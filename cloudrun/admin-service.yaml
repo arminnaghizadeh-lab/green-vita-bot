@@ -1,0 +1,57 @@
+# Cloud Run service definition — Admin Panel (FastAPI)
+# اعمال با: gcloud run services replace cloudrun/admin-service.yaml --region <REGION>
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: green-vita-admin
+  labels:
+    app: green-vita
+    component: admin
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "3"
+    spec:
+      containerConcurrency: 40
+      timeoutSeconds: 60
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT_ID/green-vita/admin:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          env:
+            - name: APP_ENV
+              value: production
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: green-vita-database-url
+                  key: latest
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: green-vita-redis-url
+                  key: latest
+            - name: ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: green-vita-admin-username
+                  key: latest
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: green-vita-admin-password
+                  key: latest
+            - name: ADMIN_SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: green-vita-admin-session-secret
+                  key: latest
+  traffic:
+    - percent: 100
+      latestRevision: true
