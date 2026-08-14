@@ -38,7 +38,12 @@ class PlantIdentification(Base, TimestampMixin):
     scientific_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     confidence: Mapped[int] = mapped_column(Integer, nullable=False, default=0)  # 0..100
     difficulty_level: Mapped[DifficultyLevel] = mapped_column(
-        Enum(DifficultyLevel), default=DifficultyLevel.UNKNOWN, nullable=False
+    Enum(
+        DifficultyLevel,
+        values_callable=lambda enum_cls: [member.value for member in enum_cls],
+    ),
+    default=DifficultyLevel.UNKNOWN,
+    nullable=False,
     )
 
     light_requirement: Mapped[str | None] = mapped_column(Text, nullable=True)

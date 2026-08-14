@@ -47,7 +47,12 @@ class Diagnosis(Base, TimestampMixin):
     is_healthy: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     disease_name: Mapped[str] = mapped_column(String(255), nullable=False, default="نامشخص")
     severity: Mapped[DiagnosisSeverity] = mapped_column(
-        Enum(DiagnosisSeverity), default=DiagnosisSeverity.UNKNOWN, nullable=False
+    Enum(
+        DiagnosisSeverity,
+        values_callable=lambda enum_cls: [member.value for member in enum_cls],
+    ),
+    default=DiagnosisSeverity.UNKNOWN,
+    nullable=False,
     )
     confidence: Mapped[int] = mapped_column(Integer, nullable=False, default=0)  # 0..100
 
