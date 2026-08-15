@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 
 from src.admin.routers import get_root_router
 from src.core.config import get_settings
@@ -38,6 +39,15 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
         docs_url="/docs" if not settings.is_production else None,
         redoc_url=None,
+    )
+
+    app.add_middleware(
+        SessionMiddleware,
+        secret_key=settings.admin_session_secret,
+        session_cookie="green_vita_admin_session",
+        max_age=60 * 60 * 8,
+        same_site="lax",
+        https_only=settings.is_production,
     )
 
     app.mount("/static", StaticFiles(directory="src/admin/static"), name="static")
