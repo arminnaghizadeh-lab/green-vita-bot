@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}درخواست‌های ویزیت | {{ app_name }}{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold">🩺 درخواست‌های ویزیت</h1>
+        <p class="text-sm text-gray-500 mt-1">مدیریت و پیگیری درخواست‌های ویزیت متخصص Green Vita</p>
+    </div>
+    <a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">داشبورد</a>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-6">
+    {% for key, label in status_labels.items() %}
+    <a href="/visits?status={{ key }}" class="bg-white rounded-lg border p-3 text-center hover:border-emerald-300">
+        <div class="text-xs text-gray-500">{{ label }}</div>
+        <div class="text-xl font-bold mt-1">{{ counts.get(key, 0) }}</div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="mb-4 flex gap-2 flex-wrap">
+    <a href="/visits" class="px-4 py-2 rounded-lg {% if not selected_status %}bg-emerald-700 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">همه</a>
+    {% for key, label in status_labels.items() %}
+    <a href="/visits?status={{ key }}" class="px-3 py-2 rounded-lg text-sm {% if selected_status == key %}bg-emerald-700 text-white{% else %}bg-gray-100 text-gray-700{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+{% if visits %}
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+<thead class="bg-gray-100">
+<tr>
+    <th class="px-4 py-3 text-right">درخواست</th>
+    <th class="px-4 py-3 text-right">کاربر</th>
+    <th class="px-4 py-3 text-right">گیاه</th>
+    <th class="px-4 py-3 text-right">مشکل</th>
+    <th class="px-4 py-3 text-right">وضعیت</th>
+    <th class="px-4 py-3 text-right">تاریخ</th>
+    <th class="px-4 py-3"></th>
+</tr>
+</thead>
+<tbody class="divide-y">
+{% for item in visits %}
+<tr class="hover:bg-gray-50">
+    <td class="px-4 py-3 font-mono">#{{ item.diagnosis.id }}</td>
+    <td class="px-4 py-3">
+        {{ item.user.first_name or '' }} {{ item.user.last_name or '' }}
+        {% if item.user.username %}<div class="text-xs text-gray-400">@{{ item.user.username }}</div>{% endif %}
+    </td>
+    <td class="px-4 py-3">{{ item.plant.name if item.plant else (item.diagnosis.plant_name_input or '—') }}</td>
+    <td class="px-4 py-3">{{ item.diagnosis.disease_name }}</td>
+    <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs {{ item.status_class }}">{{ item.status_label }}</span></td>
+    <td class="px-4 py-3 text-gray-500">{{ item.diagnosis.expert_visit_requested_at.strftime('%Y-%m-%d %H:%M') if item.diagnosis.expert_visit_requested_at else item.diagnosis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+    <td class="px-4 py-3"><a href="/visits/{{ item.diagnosis.id }}" class="text-emerald-700 font-semibold">مشاهده ←</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="p-10 text-center text-gray-500">درخواستی با این وضعیت وجود ندارد.</div>
+{% endif %}
+</div>
+{% endblock %}
