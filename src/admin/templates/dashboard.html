@@ -18,8 +18,86 @@
     </div>
 </div>
 
+<div class="mb-8">
+    <h2 class="text-lg font-bold mb-4">دسترسی سریع</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <a href="/users" class="bg-white rounded-xl shadow p-5 border border-gray-100 hover:border-emerald-300 hover:shadow-md transition block">
+            <div class="text-3xl mb-3">👥</div>
+            <h3 class="font-bold text-gray-800">مدیریت کاربران</h3>
+            <p class="text-sm text-gray-500 mt-1">مشاهده کاربران، وضعیت و پرونده هر کاربر</p>
+            <span class="inline-block mt-4 text-sm text-emerald-700 font-semibold">ورود ←</span>
+        </a>
+
+        <a href="/visits" class="bg-white rounded-xl shadow p-5 border border-red-100 hover:border-red-300 hover:shadow-md transition block relative">
+            {% if visits_new_count > 0 %}
+            <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">{{ visits_new_count }} جدید</span>
+            {% endif %}
+            <div class="text-3xl mb-3">🩺</div>
+            <h3 class="font-bold text-gray-800">درخواست‌های ویزیت</h3>
+            <p class="text-sm text-gray-500 mt-1">بررسی، پیگیری، زمان‌بندی و مدیریت درخواست‌های ویزیت متخصص</p>
+            <span class="inline-block mt-4 text-sm text-emerald-700 font-semibold">مدیریت درخواست‌ها ←</span>
+        </a>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">🌿</div>
+            <h3 class="font-bold text-gray-700">گیاهان ثبت‌شده</h3>
+            <p class="text-sm text-gray-500 mt-1">مدیریت پرونده و وضعیت سلامت گیاهان</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">🩺</div>
+            <h3 class="font-bold text-gray-700">تشخیص بیماری‌ها</h3>
+            <p class="text-sm text-gray-500 mt-1">تاریخچه تشخیص‌ها و پرونده درمانی</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">🔬</div>
+            <h3 class="font-bold text-gray-700">شناسایی گیاهان</h3>
+            <p class="text-sm text-gray-500 mt-1">نتایج شناسایی گونه و اطلاعات نگهداری</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">⏰</div>
+            <h3 class="font-bold text-gray-700">یادآوری‌ها</h3>
+            <p class="text-sm text-gray-500 mt-1">مدیریت یادآوری‌های مراقبت از گیاهان</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">💬</div>
+            <h3 class="font-bold text-gray-700">گفتگوها</h3>
+            <p class="text-sm text-gray-500 mt-1">مشاهده و بررسی گفتگوهای کاربران با بات</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">📊</div>
+            <h3 class="font-bold text-gray-700">آمار و گزارش‌ها</h3>
+            <p class="text-sm text-gray-500 mt-1">آمار استفاده، تشخیص‌ها و عملکرد بات</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">🛒</div>
+            <h3 class="font-bold text-gray-700">فروشگاه</h3>
+            <p class="text-sm text-gray-500 mt-1">محصولات، سفارش‌ها و فروش Green Vita</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+            <div class="text-3xl mb-3">⚙️</div>
+            <h3 class="font-bold text-gray-700">تنظیمات</h3>
+            <p class="text-sm text-gray-500 mt-1">تنظیمات بات، هوش مصنوعی و پنل مدیریت</p>
+            <span class="inline-block mt-4 text-xs bg-gray-200 text-gray-600 px-3 py-1 rounded-full">به‌زودی</span>
+        </div>
+    </div>
+</div>
+
 <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-4 text-sm">
-    ⚠️ این نسخه فقط اسکلت اولیه پنل مدیریت است. مدیریت کاربران، پرونده گیاهان،
-    یادآوری‌ها و فروشگاه در فازهای بعدی اضافه می‌شوند.
+    💡 قابلیت‌های جدید به‌صورت مرحله‌ای به پنل اضافه می‌شوند. در حال حاضر مدیریت کاربران فعال است.
 </div>
 {% endblock %}
