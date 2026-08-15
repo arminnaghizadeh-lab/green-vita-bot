@@ -6,6 +6,7 @@ from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.bot.keyboards import get_main_menu_keyboard
+from src.bot.keyboards.main_menu import BTN_START
 from src.core.logging import get_logger
 from src.repositories.user_repository import UserRepository
 
@@ -28,6 +29,7 @@ WELCOME_TEXT = (
 
 
 @router.message(CommandStart())
+@router.message(lambda message: message.text == BTN_START)
 async def handle_start(message: Message, session: AsyncSession) -> None:
     user_repo = UserRepository(session)
     user, created = await user_repo.get_or_create(
