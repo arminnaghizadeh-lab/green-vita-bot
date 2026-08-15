@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}کاربران | Green Vita Admin{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold">مدیریت کاربران</h1>
+        <p class="text-sm text-gray-500 mt-1">
+            کاربران ثبت‌شده در بات Green Vita
+        </p>
+    </div>
+
+    <a
+        href="/"
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm"
+    >
+        داشبورد
+    </a>
+</div>
+
+<div class="bg-white rounded-xl shadow overflow-hidden">
+
+    {% if users %}
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-right">شناسه</th>
+                    <th class="px-4 py-3 text-right">نام کاربری</th>
+                    <th class="px-4 py-3 text-right">نام</th>
+                    <th class="px-4 py-3 text-right">تعداد گیاه</th>
+                    <th class="px-4 py-3 text-right">وضعیت</th>
+                    <th class="px-4 py-3 text-right">پرونده</th>
+                    <th class="px-4 py-3 text-right">تاریخ ثبت</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+                {% for row in users %}
+                <tr class="hover:bg-gray-50">
+
+                    <td class="px-4 py-3 font-mono">
+                        {{ row.user.id }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% if row.user.username %}
+                            @{{ row.user.username }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {{ row.user.first_name or '' }}
+                        {{ row.user.last_name or '' }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {{ row.plants_count }}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        {% if row.user.is_blocked %}
+                            <span class="text-red-600">مسدود</span>
+                        {% else %}
+                            <span class="text-emerald-600">فعال</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3">
+                        <a
+                            href="/users/{{ row.user.id }}"
+                            class="text-emerald-700 hover:text-emerald-900 font-medium"
+                        >
+                            مشاهده پرونده
+                        </a>
+                    </td>
+
+                    <td class="px-4 py-3 text-gray-500">
+                        {{ row.user.created_at.strftime('%Y-%m-%d %H:%M') }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="p-10 text-center text-gray-500">
+        هنوز کاربری ثبت نشده است.
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
