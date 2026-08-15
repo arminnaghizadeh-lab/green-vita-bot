@@ -10,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.admin.auth import require_authentication
 from src.admin.dependencies import get_session
 from src.core.config import Settings, get_settings
 from src.db.models import Plant, User
@@ -24,6 +25,10 @@ async def dashboard_home(
     session: AsyncSession = Depends(get_session),
     settings: Settings = Depends(get_settings),
 ):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
     users_count = (await session.execute(select(func.count()).select_from(User))).scalar_one()
     plants_count = (await session.execute(select(func.count()).select_from(Plant))).scalar_one()
 
