@@ -47,7 +47,7 @@ def create_app() -> FastAPI:
         session_cookie="green_vita_admin_session",
         max_age=60 * 60 * 8,
         same_site="lax",
-        https_only=settings.is_production,
+        https_only=False,
     )
 
     app.mount("/static", StaticFiles(directory="src/admin/static"), name="static")
