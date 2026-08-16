@@ -102,6 +102,51 @@ async def visits_list(
     )
 
 
+@router.get("/visits/{diagnosis_id}/image")
+async def visit_image(
+    diagnosis_id: int,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    diagnosis = await session.get(Diagnosis, diagnosis_id)
+    if not diagnosis or not diagnosis.expert_visit_requested or not diagnosis.telegram_file_id:
+        raise HTTPException(status_code=404, detail="Visit image not found")
+
+    import asyncio
+    import json
+    from urllib.parse import quote
+    from urllib.request import urlopen
+
+    async def fetch_file_url() -> str:
+        def _fetch() -> str:
+            api_url = (
+                f"https://api.telegram.org/bot{settings.bot_token}/getFile"
+                f"?file_id={quote(diagnosis.telegram_file_id, safe='')}"
+            )
+            with urlopen(api_url, timeout=15) as response:
+                payload = json.load(response)
+            if not payload.get("ok") or not payload.get("result", {}).get("file_path"):
+                raise ValueError("Telegram did not return a file path")
+            return (
+                f"https://api.telegram.org/file/bot{settings.bot_token}/"
+                f"{payload['result']['file_path']}"
+            )
+
+        return await asyncio.to_thread(_fetch)
+
+    try:
+        file_url = await fetch_file_url()
+    except Exception as exc:
+        raise HTTPException(status_code=404, detail="Unable to load visit image") from exc
+
+    return RedirectResponse(url=file_url, status_code=307)
+
+
 @router.get("/visits/{diagnosis_id}")
 async def visit_detail(
     diagnosis_id: int,
@@ -127,6 +172,10 @@ async def visit_detail(
         raise HTTPException(status_code=404, detail="Visit request not found")
 
     diagnosis, user, plant = row
+    if diagnosis.expert_visit_status == "new":
+        diagnosis.expert_visit_status = "reviewing"
+        diagnosis.expert_visit_updated_at = datetime.utcnow()
+        await session.commit()
     return templates.TemplateResponse(
         "visit_detail.html",
         {
@@ -156,7 +205,7 @@ async def update_visit(
         return redirect
 
     if status not in STATUS_LABELS:
-        return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
+        return RedirectResponse(url="/visits", status_code=303)
 
     diagnosis = await session.get(Diagnosis, diagnosis_id)
     if not diagnosis or not diagnosis.expert_visit_requested:
@@ -177,4 +226,4 @@ async def update_visit(
         diagnosis.expert_visit_scheduled_at = None
 
     await session.commit()
-    return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
+    return RedirectResponse(url="/visits", status_code=303)

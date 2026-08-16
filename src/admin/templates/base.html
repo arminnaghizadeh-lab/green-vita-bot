@@ -6,13 +6,14 @@
     <title>{% block title %}Green Vita Admin{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Tahoma', sans-serif; }
+        @import url('https://cdn.jsdelivr.net/npm/vazirmatn@33.003.1/Vazirmatn-font-face.css');
+        body { font-family: 'Vazirmatn', Tahoma, sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen">
     <nav class="bg-emerald-700 text-white px-6 py-4 flex items-center justify-between shadow">
         <span class="font-bold text-lg">🌿 Green Vita — پنل مدیریت</span>
-        <span class="text-sm opacity-80">{{ environment | default('') }}</span>
+        <div class="flex items-center gap-4"><span class="text-sm opacity-80">{{ environment | default('') }}</span>{% if request.session.get('admin_authenticated') %}<form method="post" action="/logout"><button type="submit" class="text-sm bg-white/20 px-3 py-1 rounded">خروج</button></form>{% endif %}</div>
     </nav>
     <main class="p-6 max-w-5xl mx-auto">
         {% block content %}{% endblock %}
