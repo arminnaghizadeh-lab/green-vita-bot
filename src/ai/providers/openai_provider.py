@@ -36,7 +36,9 @@ class OpenAIProvider(AIProvider):
                 chat_messages.append({"role": "system", "content": system_prompt})
             chat_messages.extend({"role": m.role.value, "content": m.content} for m in messages)
 
-            response = await self.client.chat.completions.create(
+            response = await self.client.with_options(
+                max_retries=0, timeout=30.0
+            ).chat.completions.create(
                 model=self.model,
                 messages=chat_messages,
                 max_tokens=1024,
@@ -47,7 +49,6 @@ class OpenAIProvider(AIProvider):
             logger.error("openai_chat_failed", error=str(exc))
             raise AIProviderError("خطا در ارتباط با OpenAI.") from exc
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=8))
     async def analyze_image(
         self, image_bytes: bytes, *, prompt: str, system_prompt: str | None = None
     ) -> AIResponse:
@@ -68,7 +69,10 @@ class OpenAIProvider(AIProvider):
                     ],
                 }
             )
-            response = await self.client.chat.completions.create(
+            response = await self.client.with_options(
+                max_retries=0,
+                timeout=30.0,
+            ).chat.completions.create(
                 model=self.model,
                 messages=chat_messages,
                 max_tokens=1024,
@@ -76,5 +80,32 @@ class OpenAIProvider(AIProvider):
             text = response.choices[0].message.content or ""
             return AIResponse(text=text, provider=self.name, model=self.model)
         except Exception as exc:  # noqa: BLE001
-            logger.error("openai_image_analysis_failed", error=str(exc))
+            status_code = getattr(exc, "status_code", None)
+            error_body = getattr(exc, "body", None)
+
+            if status_code == 429:
+                logger.error(
+                    "openai_image_analysis_quota_or_rate_limit",
+                    status_code=status_code,
+                    error=error_body or str(exc),
+                )
+                raise AIProviderError(
+                    "اعتبار سرویس تحلیل تصویر کافی نیست یا محدودیت درخواست فعال شده است. لطفاً بعداً دوباره تلاش کنید."
+                ) from exc
+
+            if status_code == 504:
+                logger.error(
+                    "openai_image_analysis_gateway_timeout",
+                    status_code=status_code,
+                    error=error_body or str(exc),
+                )
+                raise AIProviderError(
+                    "سرویس تحلیل تصویر موقتاً پاسخ نمی‌دهد. لطفاً چند لحظه بعد دوباره تلاش کنید."
+                ) from exc
+
+            logger.error(
+                "openai_image_analysis_failed",
+                status_code=status_code,
+                error=error_body or str(exc),
+            )
             raise AIProviderError("خطا در تحلیل تصویر با OpenAI.") from exc
