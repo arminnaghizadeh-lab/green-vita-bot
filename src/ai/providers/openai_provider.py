@@ -37,7 +37,7 @@ class OpenAIProvider(AIProvider):
             chat_messages.extend({"role": m.role.value, "content": m.content} for m in messages)
 
             response = await self.client.with_options(
-                max_retries=0, timeout=30.0
+                max_retries=0, timeout=90.0
             ).chat.completions.create(
                 model=self.model,
                 messages=chat_messages,
@@ -72,7 +72,7 @@ class OpenAIProvider(AIProvider):
             )
             response = await self.client.with_options(
                 max_retries=0,
-                timeout=30.0,
+                timeout=90.0,
             ).chat.completions.create(
                 model=self.model,
                 messages=chat_messages,
