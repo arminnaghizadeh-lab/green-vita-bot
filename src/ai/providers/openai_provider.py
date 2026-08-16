@@ -41,7 +41,8 @@ class OpenAIProvider(AIProvider):
             ).chat.completions.create(
                 model=self.model,
                 messages=chat_messages,
-                max_tokens=1024,
+                reasoning_effort="low",
+                max_tokens=4096,
             )
             text = response.choices[0].message.content or ""
             return AIResponse(text=text, provider=self.name, model=self.model)
