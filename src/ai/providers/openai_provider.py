@@ -74,7 +74,7 @@ class OpenAIProvider(AIProvider):
                 max_retries=0,
                 timeout=90.0,
             ).chat.completions.create(
-                model=self.model,
+                model="gpt-5.5",
                 messages=chat_messages,
                 max_tokens=1024,
             )
