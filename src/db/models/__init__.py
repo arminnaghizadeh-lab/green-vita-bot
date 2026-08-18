@@ -9,6 +9,7 @@ from src.db.models.plant import Plant, PlantHealthStatus
 from src.db.models.plant_identification import DifficultyLevel, PlantIdentification
 from src.db.models.reminder import Reminder, ReminderType
 from src.db.models.user import User
+from src.db.models.visit_status import VisitStatus
 
 __all__ = [
     "User",
@@ -22,4 +23,5 @@ __all__ = [
     "DiagnosisSeverity",
     "PlantIdentification",
     "DifficultyLevel",
+    "VisitStatus",
 ]

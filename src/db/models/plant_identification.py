@@ -7,12 +7,14 @@
 from __future__ import annotations
 
 import enum
+from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.base import Base, TimestampMixin
+from src.db.models.visit_status import VisitStatus
 
 if TYPE_CHECKING:
     from src.db.models.user import User
@@ -67,6 +69,18 @@ class PlantIdentification(Base, TimestampMixin):
     raw_response: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     expert_visit_requested: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    # مدیریت درخواست ویزیت متخصص (پنل ادمین)
+    visit_status: Mapped[VisitStatus] = mapped_column(
+        Enum(
+            VisitStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        default=VisitStatus.PENDING,
+        nullable=False,
+    )
+    visit_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     user: Mapped["User"] = relationship(back_populates="plant_identifications")
 

@@ -15,6 +15,7 @@ from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Tex
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.base import Base, TimestampMixin
+from src.db.models.visit_status import VisitStatus
 
 if TYPE_CHECKING:
     from src.db.models.plant import Plant
@@ -81,6 +82,18 @@ class Diagnosis(Base, TimestampMixin):
         DateTime(timezone=True), nullable=True
     )
     expert_visit_admin_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # مدیریت درخواست ویزیت متخصص (پنل ادمین)
+    visit_status: Mapped[VisitStatus] = mapped_column(
+        Enum(
+            VisitStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        default=VisitStatus.PENDING,
+        nullable=False,
+    )
+    visit_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     user: Mapped["User"] = relationship(back_populates="diagnoses")
     plant: Mapped["Plant | None"] = relationship(back_populates="diagnoses")

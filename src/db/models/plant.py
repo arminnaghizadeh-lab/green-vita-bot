@@ -36,7 +36,12 @@ class Plant(Base, TimestampMixin):
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     health_status: Mapped[PlantHealthStatus] = mapped_column(
-        Enum(PlantHealthStatus), default=PlantHealthStatus.UNKNOWN, nullable=False
+        Enum(
+            PlantHealthStatus,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+        ),
+        default=PlantHealthStatus.UNKNOWN,
+        nullable=False,
     )
 
     owner: Mapped["User"] = relationship(back_populates="plants")

@@ -1,4 +1,4 @@
-"""FSM states — فلوهای تشخیص بیماری و شناسایی گیاه از روی عکس."""
+"""FSM states — فلوهای تشخیص بیماری، شناسایی گیاه، و پرونده گیاه."""
 
 from aiogram.fsm.state import State, StatesGroup
 
@@ -10,3 +10,8 @@ class DiagnosisStates(StatesGroup):
 
 class IdentificationStates(StatesGroup):
     waiting_photo = State()  # منتظر عکس برای شناسایی گونه گیاه
+
+
+class PlantStates(StatesGroup):
+    waiting_name = State()     # منتظر اسم گیاه هنگام ثبت پرونده جدید
+    waiting_species = State()  # منتظر نوع/گونه (اختیاری)

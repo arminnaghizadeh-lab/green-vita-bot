@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from src.bot.handlers import about, diagnosis, help, identification, start
+from src.bot.handlers import about, diagnosis, help, identification, plants, start
 
 
 def get_root_router() -> Router:
@@ -10,7 +10,7 @@ def get_root_router() -> Router:
     ترتیب مهم است: identification قبل از diagnosis ثبت می‌شود چون هندلر عکسِ
     آن به state خاص محدود است (IdentificationStates.waiting_photo)، در حالی که
     هندلر عکسِ diagnosis روی همه‌ی حالت‌ها فعال است — باید اول شانس بررسی را
-    به هندلر محدودتر بدهیم.
+    به هندلر محدودتر بدهیم. plants هیچ هندلر عکسی ندارد، پس محل ثبتش بی‌اثر است.
     """
     root = Router(name="root")
     root.include_router(start.router)
@@ -18,4 +18,5 @@ def get_root_router() -> Router:
     root.include_router(about.router)
     root.include_router(identification.router)
     root.include_router(diagnosis.router)
+    root.include_router(plants.router)
     return root
