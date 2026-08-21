@@ -52,28 +52,28 @@
     <label class="block text-sm font-semibold mb-2">وضعیت</label>
     <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
         {% for key, label in status_labels.items() %}
-        <option value="{{ key }}" {% if diagnosis.expert_visit_status == key %}selected{% endif %}>{{ label }}</option>
+        <option value="{{ key }}" {% if diagnosis.visit_status.value == key %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
     </select>
 
     <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
     <input type="datetime-local" name="scheduled_at"
-           value="{{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.expert_visit_scheduled_at else '' }}"
+           value="{{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.visit_scheduled_at else '' }}"
            class="w-full border rounded-lg px-3 py-2 mb-4">
 
     <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
-    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.expert_visit_admin_note or '' }}</textarea>
+    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.admin_notes or '' }}</textarea>
 
     <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
 </form>
 
 <div class="bg-white rounded-xl shadow p-5 text-sm">
     <h2 class="font-bold mb-3">وضعیت فعلی</h2>
-    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.expert_visit_status, 'bg-gray-100 text-gray-700') }}">
-        {{ status_labels.get(diagnosis.expert_visit_status, diagnosis.expert_visit_status) }}
+    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.visit_status.value, 'bg-gray-100 text-gray-700') }}">
+        {{ status_labels.get(diagnosis.visit_status.value, diagnosis.visit_status.value) }}
     </span>
-    {% if diagnosis.expert_visit_scheduled_at %}
-    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
+    {% if diagnosis.visit_scheduled_at %}
+    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
     {% endif %}
 </div>
 </div>

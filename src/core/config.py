@@ -57,6 +57,12 @@ class Settings(BaseSettings):
     # (مثل Claude) رو هم از پشت همین فرمت ارائه می‌دن. خالی = آدرس رسمی OpenAI.
     openai_base_url: str = ""
 
+    # ---------- New Admin Panel ----------
+    admin_username: str = "admin"
+    admin_password_hash: str = ""
+    admin_session_secret: str = ""
+
+
     # ---------- Logging ----------
     log_level: str = "INFO"
     log_format: Literal["json", "console"] = "json"

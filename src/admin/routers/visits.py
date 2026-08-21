@@ -1,10 +1,8 @@
-"""Admin workflow for Green Vita expert visit requests."""
-
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
-from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,31 +10,29 @@ from src.admin.auth import require_authentication
 from src.admin.dependencies import get_session
 from src.core.config import Settings, get_settings
 from src.db.models import Diagnosis, Plant, User
-
+from src.db.models.visit_status import VisitStatus
 
 router = APIRouter(tags=["visits"])
 templates = Jinja2Templates(directory="src/admin/templates")
 
 STATUS_LABELS = {
-    "new": "جدید",
-    "reviewing": "در حال بررسی",
-    "waiting_contact": "در انتظار تماس",
-    "scheduled": "زمان‌بندی‌شده",
-    "in_progress": "در حال انجام",
-    "completed": "انجام‌شده",
-    "cancelled": "لغوشده",
-    "rejected": "ردشده",
+    VisitStatus.PENDING.value: "در انتظار بررسی",
+    VisitStatus.REVIEWING.value: "در حال بررسی",
+    VisitStatus.SCHEDULED.value: "زمان‌بندی‌شده",
+    VisitStatus.CONFIRMED.value: "تأییدشده",
+    VisitStatus.IN_PROGRESS.value: "در حال انجام",
+    VisitStatus.COMPLETED.value: "انجام‌شده",
+    VisitStatus.CANCELLED.value: "لغوشده",
 }
 
 STATUS_CLASSES = {
-    "new": "bg-red-100 text-red-700",
-    "reviewing": "bg-blue-100 text-blue-700",
-    "waiting_contact": "bg-amber-100 text-amber-700",
-    "scheduled": "bg-purple-100 text-purple-700",
-    "in_progress": "bg-indigo-100 text-indigo-700",
-    "completed": "bg-emerald-100 text-emerald-700",
-    "cancelled": "bg-gray-200 text-gray-700",
-    "rejected": "bg-gray-200 text-gray-700",
+    "pending": "status-pending",
+    "reviewing": "status-reviewing",
+    "scheduled": "status-scheduled",
+    "confirmed": "status-confirmed",
+    "in_progress": "status-progress",
+    "completed": "status-completed",
+    "cancelled": "status-cancelled",
 }
 
 
@@ -57,12 +53,13 @@ async def visits_list(
         .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
         .where(Diagnosis.expert_visit_requested.is_(True))
         .order_by(
-            Diagnosis.expert_visit_updated_at.desc().nullslast(),
+            Diagnosis.visit_scheduled_at.desc().nullslast(),
             Diagnosis.created_at.desc(),
         )
     )
+
     if status in STATUS_LABELS:
-        query = query.where(Diagnosis.expert_visit_status == status)
+        query = query.where(Diagnosis.visit_status == status)
 
     rows = (await session.execute(query)).all()
 
@@ -72,21 +69,31 @@ async def visits_list(
             "user": user,
             "plant": plant,
             "status_label": STATUS_LABELS.get(
-                diagnosis.expert_visit_status, diagnosis.expert_visit_status
+                diagnosis.visit_status.value
+                if hasattr(diagnosis.visit_status, "value")
+                else diagnosis.visit_status,
+                "نامشخص",
             ),
             "status_class": STATUS_CLASSES.get(
-                diagnosis.expert_visit_status, "bg-gray-100 text-gray-700"
+                diagnosis.visit_status.value
+                if hasattr(diagnosis.visit_status, "value")
+                else diagnosis.visit_status,
+                "status-cancelled",
             ),
         }
         for diagnosis, user, plant in rows
     ]
 
     counts_result = await session.execute(
-        select(Diagnosis.expert_visit_status, func.count())
+        select(Diagnosis.visit_status, func.count())
         .where(Diagnosis.expert_visit_requested.is_(True))
-        .group_by(Diagnosis.expert_visit_status)
+        .group_by(Diagnosis.visit_status)
     )
-    counts = {row[0]: row[1] for row in counts_result.all()}
+
+    counts = {}
+    for row in counts_result.all():
+        key = row[0].value if hasattr(row[0], "value") else row[0]
+        counts[key] = row[1]
 
     return templates.TemplateResponse(
         "visits.html",
@@ -100,51 +107,6 @@ async def visits_list(
             "selected_status": status,
         },
     )
-
-
-@router.get("/visits/{diagnosis_id}/image")
-async def visit_image(
-    diagnosis_id: int,
-    request: Request,
-    session: AsyncSession = Depends(get_session),
-    settings: Settings = Depends(get_settings),
-):
-    redirect = require_authentication(request)
-    if redirect:
-        return redirect
-
-    diagnosis = await session.get(Diagnosis, diagnosis_id)
-    if not diagnosis or not diagnosis.expert_visit_requested or not diagnosis.telegram_file_id:
-        raise HTTPException(status_code=404, detail="Visit image not found")
-
-    import asyncio
-    import json
-    from urllib.parse import quote
-    from urllib.request import urlopen
-
-    async def fetch_file_url() -> str:
-        def _fetch() -> str:
-            api_url = (
-                f"https://api.telegram.org/bot{settings.bot_token}/getFile"
-                f"?file_id={quote(diagnosis.telegram_file_id, safe='')}"
-            )
-            with urlopen(api_url, timeout=15) as response:
-                payload = json.load(response)
-            if not payload.get("ok") or not payload.get("result", {}).get("file_path"):
-                raise ValueError("Telegram did not return a file path")
-            return (
-                f"https://api.telegram.org/file/bot{settings.bot_token}/"
-                f"{payload['result']['file_path']}"
-            )
-
-        return await asyncio.to_thread(_fetch)
-
-    try:
-        file_url = await fetch_file_url()
-    except Exception as exc:
-        raise HTTPException(status_code=404, detail="Unable to load visit image") from exc
-
-    return RedirectResponse(url=file_url, status_code=307)
 
 
 @router.get("/visits/{diagnosis_id}")
@@ -167,15 +129,17 @@ async def visit_detail(
             Diagnosis.expert_visit_requested.is_(True),
         )
     )
+
     row = result.first()
     if not row:
         raise HTTPException(status_code=404, detail="Visit request not found")
 
     diagnosis, user, plant = row
-    if diagnosis.expert_visit_status == "new":
-        diagnosis.expert_visit_status = "reviewing"
-        diagnosis.expert_visit_updated_at = datetime.utcnow()
+
+    if diagnosis.visit_status == VisitStatus.PENDING:
+        diagnosis.visit_status = VisitStatus.REVIEWING
         await session.commit()
+
     return templates.TemplateResponse(
         "visit_detail.html",
         {
@@ -205,25 +169,28 @@ async def update_visit(
         return redirect
 
     if status not in STATUS_LABELS:
-        return RedirectResponse(url="/visits", status_code=303)
+        raise HTTPException(status_code=400, detail="Invalid visit status")
 
     diagnosis = await session.get(Diagnosis, diagnosis_id)
     if not diagnosis or not diagnosis.expert_visit_requested:
         raise HTTPException(status_code=404, detail="Visit request not found")
 
-    diagnosis.expert_visit_status = status
-    diagnosis.expert_visit_updated_at = datetime.now().astimezone()
-    diagnosis.expert_visit_admin_note = admin_note.strip() or None
+    diagnosis.visit_status = VisitStatus(status)
+    diagnosis.admin_notes = admin_note.strip() or None
 
     if scheduled_at.strip():
         try:
-            diagnosis.expert_visit_scheduled_at = datetime.fromisoformat(
+            diagnosis.visit_scheduled_at = datetime.fromisoformat(
                 scheduled_at.strip()
             )
-        except ValueError:
-            diagnosis.expert_visit_scheduled_at = None
+        except ValueError as exc:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid scheduled_at",
+            ) from exc
     else:
-        diagnosis.expert_visit_scheduled_at = None
+        diagnosis.visit_scheduled_at = None
 
     await session.commit()
-    return RedirectResponse(url="/visits", status_code=303)
+
+    return RedirectResponse("/visits", status_code=303)

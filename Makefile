@@ -1,11 +1,11 @@
-.PHONY: help install dev-install run-bot run-admin migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
+.PHONY: help install dev-install run-bot migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
 
 help:
 	@echo "دستورات موجود:"
 	@echo "  make install        نصب وابستگی‌های اصلی"
 	@echo "  make dev-install    نصب وابستگی‌های توسعه (تست/لینت)"
 	@echo "  make run-bot        اجرای بات تلگرام (لوکال)"
-	@echo "  make run-admin      اجرای پنل مدیریت (لوکال)"
+	@echo "  make      اجرای پنل مدیریت (لوکال)"
 	@echo "  make migrate        اجرای مایگریشن‌های آلمبیک"
 	@echo "  make migrate-new    ساخت مایگریشن جدید (m=پیام)"
 	@echo "  make seed           پر کردن دیتابیس با داده نمونه"
@@ -25,9 +25,6 @@ dev-install:
 
 run-bot:
 	python -m src.bot.main
-
-run-admin:
-	uvicorn src.admin.main:app --reload --port 8000
 
 migrate:
 	alembic upgrade head

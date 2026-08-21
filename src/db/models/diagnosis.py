@@ -69,19 +69,6 @@ class Diagnosis(Base, TimestampMixin):
     expert_visit_requested: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
-    expert_visit_status: Mapped[str] = mapped_column(
-        String(32), default="new", nullable=False
-    )
-    expert_visit_requested_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    expert_visit_updated_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    expert_visit_scheduled_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
-    )
-    expert_visit_admin_note: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # مدیریت درخواست ویزیت متخصص (پنل ادمین)
     visit_status: Mapped[VisitStatus] = mapped_column(
