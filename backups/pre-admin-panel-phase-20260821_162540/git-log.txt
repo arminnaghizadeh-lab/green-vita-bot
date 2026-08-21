@@ -1,0 +1,10 @@
+ab14f8d checkpoint: domain nginx ssl production
+4d30f81 wip: checkpoint before continuing bot development
+f1a2e67 remove legacy admin panel
+f944b73 fix(ai): use gpt-5.5 for vision analysis
+a85a1f1 fix(ai): increase vision request timeout
+8d73302 fix(ai): allow reasoning budget for vision responses
+54971fc fix(ai): fail fast on image provider failures
+4507c3f feat(admin): improve expert visit image and admin UX
+51a23c6 Add expert visit management workflow
+02a8cce Add admin user management

@@ -1,0 +1,11 @@
+Current revision(s) for postgresql+asyncpg://greenvita:***@db:5432/greenvita:
+Rev: 0007 (head)
+Parent: 0006
+Path: /app/alembic/versions/0007_expand_visit_status.py
+
+    expand visit status enum
+    
+    Revision ID: 0007
+    Revises: 0006
+    Create Date: 2026-08-18
+

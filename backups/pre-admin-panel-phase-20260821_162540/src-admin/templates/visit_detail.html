@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}درخواست ویزیت #{{ diagnosis.id }} | {{ app_name }}{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-bold">🩺 درخواست ویزیت #{{ diagnosis.id }}</h1>
+        <p class="text-sm text-gray-500 mt-1">پرونده و مدیریت درخواست</p>
+    </div>
+    <a href="/visits" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">بازگشت به درخواست‌ها</a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-6">
+    <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="font-bold text-lg mb-4">اطلاعات کاربر</h2>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><span class="text-gray-500">نام:</span> {{ user.first_name or '' }} {{ user.last_name or '' }}</div>
+            <div><span class="text-gray-500">Username:</span> {{ '@' ~ user.username if user.username else '—' }}</div>
+            <div><span class="text-gray-500">Telegram ID:</span> {{ user.telegram_id }}</div>
+            <div><span class="text-gray-500">شماره تماس:</span> {{ user.phone_number or '—' }}</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-5">
+        <h2 class="font-bold text-lg mb-4">تصویر ارسالی کاربر</h2>
+        {% if diagnosis.telegram_file_id %}<div class="text-sm text-gray-500 mb-4">شناسه تصویر: {{ diagnosis.telegram_file_id }}</div>{% endif %}
+        <h2 class="font-bold text-lg mb-4">اطلاعات گیاه و تشخیص</h2>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div><span class="text-gray-500">گیاه:</span> {{ plant.name if plant else (diagnosis.plant_name_input or '—') }}</div>
+            <div><span class="text-gray-500">بیماری/مشکل:</span> {{ diagnosis.disease_name }}</div>
+            <div><span class="text-gray-500">شدت:</span> {{ diagnosis.severity.value if diagnosis.severity else '—' }}</div>
+            <div><span class="text-gray-500">اطمینان AI:</span> {{ diagnosis.confidence }}%</div>
+        </div>
+        {% if diagnosis.user_notes %}
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg"><strong>توضیحات کاربر:</strong><br>{{ diagnosis.user_notes }}</div>
+        {% endif %}
+        {% if diagnosis.symptoms %}
+        <div class="mt-4 p-4 bg-amber-50 rounded-lg"><strong>علائم:</strong><br>{{ diagnosis.symptoms }}</div>
+        {% endif %}
+        {% if diagnosis.cause %}
+        <div class="mt-4 p-4 bg-blue-50 rounded-lg"><strong>علت احتمالی:</strong><br>{{ diagnosis.cause }}</div>
+        {% endif %}
+        {% if diagnosis.treatment %}
+        <div class="mt-4 p-4 bg-emerald-50 rounded-lg"><strong>درمان پیشنهادی:</strong><br>{{ diagnosis.treatment }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="space-y-6">
+<form method="post" action="/visits/{{ diagnosis.id }}/update" class="bg-white rounded-xl shadow p-5">
+    <h2 class="font-bold text-lg mb-4">مدیریت درخواست</h2>
+    <label class="block text-sm font-semibold mb-2">وضعیت</label>
+    <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
+        {% for key, label in status_labels.items() %}
+        <option value="{{ key }}" {% if diagnosis.visit_status.value == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
+    <input type="datetime-local" name="scheduled_at"
+           value="{{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.visit_scheduled_at else '' }}"
+           class="w-full border rounded-lg px-3 py-2 mb-4">
+
+    <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
+    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.admin_notes or '' }}</textarea>
+
+    <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
+</form>
+
+<div class="bg-white rounded-xl shadow p-5 text-sm">
+    <h2 class="font-bold mb-3">وضعیت فعلی</h2>
+    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.visit_status.value, 'bg-gray-100 text-gray-700') }}">
+        {{ status_labels.get(diagnosis.visit_status.value, diagnosis.visit_status.value) }}
+    </span>
+    {% if diagnosis.visit_scheduled_at %}
+    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
+    {% endif %}
+</div>
+</div>
+</div>
+{% endblock %}

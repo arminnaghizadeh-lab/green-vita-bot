@@ -1,0 +1,192 @@
+name: green-vita-bot
+services:
+  admin:
+    build:
+      context: /root/green-vita-bot
+      dockerfile: docker/Dockerfile.admin
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+      migrate:
+        condition: service_completed_successfully
+        required: true
+    environment:
+      ADMIN_PASSWORD_HASH: $$argon2id$$v=19$$m=65536,t=3,p=4$$6d+c88pd58bONc2KTQH4oA$$sg78GJQ/6MZPJemhYkG8YdP4lnxqZfjGyUi+4M2OLMw
+      ADMIN_SESSION_SECRET: change-this-to-another-random-string
+      ADMIN_USERNAME: admin
+      AI_PROVIDER: openai
+      ANTHROPIC_API_KEY: ""
+      ANTHROPIC_MODEL: claude-sonnet-4-6
+      APP_ENV: production
+      APP_NAME: Green Vita AI Plant Clinic
+      BOT_ADMIN_IDS: 123456789,987654321
+      BOT_TOKEN: 8731176359:AAF0CqNBQCo-Q_e_5j42OGWsYiCrueggzZM
+      DATABASE_URL: postgresql+asyncpg://greenvita:cc223b40515f73f761ece1ae8e9e061389210eea0dead77e@db:5432/greenvita
+      DEBUG: "false"
+      GEMINI_API_KEY: ""
+      GEMINI_MODEL: gemini-2.0-flash
+      LOG_FORMAT: json
+      LOG_LEVEL: INFO
+      OPENAI_API_KEY: aa-szXvm4LnBZIWeCuBiNnXmDbGNFgkIJxmN0NliqHHmKUZ140t
+      OPENAI_BASE_URL: https://api.avalai.ir/v1
+      OPENAI_MODEL: gpt-5
+      POSTGRES_DB: greenvita
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: cc223b40515f73f761ece1ae8e9e061389210eea0dead77e
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: greenvita
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: 97daa0035a5a18f67ae1334948d5d69876ea312b082b78636f0900e6ba62c443
+      TIMEZONE: Asia/Tehran
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8000/health')
+      timeout: 5s
+      interval: 15s
+      retries: 5
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8000
+        published: "8000"
+        protocol: tcp
+    restart: unless-stopped
+  bot:
+    build:
+      context: /root/green-vita-bot
+      dockerfile: docker/Dockerfile.bot
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+      migrate:
+        condition: service_completed_successfully
+        required: true
+      redis:
+        condition: service_healthy
+        required: true
+    environment:
+      ADMIN_PASSWORD_HASH: $$argon2id$$v=19$$m=65536,t=3,p=4$$6d+c88pd58bONc2KTQH4oA$$sg78GJQ/6MZPJemhYkG8YdP4lnxqZfjGyUi+4M2OLMw
+      ADMIN_SESSION_SECRET: change-this-to-another-random-string
+      ADMIN_USERNAME: admin
+      AI_PROVIDER: openai
+      ANTHROPIC_API_KEY: ""
+      ANTHROPIC_MODEL: claude-sonnet-4-6
+      APP_ENV: production
+      APP_NAME: Green Vita AI Plant Clinic
+      BOT_ADMIN_IDS: 123456789,987654321
+      BOT_TOKEN: 8731176359:AAF0CqNBQCo-Q_e_5j42OGWsYiCrueggzZM
+      DATABASE_URL: postgresql+asyncpg://greenvita:cc223b40515f73f761ece1ae8e9e061389210eea0dead77e@db:5432/greenvita
+      DEBUG: "false"
+      GEMINI_API_KEY: ""
+      GEMINI_MODEL: gemini-2.0-flash
+      LOG_FORMAT: json
+      LOG_LEVEL: INFO
+      OPENAI_API_KEY: aa-szXvm4LnBZIWeCuBiNnXmDbGNFgkIJxmN0NliqHHmKUZ140t
+      OPENAI_BASE_URL: https://api.avalai.ir/v1
+      OPENAI_MODEL: gpt-5
+      POSTGRES_DB: greenvita
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: cc223b40515f73f761ece1ae8e9e061389210eea0dead77e
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: greenvita
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: 97daa0035a5a18f67ae1334948d5d69876ea312b082b78636f0900e6ba62c443
+      TIMEZONE: Asia/Tehran
+    networks:
+      default: null
+    restart: unless-stopped
+  db:
+    environment:
+      POSTGRES_DB: greenvita
+      POSTGRES_PASSWORD: cc223b40515f73f761ece1ae8e9e061389210eea0dead77e
+      POSTGRES_USER: greenvita
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U greenvita
+      timeout: 5s
+      interval: 5s
+      retries: 10
+    image: postgres:16-alpine
+    networks:
+      default: null
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgresql/data
+        volume: {}
+  migrate:
+    build:
+      context: /root/green-vita-bot
+      dockerfile: docker/Dockerfile.bot
+    command:
+      - alembic
+      - upgrade
+      - head
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    environment:
+      ADMIN_PASSWORD_HASH: $$argon2id$$v=19$$m=65536,t=3,p=4$$6d+c88pd58bONc2KTQH4oA$$sg78GJQ/6MZPJemhYkG8YdP4lnxqZfjGyUi+4M2OLMw
+      ADMIN_SESSION_SECRET: change-this-to-another-random-string
+      ADMIN_USERNAME: admin
+      AI_PROVIDER: openai
+      ANTHROPIC_API_KEY: ""
+      ANTHROPIC_MODEL: claude-sonnet-4-6
+      APP_ENV: production
+      APP_NAME: Green Vita AI Plant Clinic
+      BOT_ADMIN_IDS: 123456789,987654321
+      BOT_TOKEN: 8731176359:AAF0CqNBQCo-Q_e_5j42OGWsYiCrueggzZM
+      DATABASE_URL: postgresql+asyncpg://greenvita:cc223b40515f73f761ece1ae8e9e061389210eea0dead77e@db:5432/greenvita
+      DEBUG: "false"
+      GEMINI_API_KEY: ""
+      GEMINI_MODEL: gemini-2.0-flash
+      LOG_FORMAT: json
+      LOG_LEVEL: INFO
+      OPENAI_API_KEY: aa-szXvm4LnBZIWeCuBiNnXmDbGNFgkIJxmN0NliqHHmKUZ140t
+      OPENAI_BASE_URL: https://api.avalai.ir/v1
+      OPENAI_MODEL: gpt-5
+      POSTGRES_DB: greenvita
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: cc223b40515f73f761ece1ae8e9e061389210eea0dead77e
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: greenvita
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: 97daa0035a5a18f67ae1334948d5d69876ea312b082b78636f0900e6ba62c443
+      TIMEZONE: Asia/Tehran
+    networks:
+      default: null
+  redis:
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      timeout: 5s
+      interval: 5s
+      retries: 10
+    image: redis:7-alpine
+    networks:
+      default: null
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: redisdata
+        target: /data
+        volume: {}
+networks:
+  default:
+    name: green-vita-bot_default
+volumes:
+  pgdata:
+    name: green-vita-bot_pgdata
+  redisdata:
+    name: green-vita-bot_redisdata

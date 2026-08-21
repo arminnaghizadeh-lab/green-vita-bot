@@ -1,0 +1,5 @@
+ab14f8d checkpoint: domain nginx ssl production
+4d30f81 wip: checkpoint before continuing bot development
+f1a2e67 remove legacy admin panel
+f944b73 fix(ai): use gpt-5.5 for vision analysis
+a85a1f1 fix(ai): increase vision request timeout

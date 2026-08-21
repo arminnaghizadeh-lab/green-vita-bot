@@ -1,0 +1,15 @@
+auth.py
+dependencies.py
+__init__.py
+main.py
+routers/auth.py
+routers/dashboard.py
+routers/__init__.py
+routers/visits.py
+static/css/admin.css
+static/logo.png
+templates/base.html
+templates/dashboard.html
+templates/login.html
+templates/visit_detail.html
+templates/visits.html
