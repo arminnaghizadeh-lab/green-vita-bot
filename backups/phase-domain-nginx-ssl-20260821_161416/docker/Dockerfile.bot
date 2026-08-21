@@ -1,0 +1,30 @@
+# ============================================================
+# Dockerfile — Telegram Bot service
+# ============================================================
+FROM python:3.12-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# وابستگی‌های سیستمی سبک (برای asyncpg و کتابخانه‌های تصویری در فازهای بعدی)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src ./src
+COPY alembic ./alembic
+COPY alembic.ini .
+COPY scripts ./scripts
+
+# کاربر غیر-روت برای امنیت بیشتر در Production
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+CMD ["python", "-m", "src.bot.main"]

@@ -1,0 +1,64 @@
+diff --git a/src/admin/routers/visits.py b/src/admin/routers/visits.py
+index ffcbf5b..bbae7aa 100644
+--- a/src/admin/routers/visits.py
++++ b/src/admin/routers/visits.py
+@@ -127,6 +127,10 @@ async def visit_detail(
+         raise HTTPException(status_code=404, detail="Visit request not found")
+ 
+     diagnosis, user, plant = row
++    if diagnosis.expert_visit_status == "new":
++        diagnosis.expert_visit_status = "reviewing"
++        diagnosis.expert_visit_updated_at = datetime.utcnow()
++        await session.commit()
+     return templates.TemplateResponse(
+         "visit_detail.html",
+         {
+@@ -156,7 +160,7 @@ async def update_visit(
+         return redirect
+ 
+     if status not in STATUS_LABELS:
+-        return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
++        return RedirectResponse(url="/visits", status_code=303)
+ 
+     diagnosis = await session.get(Diagnosis, diagnosis_id)
+     if not diagnosis or not diagnosis.expert_visit_requested:
+@@ -177,4 +181,4 @@ async def update_visit(
+         diagnosis.expert_visit_scheduled_at = None
+ 
+     await session.commit()
+-    return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
++    return RedirectResponse(url="/visits", status_code=303)
+diff --git a/src/admin/templates/base.html b/src/admin/templates/base.html
+index 14d109d..0da98a8 100644
+--- a/src/admin/templates/base.html
++++ b/src/admin/templates/base.html
+@@ -6,13 +6,14 @@
+     <title>{% block title %}Green Vita Admin{% endblock %}</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+     <style>
+-        body { font-family: 'Tahoma', sans-serif; }
++        @import url('https://cdn.jsdelivr.net/npm/vazirmatn@33.003.1/Vazirmatn-font-face.css');
++        body { font-family: 'Vazirmatn', Tahoma, sans-serif; }
+     </style>
+ </head>
+ <body class="bg-gray-50 text-gray-800 min-h-screen">
+     <nav class="bg-emerald-700 text-white px-6 py-4 flex items-center justify-between shadow">
+         <span class="font-bold text-lg">🌿 Green Vita — پنل مدیریت</span>
+-        <span class="text-sm opacity-80">{{ environment | default('') }}</span>
++        <div class="flex items-center gap-4"><span class="text-sm opacity-80">{{ environment | default('') }}</span><form method="post" action="/logout"><button class="text-sm bg-white/20 px-3 py-1 rounded">خروج</button></form></div>
+     </nav>
+     <main class="p-6 max-w-5xl mx-auto">
+         {% block content %}{% endblock %}
+diff --git a/src/admin/templates/visit_detail.html b/src/admin/templates/visit_detail.html
+index 235a8ba..18a1cf4 100644
+--- a/src/admin/templates/visit_detail.html
++++ b/src/admin/templates/visit_detail.html
+@@ -22,6 +22,8 @@
+     </div>
+ 
+     <div class="bg-white rounded-xl shadow p-5">
++        <h2 class="font-bold text-lg mb-4">تصویر ارسالی کاربر</h2>
++        {% if diagnosis.telegram_file_id %}<div class="text-sm text-gray-500 mb-4">شناسه تصویر: {{ diagnosis.telegram_file_id }}</div>{% endif %}
+         <h2 class="font-bold text-lg mb-4">اطلاعات گیاه و تشخیص</h2>
+         <div class="grid grid-cols-2 gap-4 text-sm">
+             <div><span class="text-gray-500">گیاه:</span> {{ plant.name if plant else (diagnosis.plant_name_input or '—') }}</div>

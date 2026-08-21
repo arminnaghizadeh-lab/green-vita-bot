@@ -1,0 +1,491 @@
+--- a/src/db/models/diagnosis.py
++++ b/src/db/models/diagnosis.py
+@@ -8,9 +8,10 @@
+ from __future__ import annotations
+ 
+ import enum
++from datetime import datetime
+ from typing import TYPE_CHECKING
+ 
+-from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, Text
++from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Text
+ from sqlalchemy.orm import Mapped, mapped_column, relationship
+ 
+ from src.db.base import Base, TimestampMixin
+@@ -67,6 +68,19 @@
+     expert_visit_requested: Mapped[bool] = mapped_column(
+         Boolean, default=False, nullable=False
+     )
++    expert_visit_status: Mapped[str] = mapped_column(
++        String(32), default="new", nullable=False
++    )
++    expert_visit_requested_at: Mapped[datetime | None] = mapped_column(
++        DateTime(timezone=True), nullable=True
++    )
++    expert_visit_updated_at: Mapped[datetime | None] = mapped_column(
++        DateTime(timezone=True), nullable=True
++    )
++    expert_visit_scheduled_at: Mapped[datetime | None] = mapped_column(
++        DateTime(timezone=True), nullable=True
++    )
++    expert_visit_admin_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+ 
+     user: Mapped["User"] = relationship(back_populates="diagnoses")
+     plant: Mapped["Plant | None"] = relationship(back_populates="diagnoses")
+--- a/src/admin/routers/__init__.py
++++ b/src/admin/routers/__init__.py
+@@ -1,6 +1,6 @@
+ from fastapi import APIRouter
+ 
+-from src.admin.routers import auth, dashboard, health, users
++from src.admin.routers import auth, dashboard, health, users, visits
+ 
+ 
+ def get_root_router() -> APIRouter:
+@@ -9,4 +9,5 @@
+     root.include_router(health.router)
+     root.include_router(dashboard.router)
+     root.include_router(users.router)
++    root.include_router(visits.router)
+     return root
+--- a/src/admin/routers/dashboard.py
++++ b/src/admin/routers/dashboard.py
+@@ -13,7 +13,7 @@
+ from src.admin.auth import require_authentication
+ from src.admin.dependencies import get_session
+ from src.core.config import Settings, get_settings
+-from src.db.models import Plant, User
++from src.db.models import Diagnosis, Plant, User
+ 
+ router = APIRouter(tags=["dashboard"])
+ templates = Jinja2Templates(directory="src/admin/templates")
+@@ -31,6 +31,14 @@
+ 
+     users_count = (await session.execute(select(func.count()).select_from(User))).scalar_one()
+     plants_count = (await session.execute(select(func.count()).select_from(Plant))).scalar_one()
++    visits_new_count = (
++        await session.execute(
++            select(func.count())
++            .select_from(Diagnosis)
++            .where(Diagnosis.expert_visit_requested.is_(True))
++            .where(Diagnosis.expert_visit_status == "new")
++        )
++    ).scalar_one()
+ 
+     return templates.TemplateResponse(
+         "dashboard.html",
+@@ -41,5 +49,6 @@
+             "environment": settings.app_env,
+             "users_count": users_count,
+             "plants_count": plants_count,
++            "visits_new_count": visits_new_count,
+         },
+     )
+--- a/src/admin/templates/dashboard.html
++++ b/src/admin/templates/dashboard.html
+@@ -27,6 +27,16 @@
+             <h3 class="font-bold text-gray-800">مدیریت کاربران</h3>
+             <p class="text-sm text-gray-500 mt-1">مشاهده کاربران، وضعیت و پرونده هر کاربر</p>
+             <span class="inline-block mt-4 text-sm text-emerald-700 font-semibold">ورود ←</span>
++        </a>
++
++        <a href="/visits" class="bg-white rounded-xl shadow p-5 border border-red-100 hover:border-red-300 hover:shadow-md transition block relative">
++            {% if visits_new_count > 0 %}
++            <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">{{ visits_new_count }} جدید</span>
++            {% endif %}
++            <div class="text-3xl mb-3">🩺</div>
++            <h3 class="font-bold text-gray-800">درخواست‌های ویزیت</h3>
++            <p class="text-sm text-gray-500 mt-1">بررسی، پیگیری، زمان‌بندی و مدیریت درخواست‌های ویزیت متخصص</p>
++            <span class="inline-block mt-4 text-sm text-emerald-700 font-semibold">مدیریت درخواست‌ها ←</span>
+         </a>
+ 
+         <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 opacity-80">
+--- /dev/null
++++ b/alembic/versions/0006_add_expert_visit_workflow.py
+@@ -0,0 +1,53 @@
++"""add expert visit workflow fields
++
++Revision ID: 0006
++Revises: 0005
++Create Date: 2026-08-16
++"""
++
++from collections.abc import Sequence
++
++import sqlalchemy as sa
++from alembic import op
++
++
++revision: str = "0006"
++down_revision: str | None = "0005"
++branch_labels: str | Sequence[str] | None = None
++depends_on: str | Sequence[str] | None = None
++
++
++def upgrade() -> None:
++    op.add_column(
++        "diagnoses",
++        sa.Column(
++            "expert_visit_status",
++            sa.String(length=32),
++            nullable=False,
++            server_default="new",
++        ),
++    )
++    op.add_column(
++        "diagnoses",
++        sa.Column("expert_visit_requested_at", sa.DateTime(timezone=True), nullable=True),
++    )
++    op.add_column(
++        "diagnoses",
++        sa.Column("expert_visit_updated_at", sa.DateTime(timezone=True), nullable=True),
++    )
++    op.add_column(
++        "diagnoses",
++        sa.Column("expert_visit_scheduled_at", sa.DateTime(timezone=True), nullable=True),
++    )
++    op.add_column(
++        "diagnoses",
++        sa.Column("expert_visit_admin_note", sa.Text(), nullable=True),
++    )
++
++
++def downgrade() -> None:
++    op.drop_column("diagnoses", "expert_visit_admin_note")
++    op.drop_column("diagnoses", "expert_visit_scheduled_at")
++    op.drop_column("diagnoses", "expert_visit_updated_at")
++    op.drop_column("diagnoses", "expert_visit_requested_at")
++    op.drop_column("diagnoses", "expert_visit_status")
+--- /dev/null
++++ b/src/admin/routers/visits.py
+@@ -0,0 +1,180 @@
++"""Admin workflow for Green Vita expert visit requests."""
++
++from datetime import datetime
++
++from fastapi import APIRouter, Depends, Form, HTTPException, Request
++from fastapi.templating import Jinja2Templates
++from fastapi.responses import RedirectResponse
++from sqlalchemy import func, select
++from sqlalchemy.ext.asyncio import AsyncSession
++
++from src.admin.auth import require_authentication
++from src.admin.dependencies import get_session
++from src.core.config import Settings, get_settings
++from src.db.models import Diagnosis, Plant, User
++
++
++router = APIRouter(tags=["visits"])
++templates = Jinja2Templates(directory="src/admin/templates")
++
++STATUS_LABELS = {
++    "new": "جدید",
++    "reviewing": "در حال بررسی",
++    "waiting_contact": "در انتظار تماس",
++    "scheduled": "زمان‌بندی‌شده",
++    "in_progress": "در حال انجام",
++    "completed": "انجام‌شده",
++    "cancelled": "لغوشده",
++    "rejected": "ردشده",
++}
++
++STATUS_CLASSES = {
++    "new": "bg-red-100 text-red-700",
++    "reviewing": "bg-blue-100 text-blue-700",
++    "waiting_contact": "bg-amber-100 text-amber-700",
++    "scheduled": "bg-purple-100 text-purple-700",
++    "in_progress": "bg-indigo-100 text-indigo-700",
++    "completed": "bg-emerald-100 text-emerald-700",
++    "cancelled": "bg-gray-200 text-gray-700",
++    "rejected": "bg-gray-200 text-gray-700",
++}
++
++
++@router.get("/visits")
++async def visits_list(
++    request: Request,
++    status: str | None = None,
++    session: AsyncSession = Depends(get_session),
++    settings: Settings = Depends(get_settings),
++):
++    redirect = require_authentication(request)
++    if redirect:
++        return redirect
++
++    query = (
++        select(Diagnosis, User, Plant)
++        .join(User, Diagnosis.user_id == User.id)
++        .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
++        .where(Diagnosis.expert_visit_requested.is_(True))
++        .order_by(
++            Diagnosis.expert_visit_updated_at.desc().nullslast(),
++            Diagnosis.created_at.desc(),
++        )
++    )
++    if status in STATUS_LABELS:
++        query = query.where(Diagnosis.expert_visit_status == status)
++
++    rows = (await session.execute(query)).all()
++
++    visits = [
++        {
++            "diagnosis": diagnosis,
++            "user": user,
++            "plant": plant,
++            "status_label": STATUS_LABELS.get(
++                diagnosis.expert_visit_status, diagnosis.expert_visit_status
++            ),
++            "status_class": STATUS_CLASSES.get(
++                diagnosis.expert_visit_status, "bg-gray-100 text-gray-700"
++            ),
++        }
++        for diagnosis, user, plant in rows
++    ]
++
++    counts_result = await session.execute(
++        select(Diagnosis.expert_visit_status, func.count())
++        .where(Diagnosis.expert_visit_requested.is_(True))
++        .group_by(Diagnosis.expert_visit_status)
++    )
++    counts = {row[0]: row[1] for row in counts_result.all()}
++
++    return templates.TemplateResponse(
++        "visits.html",
++        {
++            "request": request,
++            "app_name": settings.app_name,
++            "environment": settings.app_env,
++            "visits": visits,
++            "counts": counts,
++            "status_labels": STATUS_LABELS,
++            "selected_status": status,
++        },
++    )
++
++
++@router.get("/visits/{diagnosis_id}")
++async def visit_detail(
++    diagnosis_id: int,
++    request: Request,
++    session: AsyncSession = Depends(get_session),
++    settings: Settings = Depends(get_settings),
++):
++    redirect = require_authentication(request)
++    if redirect:
++        return redirect
++
++    result = await session.execute(
++        select(Diagnosis, User, Plant)
++        .join(User, Diagnosis.user_id == User.id)
++        .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
++        .where(
++            Diagnosis.id == diagnosis_id,
++            Diagnosis.expert_visit_requested.is_(True),
++        )
++    )
++    row = result.first()
++    if not row:
++        raise HTTPException(status_code=404, detail="Visit request not found")
++
++    diagnosis, user, plant = row
++    return templates.TemplateResponse(
++        "visit_detail.html",
++        {
++            "request": request,
++            "app_name": settings.app_name,
++            "environment": settings.app_env,
++            "diagnosis": diagnosis,
++            "user": user,
++            "plant": plant,
++            "status_labels": STATUS_LABELS,
++            "status_classes": STATUS_CLASSES,
++        },
++    )
++
++
++@router.post("/visits/{diagnosis_id}/update")
++async def update_visit(
++    diagnosis_id: int,
++    request: Request,
++    status: str = Form(...),
++    admin_note: str = Form(""),
++    scheduled_at: str = Form(""),
++    session: AsyncSession = Depends(get_session),
++):
++    redirect = require_authentication(request)
++    if redirect:
++        return redirect
++
++    if status not in STATUS_LABELS:
++        return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
++
++    diagnosis = await session.get(Diagnosis, diagnosis_id)
++    if not diagnosis or not diagnosis.expert_visit_requested:
++        raise HTTPException(status_code=404, detail="Visit request not found")
++
++    diagnosis.expert_visit_status = status
++    diagnosis.expert_visit_updated_at = datetime.now().astimezone()
++    diagnosis.expert_visit_admin_note = admin_note.strip() or None
++
++    if scheduled_at.strip():
++        try:
++            diagnosis.expert_visit_scheduled_at = datetime.fromisoformat(
++                scheduled_at.strip()
++            )
++        except ValueError:
++            diagnosis.expert_visit_scheduled_at = None
++    else:
++        diagnosis.expert_visit_scheduled_at = None
++
++    await session.commit()
++    return RedirectResponse(url=f"/visits/{diagnosis_id}", status_code=303)
+--- /dev/null
++++ b/src/admin/templates/visits.html
+@@ -0,0 +1,65 @@
++{% extends "base.html" %}
++{% block title %}درخواست‌های ویزیت | {{ app_name }}{% endblock %}
++{% block content %}
++<div class="flex items-center justify-between mb-6">
++    <div>
++        <h1 class="text-2xl font-bold">🩺 درخواست‌های ویزیت</h1>
++        <p class="text-sm text-gray-500 mt-1">مدیریت و پیگیری درخواست‌های ویزیت متخصص Green Vita</p>
++    </div>
++    <a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">داشبورد</a>
++</div>
++
++<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-6">
++    {% for key, label in status_labels.items() %}
++    <a href="/visits?status={{ key }}" class="bg-white rounded-lg border p-3 text-center hover:border-emerald-300">
++        <div class="text-xs text-gray-500">{{ label }}</div>
++        <div class="text-xl font-bold mt-1">{{ counts.get(key, 0) }}</div>
++    </a>
++    {% endfor %}
++</div>
++
++<div class="mb-4 flex gap-2 flex-wrap">
++    <a href="/visits" class="px-4 py-2 rounded-lg {% if not selected_status %}bg-emerald-700 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">همه</a>
++    {% for key, label in status_labels.items() %}
++    <a href="/visits?status={{ key }}" class="px-3 py-2 rounded-lg text-sm {% if selected_status == key %}bg-emerald-700 text-white{% else %}bg-gray-100 text-gray-700{% endif %}">{{ label }}</a>
++    {% endfor %}
++</div>
++
++<div class="bg-white rounded-xl shadow overflow-hidden">
++{% if visits %}
++<div class="overflow-x-auto">
++<table class="w-full text-sm">
++<thead class="bg-gray-100">
++<tr>
++    <th class="px-4 py-3 text-right">درخواست</th>
++    <th class="px-4 py-3 text-right">کاربر</th>
++    <th class="px-4 py-3 text-right">گیاه</th>
++    <th class="px-4 py-3 text-right">مشکل</th>
++    <th class="px-4 py-3 text-right">وضعیت</th>
++    <th class="px-4 py-3 text-right">تاریخ</th>
++    <th class="px-4 py-3"></th>
++</tr>
++</thead>
++<tbody class="divide-y">
++{% for item in visits %}
++<tr class="hover:bg-gray-50">
++    <td class="px-4 py-3 font-mono">#{{ item.diagnosis.id }}</td>
++    <td class="px-4 py-3">
++        {{ item.user.first_name or '' }} {{ item.user.last_name or '' }}
++        {% if item.user.username %}<div class="text-xs text-gray-400">@{{ item.user.username }}</div>{% endif %}
++    </td>
++    <td class="px-4 py-3">{{ item.plant.name if item.plant else (item.diagnosis.plant_name_input or '—') }}</td>
++    <td class="px-4 py-3">{{ item.diagnosis.disease_name }}</td>
++    <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs {{ item.status_class }}">{{ item.status_label }}</span></td>
++    <td class="px-4 py-3 text-gray-500">{{ item.diagnosis.expert_visit_requested_at.strftime('%Y-%m-%d %H:%M') if item.diagnosis.expert_visit_requested_at else item.diagnosis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
++    <td class="px-4 py-3"><a href="/visits/{{ item.diagnosis.id }}" class="text-emerald-700 font-semibold">مشاهده ←</a></td>
++</tr>
++{% endfor %}
++</tbody>
++</table>
++</div>
++{% else %}
++<div class="p-10 text-center text-gray-500">درخواستی با این وضعیت وجود ندارد.</div>
++{% endif %}
++</div>
++{% endblock %}
+--- /dev/null
++++ b/src/admin/templates/visit_detail.html
+@@ -0,0 +1,79 @@
++{% extends "base.html" %}
++{% block title %}درخواست ویزیت #{{ diagnosis.id }} | {{ app_name }}{% endblock %}
++{% block content %}
++<div class="flex items-center justify-between mb-6">
++    <div>
++        <h1 class="text-2xl font-bold">🩺 درخواست ویزیت #{{ diagnosis.id }}</h1>
++        <p class="text-sm text-gray-500 mt-1">پرونده و مدیریت درخواست</p>
++    </div>
++    <a href="/visits" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">بازگشت به درخواست‌ها</a>
++</div>
++
++<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
++<div class="lg:col-span-2 space-y-6">
++    <div class="bg-white rounded-xl shadow p-5">
++        <h2 class="font-bold text-lg mb-4">اطلاعات کاربر</h2>
++        <div class="grid grid-cols-2 gap-4 text-sm">
++            <div><span class="text-gray-500">نام:</span> {{ user.first_name or '' }} {{ user.last_name or '' }}</div>
++            <div><span class="text-gray-500">Username:</span> {{ '@' ~ user.username if user.username else '—' }}</div>
++            <div><span class="text-gray-500">Telegram ID:</span> {{ user.telegram_id }}</div>
++            <div><span class="text-gray-500">شماره تماس:</span> {{ user.phone_number or '—' }}</div>
++        </div>
++    </div>
++
++    <div class="bg-white rounded-xl shadow p-5">
++        <h2 class="font-bold text-lg mb-4">اطلاعات گیاه و تشخیص</h2>
++        <div class="grid grid-cols-2 gap-4 text-sm">
++            <div><span class="text-gray-500">گیاه:</span> {{ plant.name if plant else (diagnosis.plant_name_input or '—') }}</div>
++            <div><span class="text-gray-500">بیماری/مشکل:</span> {{ diagnosis.disease_name }}</div>
++            <div><span class="text-gray-500">شدت:</span> {{ diagnosis.severity.value if diagnosis.severity else '—' }}</div>
++            <div><span class="text-gray-500">اطمینان AI:</span> {{ diagnosis.confidence }}%</div>
++        </div>
++        {% if diagnosis.user_notes %}
++        <div class="mt-4 p-4 bg-gray-50 rounded-lg"><strong>توضیحات کاربر:</strong><br>{{ diagnosis.user_notes }}</div>
++        {% endif %}
++        {% if diagnosis.symptoms %}
++        <div class="mt-4 p-4 bg-amber-50 rounded-lg"><strong>علائم:</strong><br>{{ diagnosis.symptoms }}</div>
++        {% endif %}
++        {% if diagnosis.cause %}
++        <div class="mt-4 p-4 bg-blue-50 rounded-lg"><strong>علت احتمالی:</strong><br>{{ diagnosis.cause }}</div>
++        {% endif %}
++        {% if diagnosis.treatment %}
++        <div class="mt-4 p-4 bg-emerald-50 rounded-lg"><strong>درمان پیشنهادی:</strong><br>{{ diagnosis.treatment }}</div>
++        {% endif %}
++    </div>
++</div>
++
++<div class="space-y-6">
++<form method="post" action="/visits/{{ diagnosis.id }}/update" class="bg-white rounded-xl shadow p-5">
++    <h2 class="font-bold text-lg mb-4">مدیریت درخواست</h2>
++    <label class="block text-sm font-semibold mb-2">وضعیت</label>
++    <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
++        {% for key, label in status_labels.items() %}
++        <option value="{{ key }}" {% if diagnosis.expert_visit_status == key %}selected{% endif %}>{{ label }}</option>
++        {% endfor %}
++    </select>
++
++    <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
++    <input type="datetime-local" name="scheduled_at"
++           value="{{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.expert_visit_scheduled_at else '' }}"
++           class="w-full border rounded-lg px-3 py-2 mb-4">
++
++    <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
++    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.expert_visit_admin_note or '' }}</textarea>
++
++    <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
++</form>
++
++<div class="bg-white rounded-xl shadow p-5 text-sm">
++    <h2 class="font-bold mb-3">وضعیت فعلی</h2>
++    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.expert_visit_status, 'bg-gray-100 text-gray-700') }}">
++        {{ status_labels.get(diagnosis.expert_visit_status, diagnosis.expert_visit_status) }}
++    </span>
++    {% if diagnosis.expert_visit_scheduled_at %}
++    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
++    {% endif %}
++</div>
++</div>
++</div>
++{% endblock %}

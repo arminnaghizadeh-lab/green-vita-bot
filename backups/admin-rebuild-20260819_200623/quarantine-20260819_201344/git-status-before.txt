@@ -1,0 +1,23 @@
+ M .env.example
+ M alembic/versions/0006_add_expert_visit_workflow.py
+ D alembic/versions/0006_expert_visit_management.py
+ M docker-compose.yml
+ M requirements.txt
+ M src/admin/routers/visits.py
+ M src/admin/templates/visit_detail.html
+ M src/admin/templates/visits.html
+ M src/core/config.py
+M  src/db/models/diagnosis.py
+?? backups/
+?? docker/Dockerfile.admin
+?? src/admin/__init__.py
+?? src/admin/auth.py
+?? src/admin/dependencies.py
+?? src/admin/main.py
+?? src/admin/routers/__init__.py
+?? src/admin/routers/auth.py
+?? src/admin/routers/dashboard.py
+?? src/admin/static/
+?? src/admin/templates/base.html
+?? src/admin/templates/dashboard.html
+?? src/admin/templates/login.html

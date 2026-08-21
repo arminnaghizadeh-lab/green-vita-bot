@@ -1,0 +1,72 @@
+--- a/src/admin/templates/base.html
++++ b/src/admin/templates/base.html
+@@ -12,7 +12,14 @@
+ <body class="bg-gray-50 text-gray-800 min-h-screen">
+     <nav class="bg-emerald-700 text-white px-6 py-4 flex items-center justify-between shadow">
+         <span class="font-bold text-lg">🌿 Green Vita — پنل مدیریت</span>
+-        <span class="text-sm opacity-80">{{ environment | default('') }}</span>
++        <div class="flex items-center gap-4">
++            <span class="text-sm opacity-80">{{ environment | default('') }}</span>
++            {% if request.session.get('admin_authenticated') %}
++            <form method="post" action="/logout">
++                <button class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg text-sm">خروج</button>
++            </form>
++            {% endif %}
++        </div>
+     </nav>
+     <main class="p-6 max-w-5xl mx-auto">
+         {% block content %}{% endblock %}
+--- a/src/admin/routers/visits.py
++++ b/src/admin/routers/visits.py
+@@ -4,7 +4,9 @@
+ 
+ from fastapi import APIRouter, Depends, Form, HTTPException, Request
+ from fastapi.templating import Jinja2Templates
+-from fastapi.responses import RedirectResponse
++from fastapi.responses import RedirectResponse, StreamingResponse
++import io
++import httpx
+ from sqlalchemy import func, select
+ from sqlalchemy.ext.asyncio import AsyncSession
+ 
+@@ -102,6 +104,40 @@
+     )
+ 
+ 
++
++
++@router.get("/visits/{diagnosis_id}/image")
++async def visit_image(
++    diagnosis_id: int,
++    request: Request,
++    session: AsyncSession = Depends(get_session),
++    settings: Settings = Depends(get_settings),
++):
++    redirect = require_authentication(request)
++    if redirect:
++        return redirect
++
++    diagnosis = await session.get(Diagnosis, diagnosis_id)
++    if not diagnosis or not diagnosis.telegram_file_id:
++        raise HTTPException(status_code=404, detail="Image not found")
++
++    async with httpx.AsyncClient(timeout=15) as client:
++        file_info = await client.get(
++            f"https://api.telegram.org/bot{settings.bot_token}/getFile",
++            params={"file_id": diagnosis.telegram_file_id},
++        )
++        data = file_info.json()
++        if not data.get("ok"):
++            raise HTTPException(status_code=404, detail="Telegram image unavailable")
++
++        file_path = data["result"]["file_path"]
++        image = await client.get(
++            f"https://api.telegram.org/file/bot{settings.bot_token}/{file_path}"
++        )
++
++    return StreamingResponse(io.BytesIO(image.content), media_type="image/jpeg")
++
++
+ @router.get("/visits/{diagnosis_id}")
+ async def visit_detail(
+     diagnosis_id: int,

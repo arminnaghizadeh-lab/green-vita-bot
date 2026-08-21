@@ -1,0 +1,4 @@
+NAME                     IMAGE                                                                     COMMAND                  SERVICE   CREATED      STATUS                PORTS
+green-vita-bot-bot-1     sha256:5f46ef341ae4c7d48d06fb6975da8321b69db0216b8739b28b6d98e822dd80fb   "python -m src.bot.m…"   bot       2 days ago   Up 2 days             
+green-vita-bot-db-1      postgres:16-alpine                                                        "docker-entrypoint.s…"   db        5 days ago   Up 5 days (healthy)   5432/tcp
+green-vita-bot-redis-1   redis:7-alpine                                                            "docker-entrypoint.s…"   redis     5 days ago   Up 5 days (healthy)   6379/tcp

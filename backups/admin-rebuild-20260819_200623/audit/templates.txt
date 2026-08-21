@@ -1,0 +1,5 @@
+src/admin/templates/base.html
+src/admin/templates/dashboard.html
+src/admin/templates/login.html
+src/admin/templates/visit_detail.html
+src/admin/templates/visits.html

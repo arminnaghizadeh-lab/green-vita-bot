@@ -1,0 +1,19 @@
+4d30f81 (HEAD -> main, origin/main, origin/HEAD, backup/admin-rebuild-20260819_200623) wip: checkpoint before continuing bot development
+f1a2e67 (admin-removal-from-main) remove legacy admin panel
+f944b73 (backup-before-rollback) fix(ai): use gpt-5.5 for vision analysis
+a85a1f1 fix(ai): increase vision request timeout
+8d73302 fix(ai): allow reasoning budget for vision responses
+54971fc fix(ai): fail fast on image provider failures
+4507c3f feat(admin): improve expert visit image and admin UX
+51a23c6 Add expert visit management workflow
+02a8cce (backup-expert-visit) Add admin user management
+fc6e52f add admin authentication
+7e2cb28 add admin authentication
+e0ae8c2 add start menu about and help
+dd71350 fix enum persistence for diagnosis and plant identification
+38abe6c chore: ignore environment backup
+a76997d fix: add admin static directory
+b750f9a Fix pydantic version compatibility
+f8f07bb Secure database and redis ports
+357f582 Add files via upload
+fb809c2 Add files via upload

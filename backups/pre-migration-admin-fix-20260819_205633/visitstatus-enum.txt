@@ -1,0 +1,11 @@
+   typname   |  enumlabel  
+-------------+-------------
+ visitstatus | pending
+ visitstatus | scheduled
+ visitstatus | completed
+ visitstatus | cancelled
+ visitstatus | reviewing
+ visitstatus | confirmed
+ visitstatus | in_progress
+(7 rows)
+

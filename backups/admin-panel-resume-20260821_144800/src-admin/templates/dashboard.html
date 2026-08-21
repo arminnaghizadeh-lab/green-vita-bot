@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>داشبورد | {{ app_name }}</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">
+        <img src="/static/logo.png" alt="Green Vita">
+        <div>
+            <strong>Green Vita</strong>
+            <span>پنل مدیریت</span>
+        </div>
+    </div>
+    <form method="post" action="/logout">
+        <button class="logout">خروج</button>
+    </form>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <div>
+            <h1>سلام 👋</h1>
+            <p>مدیریت هوشمند کلینیک گیاهپزشکی گرین ویتا</p>
+        </div>
+        <a class="primary-link" href="/visits">مدیریت درخواست‌های ویزیت ←</a>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card"><span>👥 کاربران</span><strong>{{ stats.users }}</strong></div>
+        <div class="stat-card"><span>🌱 پرونده گیاه</span><strong>{{ stats.plants }}</strong></div>
+        <div class="stat-card"><span>🩺 تشخیص‌ها</span><strong>{{ stats.diagnoses }}</strong></div>
+        <div class="stat-card"><span>🔍 شناسایی‌ها</span><strong>{{ stats.identifications }}</strong></div>
+        <div class="stat-card highlight"><span>📞 درخواست ویزیت</span><strong>{{ stats.visits }}</strong></div>
+    </section>
+</main>
+</body>
+</html>

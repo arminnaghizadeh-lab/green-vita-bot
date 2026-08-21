@@ -1,0 +1,11 @@
+ .env.example                                       |   3 +
+ Makefile                                           |   7 +-
+ alembic/versions/0006_add_expert_visit_workflow.py |  73 ++++++-
+ alembic/versions/0006_expert_visit_management.py   |  45 ----
+ docker-compose.yml                                 |  19 ++
+ requirements.txt                                   |   1 +
+ src/admin/routers/visits.py                        | 229 ---------------------
+ src/admin/templates/visit_detail.html              |  81 --------
+ src/admin/templates/visits.html                    |  65 ------
+ src/core/config.py                                 |   6 +
+ 10 files changed, 98 insertions(+), 431 deletions(-)

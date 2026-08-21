@@ -1,0 +1,541 @@
+diff --git a/.env.example b/.env.example
+index 8fca5ee..eb3f7ca 100644
+--- a/.env.example
++++ b/.env.example
+@@ -49,6 +49,9 @@ OPENAI_MODEL=gpt-4o
+ # خالی بگذار = آدرس رسمی OpenAI.
+ OPENAI_BASE_URL=
+ 
++
++# ---------- Admin Panel ----------
++
+ # ---------- Logging ----------
+ LOG_LEVEL=INFO                 # DEBUG | INFO | WARNING | ERROR
+ LOG_FORMAT=json                # json | console
+diff --git a/Makefile b/Makefile
+index 67b075a..a4d80ce 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,11 +1,11 @@
+-.PHONY: help install dev-install run-bot run-admin migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
++.PHONY: help install dev-install run-bot migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
+ 
+ help:
+ 	@echo "دستورات موجود:"
+ 	@echo "  make install        نصب وابستگی‌های اصلی"
+ 	@echo "  make dev-install    نصب وابستگی‌های توسعه (تست/لینت)"
+ 	@echo "  make run-bot        اجرای بات تلگرام (لوکال)"
+-	@echo "  make run-admin      اجرای پنل مدیریت (لوکال)"
++	@echo "  make      اجرای پنل مدیریت (لوکال)"
+ 	@echo "  make migrate        اجرای مایگریشن‌های آلمبیک"
+ 	@echo "  make migrate-new    ساخت مایگریشن جدید (m=پیام)"
+ 	@echo "  make seed           پر کردن دیتابیس با داده نمونه"
+@@ -26,9 +26,6 @@ dev-install:
+ run-bot:
+ 	python -m src.bot.main
+ 
+-run-admin:
+-	uvicorn src.admin.main:app --reload --port 8000
+-
+ migrate:
+ 	alembic upgrade head
+ 
+diff --git a/alembic/versions/0006_add_expert_visit_workflow.py b/alembic/versions/0006_add_expert_visit_workflow.py
+index 26998ce..7744ff7 100644
+--- a/alembic/versions/0006_add_expert_visit_workflow.py
++++ b/alembic/versions/0006_add_expert_visit_workflow.py
+@@ -1,8 +1,8 @@
+-"""add expert visit workflow fields
++"""add expert visit workflow and visit management fields.
+ 
+ Revision ID: 0006
+ Revises: 0005
+-Create Date: 2026-08-16
++Create Date: 2026-08-18
+ """
+ 
+ from collections.abc import Sequence
+@@ -18,6 +18,7 @@ depends_on: str | Sequence[str] | None = None
+ 
+ 
+ def upgrade() -> None:
++    # Existing expert-visit workflow fields used by the Telegram bot.
+     op.add_column(
+         "diagnoses",
+         sa.Column(
+@@ -29,23 +30,83 @@ def upgrade() -> None:
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_requested_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_requested_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_updated_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_updated_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_scheduled_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_scheduled_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_admin_note", sa.Text(), nullable=True),
++        sa.Column(
++            "expert_visit_admin_note",
++            sa.Text(),
++            nullable=True,
++        ),
++    )
++
++    # New visit-management workflow shared by diagnoses and plant identification.
++    visit_status = sa.Enum(
++        "pending",
++        "scheduled",
++        "completed",
++        "cancelled",
++        name="visitstatus",
+     )
++    visit_status.create(op.get_bind(), checkfirst=True)
++
++    for table in ("diagnoses", "plant_identifications"):
++        op.add_column(
++            table,
++            sa.Column(
++                "visit_status",
++                visit_status,
++                nullable=False,
++                server_default="pending",
++            ),
++        )
++        op.add_column(
++            table,
++            sa.Column(
++                "visit_scheduled_at",
++                sa.DateTime(timezone=True),
++                nullable=True,
++            ),
++        )
++        op.add_column(
++            table,
++            sa.Column(
++                "admin_notes",
++                sa.Text(),
++                nullable=True,
++            ),
++        )
+ 
+ 
+ def downgrade() -> None:
++    for table in ("diagnoses", "plant_identifications"):
++        op.drop_column(table, "admin_notes")
++        op.drop_column(table, "visit_scheduled_at")
++        op.drop_column(table, "visit_status")
++
++    sa.Enum(name="visitstatus").drop(op.get_bind(), checkfirst=True)
++
+     op.drop_column("diagnoses", "expert_visit_admin_note")
+     op.drop_column("diagnoses", "expert_visit_scheduled_at")
+     op.drop_column("diagnoses", "expert_visit_updated_at")
+diff --git a/alembic/versions/0006_expert_visit_management.py b/alembic/versions/0006_expert_visit_management.py
+deleted file mode 100644
+index 74e9f26..0000000
+--- a/alembic/versions/0006_expert_visit_management.py
++++ /dev/null
+@@ -1,45 +0,0 @@
+-"""add visit status, scheduling, and admin notes to diagnoses and plant_identifications
+-
+-Revision ID: 0006
+-Revises: 0005
+-Create Date: 2026-08-17
+-"""
+-
+-from collections.abc import Sequence
+-
+-import sqlalchemy as sa
+-from alembic import op
+-
+-revision: str = "0006"
+-down_revision: str | None = "0005"
+-branch_labels: str | Sequence[str] | None = None
+-depends_on: str | Sequence[str] | None = None
+-
+-
+-def upgrade() -> None:
+-    visit_status = sa.Enum(
+-        "pending", "scheduled", "completed", "cancelled", name="visitstatus"
+-    )
+-    visit_status.create(op.get_bind(), checkfirst=True)
+-
+-    for table in ("diagnoses", "plant_identifications"):
+-        op.add_column(
+-            table,
+-            sa.Column(
+-                "visit_status",
+-                visit_status,
+-                nullable=False,
+-                server_default="pending",
+-            ),
+-        )
+-        op.add_column(table, sa.Column("visit_scheduled_at", sa.DateTime(timezone=True), nullable=True))
+-        op.add_column(table, sa.Column("admin_notes", sa.Text(), nullable=True))
+-
+-
+-def downgrade() -> None:
+-    for table in ("diagnoses", "plant_identifications"):
+-        op.drop_column(table, "admin_notes")
+-        op.drop_column(table, "visit_scheduled_at")
+-        op.drop_column(table, "visit_status")
+-
+-    sa.Enum(name="visitstatus").drop(op.get_bind(), checkfirst=True)
+diff --git a/docker-compose.yml b/docker-compose.yml
+index 1cc598a..2a02891 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -51,6 +51,25 @@ services:
+       migrate:
+         condition: service_completed_successfully
+ 
++  admin:
++    build:
++      context: .
++      dockerfile: docker/Dockerfile.admin
++    restart: unless-stopped
++    env_file: .env
++    ports:
++      - "8000:8000"
++    depends_on:
++      db:
++        condition: service_healthy
++      migrate:
++        condition: service_completed_successfully
++    healthcheck:
++      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
++      interval: 15s
++      timeout: 5s
++      retries: 5
++
+ volumes:
+   pgdata:
+   redisdata:
+diff --git a/requirements.txt b/requirements.txt
+index 0f83ea8..aa1e9ce 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -17,3 +17,4 @@ python-multipart==0.0.20
+ itsdangerous==2.2.0
+ tenacity==9.0.0
+ structlog==24.4.0
++pwdlib[argon2]==0.2.1
+diff --git a/src/admin/routers/visits.py b/src/admin/routers/visits.py
+index f528149..61f4725 100644
+--- a/src/admin/routers/visits.py
++++ b/src/admin/routers/visits.py
+@@ -1,10 +1,8 @@
+-"""Admin workflow for Green Vita expert visit requests."""
+-
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from fastapi import APIRouter, Depends, Form, HTTPException, Request
+-from fastapi.templating import Jinja2Templates
+ from fastapi.responses import RedirectResponse
++from fastapi.templating import Jinja2Templates
+ from sqlalchemy import func, select
+ from sqlalchemy.ext.asyncio import AsyncSession
+ 
+@@ -12,31 +10,29 @@ from src.admin.auth import require_authentication
+ from src.admin.dependencies import get_session
+ from src.core.config import Settings, get_settings
+ from src.db.models import Diagnosis, Plant, User
+-
++from src.db.models.visit_status import VisitStatus
+ 
+ router = APIRouter(tags=["visits"])
+ templates = Jinja2Templates(directory="src/admin/templates")
+ 
+ STATUS_LABELS = {
+-    "new": "جدید",
+-    "reviewing": "در حال بررسی",
+-    "waiting_contact": "در انتظار تماس",
+-    "scheduled": "زمان‌بندی‌شده",
+-    "in_progress": "در حال انجام",
+-    "completed": "انجام‌شده",
+-    "cancelled": "لغوشده",
+-    "rejected": "ردشده",
++    VisitStatus.PENDING.value: "در انتظار بررسی",
++    VisitStatus.REVIEWING.value: "در حال بررسی",
++    VisitStatus.SCHEDULED.value: "زمان‌بندی‌شده",
++    VisitStatus.CONFIRMED.value: "تأییدشده",
++    VisitStatus.IN_PROGRESS.value: "در حال انجام",
++    VisitStatus.COMPLETED.value: "انجام‌شده",
++    VisitStatus.CANCELLED.value: "لغوشده",
+ }
+ 
+ STATUS_CLASSES = {
+-    "new": "bg-red-100 text-red-700",
+-    "reviewing": "bg-blue-100 text-blue-700",
+-    "waiting_contact": "bg-amber-100 text-amber-700",
+-    "scheduled": "bg-purple-100 text-purple-700",
+-    "in_progress": "bg-indigo-100 text-indigo-700",
+-    "completed": "bg-emerald-100 text-emerald-700",
+-    "cancelled": "bg-gray-200 text-gray-700",
+-    "rejected": "bg-gray-200 text-gray-700",
++    "pending": "status-pending",
++    "reviewing": "status-reviewing",
++    "scheduled": "status-scheduled",
++    "confirmed": "status-confirmed",
++    "in_progress": "status-progress",
++    "completed": "status-completed",
++    "cancelled": "status-cancelled",
+ }
+ 
+ 
+@@ -57,12 +53,13 @@ async def visits_list(
+         .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
+         .where(Diagnosis.expert_visit_requested.is_(True))
+         .order_by(
+-            Diagnosis.expert_visit_updated_at.desc().nullslast(),
++            Diagnosis.visit_scheduled_at.desc().nullslast(),
+             Diagnosis.created_at.desc(),
+         )
+     )
++
+     if status in STATUS_LABELS:
+-        query = query.where(Diagnosis.expert_visit_status == status)
++        query = query.where(Diagnosis.visit_status == status)
+ 
+     rows = (await session.execute(query)).all()
+ 
+@@ -72,21 +69,31 @@ async def visits_list(
+             "user": user,
+             "plant": plant,
+             "status_label": STATUS_LABELS.get(
+-                diagnosis.expert_visit_status, diagnosis.expert_visit_status
++                diagnosis.visit_status.value
++                if hasattr(diagnosis.visit_status, "value")
++                else diagnosis.visit_status,
++                "نامشخص",
+             ),
+             "status_class": STATUS_CLASSES.get(
+-                diagnosis.expert_visit_status, "bg-gray-100 text-gray-700"
++                diagnosis.visit_status.value
++                if hasattr(diagnosis.visit_status, "value")
++                else diagnosis.visit_status,
++                "status-cancelled",
+             ),
+         }
+         for diagnosis, user, plant in rows
+     ]
+ 
+     counts_result = await session.execute(
+-        select(Diagnosis.expert_visit_status, func.count())
++        select(Diagnosis.visit_status, func.count())
+         .where(Diagnosis.expert_visit_requested.is_(True))
+-        .group_by(Diagnosis.expert_visit_status)
++        .group_by(Diagnosis.visit_status)
+     )
+-    counts = {row[0]: row[1] for row in counts_result.all()}
++
++    counts = {}
++    for row in counts_result.all():
++        key = row[0].value if hasattr(row[0], "value") else row[0]
++        counts[key] = row[1]
+ 
+     return templates.TemplateResponse(
+         "visits.html",
+@@ -102,51 +109,6 @@ async def visits_list(
+     )
+ 
+ 
+-@router.get("/visits/{diagnosis_id}/image")
+-async def visit_image(
+-    diagnosis_id: int,
+-    request: Request,
+-    session: AsyncSession = Depends(get_session),
+-    settings: Settings = Depends(get_settings),
+-):
+-    redirect = require_authentication(request)
+-    if redirect:
+-        return redirect
+-
+-    diagnosis = await session.get(Diagnosis, diagnosis_id)
+-    if not diagnosis or not diagnosis.expert_visit_requested or not diagnosis.telegram_file_id:
+-        raise HTTPException(status_code=404, detail="Visit image not found")
+-
+-    import asyncio
+-    import json
+-    from urllib.parse import quote
+-    from urllib.request import urlopen
+-
+-    async def fetch_file_url() -> str:
+-        def _fetch() -> str:
+-            api_url = (
+-                f"https://api.telegram.org/bot{settings.bot_token}/getFile"
+-                f"?file_id={quote(diagnosis.telegram_file_id, safe='')}"
+-            )
+-            with urlopen(api_url, timeout=15) as response:
+-                payload = json.load(response)
+-            if not payload.get("ok") or not payload.get("result", {}).get("file_path"):
+-                raise ValueError("Telegram did not return a file path")
+-            return (
+-                f"https://api.telegram.org/file/bot{settings.bot_token}/"
+-                f"{payload['result']['file_path']}"
+-            )
+-
+-        return await asyncio.to_thread(_fetch)
+-
+-    try:
+-        file_url = await fetch_file_url()
+-    except Exception as exc:
+-        raise HTTPException(status_code=404, detail="Unable to load visit image") from exc
+-
+-    return RedirectResponse(url=file_url, status_code=307)
+-
+-
+ @router.get("/visits/{diagnosis_id}")
+ async def visit_detail(
+     diagnosis_id: int,
+@@ -167,15 +129,17 @@ async def visit_detail(
+             Diagnosis.expert_visit_requested.is_(True),
+         )
+     )
++
+     row = result.first()
+     if not row:
+         raise HTTPException(status_code=404, detail="Visit request not found")
+ 
+     diagnosis, user, plant = row
+-    if diagnosis.expert_visit_status == "new":
+-        diagnosis.expert_visit_status = "reviewing"
+-        diagnosis.expert_visit_updated_at = datetime.utcnow()
++
++    if diagnosis.visit_status == VisitStatus.PENDING:
++        diagnosis.visit_status = VisitStatus.REVIEWING
+         await session.commit()
++
+     return templates.TemplateResponse(
+         "visit_detail.html",
+         {
+@@ -205,25 +169,28 @@ async def update_visit(
+         return redirect
+ 
+     if status not in STATUS_LABELS:
+-        return RedirectResponse(url="/visits", status_code=303)
++        raise HTTPException(status_code=400, detail="Invalid visit status")
+ 
+     diagnosis = await session.get(Diagnosis, diagnosis_id)
+     if not diagnosis or not diagnosis.expert_visit_requested:
+         raise HTTPException(status_code=404, detail="Visit request not found")
+ 
+-    diagnosis.expert_visit_status = status
+-    diagnosis.expert_visit_updated_at = datetime.now().astimezone()
+-    diagnosis.expert_visit_admin_note = admin_note.strip() or None
++    diagnosis.visit_status = VisitStatus(status)
++    diagnosis.admin_notes = admin_note.strip() or None
+ 
+     if scheduled_at.strip():
+         try:
+-            diagnosis.expert_visit_scheduled_at = datetime.fromisoformat(
++            diagnosis.visit_scheduled_at = datetime.fromisoformat(
+                 scheduled_at.strip()
+             )
+-        except ValueError:
+-            diagnosis.expert_visit_scheduled_at = None
++        except ValueError as exc:
++            raise HTTPException(
++                status_code=400,
++                detail="Invalid scheduled_at",
++            ) from exc
+     else:
+-        diagnosis.expert_visit_scheduled_at = None
++        diagnosis.visit_scheduled_at = None
+ 
+     await session.commit()
+-    return RedirectResponse(url="/visits", status_code=303)
++
++    return RedirectResponse("/visits", status_code=303)
+diff --git a/src/admin/templates/visit_detail.html b/src/admin/templates/visit_detail.html
+index 18a1cf4..9912a0c 100644
+--- a/src/admin/templates/visit_detail.html
++++ b/src/admin/templates/visit_detail.html
+@@ -52,28 +52,28 @@
+     <label class="block text-sm font-semibold mb-2">وضعیت</label>
+     <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
+         {% for key, label in status_labels.items() %}
+-        <option value="{{ key }}" {% if diagnosis.expert_visit_status == key %}selected{% endif %}>{{ label }}</option>
++        <option value="{{ key }}" {% if diagnosis.visit_status.value == key %}selected{% endif %}>{{ label }}</option>
+         {% endfor %}
+     </select>
+ 
+     <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
+     <input type="datetime-local" name="scheduled_at"
+-           value="{{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.expert_visit_scheduled_at else '' }}"
++           value="{{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.visit_scheduled_at else '' }}"
+            class="w-full border rounded-lg px-3 py-2 mb-4">
+ 
+     <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
+-    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.expert_visit_admin_note or '' }}</textarea>
++    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.admin_notes or '' }}</textarea>
+ 
+     <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
+ </form>
+ 
+ <div class="bg-white rounded-xl shadow p-5 text-sm">
+     <h2 class="font-bold mb-3">وضعیت فعلی</h2>
+-    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.expert_visit_status, 'bg-gray-100 text-gray-700') }}">
+-        {{ status_labels.get(diagnosis.expert_visit_status, diagnosis.expert_visit_status) }}
++    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.visit_status.value, 'bg-gray-100 text-gray-700') }}">
++        {{ status_labels.get(diagnosis.visit_status.value, diagnosis.visit_status.value) }}
+     </span>
+-    {% if diagnosis.expert_visit_scheduled_at %}
+-    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
++    {% if diagnosis.visit_scheduled_at %}
++    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
+     {% endif %}
+ </div>
+ </div>
+diff --git a/src/admin/templates/visits.html b/src/admin/templates/visits.html
+index b933536..e6cbbee 100644
+--- a/src/admin/templates/visits.html
++++ b/src/admin/templates/visits.html
+@@ -51,7 +51,7 @@
+     <td class="px-4 py-3">{{ item.plant.name if item.plant else (item.diagnosis.plant_name_input or '—') }}</td>
+     <td class="px-4 py-3">{{ item.diagnosis.disease_name }}</td>
+     <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs {{ item.status_class }}">{{ item.status_label }}</span></td>
+-    <td class="px-4 py-3 text-gray-500">{{ item.diagnosis.expert_visit_requested_at.strftime('%Y-%m-%d %H:%M') if item.diagnosis.expert_visit_requested_at else item.diagnosis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
++    <td class="px-4 py-3 text-gray-500">{{ item.diagnosis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+     <td class="px-4 py-3"><a href="/visits/{{ item.diagnosis.id }}" class="text-emerald-700 font-semibold">مشاهده ←</a></td>
+ </tr>
+ {% endfor %}
+diff --git a/src/core/config.py b/src/core/config.py
+index 407e4cb..aa0a329 100644
+--- a/src/core/config.py
++++ b/src/core/config.py
+@@ -57,6 +57,12 @@ class Settings(BaseSettings):
+     # (مثل Claude) رو هم از پشت همین فرمت ارائه می‌دن. خالی = آدرس رسمی OpenAI.
+     openai_base_url: str = ""
+ 
++    # ---------- New Admin Panel ----------
++    admin_username: str = "admin"
++    admin_password_hash: str = ""
++    admin_session_secret: str = ""
++
++
+     # ---------- Logging ----------
+     log_level: str = "INFO"
+     log_format: Literal["json", "console"] = "json"

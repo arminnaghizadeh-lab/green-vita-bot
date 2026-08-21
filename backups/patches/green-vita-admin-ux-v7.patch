@@ -1,0 +1,78 @@
+diff --git a/src/admin/routers/visits.py b/src/admin/routers/visits.py
+index ffcbf5b..c1b0f90 100644
+--- a/src/admin/routers/visits.py
++++ b/src/admin/routers/visits.py
+@@ -4,7 +4,7 @@ from datetime import datetime
+ 
+ from fastapi import APIRouter, Depends, Form, HTTPException, Request
+ from fastapi.templating import Jinja2Templates
+-from fastapi.responses import RedirectResponse
++from fastapi.responses import RedirectResponse, Response
+ from sqlalchemy import func, select
+ from sqlalchemy.ext.asyncio import AsyncSession
+ 
+@@ -102,6 +102,37 @@ async def visits_list(
+     )
+ 
+ 
++@router.get("/visits/{diagnosis_id}/image")
++async def visit_image(
++    diagnosis_id: int,
++    request: Request,
++    session: AsyncSession = Depends(get_session),
++    settings: Settings = Depends(get_settings),
++):
++    redirect = require_authentication(request)
++    if redirect:
++        return redirect
++
++    diagnosis = await session.get(Diagnosis, diagnosis_id)
++    if not diagnosis or not diagnosis.telegram_file_id:
++        raise HTTPException(status_code=404, detail="Image not found")
++
++    import httpx
++    async with httpx.AsyncClient(timeout=10) as client:
++        file_info = await client.get(
++            f"https://api.telegram.org/bot{settings.bot_token}/getFile",
++            params={"file_id": diagnosis.telegram_file_id},
++        )
++        data = file_info.json()
++        if not data.get("ok"):
++            raise HTTPException(status_code=404, detail="Image unavailable")
++        file_path = data["result"]["file_path"]
++        image = await client.get(
++            f"https://api.telegram.org/file/bot{settings.bot_token}/{file_path}"
++        )
++    return Response(content=image.content, media_type=image.headers.get("content-type", "image/jpeg"))
++
++
+ @router.get("/visits/{diagnosis_id}")
+ async def visit_detail(
+     diagnosis_id: int,
+diff --git a/src/admin/templates/base.html b/src/admin/templates/base.html
+index 14d109d..184f2b7 100644
+--- a/src/admin/templates/base.html
++++ b/src/admin/templates/base.html
+@@ -5,14 +5,20 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>{% block title %}Green Vita Admin{% endblock %}</title>
+     <script src="https://cdn.tailwindcss.com"></script>
++    <link rel="preconnect" href="https://fonts.googleapis.com">
++    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+     <style>
+-        body { font-family: 'Tahoma', sans-serif; }
++        body { font-family: 'Vazirmatn', Tahoma, sans-serif; }
++
+     </style>
+ </head>
+ <body class="bg-gray-50 text-gray-800 min-h-screen">
+     <nav class="bg-emerald-700 text-white px-6 py-4 flex items-center justify-between shadow">
+         <span class="font-bold text-lg">🌿 Green Vita — پنل مدیریت</span>
+-        <span class="text-sm opacity-80">{{ environment | default('') }}</span>
++        <div class="flex items-center gap-4">
++            <span class="text-sm opacity-80">{{ environment | default('') }}</span>
++            {% if request.session.get("admin_authenticated") %}<form method="post" action="/logout"><button class="bg-white/20 px-3 py-1 rounded">خروج</button></form>{% endif %}
++        </div>
+     </nav>
+     <main class="p-6 max-w-5xl mx-auto">
+         {% block content %}{% endblock %}

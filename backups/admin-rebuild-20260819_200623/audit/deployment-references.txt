@@ -1,0 +1,1 @@
+docker-compose.yml:57:      dockerfile: docker/Dockerfile.admin

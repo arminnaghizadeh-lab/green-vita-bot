@@ -1,0 +1,8 @@
+src/admin
+src/admin/__pycache__
+src/admin/routers
+src/admin/routers/__pycache__
+src/admin/static
+src/admin/static/css
+src/admin/static/js
+src/admin/templates

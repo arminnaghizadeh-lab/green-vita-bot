@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ورود | Green Vita</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="login-page">
+    <main class="login-card">
+        <img src="/static/logo.png" class="login-logo" alt="Green Vita">
+        <h1>پنل مدیریت گرین ویتا</h1>
+        <p class="muted">کلینیک گیاهپزشکی گرین ویتا</p>
+
+        {% if error %}
+        <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/login">
+            <label>نام کاربری</label>
+            <input name="username" type="text" autocomplete="username" required>
+
+            <label>رمز عبور</label>
+            <input name="password" type="password" autocomplete="current-password" required>
+
+            <button type="submit">ورود به پنل</button>
+        </form>
+    </main>
+</body>
+</html>

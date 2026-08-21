@@ -1,0 +1,16 @@
+src/admin/main.py:28:app.include_router(auth.router)
+src/admin/main.py:31:@app.get("/health")
+src/admin/main.py:36:@app.get("/")
+src/admin/routers/auth.py:1:from fastapi import APIRouter, Form, Request
+src/admin/routers/auth.py:8:router = APIRouter(tags=["auth"])
+src/admin/routers/auth.py:12:@router.get("/login", response_class=HTMLResponse)
+src/admin/routers/auth.py:24:@router.post("/login")
+src/admin/routers/auth.py:47:@router.post("/logout")
+src/admin/routers/dashboard.py:1:from fastapi import APIRouter, Depends, Request
+src/admin/routers/dashboard.py:11:router = APIRouter()
+src/admin/routers/dashboard.py:15:@router.get("/")
+src/admin/routers/visits.py:3:from fastapi import APIRouter, Depends, Form, HTTPException, Request
+src/admin/routers/visits.py:15:router = APIRouter(tags=["visits"])
+src/admin/routers/visits.py:39:@router.get("/visits")
+src/admin/routers/visits.py:112:@router.get("/visits/{diagnosis_id}")
+src/admin/routers/visits.py:158:@router.post("/visits/{diagnosis_id}/update")

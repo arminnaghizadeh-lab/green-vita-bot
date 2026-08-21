@@ -1,0 +1,11 @@
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Found the following certs:
+  Certificate Name: greenvitaclinic.ir
+    Serial Number: 5034af97a09caac117d019070e0ca274c06
+    Key Type: ECDSA
+    Domains: greenvitaclinic.ir www.greenvitaclinic.ir
+    Expiry Date: 2026-11-19 11:39:35+00:00 (VALID: 89 days)
+    Certificate Path: /etc/letsencrypt/live/greenvitaclinic.ir/fullchain.pem
+    Private Key Path: /etc/letsencrypt/live/greenvitaclinic.ir/privkey.pem
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

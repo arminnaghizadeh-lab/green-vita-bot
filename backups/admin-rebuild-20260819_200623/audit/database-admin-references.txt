@@ -1,0 +1,86 @@
+alembic/versions/0004_add_plant_identifications_table.py:1:"""add plant_identifications table
+alembic/versions/0004_add_plant_identifications_table.py:23:        "plant_identifications",
+alembic/versions/0004_add_plant_identifications_table.py:48:            "expert_visit_requested", sa.Boolean(), nullable=False, server_default=sa.false()
+alembic/versions/0004_add_plant_identifications_table.py:53:    op.create_index("ix_plant_identifications_user_id", "plant_identifications", ["user_id"])
+alembic/versions/0004_add_plant_identifications_table.py:57:    op.drop_table("plant_identifications")
+alembic/versions/0002_add_diagnoses_table.py:1:"""add diagnoses table
+alembic/versions/0002_add_diagnoses_table.py:20:    diagnosis_severity = sa.Enum(
+alembic/versions/0002_add_diagnoses_table.py:21:        "none", "mild", "moderate", "severe", "unknown", name="diagnosisseverity"
+alembic/versions/0002_add_diagnoses_table.py:25:        "diagnoses",
+alembic/versions/0002_add_diagnoses_table.py:32:        sa.Column("severity", diagnosis_severity, nullable=False, server_default="unknown"),
+alembic/versions/0002_add_diagnoses_table.py:42:    op.create_index("ix_diagnoses_user_id", "diagnoses", ["user_id"])
+alembic/versions/0002_add_diagnoses_table.py:43:    op.create_index("ix_diagnoses_plant_id", "diagnoses", ["plant_id"])
+alembic/versions/0002_add_diagnoses_table.py:47:    op.drop_table("diagnoses")
+alembic/versions/0002_add_diagnoses_table.py:48:    sa.Enum(name="diagnosisseverity").drop(op.get_bind(), checkfirst=True)
+alembic/versions/0001_initial_schema.py:29:        sa.Column("is_admin", sa.Boolean(), nullable=False, server_default=sa.false()),
+alembic/versions/0007_expand_visit_status.py:1:"""expand visit status enum
+alembic/versions/0007_expand_visit_status.py:18:        op.execute("ALTER TYPE visitstatus ADD VALUE IF NOT EXISTS 'reviewing'")
+alembic/versions/0007_expand_visit_status.py:19:        op.execute("ALTER TYPE visitstatus ADD VALUE IF NOT EXISTS 'confirmed'")
+alembic/versions/0007_expand_visit_status.py:20:        op.execute("ALTER TYPE visitstatus ADD VALUE IF NOT EXISTS 'in_progress'")
+alembic/versions/0006_add_expert_visit_workflow.py:1:"""add expert visit workflow and visit management fields.
+alembic/versions/0006_add_expert_visit_workflow.py:21:    # Existing expert-visit workflow fields used by the Telegram bot.
+alembic/versions/0006_add_expert_visit_workflow.py:23:        "diagnoses",
+alembic/versions/0006_add_expert_visit_workflow.py:25:            "expert_visit_status",
+alembic/versions/0006_add_expert_visit_workflow.py:32:        "diagnoses",
+alembic/versions/0006_add_expert_visit_workflow.py:34:            "expert_visit_requested_at",
+alembic/versions/0006_add_expert_visit_workflow.py:40:        "diagnoses",
+alembic/versions/0006_add_expert_visit_workflow.py:42:            "expert_visit_updated_at",
+alembic/versions/0006_add_expert_visit_workflow.py:48:        "diagnoses",
+alembic/versions/0006_add_expert_visit_workflow.py:50:            "expert_visit_scheduled_at",
+alembic/versions/0006_add_expert_visit_workflow.py:56:        "diagnoses",
+alembic/versions/0006_add_expert_visit_workflow.py:58:            "expert_visit_admin_note",
+alembic/versions/0006_add_expert_visit_workflow.py:64:    # New visit-management workflow shared by diagnoses and plant identification.
+alembic/versions/0006_add_expert_visit_workflow.py:65:    visit_status = sa.Enum(
+alembic/versions/0006_add_expert_visit_workflow.py:70:        name="visitstatus",
+alembic/versions/0006_add_expert_visit_workflow.py:72:    visit_status.create(op.get_bind(), checkfirst=True)
+alembic/versions/0006_add_expert_visit_workflow.py:74:    for table in ("diagnoses", "plant_identifications"):
+alembic/versions/0006_add_expert_visit_workflow.py:78:                "visit_status",
+alembic/versions/0006_add_expert_visit_workflow.py:79:                visit_status,
+alembic/versions/0006_add_expert_visit_workflow.py:87:                "visit_scheduled_at",
+alembic/versions/0006_add_expert_visit_workflow.py:95:                "admin_notes",
+alembic/versions/0006_add_expert_visit_workflow.py:103:    for table in ("diagnoses", "plant_identifications"):
+alembic/versions/0006_add_expert_visit_workflow.py:104:        op.drop_column(table, "admin_notes")
+alembic/versions/0006_add_expert_visit_workflow.py:105:        op.drop_column(table, "visit_scheduled_at")
+alembic/versions/0006_add_expert_visit_workflow.py:106:        op.drop_column(table, "visit_status")
+alembic/versions/0006_add_expert_visit_workflow.py:108:    sa.Enum(name="visitstatus").drop(op.get_bind(), checkfirst=True)
+alembic/versions/0006_add_expert_visit_workflow.py:110:    op.drop_column("diagnoses", "expert_visit_admin_note")
+alembic/versions/0006_add_expert_visit_workflow.py:111:    op.drop_column("diagnoses", "expert_visit_scheduled_at")
+alembic/versions/0006_add_expert_visit_workflow.py:112:    op.drop_column("diagnoses", "expert_visit_updated_at")
+alembic/versions/0006_add_expert_visit_workflow.py:113:    op.drop_column("diagnoses", "expert_visit_requested_at")
+alembic/versions/0006_add_expert_visit_workflow.py:114:    op.drop_column("diagnoses", "expert_visit_status")
+alembic/versions/0003_diagnosis_intake_fields.py:1:"""add intake fields and expert visit flag to diagnoses
+alembic/versions/0003_diagnosis_intake_fields.py:20:    op.add_column("diagnoses", sa.Column("plant_name_input", sa.String(255), nullable=True))
+alembic/versions/0003_diagnosis_intake_fields.py:21:    op.add_column("diagnoses", sa.Column("user_notes", sa.Text(), nullable=True))
+alembic/versions/0003_diagnosis_intake_fields.py:23:        "diagnoses",
+alembic/versions/0003_diagnosis_intake_fields.py:25:            "expert_visit_requested", sa.Boolean(), nullable=False, server_default=sa.false()
+alembic/versions/0003_diagnosis_intake_fields.py:31:    op.drop_column("diagnoses", "expert_visit_requested")
+alembic/versions/0003_diagnosis_intake_fields.py:32:    op.drop_column("diagnoses", "user_notes")
+alembic/versions/0003_diagnosis_intake_fields.py:33:    op.drop_column("diagnoses", "plant_name_input")
+alembic/versions/0005_add_cause_to_diagnoses.py:1:"""add cause column to diagnoses
+alembic/versions/0005_add_cause_to_diagnoses.py:20:    op.add_column("diagnoses", sa.Column("cause", sa.Text(), nullable=True))
+alembic/versions/0005_add_cause_to_diagnoses.py:24:    op.drop_column("diagnoses", "cause")
+src/db/models/user.py:14:    from src.db.models.diagnosis import Diagnosis
+src/db/models/user.py:16:    from src.db.models.plant_identification import PlantIdentification
+src/db/models/user.py:31:    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+src/db/models/user.py:43:    diagnoses: Mapped[list["Diagnosis"]] = relationship(
+src/db/models/user.py:46:    plant_identifications: Mapped[list["PlantIdentification"]] = relationship(
+src/db/models/__init__.py:7:from src.db.models.diagnosis import Diagnosis, DiagnosisSeverity
+src/db/models/__init__.py:9:from src.db.models.plant_identification import DifficultyLevel, PlantIdentification
+src/db/models/__init__.py:12:from src.db.models.visit_status import VisitStatus
+src/db/models/plant_identification.py:17:from src.db.models.visit_status import VisitStatus
+src/db/models/plant_identification.py:31:    __tablename__ = "plant_identifications"
+src/db/models/plant_identification.py:71:    expert_visit_requested: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+src/db/models/plant_identification.py:74:    visit_status: Mapped[VisitStatus] = mapped_column(
+src/db/models/plant_identification.py:82:    visit_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+src/db/models/plant_identification.py:83:    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+src/db/models/plant_identification.py:85:    user: Mapped["User"] = relationship(back_populates="plant_identifications")
+src/db/models/plant.py:15:    from src.db.models.diagnosis import Diagnosis
+src/db/models/plant.py:54:    diagnoses: Mapped[list["Diagnosis"]] = relationship(
+src/db/models/diagnosis.py:18:from src.db.models.visit_status import VisitStatus
+src/db/models/diagnosis.py:34:    __tablename__ = "diagnoses"
+src/db/models/diagnosis.py:69:    expert_visit_requested: Mapped[bool] = mapped_column(
+src/db/models/diagnosis.py:74:    visit_status: Mapped[VisitStatus] = mapped_column(
+src/db/models/diagnosis.py:82:    visit_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+src/db/models/diagnosis.py:83:    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+src/db/models/diagnosis.py:85:    user: Mapped["User"] = relationship(back_populates="diagnoses")
+src/db/models/diagnosis.py:86:    plant: Mapped["Plant | None"] = relationship(back_populates="diagnoses")

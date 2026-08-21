@@ -1,0 +1,8 @@
+  File: .env
+  Size: 2269      	Blocks: 8          IO Block: 4096   regular file
+Device: 253,1	Inode: 528389      Links: 1
+Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2026-08-19 20:14:30.981000000 +0330
+Modify: 2026-08-19 20:14:30.972000000 +0330
+Change: 2026-08-19 20:14:30.972000000 +0330
+ Birth: 2026-08-16 21:51:31.977000000 +0330

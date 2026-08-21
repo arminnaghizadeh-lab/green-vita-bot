@@ -1,0 +1,653 @@
+diff --git a/.env.example b/.env.example
+index 8fca5ee..eb3f7ca 100644
+--- a/.env.example
++++ b/.env.example
+@@ -49,6 +49,9 @@ OPENAI_MODEL=gpt-4o
+ # خالی بگذار = آدرس رسمی OpenAI.
+ OPENAI_BASE_URL=
+ 
++
++# ---------- Admin Panel ----------
++
+ # ---------- Logging ----------
+ LOG_LEVEL=INFO                 # DEBUG | INFO | WARNING | ERROR
+ LOG_FORMAT=json                # json | console
+diff --git a/Makefile b/Makefile
+index 67b075a..a4d80ce 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,11 +1,11 @@
+-.PHONY: help install dev-install run-bot run-admin migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
++.PHONY: help install dev-install run-bot migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
+ 
+ help:
+ 	@echo "دستورات موجود:"
+ 	@echo "  make install        نصب وابستگی‌های اصلی"
+ 	@echo "  make dev-install    نصب وابستگی‌های توسعه (تست/لینت)"
+ 	@echo "  make run-bot        اجرای بات تلگرام (لوکال)"
+-	@echo "  make run-admin      اجرای پنل مدیریت (لوکال)"
++	@echo "  make      اجرای پنل مدیریت (لوکال)"
+ 	@echo "  make migrate        اجرای مایگریشن‌های آلمبیک"
+ 	@echo "  make migrate-new    ساخت مایگریشن جدید (m=پیام)"
+ 	@echo "  make seed           پر کردن دیتابیس با داده نمونه"
+@@ -26,9 +26,6 @@ dev-install:
+ run-bot:
+ 	python -m src.bot.main
+ 
+-run-admin:
+-	uvicorn src.admin.main:app --reload --port 8000
+-
+ migrate:
+ 	alembic upgrade head
+ 
+diff --git a/alembic/versions/0006_add_expert_visit_workflow.py b/alembic/versions/0006_add_expert_visit_workflow.py
+index 26998ce..7744ff7 100644
+--- a/alembic/versions/0006_add_expert_visit_workflow.py
++++ b/alembic/versions/0006_add_expert_visit_workflow.py
+@@ -1,8 +1,8 @@
+-"""add expert visit workflow fields
++"""add expert visit workflow and visit management fields.
+ 
+ Revision ID: 0006
+ Revises: 0005
+-Create Date: 2026-08-16
++Create Date: 2026-08-18
+ """
+ 
+ from collections.abc import Sequence
+@@ -18,6 +18,7 @@ depends_on: str | Sequence[str] | None = None
+ 
+ 
+ def upgrade() -> None:
++    # Existing expert-visit workflow fields used by the Telegram bot.
+     op.add_column(
+         "diagnoses",
+         sa.Column(
+@@ -29,23 +30,83 @@ def upgrade() -> None:
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_requested_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_requested_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_updated_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_updated_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_scheduled_at", sa.DateTime(timezone=True), nullable=True),
++        sa.Column(
++            "expert_visit_scheduled_at",
++            sa.DateTime(timezone=True),
++            nullable=True,
++        ),
+     )
+     op.add_column(
+         "diagnoses",
+-        sa.Column("expert_visit_admin_note", sa.Text(), nullable=True),
++        sa.Column(
++            "expert_visit_admin_note",
++            sa.Text(),
++            nullable=True,
++        ),
++    )
++
++    # New visit-management workflow shared by diagnoses and plant identification.
++    visit_status = sa.Enum(
++        "pending",
++        "scheduled",
++        "completed",
++        "cancelled",
++        name="visitstatus",
+     )
++    visit_status.create(op.get_bind(), checkfirst=True)
++
++    for table in ("diagnoses", "plant_identifications"):
++        op.add_column(
++            table,
++            sa.Column(
++                "visit_status",
++                visit_status,
++                nullable=False,
++                server_default="pending",
++            ),
++        )
++        op.add_column(
++            table,
++            sa.Column(
++                "visit_scheduled_at",
++                sa.DateTime(timezone=True),
++                nullable=True,
++            ),
++        )
++        op.add_column(
++            table,
++            sa.Column(
++                "admin_notes",
++                sa.Text(),
++                nullable=True,
++            ),
++        )
+ 
+ 
+ def downgrade() -> None:
++    for table in ("diagnoses", "plant_identifications"):
++        op.drop_column(table, "admin_notes")
++        op.drop_column(table, "visit_scheduled_at")
++        op.drop_column(table, "visit_status")
++
++    sa.Enum(name="visitstatus").drop(op.get_bind(), checkfirst=True)
++
+     op.drop_column("diagnoses", "expert_visit_admin_note")
+     op.drop_column("diagnoses", "expert_visit_scheduled_at")
+     op.drop_column("diagnoses", "expert_visit_updated_at")
+diff --git a/alembic/versions/0006_expert_visit_management.py b/alembic/versions/0006_expert_visit_management.py
+deleted file mode 100644
+index 74e9f26..0000000
+--- a/alembic/versions/0006_expert_visit_management.py
++++ /dev/null
+@@ -1,45 +0,0 @@
+-"""add visit status, scheduling, and admin notes to diagnoses and plant_identifications
+-
+-Revision ID: 0006
+-Revises: 0005
+-Create Date: 2026-08-17
+-"""
+-
+-from collections.abc import Sequence
+-
+-import sqlalchemy as sa
+-from alembic import op
+-
+-revision: str = "0006"
+-down_revision: str | None = "0005"
+-branch_labels: str | Sequence[str] | None = None
+-depends_on: str | Sequence[str] | None = None
+-
+-
+-def upgrade() -> None:
+-    visit_status = sa.Enum(
+-        "pending", "scheduled", "completed", "cancelled", name="visitstatus"
+-    )
+-    visit_status.create(op.get_bind(), checkfirst=True)
+-
+-    for table in ("diagnoses", "plant_identifications"):
+-        op.add_column(
+-            table,
+-            sa.Column(
+-                "visit_status",
+-                visit_status,
+-                nullable=False,
+-                server_default="pending",
+-            ),
+-        )
+-        op.add_column(table, sa.Column("visit_scheduled_at", sa.DateTime(timezone=True), nullable=True))
+-        op.add_column(table, sa.Column("admin_notes", sa.Text(), nullable=True))
+-
+-
+-def downgrade() -> None:
+-    for table in ("diagnoses", "plant_identifications"):
+-        op.drop_column(table, "admin_notes")
+-        op.drop_column(table, "visit_scheduled_at")
+-        op.drop_column(table, "visit_status")
+-
+-    sa.Enum(name="visitstatus").drop(op.get_bind(), checkfirst=True)
+diff --git a/docker-compose.yml b/docker-compose.yml
+index 1cc598a..2a02891 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -51,6 +51,25 @@ services:
+       migrate:
+         condition: service_completed_successfully
+ 
++  admin:
++    build:
++      context: .
++      dockerfile: docker/Dockerfile.admin
++    restart: unless-stopped
++    env_file: .env
++    ports:
++      - "8000:8000"
++    depends_on:
++      db:
++        condition: service_healthy
++      migrate:
++        condition: service_completed_successfully
++    healthcheck:
++      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
++      interval: 15s
++      timeout: 5s
++      retries: 5
++
+ volumes:
+   pgdata:
+   redisdata:
+diff --git a/requirements.txt b/requirements.txt
+index 0f83ea8..aa1e9ce 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -17,3 +17,4 @@ python-multipart==0.0.20
+ itsdangerous==2.2.0
+ tenacity==9.0.0
+ structlog==24.4.0
++pwdlib[argon2]==0.2.1
+diff --git a/src/admin/routers/visits.py b/src/admin/routers/visits.py
+deleted file mode 100644
+index f528149..0000000
+--- a/src/admin/routers/visits.py
++++ /dev/null
+@@ -1,229 +0,0 @@
+-"""Admin workflow for Green Vita expert visit requests."""
+-
+-from datetime import datetime
+-
+-from fastapi import APIRouter, Depends, Form, HTTPException, Request
+-from fastapi.templating import Jinja2Templates
+-from fastapi.responses import RedirectResponse
+-from sqlalchemy import func, select
+-from sqlalchemy.ext.asyncio import AsyncSession
+-
+-from src.admin.auth import require_authentication
+-from src.admin.dependencies import get_session
+-from src.core.config import Settings, get_settings
+-from src.db.models import Diagnosis, Plant, User
+-
+-
+-router = APIRouter(tags=["visits"])
+-templates = Jinja2Templates(directory="src/admin/templates")
+-
+-STATUS_LABELS = {
+-    "new": "جدید",
+-    "reviewing": "در حال بررسی",
+-    "waiting_contact": "در انتظار تماس",
+-    "scheduled": "زمان‌بندی‌شده",
+-    "in_progress": "در حال انجام",
+-    "completed": "انجام‌شده",
+-    "cancelled": "لغوشده",
+-    "rejected": "ردشده",
+-}
+-
+-STATUS_CLASSES = {
+-    "new": "bg-red-100 text-red-700",
+-    "reviewing": "bg-blue-100 text-blue-700",
+-    "waiting_contact": "bg-amber-100 text-amber-700",
+-    "scheduled": "bg-purple-100 text-purple-700",
+-    "in_progress": "bg-indigo-100 text-indigo-700",
+-    "completed": "bg-emerald-100 text-emerald-700",
+-    "cancelled": "bg-gray-200 text-gray-700",
+-    "rejected": "bg-gray-200 text-gray-700",
+-}
+-
+-
+-@router.get("/visits")
+-async def visits_list(
+-    request: Request,
+-    status: str | None = None,
+-    session: AsyncSession = Depends(get_session),
+-    settings: Settings = Depends(get_settings),
+-):
+-    redirect = require_authentication(request)
+-    if redirect:
+-        return redirect
+-
+-    query = (
+-        select(Diagnosis, User, Plant)
+-        .join(User, Diagnosis.user_id == User.id)
+-        .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
+-        .where(Diagnosis.expert_visit_requested.is_(True))
+-        .order_by(
+-            Diagnosis.expert_visit_updated_at.desc().nullslast(),
+-            Diagnosis.created_at.desc(),
+-        )
+-    )
+-    if status in STATUS_LABELS:
+-        query = query.where(Diagnosis.expert_visit_status == status)
+-
+-    rows = (await session.execute(query)).all()
+-
+-    visits = [
+-        {
+-            "diagnosis": diagnosis,
+-            "user": user,
+-            "plant": plant,
+-            "status_label": STATUS_LABELS.get(
+-                diagnosis.expert_visit_status, diagnosis.expert_visit_status
+-            ),
+-            "status_class": STATUS_CLASSES.get(
+-                diagnosis.expert_visit_status, "bg-gray-100 text-gray-700"
+-            ),
+-        }
+-        for diagnosis, user, plant in rows
+-    ]
+-
+-    counts_result = await session.execute(
+-        select(Diagnosis.expert_visit_status, func.count())
+-        .where(Diagnosis.expert_visit_requested.is_(True))
+-        .group_by(Diagnosis.expert_visit_status)
+-    )
+-    counts = {row[0]: row[1] for row in counts_result.all()}
+-
+-    return templates.TemplateResponse(
+-        "visits.html",
+-        {
+-            "request": request,
+-            "app_name": settings.app_name,
+-            "environment": settings.app_env,
+-            "visits": visits,
+-            "counts": counts,
+-            "status_labels": STATUS_LABELS,
+-            "selected_status": status,
+-        },
+-    )
+-
+-
+-@router.get("/visits/{diagnosis_id}/image")
+-async def visit_image(
+-    diagnosis_id: int,
+-    request: Request,
+-    session: AsyncSession = Depends(get_session),
+-    settings: Settings = Depends(get_settings),
+-):
+-    redirect = require_authentication(request)
+-    if redirect:
+-        return redirect
+-
+-    diagnosis = await session.get(Diagnosis, diagnosis_id)
+-    if not diagnosis or not diagnosis.expert_visit_requested or not diagnosis.telegram_file_id:
+-        raise HTTPException(status_code=404, detail="Visit image not found")
+-
+-    import asyncio
+-    import json
+-    from urllib.parse import quote
+-    from urllib.request import urlopen
+-
+-    async def fetch_file_url() -> str:
+-        def _fetch() -> str:
+-            api_url = (
+-                f"https://api.telegram.org/bot{settings.bot_token}/getFile"
+-                f"?file_id={quote(diagnosis.telegram_file_id, safe='')}"
+-            )
+-            with urlopen(api_url, timeout=15) as response:
+-                payload = json.load(response)
+-            if not payload.get("ok") or not payload.get("result", {}).get("file_path"):
+-                raise ValueError("Telegram did not return a file path")
+-            return (
+-                f"https://api.telegram.org/file/bot{settings.bot_token}/"
+-                f"{payload['result']['file_path']}"
+-            )
+-
+-        return await asyncio.to_thread(_fetch)
+-
+-    try:
+-        file_url = await fetch_file_url()
+-    except Exception as exc:
+-        raise HTTPException(status_code=404, detail="Unable to load visit image") from exc
+-
+-    return RedirectResponse(url=file_url, status_code=307)
+-
+-
+-@router.get("/visits/{diagnosis_id}")
+-async def visit_detail(
+-    diagnosis_id: int,
+-    request: Request,
+-    session: AsyncSession = Depends(get_session),
+-    settings: Settings = Depends(get_settings),
+-):
+-    redirect = require_authentication(request)
+-    if redirect:
+-        return redirect
+-
+-    result = await session.execute(
+-        select(Diagnosis, User, Plant)
+-        .join(User, Diagnosis.user_id == User.id)
+-        .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
+-        .where(
+-            Diagnosis.id == diagnosis_id,
+-            Diagnosis.expert_visit_requested.is_(True),
+-        )
+-    )
+-    row = result.first()
+-    if not row:
+-        raise HTTPException(status_code=404, detail="Visit request not found")
+-
+-    diagnosis, user, plant = row
+-    if diagnosis.expert_visit_status == "new":
+-        diagnosis.expert_visit_status = "reviewing"
+-        diagnosis.expert_visit_updated_at = datetime.utcnow()
+-        await session.commit()
+-    return templates.TemplateResponse(
+-        "visit_detail.html",
+-        {
+-            "request": request,
+-            "app_name": settings.app_name,
+-            "environment": settings.app_env,
+-            "diagnosis": diagnosis,
+-            "user": user,
+-            "plant": plant,
+-            "status_labels": STATUS_LABELS,
+-            "status_classes": STATUS_CLASSES,
+-        },
+-    )
+-
+-
+-@router.post("/visits/{diagnosis_id}/update")
+-async def update_visit(
+-    diagnosis_id: int,
+-    request: Request,
+-    status: str = Form(...),
+-    admin_note: str = Form(""),
+-    scheduled_at: str = Form(""),
+-    session: AsyncSession = Depends(get_session),
+-):
+-    redirect = require_authentication(request)
+-    if redirect:
+-        return redirect
+-
+-    if status not in STATUS_LABELS:
+-        return RedirectResponse(url="/visits", status_code=303)
+-
+-    diagnosis = await session.get(Diagnosis, diagnosis_id)
+-    if not diagnosis or not diagnosis.expert_visit_requested:
+-        raise HTTPException(status_code=404, detail="Visit request not found")
+-
+-    diagnosis.expert_visit_status = status
+-    diagnosis.expert_visit_updated_at = datetime.now().astimezone()
+-    diagnosis.expert_visit_admin_note = admin_note.strip() or None
+-
+-    if scheduled_at.strip():
+-        try:
+-            diagnosis.expert_visit_scheduled_at = datetime.fromisoformat(
+-                scheduled_at.strip()
+-            )
+-        except ValueError:
+-            diagnosis.expert_visit_scheduled_at = None
+-    else:
+-        diagnosis.expert_visit_scheduled_at = None
+-
+-    await session.commit()
+-    return RedirectResponse(url="/visits", status_code=303)
+diff --git a/src/admin/templates/visit_detail.html b/src/admin/templates/visit_detail.html
+deleted file mode 100644
+index 18a1cf4..0000000
+--- a/src/admin/templates/visit_detail.html
++++ /dev/null
+@@ -1,81 +0,0 @@
+-{% extends "base.html" %}
+-{% block title %}درخواست ویزیت #{{ diagnosis.id }} | {{ app_name }}{% endblock %}
+-{% block content %}
+-<div class="flex items-center justify-between mb-6">
+-    <div>
+-        <h1 class="text-2xl font-bold">🩺 درخواست ویزیت #{{ diagnosis.id }}</h1>
+-        <p class="text-sm text-gray-500 mt-1">پرونده و مدیریت درخواست</p>
+-    </div>
+-    <a href="/visits" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">بازگشت به درخواست‌ها</a>
+-</div>
+-
+-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+-<div class="lg:col-span-2 space-y-6">
+-    <div class="bg-white rounded-xl shadow p-5">
+-        <h2 class="font-bold text-lg mb-4">اطلاعات کاربر</h2>
+-        <div class="grid grid-cols-2 gap-4 text-sm">
+-            <div><span class="text-gray-500">نام:</span> {{ user.first_name or '' }} {{ user.last_name or '' }}</div>
+-            <div><span class="text-gray-500">Username:</span> {{ '@' ~ user.username if user.username else '—' }}</div>
+-            <div><span class="text-gray-500">Telegram ID:</span> {{ user.telegram_id }}</div>
+-            <div><span class="text-gray-500">شماره تماس:</span> {{ user.phone_number or '—' }}</div>
+-        </div>
+-    </div>
+-
+-    <div class="bg-white rounded-xl shadow p-5">
+-        <h2 class="font-bold text-lg mb-4">تصویر ارسالی کاربر</h2>
+-        {% if diagnosis.telegram_file_id %}<div class="text-sm text-gray-500 mb-4">شناسه تصویر: {{ diagnosis.telegram_file_id }}</div>{% endif %}
+-        <h2 class="font-bold text-lg mb-4">اطلاعات گیاه و تشخیص</h2>
+-        <div class="grid grid-cols-2 gap-4 text-sm">
+-            <div><span class="text-gray-500">گیاه:</span> {{ plant.name if plant else (diagnosis.plant_name_input or '—') }}</div>
+-            <div><span class="text-gray-500">بیماری/مشکل:</span> {{ diagnosis.disease_name }}</div>
+-            <div><span class="text-gray-500">شدت:</span> {{ diagnosis.severity.value if diagnosis.severity else '—' }}</div>
+-            <div><span class="text-gray-500">اطمینان AI:</span> {{ diagnosis.confidence }}%</div>
+-        </div>
+-        {% if diagnosis.user_notes %}
+-        <div class="mt-4 p-4 bg-gray-50 rounded-lg"><strong>توضیحات کاربر:</strong><br>{{ diagnosis.user_notes }}</div>
+-        {% endif %}
+-        {% if diagnosis.symptoms %}
+-        <div class="mt-4 p-4 bg-amber-50 rounded-lg"><strong>علائم:</strong><br>{{ diagnosis.symptoms }}</div>
+-        {% endif %}
+-        {% if diagnosis.cause %}
+-        <div class="mt-4 p-4 bg-blue-50 rounded-lg"><strong>علت احتمالی:</strong><br>{{ diagnosis.cause }}</div>
+-        {% endif %}
+-        {% if diagnosis.treatment %}
+-        <div class="mt-4 p-4 bg-emerald-50 rounded-lg"><strong>درمان پیشنهادی:</strong><br>{{ diagnosis.treatment }}</div>
+-        {% endif %}
+-    </div>
+-</div>
+-
+-<div class="space-y-6">
+-<form method="post" action="/visits/{{ diagnosis.id }}/update" class="bg-white rounded-xl shadow p-5">
+-    <h2 class="font-bold text-lg mb-4">مدیریت درخواست</h2>
+-    <label class="block text-sm font-semibold mb-2">وضعیت</label>
+-    <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
+-        {% for key, label in status_labels.items() %}
+-        <option value="{{ key }}" {% if diagnosis.expert_visit_status == key %}selected{% endif %}>{{ label }}</option>
+-        {% endfor %}
+-    </select>
+-
+-    <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
+-    <input type="datetime-local" name="scheduled_at"
+-           value="{{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.expert_visit_scheduled_at else '' }}"
+-           class="w-full border rounded-lg px-3 py-2 mb-4">
+-
+-    <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
+-    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.expert_visit_admin_note or '' }}</textarea>
+-
+-    <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
+-</form>
+-
+-<div class="bg-white rounded-xl shadow p-5 text-sm">
+-    <h2 class="font-bold mb-3">وضعیت فعلی</h2>
+-    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.expert_visit_status, 'bg-gray-100 text-gray-700') }}">
+-        {{ status_labels.get(diagnosis.expert_visit_status, diagnosis.expert_visit_status) }}
+-    </span>
+-    {% if diagnosis.expert_visit_scheduled_at %}
+-    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.expert_visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
+-    {% endif %}
+-</div>
+-</div>
+-</div>
+-{% endblock %}
+diff --git a/src/admin/templates/visits.html b/src/admin/templates/visits.html
+deleted file mode 100644
+index b933536..0000000
+--- a/src/admin/templates/visits.html
++++ /dev/null
+@@ -1,65 +0,0 @@
+-{% extends "base.html" %}
+-{% block title %}درخواست‌های ویزیت | {{ app_name }}{% endblock %}
+-{% block content %}
+-<div class="flex items-center justify-between mb-6">
+-    <div>
+-        <h1 class="text-2xl font-bold">🩺 درخواست‌های ویزیت</h1>
+-        <p class="text-sm text-gray-500 mt-1">مدیریت و پیگیری درخواست‌های ویزیت متخصص Green Vita</p>
+-    </div>
+-    <a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">داشبورد</a>
+-</div>
+-
+-<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-6">
+-    {% for key, label in status_labels.items() %}
+-    <a href="/visits?status={{ key }}" class="bg-white rounded-lg border p-3 text-center hover:border-emerald-300">
+-        <div class="text-xs text-gray-500">{{ label }}</div>
+-        <div class="text-xl font-bold mt-1">{{ counts.get(key, 0) }}</div>
+-    </a>
+-    {% endfor %}
+-</div>
+-
+-<div class="mb-4 flex gap-2 flex-wrap">
+-    <a href="/visits" class="px-4 py-2 rounded-lg {% if not selected_status %}bg-emerald-700 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">همه</a>
+-    {% for key, label in status_labels.items() %}
+-    <a href="/visits?status={{ key }}" class="px-3 py-2 rounded-lg text-sm {% if selected_status == key %}bg-emerald-700 text-white{% else %}bg-gray-100 text-gray-700{% endif %}">{{ label }}</a>
+-    {% endfor %}
+-</div>
+-
+-<div class="bg-white rounded-xl shadow overflow-hidden">
+-{% if visits %}
+-<div class="overflow-x-auto">
+-<table class="w-full text-sm">
+-<thead class="bg-gray-100">
+-<tr>
+-    <th class="px-4 py-3 text-right">درخواست</th>
+-    <th class="px-4 py-3 text-right">کاربر</th>
+-    <th class="px-4 py-3 text-right">گیاه</th>
+-    <th class="px-4 py-3 text-right">مشکل</th>
+-    <th class="px-4 py-3 text-right">وضعیت</th>
+-    <th class="px-4 py-3 text-right">تاریخ</th>
+-    <th class="px-4 py-3"></th>
+-</tr>
+-</thead>
+-<tbody class="divide-y">
+-{% for item in visits %}
+-<tr class="hover:bg-gray-50">
+-    <td class="px-4 py-3 font-mono">#{{ item.diagnosis.id }}</td>
+-    <td class="px-4 py-3">
+-        {{ item.user.first_name or '' }} {{ item.user.last_name or '' }}
+-        {% if item.user.username %}<div class="text-xs text-gray-400">@{{ item.user.username }}</div>{% endif %}
+-    </td>
+-    <td class="px-4 py-3">{{ item.plant.name if item.plant else (item.diagnosis.plant_name_input or '—') }}</td>
+-    <td class="px-4 py-3">{{ item.diagnosis.disease_name }}</td>
+-    <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs {{ item.status_class }}">{{ item.status_label }}</span></td>
+-    <td class="px-4 py-3 text-gray-500">{{ item.diagnosis.expert_visit_requested_at.strftime('%Y-%m-%d %H:%M') if item.diagnosis.expert_visit_requested_at else item.diagnosis.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+-    <td class="px-4 py-3"><a href="/visits/{{ item.diagnosis.id }}" class="text-emerald-700 font-semibold">مشاهده ←</a></td>
+-</tr>
+-{% endfor %}
+-</tbody>
+-</table>
+-</div>
+-{% else %}
+-<div class="p-10 text-center text-gray-500">درخواستی با این وضعیت وجود ندارد.</div>
+-{% endif %}
+-</div>
+-{% endblock %}
+diff --git a/src/core/config.py b/src/core/config.py
+index 407e4cb..aa0a329 100644
+--- a/src/core/config.py
++++ b/src/core/config.py
+@@ -57,6 +57,12 @@ class Settings(BaseSettings):
+     # (مثل Claude) رو هم از پشت همین فرمت ارائه می‌دن. خالی = آدرس رسمی OpenAI.
+     openai_base_url: str = ""
+ 
++    # ---------- New Admin Panel ----------
++    admin_username: str = "admin"
++    admin_password_hash: str = ""
++    admin_session_secret: str = ""
++
++
+     # ---------- Logging ----------
+     log_level: str = "INFO"
+     log_format: Literal["json", "console"] = "json"

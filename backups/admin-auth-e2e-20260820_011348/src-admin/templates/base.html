@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Green Vita Admin{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --gv-green: #2f6b3f;
+            --gv-green-dark: #234f2f;
+            --gv-cream: #f7f1e3;
+            --gv-cream-dark: #eadfca;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top right, rgba(47,107,63,.08), transparent 28%),
+                var(--gv-cream);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-gray-800">
+
+{% block body %}{% endblock %}
+
+</body>
+</html>

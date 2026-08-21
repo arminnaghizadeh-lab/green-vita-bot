@@ -1,0 +1,18 @@
+# green-vita-admin-ux-v3.patch
+
+# Changes included:
+# - Admin logout button
+# - Expert visit workflow improvements
+# - New -> pending_review when request is opened
+# - Visit status management
+# - Redirect to /visits after saving
+# - Show user uploaded plant image in visit details
+# - Persian date support for scheduling
+# - Vazirmatn Persian UI font
+# - Better handling when AI cannot identify an image
+#
+# Apply:
+# git apply green-vita-admin-ux-v3.patch
+
+# This file is a placeholder specification because the full git diff
+# requires the current repository source tree.

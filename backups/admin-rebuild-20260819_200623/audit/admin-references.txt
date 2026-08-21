@@ -1,0 +1,181 @@
+./docs/BOT_FLOW.md:100:- وگرنه: `expert_visit_requested=True` می‌شود، به همه‌ی `settings.admin_ids` پیام اطلاع‌رسانی
+./docs/ARCHITECTURE.md:8:│   src/bot/                │     │  src/admin/               │
+./docs/ARCHITECTURE.md:50:| `src/admin/` | اپ FastAPI، روترها، dependencyها، تمپلیت‌های Jinja2 |
+./docs/ARCHITECTURE.md:86:- **پنل مدیریت:** از `Depends()` استاندارد FastAPI استفاده می‌شود (`src/admin/dependencies.py`
+./docs/ARCHITECTURE.md:123:## چرا دو سرویس جدا (bot / admin)؟
+./docs/PROJECT_OVERVIEW.md:30:2. **پنل مدیریت** (`src/admin`) — FastAPI، فقط داشبورد آماری ساده + health check.
+./docs/PROJECT_OVERVIEW.md:49:| Deploy | Google Cloud Run (دو سرویس جدا: bot و admin) |
+./docs/PROJECT_OVERVIEW.md:60:- `ADMIN_PANEL.md` — روت‌ها و وضعیت فعلی پنل
+./docs/DEPLOYMENT.md:13:| Telegram | `BOT_ADMIN_IDS` | — | برای اطلاع‌رسانی «درخواست ویزیت» و `scripts/seed.py` |
+./docs/DEPLOYMENT.md:21:| Admin | `ADMIN_USERNAME` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET` | — | ⚠️ تعریف‌شده ولی فعلاً مصرف نمی‌شوند (`ADMIN_PANEL.md`) |
+./docs/DEPLOYMENT.md:22:| Admin | `ADMIN_PORT` | `8000` | خیر (پورت واقعی از `PORT` در Dockerfile.admin می‌آید) |
+./docs/DEPLOYMENT.md:41:### `docker/Dockerfile.admin`
+./docs/DEPLOYMENT.md:44:- `CMD exec uvicorn src.admin.main:app --host 0.0.0.0 --port ${PORT}`
+./docs/DEPLOYMENT.md:58:| `admin` | `Dockerfile.admin` | منتظر همان‌ها، پورت `8000` باز، healthcheck روی `/health` |
+./docs/DEPLOYMENT.md:72:### `admin-service.yaml`
+./docs/DEPLOYMENT.md:75:- Secretها: `DATABASE_URL`, `REDIS_URL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`
+./docs/DEPLOYMENT.md:81:gcloud run services replace cloudrun/admin-service.yaml --region <REGION>
+./docs/DEPLOYMENT.md:96:   - build و push دو ایمیج (`bot`, `admin`) به Artifact Registry با تگ `latest` + SHA کامیت
+./docs/DEPLOYMENT.md:107:| `make run-bot` / `make run-admin` | اجرای لوکال (بدون Docker) |
+./docs/API_REFERENCE.md:4:`src/admin/main.py`). بات تلگرام از طریق long-polling کار می‌کند و هیچ HTTP endpoint ای
+./docs/API_REFERENCE.md:49:صفحه‌ی HTML داشبورد (نه JSON) — رندر شده با Jinja2 از `src/admin/templates/dashboard.html`.
+./docs/API_REFERENCE.md:56:فایل‌های استاتیک از `src/admin/static/` (فعلاً فقط یک `.gitkeep`، هیچ CSS/JS اختصاصی
+./docs/API_REFERENCE.md:61:هر دو exception handler در `src/admin/main.py` ثبت شده‌اند:
+./docs/DATABASE.md:38:| `is_admin` | bool، پیش‌فرض False | فقط `scripts/seed.py` آن را برای `BOT_ADMIN_IDS` تنظیم می‌کند |
+./docs/DATABASE.md:166:| `UserRepository` | `get_by_telegram_id`, `get_or_create`, `list_admins` |
+./docs/KNOWN_ISSUES.md:11:`src/admin/main.py` و `src/admin/routers/dashboard.py` هیچ لایه‌ی login/session/API-key
+./docs/KNOWN_ISSUES.md:12:ندارند. هرکسی که URL پنل را داشته باشد به داشبورد دسترسی دارد. تنظیمات `admin_username`,
+./docs/KNOWN_ISSUES.md:13:`admin_password`, `admin_session_secret` در `src/core/config.py` تعریف شده‌اند ولی **در هیچ
+./docs/KNOWN_ISSUES.md:28:`SECRET_KEY = "insecure-dev-key-change-me"`، `ADMIN_PASSWORD = "admin"`،
+./docs/KNOWN_ISSUES.md:29:`ADMIN_SESSION_SECRET = "insecure-session-secret-change-me"` (`src/core/config.py`).
+./docs/KNOWN_ISSUES.md:63:`src/admin/routers/health.py::readiness_check` وضعیت را در بدنه‌ی JSON می‌گذارد
+./docs/KNOWN_ISSUES.md:83:همیشه ۰ خواهد بود (`ADMIN_PANEL.md`).
+./docs/KNOWN_ISSUES.md:115:`StaticFiles(directory="src/admin/static")` و `Jinja2Templates(directory="src/admin/templates")`
+./docs/KNOWN_ISSUES.md:123:### L1. `TIMEZONE` و `ADMIN_PORT` در `Settings` تعریف شده‌اند ولی هیچ‌جا خوانده نمی‌شوند
+./.env:15:BOT_ADMIN_IDS=123456789,987654321   # آیدی عددی تلگرام ادمین‌ها، با کاما جدا شود
+./Makefile:1:.PHONY: help install dev-install run-bot run-admin migrate migrate-new seed test lint format docker-up docker-down docker-build docker-logs
+./Makefile:8:	@echo "  make run-admin      اجرای پنل مدیریت (لوکال)"
+./Makefile:29:run-admin:
+./Makefile:30:	uvicorn src.admin.main:app --reload --port 8000
+./DEPLOYMENT_STRATEGY.md:50:| **مزایا** | مقیاس‌پذیری افقی واقعی (بدون محدودیت single-consumer)؛ scale-to-zero وقتی ترافیک نیست؛ HTTPS/TLS مدیریت‌شده؛ زیرساخت با SLA گوگل؛ دقیقاً همان مدل عملیاتی‌ای که پنل مدیریت پروژه (`admin-service.yaml`) از قبل استفاده می‌کند — یکپارچگی عملیاتی؛ CI/CD این پروژه از قبل برای Cloud Run آماده است؛ blue/green ساده با traffic splitting بین revisionها |
+./DEPLOYMENT_STRATEGY.md:70:| هم‌راستا با زیرساخت فعلی پروژه | خیر (Docker/Compose موجود است ولی جدا از Cloud Run) | خیر | **بله** (CI/CD و admin-service از قبل روی Cloud Run هستند) |
+./MVP_DEPLOYMENT_VERIFICATION.md:13:| همه‌ی فایل‌های ارجاع‌شده وجود دارند؟ | ✅ `docker/Dockerfile.bot`, `docker/Dockerfile.admin`, `.env` (باید خودت بسازی از `.env.example`) |
+./MVP_DEPLOYMENT_VERIFICATION.md:15:| شرط‌های `depends_on` معتبرند؟ | ✅ `migrate` منتظر `db: service_healthy`؛ `bot`/`admin` منتظر `db: healthy` + `redis: healthy` + `migrate: service_completed_successfully` — دقیقاً ترتیب درست |
+./MVP_DEPLOYMENT_VERIFICATION.md:16:| healthcheckها معتبرند؟ | ✅ `db`: `pg_isready` (داخل ایمیج `postgres:16-alpine` موجود است) / ✅ `redis`: `redis-cli ping` (داخل ایمیج `redis:7-alpine` موجود است) / ✅ `admin`: `python -c "urllib.request..."` روی `/health` (بدون auth، کار می‌کند) / ⚠️ **`bot` هیچ healthcheck ندارد** (پایین توضیح داده شده) |
+./MVP_DEPLOYMENT_VERIFICATION.md:17:| Restart policyها مناسب‌اند؟ | ✅ `db`/`redis`/`bot`/`admin`: `unless-stopped` (درست) / ✅ `migrate`: بدون restart policy (درست — یک job یک‌بارمصرف نباید restart-loop بگیرد) |
+./MVP_DEPLOYMENT_VERIFICATION.md:39:## ۳. `docker/Dockerfile.admin`
+./MVP_DEPLOYMENT_VERIFICATION.md:45:| دستور استارت و پورت | ✅ `CMD exec uvicorn src.admin.main:app --host 0.0.0.0 --port ${PORT}` با `ENV PORT=8000` و `EXPOSE 8000` — منطبق با `ports: ["8000:8000"]` در compose |
+./MVP_DEPLOYMENT_VERIFICATION.md:46:| مسیرهای نسبی static/templates | ✅ `src/admin/main.py` از `"src/admin/static"` و `"src/admin/templates"` استفاده می‌کند — چون `WORKDIR /app` و `COPY src ./src`، این مسیرها در `/app/src/admin/...` درست resolve می‌شوند؛ هر دو پوشه واقعاً وجود دارند و در تصویر کپی می‌شوند |
+./MVP_DEPLOYMENT_VERIFICATION.md:59:| سرویس migrate | ✅ `alembic upgrade head` را اجرا و خارج می‌شود؛ `bot`/`admin` منتظر موفقیت کاملش می‌مانند |
+./MVP_DEPLOYMENT_VERIFICATION.md:117:| health endpointها | ✅ `GET /health` (liveness ساده) و `GET /health/ready` (چک واقعی دیتابیس با `SELECT 1`) هر دو در `src/admin/routers/health.py` تعریف و در `get_root_router()` ثبت شده‌اند |
+./MVP_DEPLOYMENT_VERIFICATION.md:189:   فایل مسئول: `src/admin/routers/health.py`
+./README.md:20:│   ├── admin/             # پنل مدیریت (FastAPI)
+./README.md:44:| **دو سرویس جدا (bot/admin)** | مقیاس‌پذیری و دیپلوی مستقل روی Cloud Run |
+./README.md:71:#    BOT_ADMIN_IDS=...       (آیدی عددی تلگرام خودت، از @userinfobot بگیر)
+./README.md:80:# ۶. ساخت کاربر ادمین اولیه (بر اساس BOT_ADMIN_IDS در .env)
+./README.md:107:make run-admin           # اجرای پنل مدیریت
+./README.md:141:2. ایمیج‌های `bot` و `admin` را می‌سازد و به Artifact Registry push می‌کند
+./README.md:155:gcloud run services replace cloudrun/admin-service.yaml --region <REGION>
+./README.md:181:6. کاربر می‌تواند دکمه‌ی «📞 درخواست ویزیت متخصص گرین‌ویتا» را بزند — همه‌ی آیدی‌های `BOT_ADMIN_IDS` پیام اطلاع‌رسانی با خلاصه‌ی تشخیص و اطلاعات تماس کاربر دریافت می‌کنند.
+./docker-compose.yml:54:  admin:
+./docker-compose.yml:57:      dockerfile: docker/Dockerfile.admin
+./alembic/versions/0001_initial_schema.py:29:        sa.Column("is_admin", sa.Boolean(), nullable=False, server_default=sa.false()),
+./alembic/versions/0006_add_expert_visit_workflow.py:58:            "expert_visit_admin_note",
+./alembic/versions/0006_add_expert_visit_workflow.py:95:                "admin_notes",
+./alembic/versions/0006_add_expert_visit_workflow.py:104:        op.drop_column(table, "admin_notes")
+./alembic/versions/0006_add_expert_visit_workflow.py:110:    op.drop_column("diagnoses", "expert_visit_admin_note")
+./.env.example:16:BOT_ADMIN_IDS=123456789,987654321   # آیدی عددی تلگرام ادمین‌ها، با کاما جدا شود
+./.env.example:52:ADMIN_PANEL_USERNAME=admin
+./.env.example:53:ADMIN_PANEL_PASSWORD_HASH=
+./.env.example:54:ADMIN_PANEL_SESSION_SECRET=
+./.env.example:57:ADMIN_USERNAME=greenvita-admin
+./.env.example:58:ADMIN_PASSWORD_HASH=
+./RELEASE_NOTES.md:18:| Docker + docker-compose (db, redis, migrate, bot, admin) | ✅ |
+./RELEASE_NOTES.md:38:- ✅ `docker-compose.yml` شامل هر ۵ سرویس لازم (`db`, `redis`, `migrate`, `bot`, `admin`) با
+./DEPLOY_CHECKLIST.md:36:| `BOT_ADMIN_IDS` | **بله** (برای فیچر ویزیت متخصص) | آیدی عددی تلگرام ادمین‌ها، با کاما جدا | از `@userinfobot` بگیر |
+./DEPLOY_CHECKLIST.md:43:| `ADMIN_USERNAME/PASSWORD/SESSION_SECRET` | فعلاً غیرفعال | تعریف شده ولی پنل هنوز لاگین ندارد — **پنل مدیریت را پشت یک IP allowlist یا VPN بگذار تا این فیچر پیاده شود** | |
+./DEPLOY_CHECKLIST.md:56:همه‌چیز (`db`, `redis`, `migrate`, `bot`, `admin`) روی یک ماشین با `docker-compose up -d`
+./DEPLOY_CHECKLIST.md:60:✅ **پنل مدیریت (`admin-service.yaml`)** روی Cloud Run بدون مشکل کار می‌کند (HTTP سرویس معمولی).
+./DEPLOY_CHECKLIST.md:81:- [ ] `BOT_ADMIN_IDS` را با آیدی تلگرام خودت/تیمت پر کن
+./DEPLOY_CHECKLIST.md:83:      قبل از بالا آمدن `bot`/`admin` باید موفق تمام شود — به مرحله‌ی بعد نگاه کن)
+./DEPLOY_CHECKLIST.md:85:- [ ] `docker compose run --rm bot python -m scripts.seed` — ادمین‌های `BOT_ADMIN_IDS` را
+./DEPLOY_CHECKLIST.md:86:      در دیتابیس `is_admin=True` می‌کند
+./DEPLOY_CHECKLIST.md:98:      `green-vita-redis-url`, `green-vita-admin-username`, `green-vita-admin-password`,
+./DEPLOY_CHECKLIST.md:99:      `green-vita-admin-session-secret`
+./DEPLOY_CHECKLIST.md:104:- [ ] `gcloud run services replace cloudrun/admin-service.yaml --region <REGION>`
+./DEPLOY_CHECKLIST.md:105:- [ ] `curl https://<admin-service-url>/health/ready` را چک کن
+./DEPLOY_CHECKLIST.md:115:      به همه‌ی `BOT_ADMIN_IDS` در تلگرام می‌رسد
+./DEPLOY_CHECKLIST.md:136:- **Cloud Run (پنل):** `gcloud run services update-traffic green-vita-admin --to-revisions=<REVISION>=100`
+./scripts/seed.py:24:        for admin_telegram_id in settings.admin_ids:
+./scripts/seed.py:25:            user, created = await user_repo.get_or_create(telegram_id=admin_telegram_id)
+./scripts/seed.py:26:            if not user.is_admin:
+./scripts/seed.py:27:                await user_repo.update(user, is_admin=True)
+./scripts/seed.py:29:            logger.info("seed_admin_user", telegram_id=admin_telegram_id, action=action)
+./scripts/seed.py:31:        if not settings.admin_ids:
+./scripts/seed.py:33:                "seed_no_admins_configured",
+./scripts/seed.py:34:                message="BOT_ADMIN_IDS در .env خالی است — هیچ ادمینی seed نشد.",
+./tests/test_config.py:19:def test_admin_ids_parsing():
+./tests/test_config.py:20:    settings = Settings(bot_admin_ids="111, 222,333")
+./tests/test_config.py:21:    assert settings.admin_ids == [111, 222, 333]
+./tests/test_config.py:24:def test_admin_ids_empty_string():
+./tests/test_config.py:25:    settings = Settings(bot_admin_ids="")
+./tests/test_config.py:26:    assert settings.admin_ids == []
+./VPS_DEPLOYMENT_GUIDE.md:194:مقادیر لازم رو پر کن (`BOT_TOKEN`, `BOT_ADMIN_IDS`, `AI_PROVIDER` + کلید متناظر،
+./VPS_DEPLOYMENT_GUIDE.md:195:`POSTGRES_PASSWORD` + بخش رمز در `DATABASE_URL`، `SECRET_KEY`, `ADMIN_PASSWORD`,
+./VPS_DEPLOYMENT_GUIDE.md:196:`ADMIN_SESSION_SECRET`).
+./VPS_DEPLOYMENT_GUIDE.md:235:- همه‌ی سرویس‌ها (`db`, `redis`, `migrate`, `bot`, `admin`) رو بالا میاره
+./VPS_DEPLOYMENT_GUIDE.md:236:- `bot`/`admin` با هم فقط از طریق شبکه‌ی داخلی Docker Compose (نام سرویس‌ها: `db`, `redis`)
+./VPS_DEPLOYMENT_GUIDE.md:238:- چون `restart: unless-stopped` روی `bot`/`admin`/`db`/`redis` تنظیمه، بعد از کرش یا ریبوت
+./VPS_DEPLOYMENT_GUIDE.md:269:docker compose logs -f admin        # فقط پنل
+./VPS_DEPLOYMENT_GUIDE.md:285:4. دکمه‌ی «📞 درخواست ویزیت متخصص» → پیام به `BOT_ADMIN_IDS` برسه
+./VPS_DEPLOYMENT_GUIDE.md:304:docker compose restart admin    # فقط پنل
+./VPS_DEPLOYMENT_GUIDE.md:438:docker compose logs admin --tail=50
+./MVP_DEPLOYMENT_PLAN.md:5:> `docker/Dockerfile.admin`, `.env.example`, و `Makefile` موجود در ریپو — بدون هیچ تغییر در
+./MVP_DEPLOYMENT_PLAN.md:20:  هم: `db` + `redis` + `migrate` + `bot` + `admin`) نوشته شده — هیچ تطبیق یا تغییری لازم
+./MVP_DEPLOYMENT_PLAN.md:51:توضیح رم: سه کانتینر پایتون (bot, admin, migrate یک‌بار) + Postgres + Redis روی یک VPS
+./MVP_DEPLOYMENT_PLAN.md:66:| `BOT_ADMIN_IDS` | برای دریافت اطلاع‌رسانی «درخواست ویزیت متخصص» و برای `scripts/seed.py` |
+./MVP_DEPLOYMENT_PLAN.md:72:| `ADMIN_USERNAME` / `ADMIN_PASSWORD` / `ADMIN_SESSION_SECRET` | فعلاً در کد استفاده نمی‌شوند (پنل هنوز لاگین ندارد — `docs/KNOWN_ISSUES.md`، مورد C1)؛ همچنان مقدارشان را از پیش‌فرض ناامن عوض کن تا برای فاز بعدی (افزودن auth) آماده باشد |
+./MVP_DEPLOYMENT_PLAN.md:84:| آیدی عددی تلگرام ادمین(ها) | [@userinfobot](https://t.me/userinfobot) | `BOT_ADMIN_IDS` |
+./MVP_DEPLOYMENT_PLAN.md:122:# ۶) ساخت ادمین اولیه در دیتابیس (بر اساس BOT_ADMIN_IDS در .env)
+./MVP_DEPLOYMENT_PLAN.md:134:- سرویس‌های `bot` و `admin` هر دو منتظر می‌مانند تا `migrate` با موفقیت **کامل** تمام شود
+./MVP_DEPLOYMENT_PLAN.md:208:   `BOT_ADMIN_IDS` برسد
+./MVP_DEPLOYMENT_PLAN.md:221:docker compose restart admin
+./MVP_DEPLOYMENT_PLAN.md:248:docker compose logs -f admin
+./src/db/models/user.py:31:    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+./src/db/models/plant_identification.py:83:    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+./src/db/models/diagnosis.py:83:    admin_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+./src/core/config.py:32:    bot_admin_ids: str = ""  # comma separated, parsed via property
+./src/core/config.py:61:    admin_username: str = "admin"
+./src/core/config.py:62:    admin_password_hash: str = ""
+./src/core/config.py:63:    admin_session_secret: str = ""
+./src/core/config.py:81:    def admin_ids(self) -> list[int]:
+./src/core/config.py:82:        if not self.bot_admin_ids:
+./src/core/config.py:84:        return [int(x.strip()) for x in self.bot_admin_ids.split(",") if x.strip()]
+./src/bot/handlers/identification.py:112:def _format_admin_notification(identification: PlantIdentification, tg_user: TgUser) -> str:
+./src/bot/handlers/identification.py:127:async def _notify_admins(bot: Bot, identification: PlantIdentification, tg_user: TgUser) -> None:
+./src/bot/handlers/identification.py:129:    if not settings.admin_ids:
+./src/bot/handlers/identification.py:130:        logger.warning("identification_expert_visit_no_admins_configured", identification_id=identification.id)
+./src/bot/handlers/identification.py:133:    text = _format_admin_notification(identification, tg_user)
+./src/bot/handlers/identification.py:134:    for admin_id in settings.admin_ids:
+./src/bot/handlers/identification.py:136:            await bot.send_message(admin_id, text)
+./src/bot/handlers/identification.py:138:            logger.warning("identification_admin_notify_failed", admin_id=admin_id, error=str(exc))
+./src/bot/handlers/identification.py:270:    await _notify_admins(callback.bot, identification, callback.from_user)
+./src/bot/handlers/diagnosis.py:11:6. با زدن آن دکمه، به همه‌ی ادمین‌های تنظیم‌شده در BOT_ADMIN_IDS اطلاع داده می‌شود.
+./src/bot/handlers/diagnosis.py:117:def _format_admin_notification(diagnosis: Diagnosis, tg_user: TgUser) -> str:
+./src/bot/handlers/diagnosis.py:132:async def _notify_admins_of_expert_visit(bot: Bot, diagnosis: Diagnosis, tg_user: TgUser) -> None:
+./src/bot/handlers/diagnosis.py:134:    if not settings.admin_ids:
+./src/bot/handlers/diagnosis.py:135:        logger.warning("expert_visit_no_admins_configured", diagnosis_id=diagnosis.id)
+./src/bot/handlers/diagnosis.py:138:    text = _format_admin_notification(diagnosis, tg_user)
+./src/bot/handlers/diagnosis.py:139:    for admin_id in settings.admin_ids:
+./src/bot/handlers/diagnosis.py:141:            await bot.send_message(admin_id, text)
+./src/bot/handlers/diagnosis.py:143:            logger.warning("expert_visit_admin_notify_failed", admin_id=admin_id, error=str(exc))
+./src/bot/handlers/diagnosis.py:310:    await _notify_admins_of_expert_visit(callback.bot, diagnosis, callback.from_user)
+./src/admin/__init__.py:1:"""Green Vita admin panel."""
+./src/admin/main.py:6:from src.admin.auth import SESSION_KEY
+./src/admin/main.py:7:from src.admin.routers import auth
+./src/admin/main.py:23:    StaticFiles(directory="src/admin/static"),
+./src/admin/auth.py:5:SESSION_KEY = "admin_authenticated"
+./src/admin/routers/__init__.py:1:from src.admin.routers import auth, dashboard, visits
+./src/admin/routers/auth.py:5:from src.admin.auth import SESSION_KEY, verify_password
+./src/admin/routers/auth.py:9:templates = Jinja2Templates(directory="src/admin/templates")
+./src/admin/routers/auth.py:33:        username.strip() == settings.admin_username
+./src/admin/routers/auth.py:34:        and verify_password(password, settings.admin_password_hash)
+./src/admin/routers/dashboard.py:6:from src.admin.auth import require_authentication
+./src/admin/routers/dashboard.py:7:from src.admin.dependencies import get_session
+./src/admin/routers/dashboard.py:12:templates = Jinja2Templates(directory="src/admin/templates")
+./src/admin/routers/visits.py:9:from src.admin.auth import require_authentication
+./src/admin/routers/visits.py:10:from src.admin.dependencies import get_session
+./src/admin/routers/visits.py:16:templates = Jinja2Templates(directory="src/admin/templates")
+./src/admin/routers/visits.py:163:    admin_note: str = Form(""),
+./src/admin/routers/visits.py:179:    diagnosis.admin_notes = admin_note.strip() or None
+./src/admin/templates/login.html:7:    <link rel="stylesheet" href="/static/css/admin.css">
+./src/admin/templates/visit_detail.html:65:    <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.admin_notes or '' }}</textarea>
+./src/admin/templates/dashboard.html:7:    <link rel="stylesheet" href="/static/css/admin.css">
+./src/repositories/user_repository.py:40:    async def list_admins(self) -> list[User]:
+./src/repositories/user_repository.py:41:        stmt = select(User).where(User.is_admin.is_(True))
+./.env.backup:15:BOT_ADMIN_IDS=123456789,987654321   # آیدی عددی تلگرام ادمین‌ها، با کاما جدا شود
+./.env.backup:52:ADMIN_USERNAME=admin
+./.env.backup:53:ADMIN_PASSWORD=change-this-password
+./.env.backup:54:ADMIN_SESSION_SECRET=change-this-to-another-random-string
+./.env.backup:55:ADMIN_PORT=8000
+./docker/Dockerfile.admin:24:CMD ["python", "-m", "uvicorn", "src.admin.main:app", "--host", "0.0.0.0", "--port", "8000"]

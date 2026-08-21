@@ -1,0 +1,16 @@
+ M .env.example
+ M Makefile
+ M alembic/versions/0006_add_expert_visit_workflow.py
+ D alembic/versions/0006_expert_visit_management.py
+ M docker-compose.yml
+ M requirements.txt
+ D src/admin/routers/visits.py
+ D src/admin/templates/visit_detail.html
+ D src/admin/templates/visits.html
+ M src/core/config.py
+M  src/db/models/diagnosis.py
+?? 0
+?? backups/
+?? done
+?? echo
+?? grep

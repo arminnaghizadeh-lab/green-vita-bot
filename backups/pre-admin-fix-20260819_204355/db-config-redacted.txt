@@ -1,0 +1,6 @@
+DATABASE_URL=postgresql+asyncpg://greenvita:cc223b40515f73f761ece1ae8e9e061389210eea0dead77e@db:5432/greenvita
+POSTGRES_USER=greenvita
+POSTGRES_PASSWORD=***REDACTED***
+POSTGRES_DB=greenvita
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
