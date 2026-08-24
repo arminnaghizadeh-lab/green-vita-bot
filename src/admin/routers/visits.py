@@ -403,6 +403,86 @@ async def calendar_cancel_appointment(
     )
 
 
+
+@router.get("/calendar")
+async def calendar_page(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    return templates.TemplateResponse(
+        "calendar.html",
+        {
+            "request": request,
+            "app_name": settings.app_name,
+            "environment": settings.app_env,
+        },
+    )
+
+
+@router.get("/api/calendar/requests")
+async def calendar_requests(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    result = await session.execute(
+        select(Diagnosis, User, Plant)
+        .join(User, Diagnosis.user_id == User.id)
+        .outerjoin(Plant, Diagnosis.plant_id == Plant.id)
+        .outerjoin(
+            VisitAppointment,
+            VisitAppointment.diagnosis_id == Diagnosis.id,
+        )
+        .where(
+            Diagnosis.expert_visit_requested.is_(True),
+            Diagnosis.visit_status.in_(
+                [
+                    VisitStatus.PENDING,
+                    VisitStatus.REVIEWING,
+                    VisitStatus.SCHEDULED,
+                ]
+            ),
+            VisitAppointment.id.is_(None),
+        )
+        .order_by(Diagnosis.created_at.asc())
+    )
+
+    requests = []
+
+    for diagnosis, user, plant in result.all():
+        requests.append(
+            {
+                "diagnosis_id": diagnosis.id,
+                "user_name": (
+                    f"{user.first_name or ''} {user.last_name or ''}"
+                ).strip() or "بدون نام",
+                "username": user.username,
+                "plant_name": (
+                    plant.name
+                    if plant
+                    else diagnosis.plant_name_input or "گیاه نامشخص"
+                ),
+                "disease_name": diagnosis.disease_name,
+                "status": (
+                    diagnosis.visit_status.value
+                    if hasattr(diagnosis.visit_status, "value")
+                    else diagnosis.visit_status
+                ),
+                "created_at": diagnosis.created_at.isoformat(),
+            }
+        )
+
+    return JSONResponse({"requests": requests})
+
+
 @router.get("/visits")
 async def visits_list(
     request: Request,
