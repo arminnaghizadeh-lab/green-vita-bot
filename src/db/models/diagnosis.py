@@ -20,6 +20,7 @@ from src.db.models.visit_status import VisitStatus
 if TYPE_CHECKING:
     from src.db.models.plant import Plant
     from src.db.models.user import User
+    from src.db.models.visit_appointment import VisitAppointment
 
 
 class DiagnosisSeverity(str, enum.Enum):
@@ -84,6 +85,11 @@ class Diagnosis(Base, TimestampMixin):
 
     user: Mapped["User"] = relationship(back_populates="diagnoses")
     plant: Mapped["Plant | None"] = relationship(back_populates="diagnoses")
+    appointment: Mapped["VisitAppointment | None"] = relationship(
+        back_populates="diagnosis",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self) -> str:
         return (
