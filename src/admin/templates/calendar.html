@@ -19,7 +19,7 @@
             <a href="/visits" class="gv-secondary-btn">
                 درخواست‌های ویزیت
             </a>
-            <a href="/dashboard" class="gv-secondary-btn">
+            <a href="/" class="gv-secondary-btn">
                 داشبورد
             </a>
         </div>
@@ -65,7 +65,27 @@
 
     </div>
 
-    <div class="gv-calendar-bottom">
+    
+    <section class="gv-panel gv-calendar-request-panel" id="calendar-request-panel">
+
+        <div class="gv-panel-header">
+            <div>
+                <h2>درخواست ویزیت</h2>
+                <p id="selected-request-label">
+                    برای ثبت یا تغییر زمان، ابتدا یک درخواست یا ویزیت را انتخاب کنید.
+                </p>
+            </div>
+        </div>
+
+        <div id="calendar-request-content">
+            <div class="gv-empty-state">
+                در حال بارگذاری درخواست‌ها...
+            </div>
+        </div>
+
+    </section>
+
+<div class="gv-calendar-bottom">
 
         <section class="gv-panel">
 
@@ -111,41 +131,48 @@
 
 </div>
 
+<!-- GV_CALENDAR_INTERACTION_V1 -->
 <script>
 (function () {
     "use strict";
 
+    /*
+     * GV_CALENDAR_INTERACTION_V2
+     *
+     * Important:
+     * - UI calendar is Jalali.
+     * - Backend/API continues to receive ISO Gregorian timestamps.
+     * - Selected Jalali date is converted to Gregorian only when calling API.
+     */
+
     const PERSIAN_MONTHS = [
-        "فروردین",
-        "اردیبهشت",
-        "خرداد",
-        "تیر",
-        "مرداد",
-        "شهریور",
-        "مهر",
-        "آبان",
-        "آذر",
-        "دی",
-        "بهمن",
-        "اسفند"
+        "فروردین", "اردیبهشت", "خرداد",
+        "تیر", "مرداد", "شهریور",
+        "مهر", "آبان", "آذر",
+        "دی", "بهمن", "اسفند"
     ];
 
     const PERSIAN_WEEKDAYS = [
-        "شنبه",
-        "یکشنبه",
-        "دوشنبه",
-        "سه‌شنبه",
-        "چهارشنبه",
-        "پنجشنبه",
-        "جمعه"
+        "شنبه", "یکشنبه", "دوشنبه",
+        "سه‌شنبه", "چهارشنبه",
+        "پنجشنبه", "جمعه"
     ];
 
-    let currentDate = new Date();
-    let selectedDate = new Date();
+    let currentJalali = null;
+    let selectedJalali = null;
+
     let events = [];
+    let requests = [];
+
+    let selectedDiagnosisId = null;
+    let selectedAppointmentId = null;
 
     function pad(value) {
         return String(value).padStart(2, "0");
+    }
+
+    function formatPersianNumber(value) {
+        return String(value).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
     }
 
     function gregorianToJalali(gy, gm, gd) {
@@ -155,6 +182,7 @@
         ];
 
         let gy2 = gm > 2 ? gy + 1 : gy;
+
         let days =
             355666 +
             (365 * gy) +
@@ -165,9 +193,11 @@
             gdm[gm - 1];
 
         let jy = -1595 + 33 * Math.floor(days / 12053);
+
         days %= 12053;
 
         jy += 4 * Math.floor(days / 1461);
+
         days %= 1461;
 
         if (days > 365) {
@@ -175,15 +205,14 @@
             days = (days - 1) % 365;
         }
 
-        let jm = days < 186
+        const jm = days < 186
             ? 1 + Math.floor(days / 31)
             : 7 + Math.floor((days - 186) / 30);
 
-        let jd = 1 + (
-            days < 186
+        const jd = 1 +
+            (days < 186
                 ? days % 31
-                : (days - 186) % 30
-        );
+                : (days - 186) % 30);
 
         return [jy, jm, jd];
     }
@@ -196,12 +225,16 @@
             (365 * jy) +
             Math.floor(jy / 33) * 8 +
             Math.floor(((jy % 33) + 3) / 4) +
-            jd +
-            (jm < 7
-                ? (jm - 1) * 31
-                : ((jm - 7) * 30) + 186);
+            jd;
+
+        if (jm < 7) {
+            days += (jm - 1) * 31;
+        } else {
+            days += ((jm - 7) * 30) + 186;
+        }
 
         let gy = 400 * Math.floor(days / 146097);
+
         days %= 146097;
 
         if (days > 36524) {
@@ -224,7 +257,8 @@
         let gd = days + 1;
 
         const sal_a = [
-            0, 31,
+            0,
+            31,
             ((gy % 4 === 0 && gy % 100 !== 0) || gy % 400 === 0)
                 ? 29
                 : 28,
@@ -232,238 +266,353 @@
             31, 31, 30, 31, 30, 31
         ];
 
-        let gm = 1;
+        let gm = 0;
 
-        while (gm <= 12 && gd > sal_a[gm]) {
+        for (gm = 1; gm <= 12 && gd > sal_a[gm]; gm++) {
             gd -= sal_a[gm];
-            gm++;
         }
 
         return [gy, gm, gd];
     }
 
-    function toJalali(date) {
+    function jalaliNow() {
+        const now = new Date();
+
         return gregorianToJalali(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            date.getDate()
+            now.getFullYear(),
+            now.getMonth() + 1,
+            now.getDate()
         );
     }
 
-    function fromJalali(jy, jm, jd) {
-        const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
-        return new Date(gy, gm - 1, gd);
-    }
-
-    function jalaliMonthDays(year, month) {
-        if (month <= 6) {
+    function jalaliMonthLength(jy, jm) {
+        if (jm <= 6) {
             return 31;
         }
 
-        if (month <= 11) {
+        if (jm <= 11) {
             return 30;
         }
 
-        const start = fromJalali(year, 12, 1);
-        const next = fromJalali(year + 1, 1, 1);
+        const [gy, gm, gd] = jalaliToGregorian(jy, 12, 1);
+        const next = new Date(gy, gm - 1, gd + 30);
 
-        return Math.round(
-            (next.getTime() - start.getTime()) / 86400000
+        const [ny, nm, nd] = gregorianToJalali(
+            next.getFullYear(),
+            next.getMonth() + 1,
+            next.getDate()
+        );
+
+        return ny === jy && nm === 12 ? 30 : 29;
+    }
+
+    function jalaliToDate(jy, jm, jd, hour = 0, minute = 0) {
+        const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+
+        return new Date(
+            gy,
+            gm - 1,
+            gd,
+            hour,
+            minute,
+            0,
+            0
         );
     }
 
-    function formatPersianNumber(value) {
-        return String(value).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+    function dateToIsoForApi(jy, jm, jd, hour = 0, minute = 0) {
+        return jalaliToDate(
+            jy,
+            jm,
+            jd,
+            hour,
+            minute
+        ).toISOString();
     }
 
-    function dateKey(date) {
-        const [jy, jm, jd] = toJalali(date);
-        return `${jy}-${pad(jm)}-${pad(jd)}`;
+    function jalaliDayOfWeek(jy, jm, jd) {
+        const date = jalaliToDate(jy, jm, jd);
+        return (date.getDay() + 1) % 7;
     }
 
-    function isoStart(date) {
-        const d = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            0, 0, 0
+    function sameJalali(a, b) {
+        return (
+            a &&
+            b &&
+            a[0] === b[0] &&
+            a[1] === b[1] &&
+            a[2] === b[2]
         );
-
-        return d.toISOString();
     }
 
-    function isoEnd(date) {
-        const d = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            23, 59, 59
-        );
+    function eventJalali(event) {
+        const d = new Date(event.start_at);
 
-        return d.toISOString();
+        return gregorianToJalali(
+            d.getFullYear(),
+            d.getMonth() + 1,
+            d.getDate()
+        );
     }
 
     function formatTime(value) {
-        const date = new Date(value);
+        const d = new Date(value);
 
-        return new Intl.DateTimeFormat(
-            "fa-IR",
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false
-            }
-        ).format(date);
+        return `${formatPersianNumber(pad(d.getHours()))}:${formatPersianNumber(pad(d.getMinutes()))}`;
     }
 
-    function formatDateLabel(date) {
-        const [jy, jm, jd] = toJalali(date);
-
-        return `${PERSIAN_WEEKDAYS[(date.getDay() + 1) % 7]} ${formatPersianNumber(jd)} ${PERSIAN_MONTHS[jm - 1]} ${formatPersianNumber(jy)}`;
+    function formatDateLabel(jalali) {
+        return `${PERSIAN_WEEKDAYS[jalaliDayOfWeek(...jalali)]}، ${formatPersianNumber(jalali[2])} ${PERSIAN_MONTHS[jalali[1] - 1]} ${formatPersianNumber(jalali[0])}`;
     }
 
-    function sameDate(a, b) {
-        return (
-            a.getFullYear() === b.getFullYear() &&
-            a.getMonth() === b.getMonth() &&
-            a.getDate() === b.getDate()
-        );
-    }
-
-    function showToast(message, type = "info") {
+    function gvNotify(message, type = "success") {
         const toast = document.getElementById("calendar-toast");
 
-        toast.textContent = message;
+        if (!toast) {
+            return;
+        }
+
         toast.hidden = false;
+        toast.textContent = message;
         toast.dataset.type = type;
 
-        clearTimeout(showToast.timer);
+        clearTimeout(window.__gvCalendarToastTimer);
 
-        showToast.timer = setTimeout(() => {
+        window.__gvCalendarToastTimer = setTimeout(() => {
             toast.hidden = true;
         }, 3500);
     }
 
-    async function fetchEventsForMonth() {
-        const monthStart = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            1
-        );
-
-        const monthEnd = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() + 1,
-            0,
-            23, 59, 59
-        );
-
-        const params = new URLSearchParams({
-            start_at: monthStart.toISOString(),
-            end_at: monthEnd.toISOString()
-        });
-
+    async function gvApi(url, options = {}) {
         const response = await fetch(
-            `/api/calendar/events?${params.toString()}`,
+            url,
             {
-                credentials: "same-origin"
+                credentials: "same-origin",
+                ...options,
+                headers: {
+                    "Accept": "application/json",
+                    ...(options.headers || {})
+                }
             }
         );
 
-        if (!response.ok) {
-            throw new Error("خطا در دریافت رویدادهای تقویم");
+        const contentType =
+            response.headers.get("content-type") || "";
+
+        let data = null;
+
+        if (contentType.includes("application/json")) {
+            data = await response.json();
+        } else {
+            data = {
+                detail: await response.text()
+            };
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(
+                data?.detail ||
+                `خطای ${response.status}`
+            );
+        }
+
+        return data;
+    }
+
+    async function fetchEventsForMonth() {
+        const first = jalaliToDate(
+            currentJalali[0],
+            currentJalali[1],
+            1,
+            0,
+            0
+        );
+
+        const lastDay = jalaliMonthLength(
+            currentJalali[0],
+            currentJalali[1]
+        );
+
+        const last = jalaliToDate(
+            currentJalali[0],
+            currentJalali[1],
+            lastDay,
+            23,
+            59
+        );
+
+        const params = new URLSearchParams({
+            start_at: first.toISOString(),
+            end_at: last.toISOString()
+        });
+
+        const data = await gvApi(
+            `/api/calendar/events?${params.toString()}`
+        );
 
         events = data.events || [];
     }
 
-    function renderCalendar() {
-        const grid = document.getElementById("calendar-grid");
-        const title = document.getElementById("calendar-title");
-
-        const [jy, jm] = toJalali(
-            new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                15
-            )
+    async function loadCalendarRequests() {
+        const data = await gvApi(
+            "/api/calendar/requests"
         );
+
+        requests = data.requests || [];
+
+        renderRequestPanel();
+    }
+
+    function renderRequestPanel() {
+        const container =
+            document.getElementById("calendar-request-content");
+
+        if (!container) {
+            return;
+        }
+
+        if (!requests.length) {
+            container.innerHTML = `
+                <div class="gv-empty-state">
+                    درخواست ویزیت جدیدی برای زمان‌بندی وجود ندارد.
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="gv-request-list">
+                ${requests.map(item => `
+                    <button
+                        type="button"
+                        class="gv-request-item ${
+                            Number(item.diagnosis_id) === Number(selectedDiagnosisId)
+                                ? "is-selected"
+                                : ""
+                        }"
+                        data-calendar-request="${item.diagnosis_id}"
+                    >
+                        <strong>
+                            ${item.user_name || "بدون نام"}
+                        </strong>
+
+                        <span>
+                            ${item.plant_name || "گیاه نامشخص"}
+                        </span>
+
+                        <small>
+                            ${item.disease_name || "بدون مشکل ثبت‌شده"}
+                        </small>
+                    </button>
+                `).join("")}
+            </div>
+        `;
+    }
+
+    function selectRequest(diagnosisId) {
+        const item = requests.find(
+            x => Number(x.diagnosis_id) === Number(diagnosisId)
+        );
+
+        if (!item) {
+            return;
+        }
+
+        selectedDiagnosisId = Number(item.diagnosis_id);
+        selectedAppointmentId = null;
+
+        renderRequestPanel();
+
+        gvNotify(
+            `درخواست «${item.user_name}» انتخاب شد. اکنون زمان آزاد را انتخاب کنید.`
+        );
+
+        loadSlots();
+    }
+
+    function renderCalendar() {
+        const grid =
+            document.getElementById("calendar-grid");
+
+        const title =
+            document.getElementById("calendar-title");
 
         title.textContent =
-            `${PERSIAN_MONTHS[jm - 1]} ${formatPersianNumber(jy)}`;
-
-        const firstDay = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth(),
-            1
-        );
-
-        const lastDay = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() + 1,
-            0
-        );
-
-        let weekday = (firstDay.getDay() + 1) % 7;
+            `${PERSIAN_MONTHS[currentJalali[1] - 1]} ${formatPersianNumber(currentJalali[0])}`;
 
         grid.innerHTML = "";
 
-        for (let i = 0; i < weekday; i++) {
+        const firstWeekday = jalaliDayOfWeek(
+            currentJalali[0],
+            currentJalali[1],
+            1
+        );
+
+        for (let i = 0; i < firstWeekday; i++) {
             const empty = document.createElement("div");
-            empty.className = "gv-calendar-day gv-calendar-day-empty";
+
+            empty.className =
+                "gv-calendar-day gv-calendar-day-empty";
+
             grid.appendChild(empty);
         }
 
-        for (
-            let day = 1;
-            day <= lastDay.getDate();
-            day++
-        ) {
-            const date = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                day
-            );
+        const today = jalaliNow();
 
-            const cell = document.createElement("button");
+        const length = jalaliMonthLength(
+            currentJalali[0],
+            currentJalali[1]
+        );
+
+        for (let day = 1; day <= length; day++) {
+            const jalali = [
+                currentJalali[0],
+                currentJalali[1],
+                day
+            ];
+
+            const cell =
+                document.createElement("button");
 
             cell.type = "button";
             cell.className = "gv-calendar-day";
 
-            if (sameDate(date, selectedDate)) {
+            if (sameJalali(jalali, selectedJalali)) {
                 cell.classList.add("is-selected");
             }
 
-            if (sameDate(date, new Date())) {
+            if (sameJalali(jalali, today)) {
                 cell.classList.add("is-today");
             }
 
-            const [dayJy, dayJm, dayJd] = toJalali(date);
-
-            const dayEvents = events.filter(event => {
-                const eventDate = new Date(event.start_at);
-                return sameDate(eventDate, date);
-            });
+            const dayEvents =
+                events.filter(event =>
+                    sameJalali(
+                        eventJalali(event),
+                        jalali
+                    )
+                );
 
             cell.innerHTML = `
                 <span class="gv-day-number">
-                    ${formatPersianNumber(dayJd)}
+                    ${formatPersianNumber(day)}
                 </span>
+
                 ${
                     dayEvents.length
                         ? `
-                        <span class="gv-day-events-count">
-                            ${formatPersianNumber(dayEvents.length)} ویزیت
-                        </span>
+                            <span class="gv-day-events-count">
+                                ${formatPersianNumber(dayEvents.length)} ویزیت
+                            </span>
                         `
                         : ""
                 }
             `;
 
             cell.addEventListener("click", () => {
-                selectedDate = date;
+                selectedJalali = jalali;
+
                 renderCalendar();
                 loadSelectedDay();
             });
@@ -472,9 +621,84 @@
         }
     }
 
+    function renderDayEvents() {
+        const container =
+            document.getElementById("day-events");
+
+        const selectedEvents =
+            events
+                .filter(event =>
+                    sameJalali(
+                        eventJalali(event),
+                        selectedJalali
+                    )
+                )
+                .sort(
+                    (a, b) =>
+                        new Date(a.start_at) -
+                        new Date(b.start_at)
+                );
+
+        if (!selectedEvents.length) {
+            container.innerHTML = `
+                <div class="gv-empty-state">
+                    برای این روز ویزیتی ثبت نشده است.
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        selectedEvents.forEach(event => {
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "gv-event-card";
+
+            item.innerHTML = `
+                <div class="gv-event-time">
+                    ${formatTime(event.start_at)}
+                    <span>تا</span>
+                    ${formatTime(event.end_at)}
+                </div>
+
+                <div class="gv-event-main">
+                    <strong>
+                        ${event.user_name || `ویزیت #${event.diagnosis_id}`}
+                    </strong>
+
+                    <span>
+                        ${event.plant_name || "گیاه ثبت نشده"}
+                    </span>
+                </div>
+
+                <div class="gv-event-actions">
+
+                    <button
+                        type="button"
+                        class="gv-danger-btn"
+                        data-cancel-appointment="${event.appointment_id || event.id}"
+                    >
+                        لغو نوبت
+                    </button>
+
+                </div>
+            `;
+
+            container.appendChild(item);
+        });
+    }
+
     async function loadSlots() {
         const container =
             document.getElementById("available-slots");
+
+        if (!selectedJalali) {
+            return;
+        }
 
         container.innerHTML = `
             <div class="gv-loading">
@@ -483,19 +707,23 @@
         `;
 
         try {
-            const start = new Date(
-                selectedDate.getFullYear(),
-                selectedDate.getMonth(),
-                selectedDate.getDate(),
-                8, 0, 0
-            );
+            const start =
+                jalaliToDate(
+                    selectedJalali[0],
+                    selectedJalali[1],
+                    selectedJalali[2],
+                    8,
+                    0
+                );
 
-            const end = new Date(
-                selectedDate.getFullYear(),
-                selectedDate.getMonth(),
-                selectedDate.getDate(),
-                22, 0, 0
-            );
+            const end =
+                jalaliToDate(
+                    selectedJalali[0],
+                    selectedJalali[1],
+                    selectedJalali[2],
+                    22,
+                    0
+                );
 
             const params = new URLSearchParams({
                 start_at: start.toISOString(),
@@ -503,48 +731,56 @@
                 step_minutes: "30"
             });
 
-            const response = await fetch(
-                `/api/calendar/slots?${params.toString()}`,
-                {
-                    credentials: "same-origin"
-                }
-            );
+            const data =
+                await gvApi(
+                    `/api/calendar/slots?${params.toString()}`
+                );
 
-            if (!response.ok) {
-                throw new Error("خطا در دریافت اسلات‌ها");
-            }
-
-            const data = await response.json();
-
-            const slots = data.slots || [];
+            const slots =
+                data.slots || [];
 
             if (!slots.length) {
                 container.innerHTML = `
                     <div class="gv-empty-state">
-                        برای این روز زمان قابل انتخابی وجود ندارد.
+                        برای این روز زمانی وجود ندارد.
                     </div>
                 `;
+
                 return;
             }
 
             container.innerHTML = "";
 
             slots.forEach(slot => {
-                const button = document.createElement("button");
+                const button =
+                    document.createElement("button");
 
                 button.type = "button";
-                button.className = slot.available
-                    ? "gv-slot gv-slot-free"
-                    : "gv-slot gv-slot-busy";
 
-                button.disabled = !slot.available;
+                button.className =
+                    slot.available
+                        ? "gv-slot gv-slot-free"
+                        : "gv-slot gv-slot-busy";
+
+                button.disabled =
+                    !slot.available;
+
+                button.dataset.calendarSlot =
+                    slot.start_at;
 
                 button.innerHTML = `
-                    <span>${formatTime(slot.start_at)}</span>
+                    <span>
+                        ${formatTime(slot.start_at)}
+                    </span>
+
                     <small>
                         ${
                             slot.available
-                                ? "قابل انتخاب"
+                                ? (
+                                    selectedDiagnosisId
+                                        ? "ثبت این زمان"
+                                        : "ابتدا درخواست را انتخاب کنید"
+                                )
                                 : "رزرو شده"
                         }
                     </small>
@@ -562,82 +798,191 @@
         }
     }
 
-    function renderDayEvents() {
-        const container =
-            document.getElementById("day-events");
-
-        const selectedEvents = events
-            .filter(event => {
-                const eventDate = new Date(event.start_at);
-                return sameDate(eventDate, selectedDate);
-            })
-            .sort(
-                (a, b) =>
-                    new Date(a.start_at) -
-                    new Date(b.start_at)
+    async function createAppointmentForSelectedRequest(startAt) {
+        if (!selectedDiagnosisId) {
+            gvNotify(
+                "ابتدا یک درخواست ویزیت را انتخاب کنید.",
+                "error"
             );
 
-        if (!selectedEvents.length) {
-            container.innerHTML = `
-                <div class="gv-empty-state">
-                    برای این روز ویزیتی ثبت نشده است.
-                </div>
-            `;
             return;
         }
 
-        container.innerHTML = "";
+        try {
+            const params =
+                new URLSearchParams({
+                    diagnosis_id:
+                        String(selectedDiagnosisId),
+                    start_at:
+                        startAt
+                });
 
-        selectedEvents.forEach(event => {
-            const item = document.createElement("div");
+            const result =
+                await gvApi(
+                    `/api/calendar/appointments?${params.toString()}`,
+                    {
+                        method: "POST"
+                    }
+                );
 
-            item.className = "gv-event-card";
+            selectedAppointmentId =
+                result.appointment?.id || null;
 
-            item.innerHTML = `
-                <div class="gv-event-time">
-                    ${formatTime(event.start_at)}
-                    <span>تا</span>
-                    ${formatTime(event.end_at)}
-                </div>
+            gvNotify(
+                "نوبت با موفقیت ثبت شد."
+            );
 
-                <div class="gv-event-main">
-                    <strong>
-                        ${
-                            event.user_name ||
-                            `ویزیت #${event.diagnosis_id}`
-                        }
-                    </strong>
+            /*
+             * مهم:
+             * بعد از ثبت، از سرور دوباره می‌خوانیم.
+             * بنابراین تغییر فقط در UI نمی‌ماند.
+             */
+            await Promise.all([
+                fetchEventsForMonth(),
+                loadCalendarRequests()
+            ]);
 
-                    <span>
-                        ${
-                            event.plant_name ||
-                            "گیاه ثبت نشده"
-                        }
-                    </span>
-                </div>
+            renderCalendar();
+            renderDayEvents();
+            await loadSlots();
 
-                <div class="gv-event-status">
-                    ${event.status_label || event.status}
-                </div>
-            `;
+        } catch (error) {
+            gvNotify(
+                error.message,
+                "error"
+            );
+        }
+    }
 
-            container.appendChild(item);
-        });
+    async function rescheduleAppointmentFromUI(
+        appointmentId,
+        startAt
+    ) {
+        try {
+            const params =
+                new URLSearchParams({
+                    start_at: startAt
+                });
+
+            await gvApi(
+                `/api/calendar/appointments/${appointmentId}/reschedule?${params.toString()}`,
+                {
+                    method: "POST"
+                }
+            );
+
+            gvNotify(
+                "زمان ویزیت با موفقیت تغییر کرد."
+            );
+
+            await fetchEventsForMonth();
+
+            renderCalendar();
+            renderDayEvents();
+            await loadSlots();
+
+        } catch (error) {
+            gvNotify(
+                error.message,
+                "error"
+            );
+        }
+    }
+
+    async function cancelAppointmentFromUI(
+        appointmentId
+    ) {
+        if (!confirm(
+            "آیا از لغو این نوبت مطمئن هستید؟"
+        )) {
+            return;
+        }
+
+        try {
+            await gvApi(
+                `/api/calendar/appointments/${appointmentId}/cancel`,
+                {
+                    method: "POST"
+                }
+            );
+
+            gvNotify(
+                "نوبت لغو شد."
+            );
+
+            await Promise.all([
+                fetchEventsForMonth(),
+                loadCalendarRequests()
+            ]);
+
+            renderCalendar();
+            renderDayEvents();
+            await loadSlots();
+
+        } catch (error) {
+            gvNotify(
+                error.message,
+                "error"
+            );
+        }
     }
 
     function loadSelectedDay() {
         const label =
-            document.getElementById("selected-day-label");
+            document.getElementById(
+                "selected-day-label"
+            );
 
-        label.textContent = formatDateLabel(selectedDate);
+        label.textContent =
+            formatDateLabel(selectedJalali);
 
         renderDayEvents();
+
         loadSlots();
+    }
+
+    function changeJalaliMonth(delta) {
+        let jy = currentJalali[0];
+        let jm = currentJalali[1];
+
+        jm += delta;
+
+        if (jm > 12) {
+            jm = 1;
+            jy++;
+        }
+
+        if (jm < 1) {
+            jm = 12;
+            jy--;
+        }
+
+        currentJalali = [
+            jy,
+            jm,
+            1
+        ];
+
+        const selectedDay =
+            Math.min(
+                selectedJalali[2],
+                jalaliMonthLength(jy, jm)
+            );
+
+        selectedJalali = [
+            jy,
+            jm,
+            selectedDay
+        ];
+
+        loadCalendar();
     }
 
     async function loadCalendar() {
         const grid =
-            document.getElementById("calendar-grid");
+            document.getElementById(
+                "calendar-grid"
+            );
 
         grid.innerHTML = `
             <div class="gv-calendar-loading">
@@ -649,6 +994,7 @@
             await fetchEventsForMonth();
 
             renderCalendar();
+
             loadSelectedDay();
 
         } catch (error) {
@@ -658,44 +1004,130 @@
                 </div>
             `;
 
-            showToast(error.message, "error");
+            gvNotify(
+                error.message,
+                "error"
+            );
         }
     }
 
     document
         .getElementById("calendar-prev")
-        .addEventListener("click", () => {
-            currentDate = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth() - 1,
-                1
-            );
-
-            loadCalendar();
-        });
+        .addEventListener(
+            "click",
+            () => changeJalaliMonth(-1)
+        );
 
     document
         .getElementById("calendar-next")
-        .addEventListener("click", () => {
-            currentDate = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth() + 1,
-                1
-            );
-
-            loadCalendar();
-        });
+        .addEventListener(
+            "click",
+            () => changeJalaliMonth(1)
+        );
 
     document
         .getElementById("calendar-today")
-        .addEventListener("click", () => {
-            currentDate = new Date();
-            selectedDate = new Date();
+        .addEventListener(
+            "click",
+            () => {
+                const today =
+                    jalaliNow();
 
-            loadCalendar();
-        });
+                currentJalali = [
+                    today[0],
+                    today[1],
+                    1
+                ];
 
-    loadCalendar();
+                selectedJalali = today;
+
+                loadCalendar();
+            }
+        );
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const requestButton =
+                event.target.closest(
+                    "[data-calendar-request]"
+                );
+
+            if (requestButton) {
+                selectRequest(
+                    Number(
+                        requestButton.dataset.calendarRequest
+                    )
+                );
+
+                return;
+            }
+
+            const slot =
+                event.target.closest(
+                    "[data-calendar-slot]"
+                );
+
+            if (slot) {
+                const startAt =
+                    slot.dataset.calendarSlot;
+
+                if (startAt) {
+                    createAppointmentForSelectedRequest(
+                        startAt
+                    );
+                }
+
+                return;
+            }
+
+            const cancelButton =
+                event.target.closest(
+                    "[data-cancel-appointment]"
+                );
+
+            if (cancelButton) {
+                const appointmentId =
+                    Number(
+                        cancelButton.dataset.cancelAppointment
+                    );
+
+                if (appointmentId) {
+                    cancelAppointmentFromUI(
+                        appointmentId
+                    );
+                }
+
+                return;
+            }
+        }
+    );
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            const today =
+                jalaliNow();
+
+            currentJalali = [
+                today[0],
+                today[1],
+                1
+            ];
+
+            selectedJalali = today;
+
+            try {
+                await loadCalendarRequests();
+            } catch (error) {
+                console.error(error);
+            }
+
+            await loadCalendar();
+        }
+    );
 
 })();
 </script>
