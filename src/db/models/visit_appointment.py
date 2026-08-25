@@ -3,7 +3,7 @@ from __future__ import annotations
 import enum
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, Text
+from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.base import Base, TimestampMixin
@@ -21,10 +21,9 @@ class VisitAppointment(Base, TimestampMixin):
     __tablename__ = "visit_appointments"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    diagnosis_id: Mapped[int] = mapped_column(
-        ForeignKey("diagnoses.id", ondelete="CASCADE"),
-        nullable=False,
-        unique=True,
+    diagnosis_id: Mapped[int | None] = mapped_column(
+        ForeignKey("diagnoses.id", ondelete="SET NULL"),
+        nullable=True,
         index=True,
     )
 
@@ -62,6 +61,26 @@ class VisitAppointment(Base, TimestampMixin):
     )
 
     admin_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    # رزروهای خارج از درخواست بات
+    source: Mapped[str] = mapped_column(
+        String(32),
+        nullable=False,
+        default="bot",
+        server_default="bot",
+    )
+    customer_name: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+    customer_phone: Mapped[str | None] = mapped_column(
+        String(32),
+        nullable=True,
+    )
+    customer_plant: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
+    )
 
     diagnosis = relationship("Diagnosis", back_populates="appointment")
 

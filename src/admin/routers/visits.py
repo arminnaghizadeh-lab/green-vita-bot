@@ -23,6 +23,7 @@ from src.services.visit_scheduler import (
     AppointmentNotFound,
     InvalidAppointmentTime,
     SchedulerError,
+    cancel_appointment,
     create_appointment,
     is_slot_available,
     reschedule_appointment,
@@ -71,11 +72,10 @@ def _parse_datetime(value: str, field_name: str) -> datetime:
             detail=f"Invalid {field_name}",
         ) from exc
 
+    # فرم datetime-local زمان را بدون timezone ارسال می‌کند.
+    # زمان پنل ادمین به صورت local در نظر گرفته می‌شود.
     if parsed.tzinfo is None:
-        raise HTTPException(
-            status_code=400,
-            detail=f"{field_name} must include timezone information",
-        )
+        parsed = parsed.replace(tzinfo=timezone.utc)
 
     return parsed.astimezone(timezone.utc)
 
@@ -122,11 +122,11 @@ async def calendar_events(
 
     result = await session.execute(
         select(VisitAppointment, Diagnosis, User, Plant)
-        .join(
+        .outerjoin(
             Diagnosis,
             VisitAppointment.diagnosis_id == Diagnosis.id,
         )
-        .join(
+        .outerjoin(
             User,
             Diagnosis.user_id == User.id,
         )
@@ -151,28 +151,66 @@ async def calendar_events(
             else appointment.status
         )
 
-        events.append(
-            {
+        if diagnosis is not None and user is not None:
+            user_name = (
+                f"{user.first_name or ''} "
+                f"{user.last_name or ''}"
+            ).strip() or "بدون نام"
+
+            plant_name = (
+                plant.name
+                if plant
+                else diagnosis.plant_name_input
+            )
+
+            event = {
                 **_appointment_json(appointment),
-                "title": (
-                    f"ویزیت {user.first_name or ''} "
-                    f"{user.last_name or ''}"
-                ).strip(),
+                "title": f"ویزیت {user_name}",
                 "user_id": user.id,
-                "user_name": (
-                    f"{user.first_name or ''} "
-                    f"{user.last_name or ''}"
-                ).strip(),
+                "user_name": user_name,
+                "username": user.username,
+                "phone_number": user.phone_number,
                 "plant_id": plant.id if plant else None,
-                "plant_name": plant.name if plant else None,
+                "plant_name": plant_name,
+                "disease_name": diagnosis.disease_name,
+                "symptoms": diagnosis.symptoms,
+                "cause": diagnosis.cause,
+                "user_notes": diagnosis.user_notes,
+                "admin_notes": diagnosis.admin_notes,
+                "diagnosis_id": diagnosis.id,
                 "diagnosis_status": (
                     diagnosis.visit_status.value
                     if hasattr(diagnosis.visit_status, "value")
                     else diagnosis.visit_status
                 ),
                 "calendar_status": status,
+                "source": "bot",
             }
-        )
+        else:
+            event = {
+                **_appointment_json(appointment),
+                "title": (
+                    f"رزرو دستی - "
+                    f"{appointment.customer_name or 'بدون نام'}"
+                ),
+                "user_id": None,
+                "user_name": appointment.customer_name or "بدون نام",
+                "username": None,
+                "phone_number": appointment.customer_phone,
+                "plant_id": None,
+                "plant_name": appointment.customer_plant,
+                "disease_name": None,
+                "symptoms": None,
+                "cause": None,
+                "user_notes": None,
+                "admin_notes": appointment.admin_note,
+                "diagnosis_id": None,
+                "diagnosis_status": None,
+                "calendar_status": status,
+                "source": "manual",
+            }
+
+        events.append(event)
 
     return JSONResponse(
         {
@@ -301,6 +339,89 @@ async def calendar_create_appointment(
     )
 
 
+
+@router.post("/api/calendar/manual-appointments")
+async def calendar_create_manual_appointment(
+    request: Request,
+    start_at: str,
+    customer_name: str,
+    customer_phone: str = "",
+    customer_plant: str = "",
+    admin_note: str = "",
+    session: AsyncSession = Depends(get_session),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    customer_name = customer_name.strip()
+
+    if not customer_name:
+        raise HTTPException(
+            status_code=400,
+            detail="نام مشتری الزامی است.",
+        )
+
+    start = _parse_datetime(start_at, "start_at")
+
+    try:
+        from src.services.visit_scheduler import calculate_window, find_conflict
+
+        start, end, blocked_until = calculate_window(
+            start,
+            60,
+            120,
+        )
+
+        conflict = await find_conflict(
+            session=session,
+            start_at=start,
+            blocked_until=blocked_until,
+        )
+
+        if conflict is not None:
+            raise AppointmentConflict(
+                f"زمان انتخاب‌شده با رزرو {conflict.id} تداخل دارد."
+            )
+
+        appointment = VisitAppointment(
+            diagnosis_id=None,
+            start_at=start,
+            end_at=end,
+            blocked_until=blocked_until,
+            duration_minutes=60,
+            buffer_minutes=120,
+            status=AppointmentStatus.SCHEDULED,
+            admin_note=admin_note.strip() or None,
+            source="manual",
+            customer_name=customer_name,
+            customer_phone=customer_phone.strip() or None,
+            customer_plant=customer_plant.strip() or None,
+        )
+
+        session.add(appointment)
+        await session.commit()
+        await session.refresh(appointment)
+
+    except AppointmentConflict as exc:
+        await session.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail=str(exc),
+        ) from exc
+
+    except Exception:
+        await session.rollback()
+        raise
+
+    return JSONResponse(
+        {
+            "success": True,
+            "appointment": _appointment_json(appointment),
+        }
+    )
+
+
 @router.post("/api/calendar/appointments/{appointment_id}/reschedule")
 async def calendar_reschedule_appointment(
     appointment_id: int,
@@ -371,29 +492,36 @@ async def calendar_cancel_appointment(
     if redirect:
         return redirect
 
-    appointment = await session.get(
-        VisitAppointment,
-        appointment_id,
-    )
-
-    if appointment is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Appointment not found",
+    try:
+        appointment = await cancel_appointment(
+            session=session,
+            appointment_id=appointment_id,
         )
 
-    appointment.status = AppointmentStatus.CANCELLED
+        diagnosis = await session.get(
+            Diagnosis,
+            appointment.diagnosis_id,
+        )
 
-    diagnosis = await session.get(
-        Diagnosis,
-        appointment.diagnosis_id,
-    )
+        if diagnosis is not None:
+            diagnosis.visit_status = VisitStatus.PENDING
 
-    if diagnosis is not None:
-        diagnosis.visit_scheduled_at = None
-        diagnosis.visit_status = VisitStatus.CANCELLED
+        await session.commit()
+        await session.refresh(appointment)
 
-    await session.commit()
+    except AppointmentNotFound as exc:
+        await session.rollback()
+        raise HTTPException(
+            status_code=404,
+            detail=str(exc),
+        ) from exc
+
+    except SchedulerError as exc:
+        await session.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        ) from exc
 
     return JSONResponse(
         {
@@ -465,12 +593,17 @@ async def calendar_requests(
                     f"{user.first_name or ''} {user.last_name or ''}"
                 ).strip() or "بدون نام",
                 "username": user.username,
+                "phone_number": user.phone_number,
                 "plant_name": (
                     plant.name
                     if plant
                     else diagnosis.plant_name_input or "گیاه نامشخص"
                 ),
                 "disease_name": diagnosis.disease_name,
+                "symptoms": diagnosis.symptoms,
+                "cause": diagnosis.cause,
+                "user_notes": diagnosis.user_notes,
+                "admin_notes": diagnosis.admin_notes,
                 "status": (
                     diagnosis.visit_status.value
                     if hasattr(diagnosis.visit_status, "value")
@@ -716,7 +849,23 @@ async def update_visit(
         existing = existing_result.scalar_one_or_none()
 
         if existing is not None:
-            existing.status = AppointmentStatus.CANCELLED
+            try:
+                await cancel_appointment(
+                    session=session,
+                    appointment_id=existing.id,
+                )
+            except AppointmentNotFound as exc:
+                await session.rollback()
+                raise HTTPException(
+                    status_code=404,
+                    detail=str(exc),
+                ) from exc
+            except SchedulerError as exc:
+                await session.rollback()
+                raise HTTPException(
+                    status_code=400,
+                    detail=str(exc),
+                ) from exc
 
         diagnosis.visit_scheduled_at = None
 

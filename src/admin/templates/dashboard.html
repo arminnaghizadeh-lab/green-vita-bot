@@ -332,7 +332,15 @@
             const button =
                 document.createElement("a");
 
-            button.href = "/calendar";
+            const gregorian =
+                j2g(
+                    state[0],
+                    state[1],
+                    day
+                );
+
+            button.href =
+                `/calendar?date=${gregorian[0]}-${String(gregorian[1]).padStart(2, "0")}-${String(gregorian[2]).padStart(2, "0")}`;
 
             button.className =
                 "gv-dashboard-calendar-day";

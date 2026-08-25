@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.db.models.diagnosis import Diagnosis
+from src.db.models.visit_status import VisitStatus
 from src.db.models.visit_appointment import (
     AppointmentStatus,
     VisitAppointment,
@@ -140,13 +141,16 @@ async def create_appointment(
 
     existing = await session.execute(
         select(VisitAppointment)
-        .where(VisitAppointment.diagnosis_id == diagnosis_id)
+        .where(
+            VisitAppointment.diagnosis_id == diagnosis_id,
+            VisitAppointment.status != AppointmentStatus.CANCELLED,
+        )
         .limit(1)
     )
 
     if existing.scalar_one_or_none() is not None:
         raise SchedulerError(
-            f"Diagnosis {diagnosis_id} already has an appointment."
+            f"Diagnosis {diagnosis_id} already has an active appointment."
         )
 
     conflict = await find_conflict(
@@ -288,6 +292,7 @@ async def cancel_appointment(
 
     if diagnosis is not None:
         diagnosis.visit_scheduled_at = None
+        diagnosis.visit_status = VisitStatus.PENDING
 
     await session.flush()
 
