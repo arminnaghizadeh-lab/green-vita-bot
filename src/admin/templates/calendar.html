@@ -16,6 +16,14 @@
         </div>
 
         <div class="gv-calendar-actions">
+            <button
+                type="button"
+                class="gv-secondary-btn"
+                id="manual-appointment-button"
+            >
+                + نوبت دستی
+            </button>
+
             <a href="/visits" class="gv-secondary-btn">
                 درخواست‌های ویزیت
             </a>
@@ -128,6 +136,158 @@
     </div>
 
     <div id="calendar-toast" class="gv-calendar-toast" hidden></div>
+
+    <div
+        id="manual-appointment-modal"
+        class="calendar-modal hidden"
+        aria-hidden="true"
+    >
+        <div
+            class="calendar-modal-backdrop"
+            data-close-manual-modal
+        ></div>
+
+        <div
+            class="calendar-modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="manual-appointment-title"
+        >
+            <div class="calendar-modal-header">
+                <div>
+                    <div class="calendar-modal-kicker">
+                        GREEN VITA · MANUAL
+                    </div>
+
+                    <h3 id="manual-appointment-title">
+                        ثبت نوبت دستی
+                    </h3>
+                </div>
+
+                <button
+                    type="button"
+                    class="gv-icon-btn"
+                    data-close-manual-modal
+                    aria-label="بستن"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div class="modal-summary">
+                <div class="modal-summary-row">
+                    <span>تاریخ انتخاب‌شده</span>
+                    <strong id="manual-appointment-date">
+                        —
+                    </strong>
+                </div>
+
+                <div class="modal-summary-row">
+                    <span>زمان</span>
+                    <strong id="manual-appointment-time-preview">
+                        —
+                    </strong>
+                </div>
+            </div>
+
+            <form id="manual-appointment-form">
+
+                <div class="modal-form-group">
+                    <label for="manual-customer-name">
+                        نام مشتری *
+                    </label>
+
+                    <input
+                        id="manual-customer-name"
+                        name="customer_name"
+                        type="text"
+                        required
+                        autocomplete="name"
+                        placeholder="مثلاً آرمین نقیزاده"
+                    >
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="manual-customer-phone">
+                        شماره تماس
+                    </label>
+
+                    <input
+                        id="manual-customer-phone"
+                        name="customer_phone"
+                        type="tel"
+                        autocomplete="tel"
+                        placeholder="مثلاً 0912..."
+                    >
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="manual-customer-plant">
+                        نام گیاه
+                    </label>
+
+                    <input
+                        id="manual-customer-plant"
+                        name="customer_plant"
+                        type="text"
+                        placeholder="مثلاً فیکوس"
+                    >
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="manual-appointment-time">
+                        ساعت *
+                    </label>
+
+                    <input
+                        id="manual-appointment-time"
+                        name="appointment_time"
+                        type="time"
+                        required
+                        step="1800"
+                    >
+                </div>
+
+                <div class="modal-form-group">
+                    <label for="manual-admin-note">
+                        یادداشت
+                    </label>
+
+                    <textarea
+                        id="manual-admin-note"
+                        name="admin_note"
+                        rows="3"
+                        placeholder="توضیحات داخلی نوبت..."
+                    ></textarea>
+                </div>
+
+                <div
+                    id="manual-appointment-error"
+                    class="calendar-modal-error"
+                    hidden
+                ></div>
+
+                <div class="modal-actions">
+                    <button
+                        type="button"
+                        class="gv-secondary-btn"
+                        data-close-manual-modal
+                    >
+                        انصراف
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="gv-primary-btn"
+                        id="manual-appointment-submit"
+                    >
+                        ثبت نوبت
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 
 </div>
 
@@ -798,6 +958,241 @@
         }
     }
 
+    function getManualAppointmentDate() {
+        if (!selectedJalali) {
+            throw new Error(
+                "ابتدا یک روز را از تقویم انتخاب کنید."
+            );
+        }
+
+        const gregorian =
+            jalaliToGregorian(
+                selectedJalali[0],
+                selectedJalali[1],
+                selectedJalali[2]
+            );
+
+        return [
+            gregorian[0],
+            pad(gregorian[1]),
+            pad(gregorian[2])
+        ].join("-");
+    }
+
+    function openManualAppointmentModal() {
+        const modal =
+            document.getElementById(
+                "manual-appointment-modal"
+            );
+
+        const dateLabel =
+            document.getElementById(
+                "manual-appointment-date"
+            );
+
+        const timeInput =
+            document.getElementById(
+                "manual-appointment-time"
+            );
+
+        const errorBox =
+            document.getElementById(
+                "manual-appointment-error"
+            );
+
+        try {
+            dateLabel.textContent =
+                formatDateLabel(selectedJalali);
+
+            errorBox.hidden = true;
+            errorBox.textContent = "";
+
+            if (!timeInput.value) {
+                timeInput.value = "09:00";
+            }
+
+            modal.classList.remove("hidden");
+            modal.setAttribute("aria-hidden", "false");
+
+            document
+                .getElementById(
+                    "manual-customer-name"
+                )
+                .focus();
+
+        } catch (error) {
+            gvNotify(
+                error.message,
+                "error"
+            );
+        }
+    }
+
+    function closeManualAppointmentModal() {
+        const modal =
+            document.getElementById(
+                "manual-appointment-modal"
+            );
+
+        modal.classList.add("hidden");
+        modal.setAttribute("aria-hidden", "true");
+    }
+
+    function updateManualAppointmentTimePreview() {
+        const time =
+            document.getElementById(
+                "manual-appointment-time"
+            ).value;
+
+        document.getElementById(
+            "manual-appointment-time-preview"
+        ).textContent =
+            time || "—";
+    }
+
+    async function createManualAppointment(event) {
+        event.preventDefault();
+
+        const form =
+            document.getElementById(
+                "manual-appointment-form"
+            );
+
+        const submit =
+            document.getElementById(
+                "manual-appointment-submit"
+            );
+
+        const errorBox =
+            document.getElementById(
+                "manual-appointment-error"
+            );
+
+        const name =
+            document.getElementById(
+                "manual-customer-name"
+            ).value.trim();
+
+        const phone =
+            document.getElementById(
+                "manual-customer-phone"
+            ).value.trim();
+
+        const plant =
+            document.getElementById(
+                "manual-customer-plant"
+            ).value.trim();
+
+        const note =
+            document.getElementById(
+                "manual-admin-note"
+            ).value.trim();
+
+        const time =
+            document.getElementById(
+                "manual-appointment-time"
+            ).value;
+
+        if (!name) {
+            errorBox.textContent =
+                "نام مشتری الزامی است.";
+
+            errorBox.hidden = false;
+            return;
+        }
+
+        if (!time) {
+            errorBox.textContent =
+                "ساعت نوبت را انتخاب کنید.";
+
+            errorBox.hidden = false;
+            return;
+        }
+
+        let date;
+
+        try {
+            date = getManualAppointmentDate();
+        } catch (error) {
+            errorBox.textContent =
+                error.message;
+
+            errorBox.hidden = false;
+            return;
+        }
+
+        const startAt =
+            `${date}T${time}:00+00:00`;
+
+        const params =
+            new URLSearchParams({
+                start_at: startAt,
+                customer_name: name,
+                customer_phone: phone,
+                customer_plant: plant,
+                admin_note: note
+            });
+
+        submit.disabled = true;
+        submit.textContent =
+            "در حال ثبت...";
+
+        errorBox.hidden = true;
+        errorBox.textContent = "";
+
+        try {
+            const result =
+                await gvApi(
+                    `/api/calendar/manual-appointments?${params.toString()}`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+            if (!result.success) {
+                throw new Error(
+                    result.detail ||
+                    "ثبت نوبت انجام نشد."
+                );
+            }
+
+            closeManualAppointmentModal();
+
+            form.reset();
+
+            gvNotify(
+                "نوبت دستی با موفقیت ثبت شد."
+            );
+
+            await Promise.all([
+                fetchEventsForMonth(),
+                loadCalendarRequests()
+            ]);
+
+            renderCalendar();
+            renderDayEvents();
+            await loadSlots();
+
+        } catch (error) {
+            errorBox.textContent =
+                error.message ||
+                "خطا در ثبت نوبت.";
+
+            errorBox.hidden = false;
+
+            gvNotify(
+                error.message ||
+                "خطا در ثبت نوبت.",
+                "error"
+            );
+
+        } finally {
+            submit.disabled = false;
+            submit.textContent =
+                "ثبت نوبت";
+        }
+    }
+
     async function createAppointmentForSelectedRequest(startAt) {
         if (!selectedDiagnosisId) {
             gvNotify(
@@ -1100,6 +1495,67 @@
                 }
 
                 return;
+            }
+        }
+    );
+
+    document
+        .getElementById(
+            "manual-appointment-button"
+        )
+        .addEventListener(
+            "click",
+            openManualAppointmentModal
+        );
+
+    document
+        .getElementById(
+            "manual-appointment-form"
+        )
+        .addEventListener(
+            "submit",
+            createManualAppointment
+        );
+
+    document
+        .getElementById(
+            "manual-appointment-time"
+        )
+        .addEventListener(
+            "input",
+            updateManualAppointmentTimePreview
+        );
+
+    document.addEventListener(
+        "click",
+        event => {
+            if (
+                event.target.closest(
+                    "[data-close-manual-modal]"
+                )
+            ) {
+                closeManualAppointmentModal();
+            }
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        event => {
+            if (
+                event.key === "Escape"
+            ) {
+                const modal =
+                    document.getElementById(
+                        "manual-appointment-modal"
+                    );
+
+                if (
+                    modal &&
+                    !modal.classList.contains("hidden")
+                ) {
+                    closeManualAppointmentModal();
+                }
             }
         }
     );
