@@ -72,6 +72,193 @@
     </section>
 
 
+
+    <section class="smart-bio-analytics" id="smart-bio-analytics">
+
+        <div class="smart-bio-head">
+            <div>
+                <h2>📊 آمار Smart Bio</h2>
+                <p>آمار کلیک روی لینک‌های ارتباطی گرین ویتا</p>
+            </div>
+
+            <a href="/" target="_blank" rel="noopener" class="primary-link">
+                مشاهده صفحه عمومی ←
+            </a>
+        </div>
+
+
+        <div class="smart-bio-periods">
+
+            <div class="smart-bio-period">
+                <span>۲۴ ساعت اخیر</span>
+                <strong>{{ smart_bio.last_24h }}</strong>
+            </div>
+
+            <div class="smart-bio-period">
+                <span>۷ روز اخیر</span>
+                <strong>{{ smart_bio.last_7d }}</strong>
+            </div>
+
+        </div>
+
+        <div class="smart-bio-total">
+            <span>کل کلیک‌ها</span>
+            <strong>{{ smart_bio.total }}</strong>
+        </div>
+
+        {% if smart_bio.top_channel %}
+        <div class="smart-bio-top-channel">
+            <span>🏆 پربازده‌ترین کانال</span>
+
+            <strong>
+                {% if smart_bio.top_channel.channel == "telegram" %}
+                    ✈️ تلگرام
+                {% elif smart_bio.top_channel.channel == "instagram" %}
+                    ◎ اینستاگرام
+                {% elif smart_bio.top_channel.channel == "whatsapp" %}
+                    ◉ واتساپ
+                {% elif smart_bio.top_channel.channel == "bale" %}
+                    ➤ بله
+                {% else %}
+                    {{ smart_bio.top_channel.channel }}
+                {% endif %}
+            </strong>
+
+            <small>
+                {{ smart_bio.top_channel.count }}
+                کلیک ·
+                {{ smart_bio.top_channel.percentage }}٪
+            </small>
+        </div>
+        {% endif %}
+
+        <div class="smart-bio-channel-stats">
+
+            <h3>عملکرد کانال‌ها</h3>
+
+            {% for item in smart_bio.channel_stats %}
+
+            <div class="smart-bio-channel-stat">
+
+                <div class="smart-bio-channel-stat-head">
+
+                    <span>
+                        {% if item.channel == "telegram" %}
+                            ✈️ تلگرام
+                        {% elif item.channel == "instagram" %}
+                            ◎ اینستاگرام
+                        {% elif item.channel == "whatsapp" %}
+                            ◉ واتساپ
+                        {% elif item.channel == "bale" %}
+                            ➤ بله
+                        {% else %}
+                            {{ item.channel }}
+                        {% endif %}
+                    </span>
+
+                    <strong>
+                        {{ item.count }}
+                        <small>({{ item.percentage }}٪)</small>
+                    </strong>
+
+                </div>
+
+                <div class="smart-bio-progress">
+                    <span style="width: {{ item.percentage }}%;"></span>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="smart-bio-channels">
+
+            <div class="smart-bio-channel">
+                <span class="smart-bio-channel-icon">✈️</span>
+                <div>
+                    <strong>تلگرام</strong>
+                    <small>/go/telegram</small>
+                </div>
+                <b>{{ smart_bio.channels.get("telegram", 0) }}</b>
+            </div>
+
+            <div class="smart-bio-channel">
+                <span class="smart-bio-channel-icon">◎</span>
+                <div>
+                    <strong>اینستاگرام</strong>
+                    <small>/go/instagram</small>
+                </div>
+                <b>{{ smart_bio.channels.get("instagram", 0) }}</b>
+            </div>
+
+            <div class="smart-bio-channel">
+                <span class="smart-bio-channel-icon">◉</span>
+                <div>
+                    <strong>واتساپ</strong>
+                    <small>/go/whatsapp</small>
+                </div>
+                <b>{{ smart_bio.channels.get("whatsapp", 0) }}</b>
+            </div>
+
+            <div class="smart-bio-channel">
+                <span class="smart-bio-channel-icon">➤</span>
+                <div>
+                    <strong>پیام‌رسان بله</strong>
+                    <small>/go/bale</small>
+                </div>
+                <b>{{ smart_bio.channels.get("bale", 0) }}</b>
+            </div>
+
+        </div>
+
+        {% if smart_bio.recent %}
+        <div class="smart-bio-recent">
+
+            <h3>آخرین کلیک‌ها</h3>
+
+            <div class="smart-bio-recent-list">
+
+                {% for click in smart_bio.recent %}
+                <div class="smart-bio-recent-row">
+
+                    <span class="smart-bio-recent-channel">
+                        {% if click.channel == "telegram" %}
+                            ✈️ تلگرام
+                        {% elif click.channel == "instagram" %}
+                            ◎ اینستاگرام
+                        {% elif click.channel == "whatsapp" %}
+                            ◉ واتساپ
+                        {% elif click.channel == "bale" %}
+                            ➤ بله
+                        {% else %}
+                            {{ click.channel }}
+                        {% endif %}
+                    </span>
+
+                    <span class="smart-bio-recent-path">
+                        {{ click.source_path or "—" }}
+                    </span>
+
+                    <time datetime="{{ click.created_at.isoformat() }}">
+                        {{ click.created_at.strftime("%Y-%m-%d %H:%M") if click.created_at else "—" }}
+                    </time>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+        {% else %}
+        <div class="smart-bio-empty">
+            هنوز کلیکی ثبت نشده است.
+        </div>
+        {% endif %}
+
+    </section>
+
     <section class="stats">
         <div class="stat-card"><span>👥 کاربران</span><strong>{{ stats.users }}</strong></div>
         <div class="stat-card"><span>🌱 پرونده گیاه</span><strong>{{ stats.plants }}</strong></div>

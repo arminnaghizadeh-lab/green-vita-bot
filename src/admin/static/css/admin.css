@@ -987,3 +987,381 @@ button {
         text-align: center;
     }
 }
+
+/* =========================================================
+   GV SMART BIO ANALYTICS
+   ========================================================= */
+
+.smart-bio-analytics {
+    margin-top: 28px;
+    padding: 24px;
+    background: rgba(255, 255, 255, .86);
+    border: 1px solid rgba(47, 107, 63, .12);
+    border-radius: 24px;
+    box-shadow: 0 12px 35px rgba(35, 79, 47, .08);
+}
+
+.smart-bio-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.smart-bio-head h2 {
+    margin: 0;
+    color: #234f2f;
+    font-size: 20px;
+}
+
+.smart-bio-head p {
+    margin: 6px 0 0;
+    color: #718074;
+    font-size: 12px;
+}
+
+.smart-bio-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    border-radius: 18px;
+    background: #eaf3ec;
+}
+
+.smart-bio-total span {
+    color: #718074;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.smart-bio-total strong {
+    color: #234f2f;
+    font-size: 30px;
+}
+
+.smart-bio-channels {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.smart-bio-channel {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 72px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1px solid rgba(47, 107, 63, .10);
+    border-radius: 16px;
+}
+
+.smart-bio-channel-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #eaf3ec;
+    font-size: 18px;
+}
+
+.smart-bio-channel div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.smart-bio-channel strong {
+    color: #26352a;
+    font-size: 13px;
+}
+
+.smart-bio-channel small {
+    margin-top: 3px;
+    color: #718074;
+    font-size: 9px;
+    direction: ltr;
+    text-align: right;
+}
+
+.smart-bio-channel b {
+    color: #2f6b3f;
+    font-size: 21px;
+}
+
+.smart-bio-recent {
+    margin-top: 22px;
+}
+
+.smart-bio-recent h3 {
+    margin: 0 0 12px;
+    color: #234f2f;
+    font-size: 15px;
+}
+
+.smart-bio-recent-list {
+    overflow: hidden;
+    border: 1px solid rgba(47, 107, 63, .10);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.smart-bio-recent-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(47, 107, 63, .07);
+    font-size: 11px;
+}
+
+.smart-bio-recent-row:last-child {
+    border-bottom: 0;
+}
+
+.smart-bio-recent-channel {
+    color: #26352a;
+    font-weight: 800;
+}
+
+.smart-bio-recent-path {
+    direction: ltr;
+    text-align: right;
+    color: #718074;
+}
+
+.smart-bio-recent-row time {
+    direction: ltr;
+    text-align: left;
+    color: #718074;
+    font-size: 10px;
+}
+
+.smart-bio-empty {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #f7f1e3;
+    color: #718074;
+    text-align: center;
+    font-size: 12px;
+}
+
+@media (max-width: 900px) {
+    .smart-bio-channels {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .smart-bio-analytics {
+        padding: 17px;
+        border-radius: 20px;
+    }
+
+    .smart-bio-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .smart-bio-head .primary-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .smart-bio-channels {
+        grid-template-columns: 1fr;
+    }
+
+    .smart-bio-recent-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .smart-bio-recent-path {
+        display: none;
+    }
+
+    .smart-bio-recent-row time {
+        text-align: left;
+    }
+}
+
+
+/* =========================================================
+   GV SMART BIO PHASE 7 — PERIOD ANALYTICS
+   ========================================================= */
+
+.smart-bio-periods {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.smart-bio-period {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid rgba(47, 107, 63, .10);
+    border-radius: 16px;
+}
+
+.smart-bio-period span {
+    color: #718074;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.smart-bio-period strong {
+    color: #2f6b3f;
+    font-size: 22px;
+}
+
+@media (max-width: 600px) {
+    .smart-bio-periods {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   GV SMART BIO PHASE 8 — VISUAL ANALYTICS
+   ========================================================= */
+
+.smart-bio-top-channel {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+
+    margin: 0 0 16px;
+    padding: 14px 16px;
+
+    background: linear-gradient(
+        135deg,
+        rgba(47, 107, 63, .09),
+        rgba(255, 255, 255, .95)
+    );
+
+    border: 1px solid rgba(47, 107, 63, .12);
+    border-radius: 16px;
+}
+
+.smart-bio-top-channel > span {
+    color: #718074;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.smart-bio-top-channel > strong {
+    color: #234f2f;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.smart-bio-top-channel > small {
+    color: #718074;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.smart-bio-channel-stats {
+    margin-bottom: 18px;
+    padding: 16px;
+
+    background: rgba(255, 255, 255, .72);
+
+    border: 1px solid rgba(47, 107, 63, .09);
+    border-radius: 18px;
+}
+
+.smart-bio-channel-stats h3 {
+    margin: 0 0 16px;
+
+    color: #26352a;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.smart-bio-channel-stat {
+    margin-bottom: 15px;
+}
+
+.smart-bio-channel-stat:last-child {
+    margin-bottom: 0;
+}
+
+.smart-bio-channel-stat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    color: #26352a;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.smart-bio-channel-stat-head strong {
+    color: #2f6b3f;
+    font-size: 13px;
+}
+
+.smart-bio-channel-stat-head strong small {
+    color: #718074;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.smart-bio-progress {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    background: #e8eee9;
+
+    border-radius: 999px;
+}
+
+.smart-bio-progress span {
+    display: block;
+
+    height: 100%;
+
+    min-width: 2px;
+
+    background: #2f6b3f;
+
+    border-radius: inherit;
+
+    transition: width .35s ease;
+}
+
+@media (max-width: 600px) {
+
+    .smart-bio-top-channel {
+        grid-template-columns: 1fr auto;
+        gap: 7px 12px;
+    }
+
+    .smart-bio-top-channel > small {
+        grid-column: 1 / -1;
+    }
+
+    .smart-bio-channel-stats {
+        padding: 14px;
+        border-radius: 16px;
+    }
+}
