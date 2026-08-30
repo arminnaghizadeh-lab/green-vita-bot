@@ -25,7 +25,7 @@ from src.bot.keyboards import (
     get_skip_details_keyboard,
 )
 from src.bot.keyboards.main_menu import BTN_IDENTIFY
-from src.bot.states import DiagnosisStates, IdentificationStates
+from src.bot.states import DiagnosisStates, ExpertVisitStates, IdentificationStates
 from src.core.config import get_settings
 from src.core.exceptions import AIProviderError
 from src.core.logging import get_logger
@@ -254,6 +254,7 @@ async def handle_identification_expert_visit(
     callback: CallbackQuery,
     callback_data: IdentificationExpertVisitCallback,
     session: AsyncSession,
+    state: FSMContext,
 ) -> None:
     identification_repo = PlantIdentificationRepository(session)
     identification = await identification_repo.get_by_id(callback_data.identification_id)
@@ -263,14 +264,22 @@ async def handle_identification_expert_visit(
         return
 
     if identification.expert_visit_requested:
-        await callback.answer("درخواست شما قبلاً ثبت شده. کارشناسان به‌زودی تماس می‌گیرند. 🌿", show_alert=True)
+        await callback.answer(
+            "درخواست شما قبلاً ثبت شده. کارشناسان به‌زودی تماس می‌گیرند. 🌿",
+            show_alert=True,
+        )
         return
 
-    await identification_repo.update(identification, expert_visit_requested=True)
-    await _notify_admins(callback.bot, identification, callback.from_user)
+    await callback.answer()
 
-    await callback.answer("درخواست شما ثبت شد ✅", show_alert=True)
+    await state.clear()
+    await state.update_data(
+        expert_visit_source="identification",
+        expert_visit_id=callback_data.identification_id,
+    )
+    await state.set_state(ExpertVisitStates.waiting_name)
+
     await callback.message.answer(
-        "📞 درخواست ویزیت متخصص شما برای کلینیک گیاه‌پزشکی گرین‌ویتا ثبت شد. "
-        "کارشناسان ما به‌زودی از طریق همین تلگرام باهاتون تماس می‌گیرن. 🌿"
+        "📞 <b>درخواست ویزیت متخصص</b>\n\n"
+        "لطفاً نام و نام خانوادگی خودت رو وارد کن:"
     )

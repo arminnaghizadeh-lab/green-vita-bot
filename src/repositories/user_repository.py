@@ -37,6 +37,25 @@ class UserRepository(BaseRepository[User]):
         )
         return user, True
 
+    async def update_contact(
+        self,
+        user: User,
+        *,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        phone_number: str | None = None,
+    ) -> User:
+        if first_name is not None:
+            user.first_name = first_name
+        if last_name is not None:
+            user.last_name = last_name
+        if phone_number is not None:
+            user.phone_number = phone_number
+
+        await self.session.flush()
+        await self.session.refresh(user)
+        return user
+
     async def list_admins(self) -> list[User]:
         stmt = select(User).where(User.is_admin.is_(True))
         result = await self.session.execute(stmt)

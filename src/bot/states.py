@@ -15,3 +15,8 @@ class IdentificationStates(StatesGroup):
 class PlantStates(StatesGroup):
     waiting_name = State()     # منتظر اسم گیاه هنگام ثبت پرونده جدید
     waiting_species = State()  # منتظر نوع/گونه (اختیاری)
+
+
+class ExpertVisitStates(StatesGroup):
+    waiting_name = State()   # نام و نام خانوادگی برای تماس
+    waiting_phone = State()  # شماره تلفن برای تماس

@@ -34,7 +34,17 @@ class OpenAIProvider(AIProvider):
             chat_messages = []
             if system_prompt:
                 chat_messages.append({"role": "system", "content": system_prompt})
-            chat_messages.extend({"role": m.role.value, "content": m.content} for m in messages)
+            chat_messages.extend(
+                {
+                    "role": (
+                        m.role.value
+                        if hasattr(m.role, "value")
+                        else str(m.role)
+                    ),
+                    "content": m.content,
+                }
+                for m in messages
+            )
 
             response = await self.client.with_options(
                 max_retries=0, timeout=90.0
@@ -74,7 +84,7 @@ class OpenAIProvider(AIProvider):
                 max_retries=0,
                 timeout=90.0,
             ).chat.completions.create(
-                model="gpt-5.5",
+                model=self.model,
                 messages=chat_messages,
                 max_tokens=1024,
             )

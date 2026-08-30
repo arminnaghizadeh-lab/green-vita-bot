@@ -839,6 +839,14 @@
 
                     <button
                         type="button"
+                        class="gv-secondary-btn"
+                        data-reschedule-appointment="${event.appointment_id || event.id}"
+                    >
+                        تغییر زمان
+                    </button>
+
+                    <button
+                        type="button"
                         class="gv-danger-btn"
                         data-cancel-appointment="${event.appointment_id || event.id}"
                     >
@@ -1121,8 +1129,19 @@
             return;
         }
 
+        /*
+         * ساعت انتخاب‌شده توسط ادمین، همیشه ساعت محلی تهران است.
+         *
+         * مهم:
+         * از new Date(year, month, day, ...) استفاده نمی‌کنیم،
+         * چون آن روش timezone مرورگر را اعمال می‌کند.
+         *
+         * تهران در زمان فعلی با UTC+03:30 محاسبه می‌شود.
+         * بنابراین timestamp ارسالی به API به صورت صریح
+         * با offset تهران ساخته می‌شود.
+         */
         const startAt =
-            `${date}T${time}:00+00:00`;
+            `${date}T${time}:00+03:30`;
 
         const params =
             new URLSearchParams({
@@ -1469,9 +1488,41 @@
                     slot.dataset.calendarSlot;
 
                 if (startAt) {
-                    createAppointmentForSelectedRequest(
-                        startAt
+                    if (selectedAppointmentId) {
+                        await rescheduleAppointmentFromUI(
+                            selectedAppointmentId,
+                            startAt
+                        );
+                        selectedAppointmentId = null;
+                    } else {
+                        createAppointmentForSelectedRequest(
+                            startAt
+                        );
+                    }
+                }
+
+                return;
+            }
+
+            const rescheduleButton =
+                event.target.closest(
+                    "[data-reschedule-appointment]"
+                );
+
+            if (rescheduleButton) {
+                const appointmentId =
+                    Number(
+                        rescheduleButton.dataset.rescheduleAppointment
                     );
+
+                if (appointmentId) {
+                    selectedAppointmentId = appointmentId;
+
+                    gvNotify(
+                        "نوبت انتخاب شد؛ زمان جدید را از بخش زمان‌های آزاد انتخاب کنید."
+                    );
+
+                    await loadSlots();
                 }
 
                 return;
