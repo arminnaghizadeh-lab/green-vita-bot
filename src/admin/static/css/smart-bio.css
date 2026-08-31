@@ -1,0 +1,382 @@
+:root {
+    --gv-green: #2f6b3f;
+    --gv-green-dark: #234f2f;
+    --gv-green-soft: #eaf3ec;
+    --gv-cream: #f7f1e3;
+    --gv-white: #ffffff;
+    --gv-text: #26352a;
+    --gv-muted: #718074;
+    --gv-border: rgba(47, 107, 63, .12);
+    --gv-shadow: 0 18px 55px rgba(35, 79, 47, .14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--gv-text);
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(47, 107, 63, .13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(47, 107, 63, .10),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            #f9f5eb 0%,
+            #eef5ef 100%
+        );
+}
+
+.bio-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 28px 16px;
+}
+
+.bio-card {
+    width: 100%;
+    max-width: 460px;
+
+    padding: 34px 24px 24px;
+
+    background: rgba(255, 255, 255, .88);
+
+    border: 1px solid rgba(255, 255, 255, .9);
+
+    border-radius: 30px;
+
+    box-shadow: var(--gv-shadow);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    text-align: center;
+}
+
+.bio-logo-wrap {
+    width: 92px;
+    height: 92px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--gv-white);
+
+    box-shadow:
+        0 8px 25px rgba(47, 107, 63, .14);
+
+    overflow: hidden;
+}
+
+.bio-logo {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.bio-card h1 {
+    margin: 0;
+
+    color: var(--gv-green-dark);
+
+    font-size: 29px;
+    font-weight: 800;
+
+    letter-spacing: .2px;
+}
+
+.bio-title {
+    margin: 7px 0 0;
+
+    color: var(--gv-green);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bio-description {
+    margin: 12px auto 26px;
+
+    max-width: 340px;
+
+    color: var(--gv-muted);
+
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.bio-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bio-link {
+    display: grid;
+    grid-template-columns: 44px 1fr 28px;
+
+    align-items: center;
+
+    min-height: 70px;
+
+    padding: 10px 14px;
+
+    color: var(--gv-text);
+    text-decoration: none;
+
+    background: var(--gv-white);
+
+    border: 1px solid var(--gv-border);
+
+    border-radius: 18px;
+
+    box-shadow: 0 7px 20px rgba(35, 79, 47, .06);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.bio-link:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(47, 107, 63, .28);
+
+    box-shadow: 0 12px 28px rgba(35, 79, 47, .12);
+}
+
+.bio-link:active {
+    transform: scale(.985);
+}
+
+.link-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: var(--gv-green-dark);
+
+    background: var(--gv-green-soft);
+
+    font-size: 19px;
+}
+
+.bio-link > span:nth-child(2) {
+    text-align: right;
+
+    display: flex;
+    flex-direction: column;
+
+    padding-right: 10px;
+}
+
+.bio-link strong {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.bio-link small {
+    margin-top: 3px;
+
+    color: var(--gv-muted);
+
+    font-size: 11px;
+}
+
+.link-arrow {
+    color: var(--gv-green);
+
+    font-size: 20px;
+
+    transition: transform .18s ease;
+}
+
+.bio-link:hover .link-arrow {
+    transform: translateX(-3px);
+}
+
+.bio-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    margin-top: 25px;
+
+    color: var(--gv-muted);
+
+    font-size: 11px;
+}
+
+@media (max-width: 420px) {
+
+    .bio-page {
+        padding: 18px 12px;
+    }
+
+    .bio-card {
+        padding: 28px 16px 20px;
+        border-radius: 25px;
+    }
+
+    .bio-logo-wrap {
+        width: 82px;
+        height: 82px;
+    }
+
+    .bio-card h1 {
+        font-size: 26px;
+    }
+
+    .bio-link {
+        min-height: 66px;
+        border-radius: 16px;
+    }
+}
+
+/* =========================================================
+   GREEN VITA — SMART BIO VISUAL POLISH
+   ========================================================= */
+
+.bio-link {
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease,
+        background-color .22s ease;
+}
+
+.bio-link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(47, 107, 63, .045),
+        transparent
+    );
+    transform: translateX(100%);
+    transition: transform .45s ease;
+    pointer-events: none;
+}
+
+.bio-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(31, 77, 48, .10);
+    border-color: rgba(47, 107, 63, .22);
+}
+
+.bio-link:hover::before {
+    transform: translateX(-100%);
+}
+
+.bio-link:active {
+    transform: translateY(0);
+}
+
+.link-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(47, 107, 63, .08);
+    color: #2f6b3f;
+    transition:
+        transform .22s ease,
+        background-color .22s ease;
+}
+
+.link-icon img {
+    width: 25px;
+    height: 25px;
+    display: block;
+}
+
+.bio-link:hover .link-icon {
+    transform: scale(1.06);
+    background: rgba(47, 107, 63, .13);
+}
+
+.link-arrow {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(47, 107, 63, .06);
+    transition:
+        transform .22s ease,
+        background-color .22s ease;
+}
+
+.bio-link:hover .link-arrow {
+    transform: translateX(-3px);
+    background: rgba(47, 107, 63, .11);
+}
+
+@media (max-width: 480px) {
+    .link-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 13px;
+    }
+
+    .link-icon img {
+        width: 23px;
+        height: 23px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bio-link,
+    .bio-link::before,
+    .link-icon,
+    .link-arrow {
+        transition: none;
+    }
+}
+

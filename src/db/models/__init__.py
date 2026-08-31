@@ -11,6 +11,7 @@ from src.db.models.reminder import Reminder, ReminderType
 from src.db.models.user import User
 from src.db.models.visit_status import VisitStatus
 from src.db.models.visit_appointment import AppointmentStatus, VisitAppointment
+from src.db.models.smart_bio_click import SmartBioClick
 
 __all__ = [
     "User",
@@ -27,4 +28,5 @@ __all__ = [
     "VisitStatus",
     "VisitAppointment",
     "AppointmentStatus",
+    "SmartBioClick",
 ]
