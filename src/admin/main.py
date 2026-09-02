@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.admin.auth import SESSION_KEY
-from src.admin.routers import auth, dashboard, smart_bio, visits
+from src.admin.routers import auth, dashboard, push, smart_bio, visits
 from src.core.config import get_settings
 
 app = FastAPI(
@@ -32,6 +32,7 @@ app.include_router(auth.router)
 app.include_router(dashboard.router, prefix="/dashboard")
 app.include_router(visits.router)
 app.include_router(smart_bio.router)
+app.include_router(push.router)
 
 
 @app.get("/health")
@@ -40,14 +41,5 @@ async def health():
 
 
 @app.get("/")
-async def root(request: Request):
-    from fastapi.templating import Jinja2Templates
-
-    templates = Jinja2Templates(directory="src/admin/templates")
-
-    return templates.TemplateResponse(
-        "smart_bio.html",
-        {
-            "request": request,
-        },
-    )
+async def root():
+    return RedirectResponse("/dashboard/", status_code=302)

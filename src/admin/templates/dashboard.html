@@ -5,8 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>داشبورد | {{ app_name }}</title>
     <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/dashboard-redesign.css">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=1">
+<!-- GV_PWA_INSTALL_STYLE_V1 -->
+<style>
+.gv-dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.gv-install-btn {
+    border: 0;
+    border-radius: 14px;
+    padding: 12px 18px;
+    background: #15803d;
+    color: #fff;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(21,128,61,.18);
+}
+
+.gv-install-btn:hover {
+    background: #166534;
+}
+
+.gv-install-btn[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    .gv-dashboard-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .gv-dashboard-actions .primary-link,
+    .gv-install-btn {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+</style>
 </head>
-<body>
+<body class="gv-dashboard">
 <header class="topbar">
     <div class="brand">
         <img src="/static/logo.png" alt="Green Vita">
@@ -20,13 +66,44 @@
     </form>
 </header>
 
+<!-- GV_ADMIN_SIDEBAR_V1 -->
+<aside class="gv-sidebar">
+    <div class="gv-sidebar-brand">
+        <img src="/static/logo.png" alt="Green Vita">
+        <div>
+            <strong>Green Vita</strong>
+            <small>پنل مدیریت</small>
+        </div>
+    </div>
+
+    <nav class="gv-sidebar-nav">
+        <a href="/dashboard/" class="active">🏠 داشبورد</a>
+        <a href="/visits" class="gv-visits-nav-link">
+    📅 درخواست‌های ویزیت
+    <span id="gv-pending-visits-badge" class="gv-pending-badge" hidden>0</span>
+</a>
+        <a href="/calendar">🗓 تقویم ویزیت‌ها</a>
+        <a href="/contactus/">🔗 Smart Bio</a>
+    </nav>
+
+    <form method="post" action="/logout" class="gv-sidebar-logout">
+        <button type="submit">↪ خروج</button>
+    </form>
+</aside>
+<!-- /GV_ADMIN_SIDEBAR_V1 -->
+
 <main class="container">
     <section class="hero">
         <div>
             <h1>سلام 👋</h1>
             <p>مدیریت هوشمند کلینیک گیاهپزشکی گرین ویتا</p>
         </div>
-        <a class="primary-link" href="/visits">مدیریت درخواست‌های ویزیت ←</a>
+        <div class="gv-dashboard-actions">
+            <a class="primary-link" href="/visits">مدیریت درخواست‌های ویزیت ←</a>
+            <button type="button" id="gv-install-app" class="gv-install-btn" hidden>
+                📱 افزودن پنل به صفحه اصلی
+            </button>
+        </div>
     </section>
 
     <section class="gv-dashboard-calendar-card" id="dashboard-calendar">
@@ -586,5 +663,165 @@
 })();
 </script>
 
+
+<style>
+.gv-visits-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gv-pending-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    background: #dc2626;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.gv-pending-badge[hidden] {
+    display: none !important;
+}
+</style>
+
+<script>
+(function () {
+    const badge = document.getElementById("gv-pending-visits-badge");
+
+    if (!badge) {
+        return;
+    }
+
+    async function updatePendingVisitsBadge() {
+        try {
+            const response = await fetch("/api/visits/pending-count", {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+            const count = Number(data.count || 0);
+
+            if ("setAppBadge" in navigator) {
+                if (count > 0) {
+                    await navigator.setAppBadge(count);
+                } else if ("clearAppBadge" in navigator) {
+                    await navigator.clearAppBadge();
+                }
+            }
+
+            if (count > 0) {
+                badge.textContent = count > 99 ? "99+" : String(count);
+                badge.hidden = false;
+            } else {
+                badge.textContent = "0";
+                badge.hidden = true;
+            }
+        } catch (error) {
+            console.warn("Pending visits badge update failed:", error);
+        }
+    }
+
+    updatePendingVisitsBadge();
+    setInterval(updatePendingVisitsBadge, 15000);
+})();
+</script>
+
+
+
+
+
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/static/sw.js", {
+            scope: "/"
+        }).then(function (registration) {
+            console.log("Green Vita Service Worker registered:", registration.scope);
+        }).catch(function (error) {
+            console.warn("Green Vita Service Worker registration failed:", error);
+        });
+    });
+}
+</script>
+
+<!-- GV_PWA_INSTALL_LOGIC_V1 -->
+<script>
+(function () {
+    const button = document.getElementById("gv-install-app");
+    if (!button) return;
+
+    let deferredPrompt = null;
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isStandalone || !isMobile) return;
+
+    window.addEventListener("beforeinstallprompt", function (event) {
+        event.preventDefault();
+        deferredPrompt = event;
+        button.hidden = false;
+    });
+
+    button.addEventListener("click", async function () {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+
+            try {
+                const choice = await deferredPrompt.userChoice;
+                if (choice && choice.outcome === "accepted") {
+                    button.hidden = true;
+                }
+            } catch (error) {
+                console.warn("PWA install prompt error:", error);
+            }
+
+            deferredPrompt = null;
+            return;
+        }
+
+        if (isIOS) {
+            alert(
+                "برای افزودن پنل گرین ویتا به صفحه اصلی آیفون:\n\n" +
+                "1. دکمه Share را بزنید.\n" +
+                "2. گزینه Add to Home Screen را انتخاب کنید.\n" +
+                "3. گزینه Add را بزنید."
+            );
+            return;
+        }
+
+        alert(
+            "برای افزودن پنل گرین ویتا به صفحه اصلی:\n\n" +
+            "منوی مرورگر را باز کنید و گزینه Add to Home screen یا Install app را انتخاب کنید."
+        );
+    });
+
+    window.addEventListener("appinstalled", function () {
+        button.hidden = true;
+        deferredPrompt = null;
+    });
+
+    if (isIOS) {
+        button.hidden = false;
+    }
+})();
+</script>
 </body>
 </html>

@@ -12,7 +12,7 @@ templates = Jinja2Templates(directory="src/admin/templates")
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     if request.session.get(SESSION_KEY):
-        return RedirectResponse("/", status_code=303)
+        return RedirectResponse("/dashboard/", status_code=303)
 
     return templates.TemplateResponse(
         request=request,
@@ -34,7 +34,7 @@ async def login(
         and verify_password(password, settings.admin_password_hash)
     ):
         request.session[SESSION_KEY] = True
-        return RedirectResponse("/", status_code=303)
+        return RedirectResponse("/dashboard/", status_code=303)
 
     return templates.TemplateResponse(
         request=request,

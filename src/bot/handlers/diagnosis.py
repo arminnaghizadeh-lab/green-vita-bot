@@ -543,10 +543,13 @@ async def _finish_expert_visit(
     await state.clear()
 
     # Remove the temporary "send phone number" keyboard first.
+    visit_code = f"{20000 + diagnosis.id:06d}"
+
     await message.answer(
-        "✅ <b>درخواست ویزیت متخصص ثبت شد.</b>\n\n"
-        "نام و شماره تماس شما برای کارشناسان کلینیک ارسال شد.\n"
-        "کارشناسان گرین‌ویتا در اولین فرصت با شما تماس می‌گیرند. 🌿",
+        "✅ درخواست ویزیت متخصص شما با کد "
+        f"<b>{visit_code}</b> با موفقیت ثبت شد. "
+        "کارشناسان کلینیک گیاهپزشکی گرین ویتا به زودی "
+        "جهت هماهنگی با شما تماس خواهند گرفت.",
         reply_markup=ReplyKeyboardRemove(),
     )
 

@@ -3,7 +3,7 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
 BTN_START = "🏠 شروع"
-BTN_DIAGNOSE = "📷 تشخیص بیماری"
+BTN_DIAGNOSE = "🩺 تشخیص بیماری"
 BTN_IDENTIFY = "🔍 شناسایی گیاه"
 BTN_EXPERT_VISIT = "📞 درخواست ویزیت متخصص"
 BTN_MY_PLANTS = "🌱 گیاهان من"

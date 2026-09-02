@@ -1,0 +1,755 @@
+/*
+ * Green Vita Admin
+ * Dashboard Visual Foundation
+ * Phase: Admin UI Redesign / Patch 1
+ */
+
+:root {
+    --gv-green-950: #063d2f;
+    --gv-green-900: #07543f;
+    --gv-green-800: #086449;
+    --gv-green-700: #087653;
+    --gv-green-600: #159566;
+    --gv-green-500: #22a970;
+
+    --gv-bg: #f4f7f4;
+    --gv-surface: #ffffff;
+    --gv-surface-soft: #f8faf8;
+
+    --gv-text: #17221e;
+    --gv-text-soft: #68736e;
+    --gv-border: #e4ebe6;
+
+    --gv-radius-xl: 22px;
+    --gv-radius-lg: 18px;
+    --gv-radius-md: 14px;
+
+    --gv-shadow:
+        0 12px 35px rgba(12, 55, 40, .08);
+
+    --gv-shadow-hover:
+        0 18px 42px rgba(12, 55, 40, .13);
+}
+
+/* -------------------------------------------------
+   PAGE
+------------------------------------------------- */
+
+body.gv-dashboard {
+    background:
+        radial-gradient(
+            circle at 8% 10%,
+            rgba(34, 169, 112, .07),
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #f8faf8 0%,
+            #eef4ef 100%
+        );
+
+    color: var(--gv-text);
+}
+
+/* -------------------------------------------------
+   GLOBAL BOX SIZING
+------------------------------------------------- */
+
+body.gv-dashboard *,
+body.gv-dashboard *::before,
+body.gv-dashboard *::after {
+    box-sizing: border-box;
+}
+
+/* -------------------------------------------------
+   MAIN WRAPPERS
+------------------------------------------------- */
+
+body.gv-dashboard main,
+body.gv-dashboard .dashboard,
+body.gv-dashboard .dashboard-container,
+body.gv-dashboard .admin-dashboard,
+body.gv-dashboard .page-content {
+    min-width: 0;
+}
+
+/* -------------------------------------------------
+   HEADER
+------------------------------------------------- */
+
+body.gv-dashboard header,
+body.gv-dashboard .header,
+body.gv-dashboard .topbar,
+body.gv-dashboard .admin-header,
+body.gv-dashboard .dashboard-header {
+    background: rgba(255, 255, 255, .88);
+    border-bottom: 1px solid rgba(220, 231, 224, .85);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow: 0 5px 22px rgba(20, 65, 45, .04);
+}
+
+/* -------------------------------------------------
+   SIDEBAR
+------------------------------------------------- */
+
+body.gv-dashboard aside,
+body.gv-dashboard .sidebar,
+body.gv-dashboard .admin-sidebar,
+body.gv-dashboard .side-nav,
+body.gv-dashboard nav.sidebar {
+    background:
+        radial-gradient(
+            circle at 85% 5%,
+            rgba(255,255,255,.10),
+            transparent 26%
+        ),
+        linear-gradient(
+            180deg,
+            var(--gv-green-950) 0%,
+            var(--gv-green-900) 45%,
+            #064535 100%
+        );
+
+    color: #fff;
+
+    box-shadow:
+        -8px 0 30px rgba(0, 45, 32, .10);
+
+    border-left: 1px solid rgba(255,255,255,.08);
+}
+
+/* Sidebar links */
+
+body.gv-dashboard aside a,
+body.gv-dashboard .sidebar a,
+body.gv-dashboard .admin-sidebar a,
+body.gv-dashboard .side-nav a {
+    color: rgba(255,255,255,.88);
+
+    border-radius: 13px;
+
+    transition:
+        background .18s ease,
+        transform .18s ease,
+        color .18s ease;
+}
+
+body.gv-dashboard aside a:hover,
+body.gv-dashboard .sidebar a:hover,
+body.gv-dashboard .admin-sidebar a:hover,
+body.gv-dashboard .side-nav a:hover {
+    background: rgba(255,255,255,.10);
+    color: #fff;
+    transform: translateX(-2px);
+}
+
+/* Active navigation */
+
+body.gv-dashboard aside a.active,
+body.gv-dashboard .sidebar a.active,
+body.gv-dashboard .admin-sidebar a.active,
+body.gv-dashboard .side-nav a.active,
+body.gv-dashboard aside .active {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(32, 178, 116, .95),
+            rgba(18, 140, 88, .92)
+        );
+
+    color: #fff;
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, .13);
+}
+
+/* -------------------------------------------------
+   CARDS
+------------------------------------------------- */
+
+body.gv-dashboard .card,
+body.gv-dashboard .stat-card,
+body.gv-dashboard .stats-card,
+body.gv-dashboard .dashboard-card,
+body.gv-dashboard .panel,
+body.gv-dashboard .widget,
+body.gv-dashboard section.card {
+    background: rgba(255,255,255,.94);
+
+    border:
+        1px solid
+        rgba(224, 233, 227, .9);
+
+    border-radius: var(--gv-radius-xl);
+
+    box-shadow: var(--gv-shadow);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body.gv-dashboard .card:hover,
+body.gv-dashboard .stat-card:hover,
+body.gv-dashboard .dashboard-card:hover,
+body.gv-dashboard .panel:hover,
+body.gv-dashboard .widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--gv-shadow-hover);
+}
+
+/* -------------------------------------------------
+   STAT CARDS
+------------------------------------------------- */
+
+body.gv-dashboard .stat-card,
+body.gv-dashboard .stats-card {
+    position: relative;
+    overflow: hidden;
+}
+
+body.gv-dashboard .stat-card::after,
+body.gv-dashboard .stats-card::after {
+    content: "";
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    left: -28px;
+    bottom: -35px;
+
+    border-radius: 50%;
+
+    background: rgba(21,149,102,.06);
+
+    pointer-events: none;
+}
+
+/* -------------------------------------------------
+   HEADINGS
+------------------------------------------------- */
+
+body.gv-dashboard h1,
+body.gv-dashboard h2,
+body.gv-dashboard h3,
+body.gv-dashboard h4 {
+    color: var(--gv-text);
+    letter-spacing: -.02em;
+}
+
+body.gv-dashboard .muted,
+body.gv-dashboard .text-muted,
+body.gv-dashboard small {
+    color: var(--gv-text-soft);
+}
+
+/* -------------------------------------------------
+   BUTTONS
+------------------------------------------------- */
+
+body.gv-dashboard button,
+body.gv-dashboard .btn,
+body.gv-dashboard a.button {
+    border-radius: 12px;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+body.gv-dashboard button:hover,
+body.gv-dashboard .btn:hover,
+body.gv-dashboard a.button:hover {
+    transform: translateY(-1px);
+}
+
+/* Primary */
+
+body.gv-dashboard .btn-primary,
+body.gv-dashboard button.primary,
+body.gv-dashboard .primary-button {
+    background:
+        linear-gradient(
+            135deg,
+            var(--gv-green-600),
+            var(--gv-green-800)
+        );
+
+    color: #fff;
+
+    border: 0;
+
+    box-shadow:
+        0 8px 20px rgba(21,149,102,.18);
+}
+
+/* -------------------------------------------------
+   INPUTS
+------------------------------------------------- */
+
+body.gv-dashboard input,
+body.gv-dashboard select,
+body.gv-dashboard textarea {
+    border:
+        1px solid
+        var(--gv-border);
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: var(--gv-text);
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+body.gv-dashboard input:focus,
+body.gv-dashboard select:focus,
+body.gv-dashboard textarea:focus {
+    outline: none;
+
+    border-color:
+        rgba(21,149,102,.65);
+
+    box-shadow:
+        0 0 0 4px rgba(21,149,102,.09);
+}
+
+/* -------------------------------------------------
+   TABLES
+------------------------------------------------- */
+
+body.gv-dashboard table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+body.gv-dashboard th {
+    color: var(--gv-text-soft);
+    font-weight: 600;
+}
+
+body.gv-dashboard td,
+body.gv-dashboard th {
+    border-bottom: 1px solid #edf1ee;
+}
+
+body.gv-dashboard tbody tr {
+    transition: background .15s ease;
+}
+
+body.gv-dashboard tbody tr:hover {
+    background: #f7faf8;
+}
+
+/* -------------------------------------------------
+   BADGES
+------------------------------------------------- */
+
+body.gv-dashboard .badge,
+body.gv-dashboard .status,
+body.gv-dashboard .tag {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* -------------------------------------------------
+   CHART CONTAINERS
+------------------------------------------------- */
+
+body.gv-dashboard canvas {
+    max-width: 100%;
+}
+
+/* -------------------------------------------------
+   RESPONSIVE — TABLET
+------------------------------------------------- */
+
+@media (max-width: 1100px) {
+
+    body.gv-dashboard aside,
+    body.gv-dashboard .sidebar,
+    body.gv-dashboard .admin-sidebar {
+        width: 235px;
+    }
+
+    body.gv-dashboard .stat-card,
+    body.gv-dashboard .stats-card {
+        border-radius: 17px;
+    }
+}
+
+/* -------------------------------------------------
+   RESPONSIVE — MOBILE
+------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    body.gv-dashboard {
+        overflow-x: hidden;
+    }
+
+    body.gv-dashboard aside,
+    body.gv-dashboard .sidebar,
+    body.gv-dashboard .admin-sidebar,
+    body.gv-dashboard .side-nav {
+        position: fixed;
+
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        width: min(82vw, 310px);
+
+        z-index: 1000;
+
+        transform: translateX(105%);
+
+        transition:
+            transform .25s ease;
+
+        overflow-y: auto;
+    }
+
+    /*
+     * Existing projects can use any of these
+     * common open states.
+     */
+
+    body.gv-dashboard aside.open,
+    body.gv-dashboard .sidebar.open,
+    body.gv-dashboard .admin-sidebar.open,
+    body.gv-dashboard .side-nav.open,
+    body.gv-dashboard .sidebar.active {
+        transform: translateX(0);
+    }
+
+    body.gv-dashboard main,
+    body.gv-dashboard .main-content,
+    body.gv-dashboard .dashboard,
+    body.gv-dashboard .dashboard-container,
+    body.gv-dashboard .page-content {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    body.gv-dashboard .card,
+    body.gv-dashboard .dashboard-card,
+    body.gv-dashboard .panel,
+    body.gv-dashboard .widget,
+    body.gv-dashboard .stat-card,
+    body.gv-dashboard .stats-card {
+        border-radius: 16px;
+    }
+
+    body.gv-dashboard table {
+        min-width: 620px;
+    }
+
+    body.gv-dashboard .table-wrapper,
+    body.gv-dashboard .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* -------------------------------------------------
+   SMALL MOBILE
+------------------------------------------------- */
+
+@media (max-width: 480px) {
+
+    body.gv-dashboard h1 {
+        font-size: 1.35rem;
+    }
+
+    body.gv-dashboard h2 {
+        font-size: 1.15rem;
+    }
+
+    body.gv-dashboard h3 {
+        font-size: 1rem;
+    }
+
+    body.gv-dashboard .card,
+    body.gv-dashboard .dashboard-card,
+    body.gv-dashboard .panel,
+    body.gv-dashboard .widget {
+        box-shadow:
+            0 8px 24px rgba(12,55,40,.06);
+    }
+}
+
+/* =================================================
+   GV REDESIGN PATCH 2
+   Existing dashboard structure
+================================================= */
+
+body.gv-dashboard {
+    min-height: 100vh;
+}
+
+body.gv-dashboard .topbar {
+    min-height: 76px;
+    padding: 14px clamp(16px, 3vw, 42px);
+    border-radius: 0 0 20px 20px;
+}
+
+body.gv-dashboard .brand {
+    gap: 12px;
+}
+
+body.gv-dashboard .brand img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 14px;
+}
+
+body.gv-dashboard .brand strong {
+    font-size: 1.05rem;
+}
+
+body.gv-dashboard .container {
+    width: min(1400px, calc(100% - 32px));
+    margin: 28px auto 50px;
+}
+
+body.gv-dashboard .hero {
+    margin-bottom: 22px;
+    padding: 26px 28px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff, #f1f7f3);
+    border: 1px solid var(--gv-border);
+    box-shadow: var(--gv-shadow);
+}
+
+body.gv-dashboard .hero h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+body.gv-dashboard .hero p {
+    margin: 0;
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .primary-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 17px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #159566, #087653);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(21,149,102,.16);
+}
+
+body.gv-dashboard .stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+body.gv-dashboard .stats .stat-card {
+    min-height: 128px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+body.gv-dashboard .stats .stat-card span {
+    font-size: .9rem;
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .stats .stat-card strong {
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    line-height: 1;
+}
+
+body.gv-dashboard .stats .stat-card.highlight {
+    background: linear-gradient(145deg, #087653, #063d2f);
+    color: #fff;
+}
+
+body.gv-dashboard .stats .stat-card.highlight span,
+body.gv-dashboard .stats .stat-card.highlight strong {
+    color: #fff;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-card,
+body.gv-dashboard .smart-bio-analytics {
+    margin-top: 22px;
+    padding: clamp(18px, 2.5vw, 28px);
+    background: rgba(255,255,255,.96);
+    border: 1px solid var(--gv-border);
+    border-radius: var(--gv-radius-xl);
+    box-shadow: var(--gv-shadow);
+}
+
+body.gv-dashboard .gv-dashboard-calendar-head,
+body.gv-dashboard .smart-bio-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-head h2,
+body.gv-dashboard .smart-bio-head h2 {
+    margin: 0 0 6px;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-head p,
+body.gv-dashboard .smart-bio-head p {
+    margin: 0;
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .smart-bio-periods {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+body.gv-dashboard .smart-bio-period,
+body.gv-dashboard .smart-bio-total,
+body.gv-dashboard .smart-bio-top-channel,
+body.gv-dashboard .smart-bio-channel-stat,
+body.gv-dashboard .smart-bio-channel,
+body.gv-dashboard .smart-bio-recent {
+    border-radius: 16px;
+}
+
+@media (max-width: 1100px) {
+    body.gv-dashboard .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    body.gv-dashboard .container {
+        width: min(100% - 20px, 680px);
+        margin-top: 14px;
+    }
+
+    body.gv-dashboard .topbar {
+        min-height: 66px;
+        padding: 10px 14px;
+        border-radius: 0 0 16px 16px;
+    }
+
+    body.gv-dashboard .brand img {
+        width: 40px;
+        height: 40px;
+    }
+
+    body.gv-dashboard .brand span {
+        display: none;
+    }
+
+    body.gv-dashboard .hero {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    body.gv-dashboard .hero .primary-link {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    body.gv-dashboard .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    body.gv-dashboard .stats .stat-card {
+        min-height: 105px;
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-head,
+    body.gv-dashboard .smart-bio-head {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-head .primary-link,
+    body.gv-dashboard .smart-bio-head .primary-link {
+        width: 100%;
+    }
+
+    body.gv-dashboard .smart-bio-periods {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 430px) {
+    body.gv-dashboard .container {
+        width: calc(100% - 12px);
+    }
+
+    body.gv-dashboard .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    body.gv-dashboard .stats .stat-card strong {
+        font-size: 1.55rem;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-card,
+    body.gv-dashboard .smart-bio-analytics {
+        padding: 14px;
+        border-radius: 16px;
+    }
+}
+
+/* GV ADMIN SIDEBAR V1 */
+.gv-sidebar{
+ position:fixed;top:0;right:0;width:255px;height:100vh;
+ padding:28px 18px;display:flex;flex-direction:column;
+ background:linear-gradient(180deg,#063d2f,#07543f);
+ color:#fff;z-index:900;box-shadow:-8px 0 30px rgba(0,45,32,.12)
+}
+.gv-sidebar-brand{display:flex;align-items:center;gap:12px;padding:4px 8px 28px}
+.gv-sidebar-brand img{width:48px;height:48px;object-fit:contain;border-radius:14px;background:#fff}
+.gv-sidebar-brand strong,.gv-sidebar-brand small{display:block}
+.gv-sidebar-brand small{margin-top:4px;opacity:.7}
+.gv-sidebar-nav{display:flex;flex-direction:column;gap:7px}
+.gv-sidebar-nav a,.gv-sidebar-logout button{
+ width:100%;min-height:46px;padding:11px 14px;display:flex;
+ align-items:center;gap:9px;border:0;border-radius:13px;
+ background:transparent;color:rgba(255,255,255,.88);
+ text-decoration:none;font:inherit;cursor:pointer
+}
+.gv-sidebar-nav a:hover,.gv-sidebar-nav a.active,.gv-sidebar-logout button:hover{
+ background:rgba(255,255,255,.12);color:#fff
+}
+.gv-sidebar-nav a.active{
+ background:linear-gradient(135deg,#159566,#087653);
+ box-shadow:0 8px 20px rgba(0,0,0,.14)
+}
+.gv-sidebar-logout{margin-top:auto}
+body.gv-dashboard .container,body.gv-dashboard .topbar{margin-right:255px}
+
+@media(max-width:768px){
+ .gv-sidebar{width:min(82vw,300px);transform:translateX(105%);transition:transform .25s ease}
+ .gv-sidebar.open{transform:translateX(0)}
+ body.gv-dashboard .container,body.gv-dashboard .topbar{margin-right:0}
+}

@@ -1,0 +1,129 @@
+/*
+ * Green Vita - Final Global Vazir Font Layer
+ * This file MUST be loaded after every other admin stylesheet.
+ */
+
+@font-face {
+    font-family: "Vazir";
+    src: url("/static/fonts/Vazir-Regular.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazir";
+    src: url("/static/fonts/Vazir-Medium.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazir";
+    src: url("/static/fonts/Vazir-Bold.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Vazir";
+    src: url("/static/fonts/Vazir-Black.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+}
+
+/*
+ * IMPORTANT:
+ * !important is intentional here.
+ * Tailwind / dashboard-redesign / component CSS must not
+ * be able to replace Vazir.
+ */
+
+html,
+html *,
+body,
+body *,
+button,
+input,
+textarea,
+select,
+option,
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td,
+label,
+a,
+p,
+span,
+div,
+section,
+article,
+aside,
+header,
+footer,
+nav,
+main,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+small,
+strong,
+b,
+em,
+i,
+li,
+ul,
+ol,
+form,
+fieldset,
+legend,
+.font-sans,
+.font-mono {
+    font-family: "Vazir", sans-serif !important;
+}
+
+/*
+ * Preserve icon fonts if any component explicitly uses them.
+ */
+[class*="icon"],
+[class^="icon"],
+.material-icons,
+.material-symbols-outlined,
+.fa,
+.fas,
+.far,
+.fab,
+.bi {
+    font-family: inherit !important;
+}
+
+/*
+ * Persian UI rendering
+ */
+html {
+    font-family: "Vazir", sans-serif !important;
+}
+
+body {
+    font-family: "Vazir", sans-serif !important;
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: "Vazir", sans-serif !important;
+}

@@ -616,6 +616,29 @@ async def calendar_requests(
     return JSONResponse({"requests": requests})
 
 
+@router.get("/api/visits/pending-count")
+async def pending_visits_count(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    count = await session.scalar(
+        select(func.count())
+        .select_from(Diagnosis)
+        .where(
+            Diagnosis.expert_visit_requested.is_(True),
+            Diagnosis.visit_status == VisitStatus.PENDING,
+        )
+    )
+
+    return JSONResponse({
+        "count": count or 0,
+    })
+
+
 @router.get("/visits")
 async def visits_list(
     request: Request,

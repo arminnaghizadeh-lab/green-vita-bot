@@ -14,11 +14,25 @@ router = APIRouter()
 
 
 SMART_BIO_TARGETS: dict[str, str] = {
-    "telegram": "https://t.me/GreenVita_Al_Bot",
+    "telegram": "https://t.me/GreenVita_AI_Bot",
     "instagram": "https://www.instagram.com/greenvita_clinic",
     "whatsapp": "https://wa.me/989128111058",
     "bale": "https://ble.ir/greenvita",
 }
+
+    
+@router.get("/contactus/")
+async def smart_bio_page(request: Request):
+    from fastapi.templating import Jinja2Templates
+
+    templates = Jinja2Templates(directory="src/admin/templates")
+
+    return templates.TemplateResponse(
+        "smart_bio.html",
+        {
+            "request": request,
+        },
+    )
 
 
 @router.get("/go/{channel}")
@@ -30,7 +44,7 @@ async def smart_bio_redirect(
     target = SMART_BIO_TARGETS.get(channel)
 
     if target is None:
-        return RedirectResponse("/", status_code=302)
+        return RedirectResponse("/contactus/", status_code=302)
 
     click = SmartBioClick(
         channel=channel,

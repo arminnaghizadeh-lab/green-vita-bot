@@ -18,3 +18,5 @@ itsdangerous==2.2.0
 tenacity==9.0.0
 structlog==24.4.0
 pwdlib[argon2]==0.2.1
+pywebpush>=2.0,<3.0
+cryptography>=43,<47

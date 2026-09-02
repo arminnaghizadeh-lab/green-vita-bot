@@ -30,3 +30,5 @@ __all__ = [
     "AppointmentStatus",
     "SmartBioClick",
 ]
+
+from src.db.models.push_subscription import PushSubscription
