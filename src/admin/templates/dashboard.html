@@ -100,7 +100,8 @@
         </div>
         <div class="gv-dashboard-actions">
             <a class="primary-link" href="/visits">مدیریت درخواست‌های ویزیت ←</a>
-            <button type="button" id="gv-install-app" class="gv-install-btn" hidden>
+            <button type="button" id="gv-enable-push" class="gv-push-btn" hidden>🔔 فعال‌سازی اعلان‌های پنل</button>
+    <button type="button" id="gv-install-app" class="gv-install-btn" hidden>
                 📱 افزودن پنل به صفحه اصلی
             </button>
         </div>
@@ -746,14 +747,18 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker.register("/static/sw.js", {
-            scope: "/"
-        }).then(function (registration) {
-            console.log("Green Vita Service Worker registered:", registration.scope);
-        }).catch(function (error) {
-            console.warn("Green Vita Service Worker registration failed:", error);
-        });
+    navigator.serviceWorker.register("/sw.js", {
+        scope: "/"
+    }).then(function (registration) {
+        console.log("Green Vita Service Worker registered:", registration.scope);
+    }).catch(function (error) {
+        console.warn("Green Vita Service Worker registration failed:", error);
+        var pushBtn = document.getElementById("gv-enable-push");
+        if (pushBtn) {
+            pushBtn.hidden = false;
+            pushBtn.disabled = false;
+            pushBtn.textContent = "❌ SW: " + (error.message || error);
+        }
     });
 }
 </script>
@@ -823,5 +828,153 @@ if ("serviceWorker" in navigator) {
     }
 })();
 </script>
+
+
+<script id="GV_BADGE_SYNC_V1">
+(function () {
+  if (!("setAppBadge" in navigator)) return;
+
+  async function syncBadge() {
+    try {
+      const r = await fetch("/api/visits/pending-count", {
+        cache: "no-store",
+        credentials: "same-origin"
+      });
+
+      if (!r.ok) return;
+
+      const data = await r.json();
+      const count = Number(data.count || 0);
+
+      if (count > 0) {
+        await navigator.setAppBadge(count);
+      } else if ("clearAppBadge" in navigator) {
+        await navigator.clearAppBadge();
+      }
+    } catch (e) {
+      console.warn("Badge sync failed:", e);
+    }
+  }
+
+  syncBadge();
+  setInterval(syncBadge, 10000);
+})();
+</script>
+
+<script id="GV_PWA_PUSH_CLIENT_V1">
+(function () {
+  const btn = document.getElementById("gv-enable-push");
+  if (!btn) return;
+
+  const standalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+  if (!standalone || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+
+  function b64ToUint8Array(base64) {
+    const pad = "=".repeat((4 - base64.length % 4) % 4);
+    const raw = atob((base64 + pad).replace(/-/g, "+").replace(/_/g, "/"));
+    return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+  }
+
+  async function getRegistration() {
+    return await navigator.serviceWorker.register("/sw.js?v=2", {scope: "/"});
+  }
+
+  async function syncPushState() {
+    try {
+      if (Notification.permission !== "granted") {
+        btn.hidden = false;
+        return;
+      }
+
+      const reg = await getRegistration();
+      const sub = await reg.pushManager.getSubscription();
+
+      if (sub) {
+        const save = await fetch("/api/push/subscribe", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(sub.toJSON())
+        });
+
+        if (save.ok) {
+          btn.hidden = false;
+          btn.disabled = true;
+          btn.hidden = true;
+          btn.textContent = "✅ اعلان‌ها فعال است";
+          return;
+        }
+      }
+
+      btn.hidden = false;
+      btn.disabled = false;
+      btn.textContent = "🔔 فعال‌سازی اعلان‌های پنل";
+    } catch (e) {
+      console.warn("Push state sync failed:", e);
+      btn.hidden = false;
+      btn.disabled = false;
+    }
+  }
+
+  btn.hidden = true;
+  syncPushState();
+
+  btn.onclick = async function () {
+    btn.disabled = true;
+
+    try {
+      btn.textContent = "⏳ درخواست مجوز...";
+      const permission = await Notification.requestPermission();
+
+      if (permission !== "granted") {
+        throw new Error("اجازه اعلان داده نشد");
+      }
+
+      btn.textContent = "⏳ بررسی سرویس اعلان...";
+      const reg = await getRegistration();
+
+      btn.textContent = "⏳ دریافت کلید...";
+      const r = await fetch("/api/push/vapid-public-key");
+      if (!r.ok) throw new Error("دریافت کلید Push ناموفق بود");
+
+      const {public_key} = await r.json();
+
+      btn.textContent = "⏳ ساخت اشتراک...";
+      let sub = await reg.pushManager.getSubscription();
+
+      if (!sub) {
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: b64ToUint8Array(public_key)
+        });
+      }
+
+      btn.textContent = "⏳ ثبت روی سرور...";
+      const save = await fetch("/api/push/subscribe", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(sub.toJSON())
+      });
+
+      if (!save.ok) {
+        throw new Error("HTTP " + save.status);
+      }
+
+      btn.textContent = "✅ اعلان‌ها فعال است";
+      btn.disabled = true;
+      btn.hidden = true;
+      alert("اعلان‌های پنل گرین ویتا فعال شد.");
+    } catch (e) {
+      console.error(e);
+      btn.disabled = false;
+      btn.textContent = "🔔 فعال‌سازی اعلان‌های پنل";
+      alert("فعال‌سازی اعلان ناموفق بود: " + e.message);
+    }
+  };
+})();
+</script>
+
 </body>
 </html>

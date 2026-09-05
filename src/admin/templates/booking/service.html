@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ service.title }} | گرین ویتا</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f6f8f5;font-family:Arial,sans-serif;color:#18251c}
+.wrap{max-width:760px;margin:auto;padding:24px 16px}
+.card{background:#fff;border-radius:22px;padding:24px;box-shadow:0 8px 30px #0000000d}
+.back{display:inline-block;margin-bottom:20px;color:#28743b;text-decoration:none}
+h1{margin:0 0 10px;font-size:25px}
+.desc{color:#66736a;line-height:1.9}
+.price{font-size:20px;font-weight:bold;color:#28743b;margin:18px 0}
+h2{font-size:19px;margin-top:30px}
+.dates{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.date{border:1px solid #dce5dd;border-radius:14px;background:#fff;padding:12px 5px;text-align:center;cursor:pointer}
+.date:hover,.date.active{background:#28743b;color:#fff;border-color:#28743b}
+.date strong{display:block;font-size:15px}
+.date small{display:block;margin-top:5px}
+@media(max-width:600px){.dates{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<a class="back" href="/booking/">← بازگشت به خدمات</a>
+
+<section class="card">
+<h1>{{ service.title }}</h1>
+
+{% if service.description %}
+<p class="desc">{{ service.description }}</p>
+{% endif %}
+
+<div class="price">
+{% if service.price %}
+{{ "{:,}".format(service.price|int) }} تومان
+{% else %}
+رایگان
+{% endif %}
+</div>
+
+<h2>انتخاب تاریخ</h2>
+<div id="dates" class="dates">
+<div class="date">در حال بارگذاری...</div>
+</div>
+</section>
+</main>
+
+<script>
+const serviceId={{ service.id }};
+const dates=document.getElementById("dates");
+
+function jalaliToday(){
+  const d=new Date();
+  const f=new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric",month:"2-digit",day:"2-digit"});
+  return f.format(d).replace(/\u200e/g,"").replace(/\//g,"-").replace(/[۰-۹]/g,x=>"۰۱۲۳۴۵۶۷۸۹".indexOf(x));
+}
+
+async function loadDates(){
+  const today=jalaliToday();
+  const [y,m,d]=today.split("-").map(Number);
+  dates.innerHTML="";
+  for(let i=0;i<7;i++){
+    const dt=new Date();
+    dt.setDate(dt.getDate()+i);
+    const parts=new Intl.DateTimeFormat("en-US-u-ca-persian",{year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(dt);
+    const yy=parts.find(x=>x.type==="year").value;
+    const mm=parts.find(x=>x.type==="month").value;
+    const dd=parts.find(x=>x.type==="day").value;
+    const value=`${yy}-${mm}-${dd}`;
+
+    const el=document.createElement("button");
+    el.className="date";
+    el.innerHTML=`<strong>${new Intl.DateTimeFormat("fa-IR-u-ca-persian",{weekday:"long"}).format(dt)}</strong><small>${value}</small>`;
+    el.onclick=()=>selectDate(el,value);
+    dates.appendChild(el);
+  }
+}
+
+async function selectDate(el,date){
+  document.querySelectorAll(".date").forEach(x=>x.classList.remove("active"));
+  el.classList.add("active");
+
+  const r=await fetch(`/booking/api/slots/${serviceId}/${date}`);
+  const data=await r.json();
+
+  if(!data.slots?.length){
+    alert("برای این تاریخ زمانی موجود نیست.");
+    return;
+  }
+
+  alert("زمان‌های موجود: "+data.slots.map(x=>x.time).join(" - "));
+}
+
+loadDates();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<meta charset="utf-8">
+<title>SW Test</title>
+<button id="t">بررسی Service Worker</button>
+<pre id="o"></pre>
+<script>
+const o=document.getElementById("o");
+document.getElementById("t").onclick=async()=>{
+  try{
+    o.textContent="در حال ثبت...";
+    const r=await navigator.serviceWorker.register("/static/sw.js?test=1",{scope:"/"});
+    o.textContent="REGISTER OK\nscope="+r.scope;
+  }catch(e){
+    o.textContent="REGISTER ERROR\n"+e.name+"\n"+e.message;
+  }
+};
+</script>

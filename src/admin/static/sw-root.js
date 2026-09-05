@@ -18,10 +18,8 @@ self.addEventListener("push", event => {
   const count = Number(data.badge_count || 0);
 
   event.waitUntil((async () => {
-    if (count > 0 && "setAppBadge" in navigator) {
-      await navigator.setAppBadge(count).catch(() => {});
-    } else if (count === 0 && "clearAppBadge" in navigator) {
-      await navigator.clearAppBadge().catch(() => {});
+    if (count > 0 && "setAppBadge" in self.registration) {
+      await self.registration.setAppBadge(count).catch(() => {});
     }
 
     await self.registration.showNotification(
@@ -30,10 +28,6 @@ self.addEventListener("push", event => {
         body: data.body || "درخواست جدیدی ثبت شده است.",
         icon: "/static/icon-192-v2.png",
         badge: "/static/icon-192-v2.png",
-        silent: false,
-        renotify: true,
-        sound: "/static/notification.wav",
-        tag: "green-vita-visit",
         data: { url: data.url || "/visits" }
       }
     );

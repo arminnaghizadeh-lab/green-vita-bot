@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="رزرو آنلاین خدمات کلینیک گیاه پزشکی گرین ویتا">
+    <title>رزرو آنلاین | گرین ویتا</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f7f8f5;
+            color: #26352b;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0 50px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(25px, 5vw, 38px);
+        }
+
+        .hero p {
+            margin: 0;
+            color: #66736a;
+            font-size: 15px;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .service-card {
+            background: #fff;
+            border: 1px solid #e5e9e4;
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(30, 50, 35, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .service-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 14px;
+            object-fit: cover;
+            background: #edf1eb;
+        }
+
+        .service-placeholder {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 14px;
+            background: #edf1eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .service-card h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .price {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .price small {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .choose {
+            border: 0;
+            border-radius: 12px;
+            padding: 13px 16px;
+            background: #2f6b3d;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .choose:hover {
+            opacity: .9;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: min(100% - 20px, 560px);
+                padding-top: 22px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <header class="hero">
+        <h1>رزرو آنلاین خدمات</h1>
+        <p>خدمت موردنظر خود را انتخاب کنید</p>
+    </header>
+
+    <section class="services">
+        {% for service in services %}
+        <article class="service-card">
+
+            {% if service.image_url %}
+                <img
+                    class="service-image"
+                    src="{{ service.image_url }}"
+                    alt="{{ service.title }}"
+                    loading="lazy"
+                >
+            {% else %}
+                <div class="service-placeholder" aria-hidden="true">🌿</div>
+            {% endif %}
+
+            <h2>{{ service.title }}</h2>
+
+            <div class="price">
+                {% if service.price %}
+                    {{ "{:,}".format(service.price|int) }}
+                    <small>تومان</small>
+                {% else %}
+                    رایگان
+                {% endif %}
+            </div>
+
+            <a class="choose" href="/booking/service/{{ service.id }}/">
+                انتخاب خدمت
+            </a>
+
+        </article>
+        {% endfor %}
+    </section>
+
+</main>
+</body>
+</html>

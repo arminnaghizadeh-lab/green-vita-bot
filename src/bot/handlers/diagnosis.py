@@ -22,6 +22,7 @@ from aiogram.types import (
     ReplyKeyboardRemove,
     User as TgUser,
 )
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.ai.diagnosis import DiagnosisResult, diagnose_plant_image
@@ -41,6 +42,7 @@ from src.bot.states import DiagnosisStates, ExpertVisitStates
 from src.core.config import get_settings
 from src.core.exceptions import AIProviderError
 from src.core.logging import get_logger
+from src.admin.services.push import send_push
 from src.db.models.diagnosis import Diagnosis, DiagnosisSeverity
 from src.repositories.diagnosis_repository import DiagnosisRepository
 from src.repositories.user_repository import UserRepository
@@ -415,6 +417,17 @@ def _is_valid_phone(phone: str) -> bool:
     return digits.isdigit() and 8 <= len(digits) <= 15
 
 
+
+async def _get_pending_visit_count(session: AsyncSession) -> int:
+    result = await session.execute(
+        select(func.count(Diagnosis.id)).where(
+            Diagnosis.expert_visit_requested.is_(True),
+            Diagnosis.visit_status == "pending",
+        )
+    )
+    return int(result.scalar_one())
+
+
 async def _finish_expert_visit(
     *,
     message: Message,
@@ -540,10 +553,22 @@ async def _finish_expert_visit(
         )
         return
 
+    # Notify the installed Green Vita PWA about the new visit request.
+    await session.flush()
+    pending_count = await _get_pending_visit_count(session)
+    await send_push(
+        session,
+        title="🌿 گرین ویتا",
+        body="درخواست ویزیت متخصص جدید ثبت شد.",
+        url="/visits",
+        badge_count=pending_count,
+    )
+
     await state.clear()
 
     # Remove the temporary "send phone number" keyboard first.
-    visit_code = f"{20000 + diagnosis.id:06d}"
+    visit_record_id = diagnosis.id if source != "identification" else identification.id
+    visit_code = f"{20000 + visit_record_id:06d}"
 
     await message.answer(
         "✅ درخواست ویزیت متخصص شما با کد "

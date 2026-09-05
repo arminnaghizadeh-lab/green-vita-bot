@@ -32,3 +32,21 @@ __all__ = [
 ]
 
 from src.db.models.push_subscription import PushSubscription
+
+from src.db.models.booking import (
+    Booking,
+    BookingSchedule,
+    BookingSource,
+    BookingStatus,
+    BookingTimeSlot,
+    Service,
+)
+
+__all__ += [
+    "Service",
+    "BookingSchedule",
+    "BookingTimeSlot",
+    "Booking",
+    "BookingSource",
+    "BookingStatus",
+]

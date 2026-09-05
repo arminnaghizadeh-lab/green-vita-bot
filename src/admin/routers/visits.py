@@ -75,7 +75,10 @@ def _parse_datetime(value: str, field_name: str) -> datetime:
     # فرم datetime-local زمان را بدون timezone ارسال می‌کند.
     # زمان پنل ادمین به صورت local در نظر گرفته می‌شود.
     if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
+        from zoneinfo import ZoneInfo
+
+        settings = get_settings()
+        parsed = parsed.replace(tzinfo=ZoneInfo(settings.timezone))
 
     return parsed.astimezone(timezone.utc)
 

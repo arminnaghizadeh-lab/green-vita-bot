@@ -55,7 +55,7 @@ async def send_push(
     }
 
     if badge_count is not None:
-        payload["count"] = max(0, int(badge_count))
+        payload["badge_count"] = max(0, int(badge_count))
 
     sent = 0
 
