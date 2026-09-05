@@ -31,3 +31,4 @@ htmlcov/
 *.log
 
 .env.backup
+backups/
