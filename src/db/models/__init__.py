@@ -36,6 +36,7 @@ from src.db.models.push_subscription import PushSubscription
 from src.db.models.booking import (
     Booking,
     BookingSchedule,
+    BookingSlotAssignment,
     BookingSource,
     BookingStatus,
     BookingTimeSlot,
@@ -46,6 +47,7 @@ __all__ += [
     "Service",
     "BookingSchedule",
     "BookingTimeSlot",
+    "BookingSlotAssignment",
     "Booking",
     "BookingSource",
     "BookingStatus",

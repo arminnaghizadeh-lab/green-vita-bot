@@ -11,6 +11,12 @@ from src.db.models.booking import BookingSchedule, BookingTimeSlot
 
 TEHRAN = ZoneInfo("Asia/Tehran")
 
+# آخرین ساعت شروع رزرو 17:00 است.
+# برای اینکه رزروهای 1 تا 3 ساعته + دو ساعت Buffer
+# قابل ثبت باشند، Slotهای ادامه روز هم باید ساخته شوند.
+MAX_BOOKING_DURATION_HOURS = 3
+BUFFER_HOURS = 2
+
 
 def jalali_to_gregorian_datetime(
     year: int,
@@ -56,7 +62,11 @@ async def generate_slots_for_date(
 
         duration = timedelta(minutes=schedule.slot_duration_minutes)
 
-        while current + duration <= end:
+        generation_end = end + timedelta(
+            hours=MAX_BOOKING_DURATION_HOURS + BUFFER_HOURS
+        )
+
+        while current + duration <= generation_end:
             slot_end = current + duration
 
             exists = await session.scalar(

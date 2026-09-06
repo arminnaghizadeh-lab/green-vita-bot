@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -10,14 +11,19 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.admin.auth import require_authentication
+from src.admin.services.push import send_push
 from src.admin.dependencies import get_session
 from src.core.config import Settings, get_settings
+from src.db.session import AsyncSessionLocal
 from src.db.models import Diagnosis, Plant, User
 from src.db.models.visit_appointment import (
     AppointmentStatus,
     VisitAppointment,
 )
 from src.db.models.visit_status import VisitStatus
+from src.services.appointment_availability import (
+    find_booking_conflict,
+)
 from src.services.visit_scheduler import (
     AppointmentConflict,
     AppointmentNotFound,
@@ -59,6 +65,39 @@ CALENDAR_ACTIVE_STATUSES = (
 )
 
 DEFAULT_SLOT_STEP_MINUTES = 30
+
+
+def _format_visit_datetime(value: datetime, fmt: str) -> str:
+    settings = get_settings()
+    return value.astimezone(ZoneInfo(settings.timezone)).strftime(fmt)
+
+
+async def _send_visit_push_safe(
+    *,
+    title: str,
+    body: str,
+    url: str = "/visits",
+    context: dict | None = None,
+) -> None:
+    """
+    Push خطا نباید روی transaction اصلی Visit اثر بگذارد.
+    ارسال در یک session جدا و بعد از commit انجام می‌شود.
+    """
+    try:
+        async with AsyncSessionLocal() as push_session:
+            await send_push(
+                push_session,
+                title=title,
+                body=body,
+                url=url,
+            )
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "visit_admin_push_failed",
+            extra=context or {},
+        )
 
 
 def _parse_datetime(value: str, field_name: str) -> datetime:
@@ -319,6 +358,19 @@ async def calendar_create_appointment(
         await session.commit()
         await session.refresh(appointment)
 
+        await _send_visit_push_safe(
+            title="ویزیت جدید گرین ویتا",
+            body=(
+                f"زمان‌بندی جدید | "
+                f"{_format_visit_datetime(appointment.start_at, '%H:%M')} "
+                f"تا "
+                f"{_format_visit_datetime(appointment.end_at, '%H:%M')} | "
+                f"Diagnosis #{diagnosis_id}"
+            ),
+            url="/visits",
+            context={"appointment_id": appointment.id},
+        )
+
     except AppointmentConflict as exc:
         await session.rollback()
         raise HTTPException(
@@ -387,6 +439,18 @@ async def calendar_create_manual_appointment(
                 f"زمان انتخاب‌شده با رزرو {conflict.id} تداخل دارد."
             )
 
+        booking_conflict = await find_booking_conflict(
+            session=session,
+            start_at=start,
+            blocked_until=blocked_until,
+        )
+
+        if booking_conflict is not None:
+            booking_id, _, _ = booking_conflict
+            raise AppointmentConflict(
+                f"زمان انتخاب‌شده با رزرو آنلاین {booking_id} تداخل دارد."
+            )
+
         appointment = VisitAppointment(
             diagnosis_id=None,
             start_at=start,
@@ -405,6 +469,18 @@ async def calendar_create_manual_appointment(
         session.add(appointment)
         await session.commit()
         await session.refresh(appointment)
+
+        await _send_visit_push_safe(
+            title="رزرو دستی جدید گرین ویتا",
+            body=(
+                f"{appointment.customer_name} | "
+                f"{_format_visit_datetime(appointment.start_at, '%H:%M')} "
+                f"تا "
+                f"{_format_visit_datetime(appointment.end_at, '%H:%M')}"
+            ),
+            url="/visits",
+            context={"appointment_id": appointment.id},
+        )
 
     except AppointmentConflict as exc:
         await session.rollback()
@@ -445,16 +521,30 @@ async def calendar_reschedule_appointment(
             start_at=start,
         )
 
-        diagnosis = await session.get(
-            Diagnosis,
-            appointment.diagnosis_id,
-        )
+        diagnosis = None
+
+        if appointment.diagnosis_id is not None:
+            diagnosis = await session.get(
+                Diagnosis,
+                appointment.diagnosis_id,
+            )
 
         if diagnosis is not None:
             diagnosis.visit_status = VisitStatus.SCHEDULED
 
         await session.commit()
         await session.refresh(appointment)
+
+        await _send_visit_push_safe(
+            title="تغییر زمان ویزیت گرین ویتا",
+            body=(
+                f"ویزیت #{appointment.id} به "
+                f"{_format_visit_datetime(appointment.start_at, '%Y-%m-%d %H:%M')} "
+                f"منتقل شد."
+            ),
+            url="/visits",
+            context={"appointment_id": appointment.id},
+        )
 
     except AppointmentConflict as exc:
         await session.rollback()
@@ -501,16 +591,28 @@ async def calendar_cancel_appointment(
             appointment_id=appointment_id,
         )
 
-        diagnosis = await session.get(
-            Diagnosis,
-            appointment.diagnosis_id,
-        )
+        diagnosis = None
+
+        if appointment.diagnosis_id is not None:
+            diagnosis = await session.get(
+                Diagnosis,
+                appointment.diagnosis_id,
+            )
 
         if diagnosis is not None:
             diagnosis.visit_status = VisitStatus.PENDING
 
         await session.commit()
         await session.refresh(appointment)
+
+        await _send_visit_push_safe(
+            title="لغو ویزیت گرین ویتا",
+            body=(
+                f"ویزیت #{appointment.id} لغو شد."
+            ),
+            url="/visits",
+            context={"appointment_id": appointment.id},
+        )
 
     except AppointmentNotFound as exc:
         await session.rollback()

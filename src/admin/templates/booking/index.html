@@ -40,6 +40,49 @@
             font-size: 15px;
         }
 
+        .track-card {
+            margin-bottom: 24px;
+            background: #fff;
+            border: 1px solid #e5e9e4;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(30, 50, 35, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .track-card h2 {
+            margin: 0 0 7px;
+            font-size: 20px;
+        }
+
+        .track-card p {
+            margin: 0;
+            color: #66736a;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .track-button {
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 12px;
+            padding: 13px 18px;
+            background: #2f6b3d;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .track-button:hover {
+            opacity: .9;
+        }
+
         .services {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -118,12 +161,30 @@
                 grid-template-columns: 1fr;
             }
 
+            .track-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .track-button {
+                width: 100%;
+            }
+
             .service-card h2 {
                 font-size: 18px;
             }
         }
-    </style>
-</head>
+    
+html,
+body,
+button,
+input,
+textarea,
+select{
+  font-family: "Vazir", sans-serif !important;
+}
+\n</style>
+  <link rel="stylesheet" href="/admin/static/css/global-vazir.css">\n</head>
 
 <body>
 <main class="container">
@@ -132,6 +193,20 @@
         <h1>رزرو آنلاین خدمات</h1>
         <p>خدمت موردنظر خود را انتخاب کنید</p>
     </header>
+
+    <section class="track-card">
+        <div>
+            <h2>پیگیری / ویرایش رزرو</h2>
+            <p>
+                با کد رهگیری و شماره تماس، وضعیت رزرو خود را ببینید
+                و در صورت مجاز بودن آن را ویرایش کنید.
+            </p>
+        </div>
+
+        <a class="track-button" href="/booking/track/">
+            پیگیری / ویرایش رزرو
+        </a>
+    </section>
 
     <section class="services">
         {% for service in services %}

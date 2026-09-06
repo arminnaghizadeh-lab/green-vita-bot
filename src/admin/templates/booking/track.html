@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>پیگیری / ویرایش رزرو | گرین ویتا</title>
+
+<link rel="stylesheet" href="/admin/static/css/global-vazir.css">
+
+<style>
+*{box-sizing:border-box}
+
+html,body,button,input{
+  font-family:"Vazir",sans-serif !important;
+}
+
+body{
+  margin:0;
+  background:#f6f8f5;
+  color:#18251c;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:24px 16px;
+}
+
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 8px 30px #0000000d;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:20px;
+  color:#28743b;
+  text-decoration:none;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:25px;
+}
+
+.desc{
+  color:#66736a;
+  line-height:1.9;
+  margin-bottom:24px;
+}
+
+.form-grid{
+  display:grid;
+  gap:14px;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-size:13px;
+  color:#506057;
+}
+
+input{
+  width:100%;
+  border:1px solid #d9e2da;
+  border-radius:13px;
+  padding:13px;
+  outline:none;
+  font-size:15px;
+}
+
+input:focus{
+  border-color:#28743b;
+}
+
+button{
+  width:100%;
+  margin-top:16px;
+  border:0;
+  border-radius:15px;
+  padding:14px;
+  background:#28743b;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.message{
+  display:none;
+  margin-top:14px;
+  padding:12px;
+  border-radius:13px;
+  background:#fff1f1;
+  color:#9b3030;
+  line-height:1.8;
+}
+
+.result{
+  display:none;
+  margin-top:24px;
+  padding:18px;
+  border-radius:17px;
+  background:#f6faf6;
+  border:1px solid #e1ebe2;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:120px minmax(0,1fr);
+  gap:12px;
+  padding:8px 0;
+}
+
+.row span{
+  color:#607067;
+  font-size:13px;
+}
+
+.row strong{
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+
+.actions{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+}
+
+.secondary{
+  background:#eef4ef;
+  color:#28743b;
+}
+
+.tracking{
+  margin:15px 0;
+  padding:12px;
+  background:#fff;
+  border-radius:12px;
+  text-align:center;
+  direction:ltr;
+  font-weight:bold;
+  font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<main class="wrap">
+
+<a class="back" href="/booking/">← بازگشت به رزرو آنلاین</a>
+
+<section class="card">
+
+<h1>پیگیری / ویرایش رزرو</h1>
+
+<p class="desc">
+کد رهگیری و شماره تماس ثبت‌شده برای رزرو را وارد کنید.
+</p>
+
+<div class="form-grid">
+
+<div>
+<label for="trackingCode">کد رهگیری</label>
+<input
+  id="trackingCode"
+  type="text"
+  autocomplete="off"
+  placeholder="مثلاً GV-ABC12345">
+</div>
+
+<div>
+<label for="customerPhone">شماره تماس</label>
+<input
+  id="customerPhone"
+  type="tel"
+  inputmode="tel"
+  autocomplete="tel"
+  placeholder="مثلاً 09121234567">
+</div>
+
+</div>
+
+<div id="message" class="message"></div>
+
+<button id="searchBtn" type="button">
+  مشاهده رزرو
+</button>
+
+<div id="result" class="result">
+
+  <div class="tracking" id="resultTracking">—</div>
+
+  <div class="row">
+    <span>خدمت</span>
+    <strong id="resultService">—</strong>
+  </div>
+
+  <div class="row">
+    <span>تاریخ</span>
+    <strong id="resultDate">—</strong>
+  </div>
+
+  <div class="row">
+    <span>زمان</span>
+    <strong id="resultTime">—</strong>
+  </div>
+
+  <div class="row">
+    <span>مدت</span>
+    <strong id="resultDuration">—</strong>
+  </div>
+
+  <div class="row">
+    <span>وضعیت</span>
+    <strong id="resultStatus">—</strong>
+  </div>
+
+  <div class="row">
+    <span>مشتری</span>
+    <strong id="resultCustomer">—</strong>
+  </div>
+
+  <div class="row">
+    <span>گیاه</span>
+    <strong id="resultPlant">—</strong>
+  </div>
+
+  <div class="row">
+    <span>مبلغ</span>
+    <strong id="resultAmount">—</strong>
+  </div>
+
+  <div id="editMessage" class="message"></div>
+
+  <div class="actions">
+    <button id="editBtn" type="button">
+      ویرایش رزرو
+    </button>
+
+    <button
+      class="secondary"
+      id="newBookingBtn"
+      type="button">
+      رزرو جدید
+    </button>
+  </div>
+
+</div>
+
+</section>
+
+</main>
+
+<script>
+const searchBtn =
+  document.getElementById("searchBtn");
+
+const message =
+  document.getElementById("message");
+
+const result =
+  document.getElementById("result");
+
+const editBtn =
+  document.getElementById("editBtn");
+
+const editMessage =
+  document.getElementById("editMessage");
+
+let currentBooking = null;
+
+function showError(text){
+  message.textContent = text;
+  message.style.display = "block";
+}
+
+function clearError(){
+  message.textContent = "";
+  message.style.display = "none";
+}
+
+function showEditMessage(text){
+  editMessage.textContent = text;
+  editMessage.style.display = "block";
+}
+
+function formatPrice(value){
+  return Number(value).toLocaleString("fa-IR") + " تومان";
+}
+
+function statusText(status){
+  const map = {
+    pending:"در انتظار تأیید",
+    confirmed:"تأیید شده",
+    cancelled:"لغو شده",
+    completed:"تکمیل شده"
+  };
+
+  return map[status] || status;
+}
+
+function englishDigits(value){
+  return String(value)
+    .replace(/[۰-۹]/g, x => "۰۱۲۳۴۵۶۷۸۹".indexOf(x))
+    .replace(/[٠-٩]/g, x => "٠١٢٣٤٥٦٧٨٩".indexOf(x));
+}
+
+searchBtn.addEventListener("click", async () => {
+  clearError();
+  editMessage.style.display = "none";
+  result.style.display = "none";
+
+  const trackingCode =
+    document.getElementById("trackingCode").value
+      .trim()
+      .toUpperCase();
+
+  const customerPhone =
+    englishDigits(
+      document.getElementById("customerPhone").value.trim()
+    );
+
+  if(!trackingCode || !customerPhone){
+    showError("کد رهگیری و شماره تماس را وارد کنید.");
+    return;
+  }
+
+  searchBtn.disabled = true;
+  searchBtn.textContent = "در حال جست‌وجو...";
+
+  const form = new FormData();
+
+  form.append("tracking_code", trackingCode);
+  form.append("customer_phone", customerPhone);
+
+  try{
+    const response = await fetch(
+      "/booking/api/track",
+      {
+        method:"POST",
+        body:form,
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok || !data.success){
+      showError(
+        data.error || "رزرو پیدا نشد."
+      );
+      return;
+    }
+
+    currentBooking = data.booking;
+
+    document.getElementById("resultTracking").textContent =
+      currentBooking.tracking_code;
+
+    document.getElementById("resultService").textContent =
+      currentBooking.service_title;
+
+    document.getElementById("resultDate").textContent =
+      currentBooking.date;
+
+    document.getElementById("resultTime").textContent =
+      `${currentBooking.start_time} تا ${currentBooking.end_time}`;
+
+    document.getElementById("resultDuration").textContent =
+      `${currentBooking.duration_hours} ساعت`;
+
+    document.getElementById("resultStatus").textContent =
+      statusText(currentBooking.status);
+
+    document.getElementById("resultCustomer").textContent =
+      currentBooking.customer_name;
+
+    document.getElementById("resultPlant").textContent =
+      currentBooking.plant_name || "—";
+
+    document.getElementById("resultAmount").textContent =
+      formatPrice(currentBooking.amount);
+
+    if(currentBooking.can_edit){
+      editBtn.disabled = false;
+      editMessage.style.display = "none";
+    }else{
+      editBtn.disabled = true;
+      showEditMessage(
+        "این رزرو دیگر قابل ویرایش نیست. ویرایش فقط تا ۲۴ ساعت قبل از زمان شروع امکان‌پذیر است."
+      );
+    }
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  }catch(error){
+    showError(
+      "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید."
+    );
+  }finally{
+    searchBtn.disabled = false;
+    searchBtn.textContent = "مشاهده رزرو";
+  }
+});
+
+editBtn.addEventListener("click", () => {
+  if(!currentBooking || !currentBooking.can_edit){
+    return;
+  }
+
+  sessionStorage.setItem(
+    "greenVitaBookingDraft",
+    JSON.stringify({
+      edit_mode: true,
+      booking_id: currentBooking.id,
+      tracking_code: currentBooking.tracking_code,
+      service_id: currentBooking.service_id,
+      service_title: currentBooking.service_title,
+      selected_date: currentBooking.date,
+      slot_id: currentBooking.time_slot_id,
+      slot_time: currentBooking.start_time,
+      end_time: currentBooking.end_time,
+      duration_hours: currentBooking.duration_hours,
+      amount: currentBooking.amount,
+      customer_name: currentBooking.customer_name,
+      customer_phone: currentBooking.customer_phone,
+      customer_email: currentBooking.customer_email || "",
+      plant_name: currentBooking.plant_name || "",
+      plant_description: currentBooking.plant_description || "",
+      notes: currentBooking.notes || ""
+    })
+  );
+
+  window.location.href =
+    `/booking/service/${currentBooking.service_id}/`;
+});
+
+document.getElementById("newBookingBtn")
+  .addEventListener("click", () => {
+    window.location.href = "/booking/";
+  });
+</script>
+
+</body>
+</html>

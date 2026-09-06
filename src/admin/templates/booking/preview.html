@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تأیید رزرو | گرین ویتا</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#f6f8f5;
+  font-family:Arial,sans-serif;
+  color:#18251c;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:24px 16px;
+}
+
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 8px 30px #0000000d;
+}
+
+.back{
+  display:inline-block;
+  margin-bottom:20px;
+  color:#28743b;
+  text-decoration:none;
+}
+
+h1{
+  margin:0 0 22px;
+  font-size:25px;
+}
+
+.summary{
+  background:#f6faf6;
+  border:1px solid #e1ebe2;
+  border-radius:17px;
+  padding:16px;
+}
+
+.summary-row{
+  display:grid;
+  grid-template-columns:120px minmax(0,1fr);
+  align-items:start;
+  gap:14px;
+  min-height:42px;
+  padding:9px 0;
+}
+
+.summary-row span{
+  font-size:13px;
+  color:#607067;
+}
+
+.summary-row strong{
+  text-align:left;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+
+.summary-row.total{
+  border-top:1px solid #dce5dd;
+  margin-top:7px;
+  padding-top:13px;
+  font-weight:bold;
+  color:#28743b;
+}
+
+.actions{
+  display:grid;
+  gap:11px;
+  margin-top:18px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:14px;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#confirmBtn{
+  background:#28743b;
+  color:#fff;
+}
+
+#editBtn{
+  background:#eef4ef;
+  color:#28743b;
+  border:1px solid #d9e5da;
+}
+
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.message{
+  display:none;
+  margin-top:13px;
+  padding:12px;
+  border-radius:13px;
+  background:#fff1f1;
+  color:#9b3030;
+  line-height:1.8;
+}
+
+.success{
+  display:none;
+  margin-top:22px;
+  padding:20px;
+  border-radius:18px;
+  background:#edf8ef;
+  border:1px solid #d8ecd9;
+  text-align:center;
+}
+
+.tracking{
+  display:inline-block;
+  margin:10px 0;
+  padding:9px 15px;
+  background:#fff;
+  border-radius:11px;
+  font-size:20px;
+  font-weight:bold;
+  direction:ltr;
+  letter-spacing:1px;
+}
+
+@media(max-width:600px){
+  .summary-row{
+    grid-template-columns:105px minmax(0,1fr);
+    gap:10px;
+  }
+
+  .summary-row span{
+    font-size:12px;
+  }
+
+  .summary-row strong{
+    font-size:13px;
+  }
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select{
+  font-family: "Vazir", sans-serif !important;
+}
+\n</style>
+  <link rel="stylesheet" href="/admin/static/css/global-vazir.css">\n</head>
+
+<body>
+<main class="wrap">
+
+  <a class="back" id="backLink" href="/booking/">
+    ← بازگشت به خدمات
+  </a>
+
+  <section class="card" id="previewCard">
+
+    <h1>تأیید و ثبت نهایی رزرو</h1>
+
+    <div class="summary">
+
+      <div class="summary-row">
+        <span>خدمت</span>
+        <strong id="previewService">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>تاریخ</span>
+        <strong id="previewDate">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>بازه زمانی</span>
+        <strong id="previewTime">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>مدت</span>
+        <strong id="previewDuration">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>مشتری</span>
+        <strong id="previewCustomer">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>شماره تماس</span>
+        <strong id="previewPhone">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>ایمیل</span>
+        <strong id="previewEmail">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>گیاه</span>
+        <strong id="previewPlant">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>شرح مشکل</span>
+        <strong id="previewProblem">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>توضیحات</span>
+        <strong id="previewNotes">—</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>مبلغ نهایی</span>
+        <strong id="previewAmount">—</strong>
+      </div>
+
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div class="actions">
+      <button id="confirmBtn" type="button">
+        تأیید و ثبت نهایی
+      </button>
+
+      <button id="editBtn" type="button">
+        ویرایش رزرو
+      </button>
+    </div>
+
+    <div id="success" class="success">
+      <h2>رزرو شما با موفقیت ثبت شد 🌱</h2>
+      <p>وضعیت رزرو: در انتظار تأیید</p>
+
+      <div>کد پیگیری</div>
+
+      <div id="trackingCode" class="tracking"></div>
+
+      <p>این کد را برای پیگیری رزرو نگه دارید.</p>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+const serviceId = {{ service.id }};
+
+const draftKey = "greenVitaBookingDraft";
+
+const confirmBtn =
+  document.getElementById("confirmBtn");
+
+const editBtn =
+  document.getElementById("editBtn");
+
+const message =
+  document.getElementById("message");
+
+const success =
+  document.getElementById("success");
+
+function showError(text){
+  message.textContent = text;
+  message.style.display = "block";
+}
+
+function clearError(){
+  message.textContent = "";
+  message.style.display = "none";
+}
+
+function formatPrice(value){
+  return Number(value).toLocaleString("fa-IR") + " تومان";
+}
+
+function englishDigits(value){
+  return String(value)
+    .replace(/[۰-۹]/g, x => "۰۱۲۳۴۵۶۷۸۹".indexOf(x))
+    .replace(/[٠-٩]/g, x => "٠١٢٣٤٥٦٧٨٩".indexOf(x));
+}
+
+function getDraft(){
+  try{
+    const raw = sessionStorage.getItem(draftKey);
+
+    if(!raw){
+      return null;
+    }
+
+    const draft = JSON.parse(raw);
+
+    if(
+      !draft ||
+      Number(draft.service_id) !== Number(serviceId)
+    ){
+      return null;
+    }
+
+    return draft;
+  }catch(error){
+    return null;
+  }
+}
+
+const draft = getDraft();
+
+if(!draft){
+  showError("اطلاعات رزرو پیدا نشد. لطفاً دوباره رزرو را انتخاب کنید.");
+  confirmBtn.disabled = true;
+}else{
+  document.getElementById("previewService").textContent =
+    draft.service_title || "—";
+
+  document.getElementById("previewDate").textContent =
+    draft.selected_date || "—";
+
+  document.getElementById("previewTime").textContent =
+    `${draft.slot_time || "—"} تا ${draft.end_time || "—"}`;
+
+  document.getElementById("previewDuration").textContent =
+    `${draft.duration_hours || "—"} ساعت`;
+
+  document.getElementById("previewCustomer").textContent =
+    draft.customer_name || "—";
+
+  document.getElementById("previewPhone").textContent =
+    draft.customer_phone || "—";
+
+  document.getElementById("previewEmail").textContent =
+    draft.customer_email || "—";
+
+  document.getElementById("previewPlant").textContent =
+    draft.plant_name || "—";
+
+  document.getElementById("previewProblem").textContent =
+    draft.plant_description || "—";
+
+  document.getElementById("previewNotes").textContent =
+    draft.notes || "—";
+
+  document.getElementById("previewAmount").textContent =
+    formatPrice(draft.amount);
+}
+
+editBtn.addEventListener("click", () => {
+  window.location.href =
+    `/booking/service/${serviceId}/`;
+});
+
+confirmBtn.addEventListener("click", async () => {
+  clearError();
+
+  const currentDraft = getDraft();
+
+  if(!currentDraft){
+    showError("اطلاعات رزرو منقضی شده است. دوباره رزرو کنید.");
+    return;
+  }
+
+  confirmBtn.disabled = true;
+  editBtn.disabled = true;
+  confirmBtn.textContent = "در حال ثبت نهایی...";
+
+  const form = new FormData();
+
+  if(currentDraft.edit_mode){
+    form.append(
+      "booking_id",
+      currentDraft.booking_id
+    );
+
+    form.append(
+      "tracking_code",
+      currentDraft.tracking_code
+    );
+  }
+
+  form.append(
+    "service_id",
+    currentDraft.service_id
+  );
+
+  form.append(
+    "slot_id",
+    currentDraft.slot_id
+  );
+
+  form.append(
+    "duration_hours",
+    currentDraft.duration_hours
+  );
+
+  form.append(
+    "customer_name",
+    currentDraft.customer_name
+  );
+
+  form.append(
+    "customer_phone",
+    englishDigits(currentDraft.customer_phone)
+  );
+
+  form.append(
+    "customer_email",
+    currentDraft.customer_email || ""
+  );
+
+  form.append(
+    "plant_name",
+    currentDraft.plant_name || ""
+  );
+
+  form.append(
+    "plant_description",
+    currentDraft.plant_description || ""
+  );
+
+  form.append(
+    "notes",
+    currentDraft.notes || ""
+  );
+
+  const endpoint =
+    currentDraft.edit_mode
+      ? "/booking/api/edit"
+      : "/booking/api/book";
+
+  try{
+    const response = await fetch(
+      endpoint,
+      {
+        method:"POST",
+        body:form,
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok || !data.success){
+      showError(
+        data.error || "ثبت رزرو انجام نشد."
+      );
+
+      confirmBtn.disabled = false;
+      editBtn.disabled = false;
+      confirmBtn.textContent = "تأیید و ثبت نهایی";
+
+      return;
+    }
+
+    sessionStorage.removeItem(draftKey);
+
+    document.getElementById("previewCard")
+      .querySelector(".summary")
+      .style.display = "none";
+
+    document.getElementById("previewCard")
+      .querySelector(".actions")
+      .style.display = "none";
+
+    document.getElementById("trackingCode")
+      .textContent = data.tracking_code;
+
+    success.style.display = "block";
+
+    success.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  }catch(error){
+    showError(
+      "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید."
+    );
+
+    confirmBtn.disabled = false;
+    editBtn.disabled = false;
+    confirmBtn.textContent = "تأیید و ثبت نهایی";
+  }
+});
+</script>
+
+</body>
+</html>

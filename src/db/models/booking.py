@@ -117,6 +117,35 @@ class BookingTimeSlot(Base, TimestampMixin):
     )
 
 
+class BookingSlotAssignment(Base):
+    __tablename__ = "booking_slot_assignments"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    booking_id: Mapped[int] = mapped_column(
+        ForeignKey("bookings.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    time_slot_id: Mapped[int] = mapped_column(
+        ForeignKey("booking_time_slots.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+
+    # RESERVED = بخش واقعی رزرو
+    # BUFFER = دو ساعت فاصله اجباری بعد از رزرو
+    kind: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    booking: Mapped["Booking"] = relationship(
+        back_populates="slot_assignments"
+    )
+
+    time_slot: Mapped["BookingTimeSlot"] = relationship()
+
+
 class Booking(Base, TimestampMixin):
     __tablename__ = "bookings"
 
@@ -168,6 +197,10 @@ class Booking(Base, TimestampMixin):
     final_amount: Mapped[float] = mapped_column(Numeric(12, 0), nullable=False)
 
     time_slot: Mapped["BookingTimeSlot"] = relationship(back_populates="bookings")
+    slot_assignments: Mapped[list["BookingSlotAssignment"]] = relationship(
+        back_populates="booking",
+        cascade="all, delete-orphan",
+    )
     service: Mapped["Service"] = relationship()
     user = relationship("User")
 

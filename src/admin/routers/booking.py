@@ -22,6 +22,9 @@ from src.db.models.booking import (
 )
 from src.db.session import AsyncSessionLocal
 from src.admin.services.push import send_push
+from src.services.appointment_availability import (
+    get_visit_occupied_slot_starts,
+)
 
 router = APIRouter(prefix="/booking", tags=["booking"])
 templates = Jinja2Templates(directory="src/admin/templates")
@@ -207,7 +210,16 @@ async def get_shared_occupied_starts(
         )
 
     result = await session.execute(stmt)
-    return set(result.scalars().all())
+
+    booking_occupied_starts = set(result.scalars().all())
+
+    visit_occupied_starts = await get_visit_occupied_slot_starts(
+        session,
+        start_g,
+        end_g,
+    )
+
+    return booking_occupied_starts | visit_occupied_starts
 
 
 @router.get(

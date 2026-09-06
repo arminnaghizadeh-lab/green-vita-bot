@@ -12,6 +12,9 @@ from src.db.models.visit_appointment import (
     AppointmentStatus,
     VisitAppointment,
 )
+from src.services.appointment_availability import (
+    find_booking_conflict,
+)
 
 
 DEFAULT_DURATION_MINUTES = 60
@@ -115,7 +118,16 @@ async def is_slot_available(
         exclude_appointment_id=exclude_appointment_id,
     )
 
-    return conflict is None
+    if conflict is not None:
+        return False
+
+    booking_conflict = await find_booking_conflict(
+        session=session,
+        start_at=start_at,
+        blocked_until=blocked_until,
+    )
+
+    return booking_conflict is None
 
 
 async def create_appointment(
@@ -163,6 +175,18 @@ async def create_appointment(
         raise AppointmentConflict(
             f"Requested slot conflicts with appointment "
             f"{conflict.id}."
+        )
+
+    booking_conflict = await find_booking_conflict(
+        session=session,
+        start_at=start_at,
+        blocked_until=blocked_until,
+    )
+
+    if booking_conflict is not None:
+        booking_id, _, _ = booking_conflict
+        raise AppointmentConflict(
+            f"Requested slot conflicts with booking {booking_id}."
         )
 
     appointment = VisitAppointment(
@@ -244,16 +268,31 @@ async def reschedule_appointment(
             f"{conflict.id}."
         )
 
+    booking_conflict = await find_booking_conflict(
+        session=session,
+        start_at=start_at,
+        blocked_until=blocked_until,
+    )
+
+    if booking_conflict is not None:
+        booking_id, _, _ = booking_conflict
+        raise AppointmentConflict(
+            f"Requested slot conflicts with booking {booking_id}."
+        )
+
     appointment.start_at = start_at
     appointment.end_at = end_at
     appointment.blocked_until = blocked_until
     appointment.duration_minutes = duration
     appointment.buffer_minutes = buffer
 
-    diagnosis = await session.get(
-        Diagnosis,
-        appointment.diagnosis_id,
-    )
+    diagnosis = None
+
+    if appointment.diagnosis_id is not None:
+        diagnosis = await session.get(
+            Diagnosis,
+            appointment.diagnosis_id,
+        )
 
     if diagnosis is not None:
         diagnosis.visit_scheduled_at = start_at
@@ -285,10 +324,13 @@ async def cancel_appointment(
 
     appointment.status = AppointmentStatus.CANCELLED
 
-    diagnosis = await session.get(
-        Diagnosis,
-        appointment.diagnosis_id,
-    )
+    diagnosis = None
+
+    if appointment.diagnosis_id is not None:
+        diagnosis = await session.get(
+            Diagnosis,
+            appointment.diagnosis_id,
+        )
 
     if diagnosis is not None:
         diagnosis.visit_scheduled_at = None
