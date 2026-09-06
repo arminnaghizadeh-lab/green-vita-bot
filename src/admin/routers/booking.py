@@ -39,6 +39,34 @@ PHONE_CONSULTATION_BUFFER_HOURS = 1
 PHONE_CONSULTATION_MAX_DURATION_HOURS = 1
 
 
+async def _send_booking_push_safe(
+    *,
+    title: str,
+    body: str,
+    url: str = "/dashboard/",
+    context: dict | None = None,
+) -> None:
+    """
+    Push خطا نباید روی transaction اصلی Booking اثر بگذارد.
+    ارسال در یک session جدا و بعد از commit انجام می‌شود.
+    """
+    try:
+        async with AsyncSessionLocal() as push_session:
+            await send_push(
+                push_session,
+                title=title,
+                body=body,
+                url=url,
+            )
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "booking_admin_push_failed",
+            extra=context or {},
+        )
+
+
 def generate_tracking_code() -> str:
     return "GV-" + secrets.token_hex(5).upper()
 
@@ -643,7 +671,18 @@ async def edit_booking(
                     "error": "این رزرو قابل ویرایش نیست.",
                 }
 
-            current_start = booking.time_slot.starts_at.astimezone(TEHRAN)
+            current_slot = await session.get(
+                BookingTimeSlot,
+                booking.time_slot_id,
+            )
+
+            if current_slot is None:
+                return {
+                    "success": False,
+                    "error": "زمان رزرو فعلی پیدا نشد.",
+                }
+
+            current_start = current_slot.starts_at.astimezone(TEHRAN)
             now_tehran = datetime.now(TEHRAN)
 
             if (
@@ -910,7 +949,7 @@ async def edit_booking(
                 .strftime("%H:%M")
             )
 
-        return {
+        response = {
             "success": True,
             "tracking_code": booking.tracking_code,
             "booking_id": booking.id,
@@ -920,6 +959,20 @@ async def edit_booking(
             "end_time": end_time,
             "amount": int(booking.final_amount),
         }
+
+        await _send_booking_push_safe(
+            title="تغییر رزرو گرین ویتا",
+            body=(
+                f"{service.title} | "
+                f"{start_time} تا {end_time} | "
+                f"{customer_name} | "
+                f"کد پیگیری: {booking.tracking_code}"
+            ),
+            url="/dashboard/",
+            context={"booking_id": booking.id},
+        )
+
+        return response
 
 
 @router.post("/api/cancel", include_in_schema=False)
@@ -981,7 +1034,7 @@ async def cancel_booking(
 
             booking.status = BookingStatus.CANCELLED
 
-        return {
+        response = {
             "success": True,
             "booking_id": booking.id,
             "tracking_code": booking.tracking_code,
@@ -991,6 +1044,19 @@ async def cancel_booking(
                 for assignment in assignments
             ],
         }
+
+        await _send_booking_push_safe(
+            title="لغو رزرو گرین ویتا",
+            body=(
+                f"{booking.customer_name} | "
+                f"کد پیگیری: {booking.tracking_code} | "
+                "رزرو لغو شد."
+            ),
+            url="/dashboard/",
+            context={"booking_id": booking.id},
+        )
+
+        return response
 
 
 @router.post("/api/book", include_in_schema=False)
