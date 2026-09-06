@@ -19,9 +19,195 @@ h2{font-size:19px;margin-top:30px}
 .date:hover,.date.active{background:#28743b;color:#fff;border-color:#28743b}
 .date strong{display:block;font-size:15px}
 .date small{display:block;margin-top:5px}
-@media(max-width:600px){.dates{grid-template-columns:repeat(2,1fr)}}
-</style>
-</head>
+@media(max-width:600px){
+  .dates{grid-template-columns:repeat(2,1fr)}
+  .times{grid-template-columns:repeat(2,1fr)}
+
+  #previewSection .summary-row{
+    grid-template-columns:105px minmax(0,1fr);
+    gap:10px;
+    padding:9px 0;
+  }
+
+  #previewSection .summary-row span{
+    font-size:12px;
+  }
+
+  #previewSection .summary-row strong{
+    font-size:13px;
+  }
+}
+
+.times{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+
+.time{
+  border:1px solid #dce5dd;
+  border-radius:14px;
+  background:#fff;
+  padding:12px 8px;
+  text-align:center;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.time.active{
+  background:#28743b;
+  color:#fff;
+  border-color:#28743b;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.form-section{
+  margin-top:28px;
+  padding-top:22px;
+  border-top:1px solid #edf1ed;
+}
+
+.form-grid{
+  display:grid;
+  gap:13px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-size:13px;
+  color:#506057;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #d9e2da;
+  border-radius:13px;
+  padding:12px 13px;
+  font:inherit;
+  outline:none;
+  background:#fff;
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color:#28743b;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.summary{
+  margin-top:20px;
+  background:#f6faf6;
+  border:1px solid #e1ebe2;
+  border-radius:17px;
+  padding:16px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:7px 0;
+}
+
+.summary-row.total{
+  border-top:1px solid #dce5dd;
+  margin-top:7px;
+  padding-top:13px;
+  font-weight:bold;
+  color:#28743b;
+}
+
+#previewSection .summary-row{
+  display:grid;
+  grid-template-columns:120px minmax(0,1fr);
+  align-items:start;
+  gap:14px;
+  min-height:42px;
+}
+
+#previewSection .summary-row span{
+  font-size:13px;
+  color:#607067;
+}
+
+#previewSection .summary-row strong{
+  text-align:left;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+
+.submit{
+  width:100%;
+  margin-top:16px;
+  border:0;
+  border-radius:15px;
+  padding:14px;
+  background:#28743b;
+  color:#fff;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.submit:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.message{
+  display:none;
+  margin-top:13px;
+  padding:12px;
+  border-radius:13px;
+  background:#fff1f1;
+  color:#9b3030;
+  line-height:1.8;
+}
+
+.success{
+  margin-top:22px;
+  padding:20px;
+  border-radius:18px;
+  background:#edf8ef;
+  border:1px solid #d8ecd9;
+  text-align:center;
+}
+
+.tracking{
+  display:inline-block;
+  margin:10px 0;
+  padding:9px 15px;
+  background:#fff;
+  border-radius:11px;
+  font-size:20px;
+  font-weight:bold;
+  direction:ltr;
+  letter-spacing:1px;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select{
+  font-family: "Vazir", sans-serif !important;
+}
+\n</style>
+  <link rel="stylesheet" href="/admin/static/css/global-vazir.css">\n</head>
 <body>
 <main class="wrap">
 <a class="back" href="/booking/">← بازگشت به خدمات</a>
@@ -35,7 +221,7 @@ h2{font-size:19px;margin-top:30px}
 
 <div class="price">
 {% if service.price %}
-{{ "{:,}".format(service.price|int) }} تومان
+هر ساعت ویزیت متخصص {{ "{:,}".format(service.price|int) }} تومان
 {% else %}
 رایگان
 {% endif %}
@@ -45,56 +231,810 @@ h2{font-size:19px;margin-top:30px}
 <div id="dates" class="dates">
 <div class="date">در حال بارگذاری...</div>
 </div>
+
+<div id="timesSection" class="hidden" style="margin-top:28px">
+  <h2>۲. انتخاب ساعت شروع</h2>
+  <div id="times" class="times"></div>
+</div>
+
+<div id="durationSection" class="form-section hidden">
+  <h2>۳. مدت رزرو</h2>
+  <div id="durations" class="times"></div>
+</div>
+
+<div id="customerSection" class="form-section hidden">
+
+  <h2>۴. اطلاعات شما</h2>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label for="customerName">نام و نام خانوادگی *</label>
+      <input
+        id="customerName"
+        type="text"
+        autocomplete="name"
+        placeholder="نام و نام خانوادگی">
+    </div>
+
+    <div class="field">
+      <label for="customerPhone">شماره تماس *</label>
+      <input
+        id="customerPhone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel"
+        placeholder="مثلاً 09121234567">
+    </div>
+
+    <div class="field">
+      <label for="customerEmail">ایمیل</label>
+      <input
+        id="customerEmail"
+        type="email"
+        autocomplete="email"
+        placeholder="example@email.com">
+    </div>
+
+    <div class="field">
+      <label for="plantName">نام گیاه</label>
+      <input
+        id="plantName"
+        type="text"
+        placeholder="مثلاً فیکوس">
+    </div>
+
+    <div class="field">
+      <label for="plantDescription">شرح مشکل گیاه</label>
+      <textarea
+        id="plantDescription"
+        placeholder="علائم و توضیحات مشکل گیاه..."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="notes">توضیحات تکمیلی</label>
+      <textarea
+        id="notes"
+        placeholder="هر توضیح یا درخواست دیگری..."></textarea>
+    </div>
+
+  </div>
+
+  <div id="message" class="message"></div>
+
+  <button id="submitBtn" class="submit" type="button">
+    پیش‌نمایش رزرو
+  </button>
+
+  <div id="previewSection" class="success hidden">
+    <h2>پیش‌نمایش رزرو</h2>
+
+    <div class="summary">
+      <div class="summary-row">
+        <span>خدمت</span>
+        <strong id="previewService">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>تاریخ</span>
+        <strong id="previewDate">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>بازه زمانی</span>
+        <strong id="previewTime">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>مدت</span>
+        <strong id="previewDuration">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>مشتری</span>
+        <strong id="previewCustomer">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>شماره تماس</span>
+        <strong id="previewPhone">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>گیاه</span>
+        <strong id="previewPlant">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>شرح مشکل</span>
+        <strong id="previewProblem">—</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>توضیحات</span>
+        <strong id="previewNotes">—</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>مبلغ نهایی</span>
+        <strong id="previewAmount">—</strong>
+      </div>
+    </div>
+
+    <button id="confirmBtn" class="submit" type="button">
+      تأیید و ثبت نهایی
+    </button>
+  </div>
+
+</div>
+
+<div id="success" class="success hidden">
+  <h2>رزرو شما با موفقیت ثبت شد 🌱</h2>
+  <p>وضعیت رزرو: در انتظار تأیید</p>
+  <div>کد پیگیری</div>
+  <div id="trackingCode" class="tracking"></div>
+  <p>این کد را برای پیگیری رزرو نگه دارید.</p>
+</div>
+
 </section>
 </main>
 
 <script>
-const serviceId={{ service.id }};
-const dates=document.getElementById("dates");
+const serviceId = {{ service.id }};
+const serviceTitle = {{ service.title | tojson }};
+const basePrice = {{ service.price|int }};
 
-function jalaliToday(){
-  const d=new Date();
-  const f=new Intl.DateTimeFormat("fa-IR-u-ca-persian",{year:"numeric",month:"2-digit",day:"2-digit"});
-  return f.format(d).replace(/\u200e/g,"").replace(/\//g,"-").replace(/[۰-۹]/g,x=>"۰۱۲۳۴۵۶۷۸۹".indexOf(x));
-}
+const dates = document.getElementById("dates");
+const timesSection = document.getElementById("timesSection");
+const times = document.getElementById("times");
 
-async function loadDates(){
-  const today=jalaliToday();
-  const [y,m,d]=today.split("-").map(Number);
-  dates.innerHTML="";
-  for(let i=0;i<7;i++){
-    const dt=new Date();
-    dt.setDate(dt.getDate()+i);
-    const parts=new Intl.DateTimeFormat("en-US-u-ca-persian",{year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(dt);
-    const yy=parts.find(x=>x.type==="year").value;
-    const mm=parts.find(x=>x.type==="month").value;
-    const dd=parts.find(x=>x.type==="day").value;
-    const value=`${yy}-${mm}-${dd}`;
+const durationSection = document.getElementById("durationSection");
+const durations = document.getElementById("durations");
 
-    const el=document.createElement("button");
-    el.className="date";
-    el.innerHTML=`<strong>${new Intl.DateTimeFormat("fa-IR-u-ca-persian",{weekday:"long"}).format(dt)}</strong><small>${value}</small>`;
-    el.onclick=()=>selectDate(el,value);
-    dates.appendChild(el);
+const customerSection = document.getElementById("customerSection");
+const submitBtn = document.getElementById("submitBtn");
+
+const message = document.getElementById("message");
+const previewSection = document.getElementById("previewSection");
+const confirmBtn = document.getElementById("confirmBtn");
+const success = document.getElementById("success");
+
+let selectedDate = null;
+let selectedSlot = null;
+let selectedDuration = null;
+let selectedEndTime = null;
+let selectedAmount = 0;
+
+const draftKey = "greenVitaBookingDraft";
+
+let savedDraft = null;
+
+const restoringDraft =
+  sessionStorage.getItem(draftKey) !== null;
+
+try{
+  const rawDraft = sessionStorage.getItem(draftKey);
+
+  if(rawDraft){
+    const parsedDraft = JSON.parse(rawDraft);
+
+    if(
+      parsedDraft &&
+      Number(parsedDraft.service_id) === Number(serviceId)
+    ){
+      savedDraft = parsedDraft;
+    }
   }
+}catch(error){
+  savedDraft = null;
 }
 
-async function selectDate(el,date){
-  document.querySelectorAll(".date").forEach(x=>x.classList.remove("active"));
-  el.classList.add("active");
-
-  const r=await fetch(`/booking/api/slots/${serviceId}/${date}`);
-  const data=await r.json();
-
-  if(!data.slots?.length){
-    alert("برای این تاریخ زمانی موجود نیست.");
+function restoreCustomerFields(){
+  if(!savedDraft){
     return;
   }
 
-  alert("زمان‌های موجود: "+data.slots.map(x=>x.time).join(" - "));
+  document.getElementById("customerName").value =
+    savedDraft.customer_name || "";
+
+  document.getElementById("customerPhone").value =
+    savedDraft.customer_phone || "";
+
+  document.getElementById("customerEmail").value =
+    savedDraft.customer_email || "";
+
+  document.getElementById("plantName").value =
+    savedDraft.plant_name || "";
+
+  document.getElementById("plantDescription").value =
+    savedDraft.plant_description || "";
+
+  document.getElementById("notes").value =
+    savedDraft.notes || "";
 }
 
+function englishDigits(value){
+  return String(value)
+    .replace(/[۰-۹]/g, x => "۰۱۲۳۴۵۶۷۸۹".indexOf(x))
+    .replace(/[٠-٩]/g, x => "٠١٢٣٤٥٦٧٨٩".indexOf(x));
+}
+
+function jalaliParts(date){
+  const parts = new Intl.DateTimeFormat(
+    "en-US-u-ca-persian",
+    {
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
+    }
+  ).formatToParts(date);
+
+  return {
+    year: parts.find(x => x.type === "year").value,
+    month: parts.find(x => x.type === "month").value,
+    day: parts.find(x => x.type === "day").value
+  };
+}
+
+function showError(text){
+  message.textContent = text;
+  message.style.display = "block";
+}
+
+function clearError(){
+  message.textContent = "";
+  message.style.display = "none";
+}
+
+function formatPrice(value){
+  return Number(value).toLocaleString("fa-IR") + " تومان";
+}
+
+function resetAfterDateChange(){
+  selectedSlot = null;
+  selectedDuration = null;
+  selectedEndTime = null;
+  selectedAmount = 0;
+
+  durationSection.classList.add("hidden");
+  customerSection.classList.add("hidden");
+  previewSection.classList.add("hidden");
+
+  durations.innerHTML = "";
+}
+
+function resetAfterTimeChange(){
+  selectedDuration = null;
+  selectedEndTime = null;
+  selectedAmount = 0;
+
+  customerSection.classList.add("hidden");
+  previewSection.classList.add("hidden");
+
+  durations.innerHTML = "";
+}
+
+function loadDates(){
+  dates.innerHTML = "";
+
+  const weekday = new Intl.DateTimeFormat(
+    "fa-IR-u-ca-persian",
+    {weekday:"long"}
+  );
+
+  for(let i = 0; i < 7; i++){
+    const dt = new Date();
+
+    dt.setHours(12,0,0,0);
+    dt.setDate(dt.getDate() + i);
+
+    const p = jalaliParts(dt);
+    const value = `${p.year}-${p.month}-${p.day}`;
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "date";
+    button.dataset.date = value;
+
+    button.innerHTML =
+      `<strong>${weekday.format(dt)}</strong>
+       <small>${value}</small>`;
+
+    button.addEventListener(
+      "click",
+      () => selectDate(button, value)
+    );
+
+    dates.appendChild(button);
+  }
+
+  let targetDate = null;
+
+  if(savedDraft && savedDraft.selected_date){
+    targetDate =
+      dates.querySelector(
+        `.date[data-date="${savedDraft.selected_date}"]`
+      );
+  }
+
+  const first = dates.querySelector(".date");
+
+  if(targetDate){
+    targetDate.click();
+  }else if(first){
+    first.click();
+  }
+}
+
+async function selectDate(button, date){
+  clearError();
+
+  document.querySelectorAll(".date")
+    .forEach(x => x.classList.remove("active"));
+
+  button.classList.add("active");
+
+  selectedDate = date;
+
+  resetAfterDateChange();
+
+  timesSection.classList.remove("hidden");
+
+  times.innerHTML =
+    '<div class="loading">در حال دریافت ساعت‌های آزاد...</div>';
+
+  try{
+    const response = await fetch(
+      `/booking/api/slots/${serviceId}/${date}`,
+      {
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if(!response.ok || data.error){
+      times.innerHTML =
+        `<div class="empty">${data.error || "خطا در دریافت زمان‌ها."}</div>`;
+      return;
+    }
+
+    if(!data.slots || !data.slots.length){
+      times.innerHTML =
+        '<div class="empty">برای این تاریخ بازه قابل رزرو باقی نمانده است.</div>';
+      return;
+    }
+
+    times.innerHTML = "";
+
+    data.slots.forEach(slot => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "time";
+      button.dataset.slotId = String(slot.id);
+      button.textContent = slot.time;
+
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".time")
+          .forEach(x => x.classList.remove("active"));
+
+        button.classList.add("active");
+
+        selectedSlot = slot;
+
+        resetAfterTimeChange();
+
+        const validDurations =
+          slot.available_durations || [];
+
+        if(!validDurations.length){
+          showError(
+            "برای این ساعت مدت رزرو معتبری وجود ندارد."
+          );
+          return;
+        }
+
+        durationSection.classList.remove("hidden");
+
+        validDurations.forEach(option => {
+          const durationButton =
+            document.createElement("button");
+
+          durationButton.type = "button";
+          durationButton.className = "time";
+          durationButton.dataset.durationHours =
+            String(option.hours);
+
+          const hourText =
+            option.hours === 1
+              ? "۱ ساعت"
+              : `${option.hours} ساعت`;
+
+          durationButton.innerHTML =
+            `<strong>${hourText}</strong>
+             <small>پایان: ${option.end_time}</small>`;
+
+          durationButton.addEventListener(
+            "click",
+            () => selectDuration(
+              durationButton,
+              option
+            )
+          );
+
+          durations.appendChild(durationButton);
+        });
+
+        if(savedDraft && savedDraft.duration_hours){
+          const savedDurationButton =
+            durations.querySelector(
+              `.time[data-duration-hours="${savedDraft.duration_hours}"]`
+            );
+
+          if(savedDurationButton){
+            savedDurationButton.click();
+          }
+        }
+
+        if(!restoringDraft){
+          durationSection.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+          });
+        }
+      });
+
+      times.appendChild(button);
+    });
+
+    if(savedDraft && savedDraft.slot_id){
+      const savedTimeButton =
+        times.querySelector(
+          `.time[data-slot-id="${savedDraft.slot_id}"]`
+        );
+
+      if(savedTimeButton){
+        savedTimeButton.click();
+      }
+    }
+
+  }catch(error){
+    times.innerHTML =
+      '<div class="empty">ارتباط با سرور برقرار نشد.</div>';
+  }
+}
+
+function selectDuration(button, option){
+  clearError();
+
+  document.querySelectorAll("#durations .time")
+    .forEach(x => x.classList.remove("active"));
+
+  button.classList.add("active");
+
+  selectedDuration = option.hours;
+  selectedEndTime = option.end_time;
+  selectedAmount = option.amount;
+
+
+  customerSection.classList.remove("hidden");
+
+  previewSection.classList.add("hidden");
+
+  if(!restoringDraft){
+    customerSection.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+}
+
+function getValue(id){
+  return document.getElementById(id).value.trim();
+}
+
+function updatePreview(){
+  const customerName = getValue("customerName");
+  const customerPhone = englishDigits(
+    getValue("customerPhone")
+  );
+  const customerEmail = getValue("customerEmail");
+  const plantName = getValue("plantName");
+  const plantDescription = getValue("plantDescription");
+  const notes = getValue("notes");
+
+  if(!selectedSlot || !selectedDuration){
+    showError(
+      "لطفاً تاریخ، ساعت شروع و مدت رزرو را انتخاب کنید."
+    );
+    return false;
+  }
+
+  if(!customerName){
+    showError("نام و نام خانوادگی را وارد کنید.");
+    return false;
+  }
+
+  if(!customerPhone){
+    showError("شماره تماس را وارد کنید.");
+    return false;
+  }
+
+  document.getElementById("previewService").textContent =
+    serviceTitle;
+
+  document.getElementById("previewDate").textContent =
+    selectedDate;
+
+  document.getElementById("previewTime").textContent =
+    `${selectedSlot.time} تا ${selectedEndTime}`;
+
+  document.getElementById("previewDuration").textContent =
+    `${selectedDuration} ساعت — ${selectedSlot.time} تا ${selectedEndTime}`;
+
+  document.getElementById("previewCustomer").textContent =
+    customerName;
+
+  document.getElementById("previewPhone").textContent =
+    customerPhone;
+
+  document.getElementById("previewPlant").textContent =
+    plantName || "—";
+
+  document.getElementById("previewProblem").textContent =
+    plantDescription || "—";
+
+  document.getElementById("previewNotes").textContent =
+    notes || "—";
+
+  document.getElementById("previewAmount").textContent =
+    formatPrice(selectedAmount);
+
+  previewSection.classList.remove("hidden");
+
+  previewSection.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+  return true;
+}
+
+submitBtn.addEventListener(
+  "click",
+  () => {
+    clearError();
+
+    const customerName = getValue("customerName");
+    const customerPhone = englishDigits(
+      getValue("customerPhone")
+    );
+
+    const customerEmail =
+      getValue("customerEmail");
+
+    const plantName =
+      getValue("plantName");
+
+    const plantDescription =
+      getValue("plantDescription");
+
+    const notes =
+      getValue("notes");
+
+    if(!selectedSlot || !selectedDuration){
+      showError(
+        "لطفاً تاریخ، ساعت شروع و مدت رزرو را انتخاب کنید."
+      );
+      return;
+    }
+
+    if(!customerName){
+      showError("نام و نام خانوادگی را وارد کنید.");
+      return;
+    }
+
+    if(!customerPhone){
+      showError("شماره تماس را وارد کنید.");
+      return;
+    }
+
+    const draft = {
+      service_id: serviceId,
+      service_title: serviceTitle,
+      selected_date: selectedDate,
+
+      slot_id: selectedSlot.id,
+      slot_time: selectedSlot.time,
+      end_time: selectedEndTime,
+
+      duration_hours: selectedDuration,
+      amount: selectedAmount,
+
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      customer_email: customerEmail,
+
+      plant_name: plantName,
+      plant_description: plantDescription,
+      notes: notes
+    };
+
+    try{
+      sessionStorage.setItem(
+        "greenVitaBookingDraft",
+        JSON.stringify(draft)
+      );
+    }catch(error){
+      showError(
+        "ذخیره اطلاعات موقت رزرو انجام نشد."
+      );
+      return;
+    }
+
+    window.location.href =
+      `/booking/service/${serviceId}/preview/`;
+  }
+);
+
+confirmBtn.addEventListener(
+  "click",
+  async () => {
+    clearError();
+
+    if(!selectedSlot || !selectedDuration){
+      showError("اطلاعات زمان رزرو کامل نیست.");
+      return;
+    }
+
+    const customerName = getValue("customerName");
+    const customerPhone = englishDigits(
+      getValue("customerPhone")
+    );
+
+    const customerEmail =
+      getValue("customerEmail");
+
+    const plantName =
+      getValue("plantName");
+
+    const plantDescription =
+      getValue("plantDescription");
+
+    const notes =
+      getValue("notes");
+
+    if(!customerName || !customerPhone){
+      showError(
+        "نام و شماره تماس الزامی هستند."
+      );
+      return;
+    }
+
+    confirmBtn.disabled = true;
+    confirmBtn.textContent =
+      "در حال ثبت نهایی...";
+
+    const form = new FormData();
+
+    form.append(
+      "service_id",
+      serviceId
+    );
+
+    form.append(
+      "slot_id",
+      selectedSlot.id
+    );
+
+    form.append(
+      "duration_hours",
+      selectedDuration
+    );
+
+    form.append(
+      "customer_name",
+      customerName
+    );
+
+    form.append(
+      "customer_phone",
+      customerPhone
+    );
+
+    form.append(
+      "customer_email",
+      customerEmail
+    );
+
+    form.append(
+      "plant_name",
+      plantName
+    );
+
+    form.append(
+      "plant_description",
+      plantDescription
+    );
+
+    form.append(
+      "notes",
+      notes
+    );
+
+    try{
+      const response = await fetch(
+        "/booking/api/book",
+        {
+          method:"POST",
+          body:form,
+          headers:{
+            "Accept":"application/json"
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      if(!response.ok || !data.success){
+        showError(
+          data.error || "ثبت رزرو انجام نشد."
+        );
+
+        confirmBtn.disabled = false;
+        confirmBtn.textContent =
+          "تأیید و ثبت نهایی";
+
+        return;
+      }
+
+      customerSection.classList.add("hidden");
+      durationSection.classList.add("hidden");
+      timesSection.classList.add("hidden");
+      previewSection.classList.add("hidden");
+
+      document.getElementById("trackingCode")
+        .textContent = data.tracking_code;
+
+      success.classList.remove("hidden");
+
+      success.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }catch(error){
+      showError(
+        "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید."
+      );
+
+      confirmBtn.disabled = false;
+      confirmBtn.textContent =
+        "تأیید و ثبت نهایی";
+    }
+  }
+);
+
+restoreCustomerFields();
 loadDates();
+
+if(savedDraft){
+  requestAnimationFrame(() => {
+    const dateTitle =
+      document.getElementById("dateSelectionTitle");
+
+    if(dateTitle){
+      dateTitle.scrollIntoView({
+        behavior:"auto",
+        block:"start"
+      });
+    }
+  });
+}
 </script>
 </body>
 </html>

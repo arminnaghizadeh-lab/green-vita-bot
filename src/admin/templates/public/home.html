@@ -1,0 +1,135 @@
+{% extends "public/base.html" %}
+
+{% block title %}Green Vita | کلینیک گیاه پزشکی{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container hero-grid">
+
+        <div>
+            <span class="eyebrow">🌱 کلینیک تخصصی گیاه پزشکی Green Vita</span>
+
+            <h1>
+                حال خوب گیاهت،
+                از یک تشخیص درست شروع می‌شود.
+            </h1>
+
+            <p>
+                خدمات تخصصی تشخیص، ویزیت و مشاوره گیاهان را با رویکرد علمی
+                و دلسوزانه دریافت کنید و برای سلامت بهتر گیاهان‌تان قدم بردارید.
+            </p>
+
+            <div class="hero-actions">
+                <a href="/booking/" class="btn btn-primary">
+                    رزرو آنلاین
+                </a>
+
+                <a href="/booking/track/" class="btn btn-secondary">
+                    پیگیری / ویرایش رزرو
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-card-content">
+                <strong>🌿 Green Vita</strong>
+                <span>
+                    تشخیص دقیق، برنامه مراقبت مناسب و همراهی تخصصی
+                    برای گیاهان آپارتمانی، فضای باز و باغات.
+                </span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="section-head">
+            <h2>خدمات ما</h2>
+            <p>خدمت موردنظر را انتخاب کنید و زمان مناسب خود را رزرو کنید.</p>
+        </div>
+
+        <div class="services">
+
+            {% set icons = ["🪴", "🌳", "🌿", "📞"] %}
+
+            {% for service in services %}
+            <article class="service">
+
+                <div class="service-icon">
+                    {{ icons[loop.index0] if loop.index0 < 4 else "🌱" }}
+                </div>
+
+                <h3>{{ service.title }}</h3>
+
+                <p>
+                    {{ service.description or "مشاوره و خدمت تخصصی گیاه پزشکی گرین ویتا." }}
+                </p>
+
+                {% if service.price %}
+                <div class="service-price">
+                    هر ساعت ویزیت متخصص
+                    {{ "{:,}".format(service.price|int) }}
+                    تومان
+                </div>
+                {% else %}
+                <div class="service-price">رایگان</div>
+                {% endif %}
+
+                <a href="/booking/service/{{ service.id }}/" class="btn btn-primary">
+                    انتخاب خدمت
+                </a>
+
+            </article>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <strong>🔬 تشخیص تخصصی</strong>
+                <p>تصمیم‌گیری بر پایه بررسی دقیق وضعیت گیاه و علائم آن.</p>
+            </div>
+
+            <div class="feature">
+                <strong>📅 رزرو آنلاین</strong>
+                <p>انتخاب خدمت، تاریخ و زمان مناسب در چند مرحله ساده.</p>
+            </div>
+
+            <div class="feature">
+                <strong>🔁 پیگیری و ویرایش</strong>
+                <p>رزرو خود را با کد پیگیری مشاهده و در زمان مجاز ویرایش کنید.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="tracking">
+
+            <div>
+                <h2>قبلاً رزرو کرده‌اید؟</h2>
+                <p>با کد پیگیری و شماره تماس، وضعیت رزرو را مشاهده کنید.</p>
+            </div>
+
+            <a href="/booking/track/" class="btn">
+                پیگیری رزرو
+            </a>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
