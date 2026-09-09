@@ -26,8 +26,8 @@ self.addEventListener("push", event => {
       data.title || "گرین ویتا",
       {
         body: data.body || "درخواست جدیدی ثبت شده است.",
-        icon: "/static/icon-192-v2.png",
-        badge: "/static/icon-192-v2.png",
+
+
         data: { url: data.url || "/visits" }
       }
     );

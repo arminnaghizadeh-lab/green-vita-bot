@@ -2,11 +2,24 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
+
+        
+    
+    
+    <link rel="manifest" href="/static/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="default">
+    <meta name="apple-mobile-web-app-title"
+          content="Green Vita">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>داشبورد | {{ app_name }}</title>
     <link rel="stylesheet" href="/static/css/admin.css">
     <link rel="stylesheet" href="/static/css/dashboard-redesign.css">
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
 <!-- GV_PWA_INSTALL_STYLE_V1 -->
 <style>
 .gv-dashboard-actions {
@@ -51,6 +64,9 @@
     }
 }
 </style>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
 </head>
 <body class="gv-dashboard">
 <header class="topbar">
@@ -78,11 +94,11 @@
 
     <nav class="gv-sidebar-nav">
         <a href="/dashboard/" class="active">🏠 داشبورد</a>
-        <a href="/visits" class="gv-visits-nav-link">
+        <a href="/reservations" class="gv-visits-nav-link">
     📅 درخواست‌های ویزیت
     <span id="gv-pending-visits-badge" class="gv-pending-badge" hidden>0</span>
 </a>
-        <a href="/calendar">🗓 تقویم ویزیت‌ها</a>
+        <a href="/reservations">🗓 تقویم ویزیت‌ها</a>
         <a href="/contactus/">🔗 Smart Bio</a>
     </nav>
 
@@ -99,7 +115,7 @@
             <p>مدیریت هوشمند کلینیک گیاهپزشکی گرین ویتا</p>
         </div>
         <div class="gv-dashboard-actions">
-            <a class="primary-link" href="/visits">مدیریت درخواست‌های ویزیت ←</a>
+            <a class="primary-link" href="/reservations">مدیریت رزروها ←</a>
             <button type="button" id="gv-enable-push" class="gv-push-btn" hidden>🔔 فعال‌سازی اعلان‌های پنل</button>
     <button type="button" id="gv-install-app" class="gv-install-btn" hidden>
                 📱 افزودن پنل به صفحه اصلی
@@ -111,12 +127,12 @@
 
         <div class="gv-dashboard-calendar-head">
             <div>
-                <h2>تقویم سریع ویزیت‌ها</h2>
-                <p>دسترسی سریع به برنامه و زمان‌بندی ویزیت‌ها</p>
+                <h2>مرکز مدیریت رزروها</h2>
+                <p>تمام رزروها و برنامه ویزیت‌ها را از یکجا مدیریت کنید.</p>
             </div>
 
-            <a href="/calendar" class="primary-link">
-                تقویم کامل ←
+            <a href="/reservations" class="primary-link">
+                ورود به مدیریت رزروها ←
             </a>
         </div>
 
@@ -337,7 +353,99 @@
 
     </section>
 
-    <section class="stats">
+    
+<!-- GV_ADMIN_OVERVIEW_V1 -->
+<section class="gv-admin-overview" id="gv-admin-overview">
+
+    <div class="gv-overview-head">
+        <div>
+            <span class="gv-eyebrow">مرکز کنترل کلینیک</span>
+            <h2>داشبورد مدیریتی</h2>
+            <p>وضعیت امروز، درخواست‌های ویزیت و فعالیت کلینیک در یک نگاه</p>
+        </div>
+
+        <button
+            type="button"
+            class="gv-overview-refresh"
+            id="gv-overview-refresh"
+        >
+            ↻ بروزرسانی
+        </button>
+    </div>
+
+    <div class="gv-overview-grid">
+
+        <div class="gv-overview-card gv-card-primary">
+            <div class="gv-card-icon">📞</div>
+            <div>
+                <span>درخواست‌های در انتظار</span>
+                <strong id="gv-overview-pending">—</strong>
+            </div>
+            <a href="/visits">مشاهده ←</a>
+        </div>
+
+        <div class="gv-overview-card">
+            <div class="gv-card-icon">📅</div>
+            <div>
+                <span>برنامه امروز</span>
+                <strong id="gv-overview-today">—</strong>
+            </div>
+            <a href="/calendar">تقویم ←</a>
+        </div>
+
+        <div class="gv-overview-card">
+            <div class="gv-card-icon">✅</div>
+            <div>
+                <span>ویزیت‌های زمان‌بندی‌شده</span>
+                <strong id="gv-overview-scheduled">—</strong>
+            </div>
+            <a href="/reservations">رزروها ←</a>
+        </div>
+
+        <div class="gv-overview-card">
+            <div class="gv-card-icon">🔗</div>
+            <div>
+                <span>کلیک‌های Smart Bio در ۷ روز</span>
+                <strong id="gv-overview-smartbio">—</strong>
+            </div>
+            <a href="/contactus/">Smart Bio ←</a>
+        </div>
+
+    </div>
+
+    <div class="gv-overview-bottom">
+
+        <div class="gv-overview-mini">
+            <span>👥 کاربران</span>
+            <strong id="gv-total-users">—</strong>
+        </div>
+
+        <div class="gv-overview-mini">
+            <span>🌱 پرونده گیاه</span>
+            <strong id="gv-total-plants">—</strong>
+        </div>
+
+        <div class="gv-overview-mini">
+            <span>🩺 تشخیص‌ها</span>
+            <strong id="gv-total-diagnoses">—</strong>
+        </div>
+
+        <div class="gv-overview-mini">
+            <span>🔍 شناسایی‌ها</span>
+            <strong id="gv-total-identifications">—</strong>
+        </div>
+
+        <div class="gv-overview-mini">
+            <span>📞 کل درخواست ویزیت</span>
+            <strong id="gv-total-visits">—</strong>
+        </div>
+
+    </div>
+
+</section>
+<!-- /GV_ADMIN_OVERVIEW_V1 -->
+
+<section class="stats">
         <div class="stat-card"><span>👥 کاربران</span><strong>{{ stats.users }}</strong></div>
         <div class="stat-card"><span>🌱 پرونده گیاه</span><strong>{{ stats.plants }}</strong></div>
         <div class="stat-card"><span>🩺 تشخیص‌ها</span><strong>{{ stats.diagnoses }}</strong></div>
@@ -345,6 +453,85 @@
         <div class="stat-card highlight"><span>📞 درخواست ویزیت</span><strong>{{ stats.visits }}</strong></div>
     </section>
 </main>
+
+
+<script>
+/* GV_ADMIN_OVERVIEW_JS_V1 */
+(function () {
+    "use strict";
+
+    const $ = (id) => document.getElementById(id);
+
+    async function loadOverview() {
+        const refresh = $("gv-overview-refresh");
+
+        if (refresh) {
+            refresh.disabled = true;
+            refresh.textContent = "در حال بروزرسانی…";
+        }
+
+        try {
+            const response = await fetch("/api/overview", {
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("overview request failed");
+            }
+
+            const data = await response.json();
+
+            $("gv-overview-pending").textContent =
+                data.visits.pending ?? 0;
+
+            $("gv-overview-today").textContent =
+                data.today.total ?? 0;
+
+            $("gv-overview-scheduled").textContent =
+                data.visits.scheduled ?? 0;
+
+            $("gv-overview-smartbio").textContent =
+                data.smart_bio.last_7d ?? 0;
+
+            $("gv-total-users").textContent =
+                data.totals.users ?? 0;
+
+            $("gv-total-plants").textContent =
+                data.totals.plants ?? 0;
+
+            $("gv-total-diagnoses").textContent =
+                data.totals.diagnoses ?? 0;
+
+            $("gv-total-identifications").textContent =
+                data.totals.identifications ?? 0;
+
+            $("gv-total-visits").textContent =
+                data.totals.visits ?? 0;
+
+        } catch (error) {
+            console.error("Green Vita overview:", error);
+        } finally {
+            if (refresh) {
+                refresh.disabled = false;
+                refresh.textContent = "↻ بروزرسانی";
+            }
+        }
+    }
+
+    $("gv-overview-refresh")?.addEventListener(
+        "click",
+        loadOverview
+    );
+
+    loadOverview();
+
+    // خودکار هر 60 ثانیه
+    setInterval(loadOverview, 60000);
+})();
+</script>
 
 <script>
 /* GV_DASHBOARD_JALALI_CALENDAR_V1 */
@@ -703,7 +890,7 @@
 
     async function updatePendingVisitsBadge() {
         try {
-            const response = await fetch("/api/visits/pending-count", {
+            const response = await fetch("/dashboard/api/badge-count", {
                 credentials: "same-origin",
                 cache: "no-store"
             });
@@ -747,7 +934,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js", {
+    navigator.serviceWorker.register("/sw.js?v=3", {
         scope: "/"
     }).then(function (registration) {
         console.log("Green Vita Service Worker registered:", registration.scope);
@@ -836,7 +1023,7 @@ if ("serviceWorker" in navigator) {
 
   async function syncBadge() {
     try {
-      const r = await fetch("/api/visits/pending-count", {
+      const r = await fetch("/dashboard/api/badge-count", {
         cache: "no-store",
         credentials: "same-origin"
       });
@@ -879,7 +1066,7 @@ if ("serviceWorker" in navigator) {
   }
 
   async function getRegistration() {
-    return await navigator.serviceWorker.register("/sw.js?v=2", {scope: "/"});
+    return await navigator.serviceWorker.register("/sw.js?v=3", {scope: "/"});
   }
 
   async function syncPushState() {

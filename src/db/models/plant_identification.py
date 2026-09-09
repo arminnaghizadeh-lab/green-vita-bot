@@ -70,6 +70,14 @@ class PlantIdentification(Base, TimestampMixin):
 
     expert_visit_requested: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
+    # کانال ثبت درخواست ویزیت
+    # telegram / bale / legacy
+    expert_visit_source: Mapped[str | None] = mapped_column(
+        String(32),
+        nullable=True,
+        index=True,
+    )
+
     # مدیریت درخواست ویزیت متخصص (پنل ادمین)
     visit_status: Mapped[VisitStatus] = mapped_column(
         Enum(

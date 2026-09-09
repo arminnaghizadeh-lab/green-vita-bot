@@ -39,7 +39,7 @@
         <div class="gv-calendar-toolbar">
 
             <button type="button" class="gv-icon-btn" id="calendar-prev">
-                ‹
+                ۷ روز قبل
             </button>
 
             <button type="button" class="gv-today-btn" id="calendar-today">
@@ -51,7 +51,7 @@
             </div>
 
             <button type="button" class="gv-icon-btn" id="calendar-next">
-                ›
+                ۷ روز بعد
             </button>
 
         </div>
@@ -326,6 +326,7 @@
     let requests = [];
 
     let selectedDiagnosisId = null;
+    let selectedIdentificationId = null;
     let selectedAppointmentId = null;
 
     function pad(value) {
@@ -443,6 +444,24 @@
             now.getFullYear(),
             now.getMonth() + 1,
             now.getDate()
+        );
+    }
+
+    function jalaliAddDays(jalali, delta) {
+        const date = jalaliToDate(
+            jalali[0],
+            jalali[1],
+            jalali[2],
+            12,
+            0
+        );
+
+        date.setDate(date.getDate() + delta);
+
+        return gregorianToJalali(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate()
         );
     }
 
@@ -584,27 +603,25 @@
         const first = jalaliToDate(
             currentJalali[0],
             currentJalali[1],
-            1,
+            currentJalali[2],
             0,
             0
         );
 
-        const lastDay = jalaliMonthLength(
-            currentJalali[0],
-            currentJalali[1]
-        );
+        const lastExclusiveJalali =
+            jalaliAddDays(currentJalali, 7);
 
-        const last = jalaliToDate(
-            currentJalali[0],
-            currentJalali[1],
-            lastDay,
-            23,
-            59
+        const lastExclusive = jalaliToDate(
+            lastExclusiveJalali[0],
+            lastExclusiveJalali[1],
+            lastExclusiveJalali[2],
+            0,
+            0
         );
 
         const params = new URLSearchParams({
             start_at: first.toISOString(),
-            end_at: last.toISOString()
+            end_at: lastExclusive.toISOString()
         });
 
         const data = await gvApi(
@@ -644,44 +661,61 @@
 
         container.innerHTML = `
             <div class="gv-request-list">
-                ${requests.map(item => `
-                    <button
-                        type="button"
-                        class="gv-request-item ${
-                            Number(item.diagnosis_id) === Number(selectedDiagnosisId)
-                                ? "is-selected"
-                                : ""
-                        }"
-                        data-calendar-request="${item.diagnosis_id}"
-                    >
-                        <strong>
-                            ${item.user_name || "بدون نام"}
-                        </strong>
+                ${requests.map(item => {
+                    const selected =
+                        item.kind === "identification"
+                            ? Number(item.identification_id) === Number(selectedIdentificationId)
+                            : Number(item.diagnosis_id) === Number(selectedDiagnosisId);
 
-                        <span>
-                            ${item.plant_name || "گیاه نامشخص"}
-                        </span>
+                    return `
+                        <button
+                            type="button"
+                            class="gv-request-item ${selected ? "is-selected" : ""}"
+                            data-calendar-request="${item.record_id || item.diagnosis_id || item.identification_id}"
+                            data-calendar-request-kind="${item.kind || "diagnosis"}"
+                        >
+                            <strong>
+                                ${item.user_name || "بدون نام"}
+                            </strong>
 
-                        <small>
-                            ${item.disease_name || "بدون مشکل ثبت‌شده"}
-                        </small>
-                    </button>
-                `).join("")}
+                            <span>
+                                ${item.plant_name || "گیاه نامشخص"}
+                            </span>
+
+                            <small>
+                                ${item.disease_name || "بدون مشکل ثبت‌شده"}
+                            </small>
+
+                            <small>
+                                ${item.source_label || item.source || ""}
+                            </small>
+                        </button>
+                    `;
+                }).join("")}
             </div>
         `;
     }
 
-    function selectRequest(diagnosisId) {
+    function selectRequest(kind, recordId) {
         const item = requests.find(
-            x => Number(x.diagnosis_id) === Number(diagnosisId)
+            x =>
+                (x.kind || "diagnosis") === kind &&
+                Number(x.record_id || x.diagnosis_id || x.identification_id) === Number(recordId)
         );
 
         if (!item) {
             return;
         }
 
-        selectedDiagnosisId = Number(item.diagnosis_id);
+        selectedDiagnosisId = null;
+        selectedIdentificationId = null;
         selectedAppointmentId = null;
+
+        if (kind === "identification") {
+            selectedIdentificationId = Number(recordId);
+        } else {
+            selectedDiagnosisId = Number(recordId);
+        }
 
         renderRequestPanel();
 
@@ -699,45 +733,30 @@
         const title =
             document.getElementById("calendar-title");
 
+        const firstDay = currentJalali;
+        const lastDay = jalaliAddDays(
+            currentJalali,
+            6
+        );
+
         title.textContent =
-            `${PERSIAN_MONTHS[currentJalali[1] - 1]} ${formatPersianNumber(currentJalali[0])}`;
+            `${formatPersianNumber(firstDay[2])} ${PERSIAN_MONTHS[firstDay[1] - 1]} ${formatPersianNumber(firstDay[0])}`
+            + ` تا `
+            + `${formatPersianNumber(lastDay[2])} ${PERSIAN_MONTHS[lastDay[1] - 1]} ${formatPersianNumber(lastDay[0])}`;
 
         grid.innerHTML = "";
 
-        const firstWeekday = jalaliDayOfWeek(
-            currentJalali[0],
-            currentJalali[1],
-            1
-        );
-
-        for (let i = 0; i < firstWeekday; i++) {
-            const empty = document.createElement("div");
-
-            empty.className =
-                "gv-calendar-day gv-calendar-day-empty";
-
-            grid.appendChild(empty);
-        }
-
-        const today = jalaliNow();
-
-        const length = jalaliMonthLength(
-            currentJalali[0],
-            currentJalali[1]
-        );
-
-        for (let day = 1; day <= length; day++) {
-            const jalali = [
-                currentJalali[0],
-                currentJalali[1],
-                day
-            ];
+        for (let offset = 0; offset < 7; offset++) {
+            const jalali =
+                jalaliAddDays(currentJalali, offset);
 
             const cell =
                 document.createElement("button");
 
             cell.type = "button";
             cell.className = "gv-calendar-day";
+
+            const today = jalaliNow();
 
             if (sameJalali(jalali, selectedJalali)) {
                 cell.classList.add("is-selected");
@@ -757,7 +776,11 @@
 
             cell.innerHTML = `
                 <span class="gv-day-number">
-                    ${formatPersianNumber(day)}
+                    ${formatPersianNumber(jalali[2])}
+                </span>
+
+                <span class="gv-day-weekday">
+                    ${PERSIAN_WEEKDAYS[jalaliDayOfWeek(...jalali)]}
                 </span>
 
                 ${
@@ -946,7 +969,7 @@
                         ${
                             slot.available
                                 ? (
-                                    selectedDiagnosisId
+                                    (selectedDiagnosisId || selectedIdentificationId)
                                         ? "ثبت این زمان"
                                         : "ابتدا درخواست را انتخاب کنید"
                                 )
@@ -1214,7 +1237,7 @@
     }
 
     async function createAppointmentForSelectedRequest(startAt) {
-        if (!selectedDiagnosisId) {
+        if (!selectedDiagnosisId && !selectedIdentificationId) {
             gvNotify(
                 "ابتدا یک درخواست ویزیت را انتخاب کنید.",
                 "error"
@@ -1223,35 +1246,42 @@
             return;
         }
 
+        const kind =
+            selectedIdentificationId
+                ? "identification"
+                : "diagnosis";
+
+        const recordId =
+            selectedIdentificationId
+                ? selectedIdentificationId
+                : selectedDiagnosisId;
+
+        const params = new URLSearchParams({
+            start_at: startAt
+        });
+
         try {
-            const params =
-                new URLSearchParams({
-                    diagnosis_id:
-                        String(selectedDiagnosisId),
-                    start_at:
-                        startAt
-                });
-
-            const result =
-                await gvApi(
-                    `/api/calendar/appointments?${params.toString()}`,
-                    {
-                        method: "POST"
-                    }
-                );
-
-            selectedAppointmentId =
-                result.appointment?.id || null;
-
-            gvNotify(
-                "نوبت با موفقیت ثبت شد."
+            /*
+             * صف unified از همین endpoint استفاده می‌کند.
+             * پاسخ موفق redirect است؛ fetch آن را دنبال می‌کند،
+             * بنابراین refresh از سرور را معیار موفقیت قرار می‌دهیم.
+             */
+            await gvApi(
+                `/api/visit-queue/${kind}/${recordId}/schedule`,
+                {
+                    method: "POST",
+                    body: params
+                }
             );
 
-            /*
-             * مهم:
-             * بعد از ثبت، از سرور دوباره می‌خوانیم.
-             * بنابراین تغییر فقط در UI نمی‌ماند.
-             */
+            selectedDiagnosisId = null;
+            selectedIdentificationId = null;
+            selectedAppointmentId = null;
+
+            gvNotify(
+                "زمان ویزیت با موفقیت ثبت شد."
+            );
+
             await Promise.all([
                 fetchEventsForMonth(),
                 loadCalendarRequests()
@@ -1262,8 +1292,53 @@
             await loadSlots();
 
         } catch (error) {
+            /*
+             * endpoint پس از ثبت موفق RedirectResponse برمی‌گرداند.
+             * اگر gvApi پاسخ HTML را JSON نداند، وضعیت سرور را
+             * یک‌بار مجدداً می‌خوانیم؛ اگر رکورد از صف حذف شده
+             * باشد یعنی ثبت موفق بوده است.
+             */
+            try {
+                const latest = await gvApi(
+                    "/api/calendar/requests"
+                );
+
+                const stillPending =
+                    (latest.requests || []).some(
+                        x =>
+                            (x.kind || "diagnosis") === kind &&
+                            Number(
+                                x.record_id ||
+                                x.diagnosis_id ||
+                                x.identification_id
+                            ) === Number(recordId)
+                    );
+
+                if (!stillPending) {
+                    selectedDiagnosisId = null;
+                    selectedIdentificationId = null;
+                    selectedAppointmentId = null;
+
+                    await fetchEventsForMonth();
+                    requests = latest.requests || [];
+
+                    renderRequestPanel();
+                    renderCalendar();
+                    renderDayEvents();
+                    await loadSlots();
+
+                    gvNotify(
+                        "زمان ویزیت با موفقیت ثبت شد."
+                    );
+
+                    return;
+                }
+            } catch (_) {
+                // خطای واقعی در پایین نمایش داده می‌شود.
+            }
+
             gvNotify(
-                error.message,
+                error.message || "خطا در ثبت زمان ویزیت.",
                 "error"
             );
         }
@@ -1357,38 +1432,13 @@
     }
 
     function changeJalaliMonth(delta) {
-        let jy = currentJalali[0];
-        let jm = currentJalali[1];
-
-        jm += delta;
-
-        if (jm > 12) {
-            jm = 1;
-            jy++;
-        }
-
-        if (jm < 1) {
-            jm = 12;
-            jy--;
-        }
-
-        currentJalali = [
-            jy,
-            jm,
-            1
-        ];
-
-        const selectedDay =
-            Math.min(
-                selectedJalali[2],
-                jalaliMonthLength(jy, jm)
+        currentJalali =
+            jalaliAddDays(
+                currentJalali,
+                delta * 7
             );
 
-        selectedJalali = [
-            jy,
-            jm,
-            selectedDay
-        ];
+        selectedJalali = [...currentJalali];
 
         loadCalendar();
     }
@@ -1471,9 +1521,8 @@
 
             if (requestButton) {
                 selectRequest(
-                    Number(
-                        requestButton.dataset.calendarRequest
-                    )
+                    requestButton.dataset.calendarRequestKind || "diagnosis",
+                    Number(requestButton.dataset.calendarRequest)
                 );
 
                 return;

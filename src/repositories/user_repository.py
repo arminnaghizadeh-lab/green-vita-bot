@@ -14,6 +14,12 @@ class UserRepository(BaseRepository[User]):
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
+    async def get_by_bale_id(self, bale_id: int) -> User | None:
+        """پیدا کردن کاربر بر اساس شناسه Bale."""
+        stmt = select(User).where(User.bale_id == bale_id)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def get_or_create(
         self,
         telegram_id: int,
@@ -30,6 +36,29 @@ class UserRepository(BaseRepository[User]):
 
         user = await self.create(
             telegram_id=telegram_id,
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            language_code=language_code,
+        )
+        return user, True
+
+    async def get_or_create_bale(
+        self,
+        bale_id: int,
+        *,
+        username: str | None = None,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        language_code: str | None = None,
+    ) -> tuple[User, bool]:
+        """اگر کاربر Bale وجود داشت برمی‌گرداند، وگرنه یک کاربر Bale می‌سازد."""
+        user = await self.get_by_bale_id(bale_id)
+        if user:
+            return user, False
+
+        user = await self.create(
+            bale_id=bale_id,
             username=username,
             first_name=first_name,
             last_name=last_name,

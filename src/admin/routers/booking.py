@@ -22,6 +22,7 @@ from src.db.models.booking import (
 )
 from src.db.session import AsyncSessionLocal
 from src.admin.services.push import send_push
+from src.admin.services.badge import get_admin_badge_count
 from src.services.appointment_availability import (
     get_visit_occupied_slot_starts,
 )
@@ -52,11 +53,14 @@ async def _send_booking_push_safe(
     """
     try:
         async with AsyncSessionLocal() as push_session:
+            badge_count = await get_admin_badge_count(push_session)
+
             await send_push(
                 push_session,
                 title=title,
                 body=body,
                 url=url,
+                badge_count=badge_count,
             )
     except Exception:
         import logging
@@ -485,6 +489,12 @@ async def booking_slots(
     end_g = start_g + timedelta(days=1)
     now_tehran = datetime.now(TEHRAN)
 
+    if start_g.date() < now_tehran.date():
+        return {
+            "error": "رزرو برای تاریخ‌های گذشته امکان‌پذیر نیست.",
+            "slots": [],
+        }
+
     async with AsyncSessionLocal() as session:
         service = await session.get(Service, service_id)
 
@@ -539,7 +549,7 @@ async def booking_slots(
         output = []
 
         for index, slot in enumerate(available_slots):
-            if not slot.is_available:
+            if not slot.is_available or not slot.is_enabled:
                 continue
 
             durations = available_durations(
@@ -1059,6 +1069,48 @@ async def cancel_booking(
         return response
 
 
+@router.post(
+    "/api/slots/{slot_id}/toggle-enabled",
+    include_in_schema=False,
+)
+async def toggle_booking_slot_enabled(
+    request: Request,
+    slot_id: int,
+    enabled: bool,
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    async with AsyncSessionLocal() as session:
+        slot = await session.get(
+            BookingTimeSlot,
+            slot_id,
+        )
+
+        if slot is None:
+            return {
+                "success": False,
+                "error": "زمان موردنظر پیدا نشد.",
+            }
+
+        # فقط فعال/غیرفعال بودن دستی را تغییر می‌دهیم.
+        # وضعیت رزرو/ظرفیت مستقل باقی می‌ماند.
+        slot.is_enabled = enabled
+
+        await session.commit()
+        await session.refresh(slot)
+
+        return {
+            "success": True,
+            "slot_id": slot.id,
+            "enabled": slot.is_enabled,
+            "available": slot.is_available,
+            "start_at": slot.starts_at.isoformat(),
+            "end_at": slot.ends_at.isoformat(),
+        }
+
+
 @router.post("/api/book", include_in_schema=False)
 async def create_booking(
     service_id: int = Form(...),
@@ -1153,6 +1205,12 @@ async def create_booking(
                 return {
                     "success": False,
                     "error": "زمان شروع پیدا نشد.",
+                }
+
+            if not start_slot.is_enabled:
+                return {
+                    "success": False,
+                    "error": "این زمان در حال حاضر برای رزرو فعال نیست.",
                 }
 
             now_tehran = datetime.now(TEHRAN)
@@ -1376,6 +1434,8 @@ async def create_booking(
         # خطای اعلان نباید باعث شکست رزرو شود.
         try:
             async with AsyncSessionLocal() as push_session:
+                badge_count = await get_admin_badge_count(push_session)
+
                 await send_push(
                     push_session,
                     title="رزرو جدید گرین ویتا",
@@ -1386,6 +1446,7 @@ async def create_booking(
                         f"کد پیگیری: {tracking_code}"
                     ),
                     url="/dashboard/",
+                    badge_count=badge_count,
                 )
         except Exception:
             import logging

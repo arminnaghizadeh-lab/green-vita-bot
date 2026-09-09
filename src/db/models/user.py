@@ -21,7 +21,9 @@ class User(Base, TimestampMixin):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True, index=True, nullable=False)
+    telegram_id: Mapped[int | None] = mapped_column(BigInteger, unique=True, index=True, nullable=True)
+    # شناسه کاربر در پیام‌رسان بله؛ مستقل از Telegram
+    bale_id: Mapped[int | None] = mapped_column(BigInteger, unique=True, index=True, nullable=True)
     username: Mapped[str | None] = mapped_column(String(255), nullable=True)
     first_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     last_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
@@ -48,4 +50,7 @@ class User(Base, TimestampMixin):
     )
 
     def __repr__(self) -> str:
-        return f"<User id={self.id} telegram_id={self.telegram_id} username={self.username!r}>"
+        return (
+            f"<User id={self.id} telegram_id={self.telegram_id} "
+            f"bale_id={self.bale_id} username={self.username!r}>"
+        )

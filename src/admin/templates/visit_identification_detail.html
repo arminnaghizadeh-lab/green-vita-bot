@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=1">
+{% extends "base.html" %}
+
+{% block title %}
+درخواست ویزیت شناسایی #{{ identification.id }} | {{ app_name }}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6" dir="rtl">
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold">
+                🌱 درخواست ویزیت شناسایی #{{ identification.id }}
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">
+                پرونده شناسایی گیاه و مدیریت درخواست ویزیت
+            </p>
+        </div>
+
+        <a href="/visits"
+           class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm">
+            ← بازگشت به صف درخواست‌ها
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="lg:col-span-2 space-y-6">
+
+            <div class="bg-white rounded-2xl shadow-sm border p-5">
+                <h2 class="font-bold text-lg mb-4">اطلاعات مراجعه‌کننده</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-500">نام:</span>
+                        {{ user.first_name or '' }} {{ user.last_name or '' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">Username:</span>
+                        {{ '@' ~ user.username if user.username else '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">شماره تماس:</span>
+                        {{ user.phone_number or '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">Telegram ID:</span>
+                        {{ user.telegram_id or '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">Bale ID:</span>
+                        {{ user.bale_id or '—' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border p-5">
+                <h2 class="font-bold text-lg mb-4">اطلاعات گیاه</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-500">نام فارسی:</span>
+                        {{ identification.persian_name or '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">نام علمی:</span>
+                        {{ identification.scientific_name or '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">درصد اطمینان:</span>
+                        {{ identification.confidence }}%
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">سطح نگهداری:</span>
+                        {{ identification.difficulty_level.value
+                           if identification.difficulty_level else '—' }}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">منبع درخواست:</span>
+                        {% if identification.expert_visit_source == 'bale' %}
+                            ➤ بله
+                        {% elif identification.expert_visit_source == 'telegram' %}
+                            ✈️ تلگرام
+                        {% else %}
+                            ◌ قدیمی
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <span class="text-gray-500">کد تصویر:</span>
+                        {{ identification.telegram_file_id or '—' }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="space-y-6">
+
+            <form method="post"
+                  action="/visits/identification/{{ identification.id }}/update"
+                  class="bg-white rounded-2xl shadow-sm border p-5">
+
+                <h2 class="font-bold text-lg mb-4">مدیریت درخواست</h2>
+
+                <label class="block text-sm font-semibold mb-2">وضعیت</label>
+
+                <select name="status"
+                        class="w-full border rounded-lg px-3 py-2 mb-4">
+                    {% for key, label in status_labels.items() %}
+                    <option value="{{ key }}"
+                        {% if identification.visit_status.value == key %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label class="block text-sm font-semibold mb-2">
+                    زمان ویزیت
+                </label>
+
+                <input
+                    type="datetime-local"
+                    name="scheduled_at"
+                    value="{{ identification.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if identification.visit_scheduled_at else (appointment.start_at.strftime('%Y-%m-%dT%H:%M') if appointment else '') }}"
+                    class="w-full border rounded-lg px-3 py-2 mb-4"
+                >
+
+                <label class="block text-sm font-semibold mb-2">
+                    یادداشت داخلی
+                </label>
+
+                <textarea
+                    name="admin_note"
+                    rows="6"
+                    class="w-full border rounded-lg px-3 py-2 mb-4"
+                    placeholder="این یادداشت فقط برای مدیریت Green Vita است..."
+                >{{ identification.admin_notes or '' }}</textarea>
+
+                <button
+                    type="submit"
+                    class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold"
+                >
+                    ذخیره تغییرات
+                </button>
+
+            </form>
+
+            <div class="bg-white rounded-2xl shadow-sm border p-5 text-sm">
+                <h2 class="font-bold mb-3">وضعیت فعلی</h2>
+
+                <span class="px-3 py-2 rounded-full
+                    {{ status_classes.get(
+                        identification.visit_status.value,
+                        'bg-gray-100 text-gray-700'
+                    ) }}">
+                    {{ status_labels.get(
+                        identification.visit_status.value,
+                        identification.visit_status.value
+                    ) }}
+                </span>
+
+                {% if identification.visit_scheduled_at %}
+                <p class="mt-4">
+                    <span class="text-gray-500">زمان ویزیت:</span>
+                    {{ identification.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}
+                </p>
+                {% endif %}
+
+                {% if appointment %}
+                <p class="mt-2 text-xs text-gray-400">
+                    Appointment #{{ appointment.id }}
+                </p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

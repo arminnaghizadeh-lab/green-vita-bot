@@ -51,6 +51,20 @@ services:
       migrate:
         condition: service_completed_successfully
 
+
+  bale:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.bot
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    command: ["python", "-m", "src.bale.main"]
+
   admin:
     build:
       context: .

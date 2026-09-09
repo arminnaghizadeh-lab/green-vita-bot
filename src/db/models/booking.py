@@ -98,7 +98,22 @@ class BookingTimeSlot(Base, TimestampMixin):
         DateTime(timezone=True),
         nullable=False,
     )
-    is_available: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    is_available: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default="true",
+    )
+
+    # وضعیت فعال بودن Slot توسط ادمین.
+    # is_available وضعیت ظرفیت را نشان می‌دهد؛
+    # is_enabled مشخص می‌کند Slot اصولاً قابل ارائه هست یا نه.
+    is_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default="true",
+    )
 
     schedule: Mapped["BookingSchedule"] = relationship(back_populates="slots")
     bookings: Mapped[list["Booking"]] = relationship(

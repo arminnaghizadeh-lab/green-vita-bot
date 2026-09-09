@@ -43,6 +43,7 @@ from src.core.config import get_settings
 from src.core.exceptions import AIProviderError
 from src.core.logging import get_logger
 from src.admin.services.push import send_push
+from src.admin.services.badge import get_admin_badge_count
 from src.db.models.diagnosis import Diagnosis, DiagnosisSeverity
 from src.repositories.diagnosis_repository import DiagnosisRepository
 from src.repositories.user_repository import UserRepository
@@ -483,6 +484,7 @@ async def _finish_expert_visit(
             ai_provider="manual",
             raw_response=None,
             expert_visit_requested=True,
+            expert_visit_source="telegram",
         )
 
         await _notify_admins_of_expert_visit(
@@ -508,6 +510,7 @@ async def _finish_expert_visit(
             await diagnosis_repo.update(
                 diagnosis,
                 expert_visit_requested=True,
+                expert_visit_source=diagnosis.expert_visit_source or "telegram",
             )
 
         await _notify_admins_of_expert_visit(
@@ -538,6 +541,7 @@ async def _finish_expert_visit(
             await identification_repo.update(
                 identification,
                 expert_visit_requested=True,
+                expert_visit_source=identification.expert_visit_source or "telegram",
             )
 
         await _notify_admins(
@@ -555,13 +559,13 @@ async def _finish_expert_visit(
 
     # Notify the installed Green Vita PWA about the new visit request.
     await session.flush()
-    pending_count = await _get_pending_visit_count(session)
+    badge_count = await get_admin_badge_count(session)
     await send_push(
         session,
         title="🌿 گرین ویتا",
         body="درخواست ویزیت متخصص جدید ثبت شد.",
         url="/visits",
-        badge_count=pending_count,
+        badge_count=badge_count,
     )
 
     await state.clear()

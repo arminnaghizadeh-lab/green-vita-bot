@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     bot_token: str = ""
     bot_admin_ids: str = ""  # comma separated, parsed via property
 
+    # ---------- Bale ----------
+    bale_bot_token: str = ""
+    bale_api_base_url: str = "https://tapi.bale.ai/bot"
+
     # ---------- Database ----------
     database_url: str = "sqlite+aiosqlite:///./greenvita.db"
     postgres_user: str = "greenvita"

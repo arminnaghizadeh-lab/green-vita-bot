@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+
+        
+    
+    
+    <link rel="manifest" href="/static/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="default">
+    <meta name="apple-mobile-web-app-title"
+          content="Green Vita">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>مدیریت رزروها | Green Vita</title>
+
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+
+    <style>
+        :root {
+            --gv-green: #2f6b3f;
+            --gv-green-dark: #234f2f;
+            --gv-green-soft: #e4efdf;
+            --gv-cream: #f7f1e3;
+            --gv-white: #ffffff;
+            --gv-ink: #243128;
+            --gv-muted: #718076;
+            --gv-line: #e2e8df;
+            --gv-danger: #b94747;
+            --gv-shadow: 0 12px 35px rgba(47,107,63,.10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top right, rgba(47,107,63,.08), transparent 28%),
+                var(--gv-cream);
+            color: var(--gv-ink);
+            font-family: inherit;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        .rv-layout {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 250px minmax(0, 1fr);
+        }
+
+        .rv-sidebar {
+            background: linear-gradient(180deg, var(--gv-green-dark), var(--gv-green));
+            color: #fff;
+            padding: 22px 16px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .rv-brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 4px 8px 22px;
+            border-bottom: 1px solid rgba(255,255,255,.15);
+            margin-bottom: 20px;
+        }
+
+        .rv-brand img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .rv-brand strong,
+        .rv-brand small {
+            display: block;
+        }
+
+        .rv-brand small {
+            margin-top: 3px;
+            opacity: .72;
+        }
+
+        .rv-nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .rv-nav a {
+            color: #fff;
+            text-decoration: none;
+            border-radius: 13px;
+            padding: 12px 13px;
+            font-weight: 800;
+        }
+
+        .rv-nav a:hover,
+        .rv-nav a.active {
+            background: rgba(255,255,255,.14);
+        }
+
+        .rv-logout {
+            margin-top: 22px;
+        }
+
+        .rv-logout button {
+            width: 100%;
+            padding: 11px;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 13px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .rv-main {
+            min-width: 0;
+            padding: 28px;
+        }
+
+        .rv-hero {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .rv-eyebrow {
+            color: var(--gv-green);
+            font-size: 12px;
+            font-weight: 900;
+            margin-bottom: 7px;
+        }
+
+        .rv-hero h1 {
+            margin: 0 0 7px;
+            font-size: clamp(26px, 3vw, 36px);
+        }
+
+        .rv-hero p {
+            margin: 0;
+            color: var(--gv-muted);
+        }
+
+        .rv-actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        .rv-btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 11px 15px;
+            cursor: pointer;
+            font-weight: 900;
+        }
+
+        .rv-btn-primary {
+            background: var(--gv-green);
+            color: #fff;
+        }
+
+        .rv-btn-soft {
+            background: var(--gv-green-soft);
+            color: var(--gv-green-dark);
+        }
+
+        .rv-btn-danger {
+            background: #fbeaea;
+            color: var(--gv-danger);
+        }
+
+        .rv-card {
+            background: var(--gv-white);
+            border: 1px solid rgba(47,107,63,.07);
+            border-radius: 20px;
+            box-shadow: var(--gv-shadow);
+        }
+
+        .rv-toolbar {
+            padding: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 15px;
+        }
+
+        .rv-toolbar-title {
+            font-weight: 900;
+        }
+
+        .rv-toolbar-sub {
+            color: var(--gv-muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .rv-days {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 11px;
+        }
+
+        .rv-day {
+            padding: 14px;
+            min-height: 215px;
+            cursor: pointer;
+            transition: transform .16s ease, box-shadow .16s ease;
+        }
+
+        .rv-day:hover,
+        .rv-day.selected {
+            transform: translateY(-2px);
+        }
+
+        .rv-day.today {
+            outline: 2px solid rgba(47,107,63,.22);
+        }
+
+        .rv-day-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .rv-day-name {
+            font-weight: 900;
+        }
+
+        .rv-day-date {
+            margin-top: 3px;
+            font-size: 11px;
+            color: var(--gv-muted);
+        }
+
+        .rv-count {
+            min-width: 31px;
+            height: 31px;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            background: var(--gv-green-soft);
+            color: var(--gv-green-dark);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .rv-event {
+            display: flex;
+            gap: 8px;
+            padding: 8px 0;
+            border-top: 1px solid var(--gv-line);
+        }
+
+        .rv-event:first-of-type {
+            border-top: 0;
+        }
+
+        .rv-time {
+            min-width: 42px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .rv-event-main {
+            min-width: 0;
+        }
+
+        .rv-event-name {
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rv-source {
+            margin-top: 3px;
+            color: var(--gv-muted);
+            font-size: 10px;
+        }
+
+        .rv-empty {
+            color: var(--gv-muted);
+            font-size: 12px;
+            padding-top: 17px;
+        }
+
+        .rv-bottom {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(300px, .75fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .rv-section {
+            padding: 18px;
+        }
+
+        .rv-section-title {
+            margin: 0 0 4px;
+            font-size: 18px;
+        }
+
+        .rv-section-sub {
+            color: var(--gv-muted);
+            font-size: 12px;
+            margin-bottom: 13px;
+        }
+
+        .rv-item {
+            padding: 12px 0;
+            border-top: 1px solid var(--gv-line);
+        }
+
+        .rv-item:first-child {
+            border-top: 0;
+        }
+
+        .rv-item-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .rv-item-name {
+            font-weight: 900;
+        }
+
+        .rv-item-meta {
+            color: var(--gv-muted);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .rv-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            max-height: 430px;
+            overflow: auto;
+        }
+
+        .rv-slot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+            padding: 9px 10px;
+            border: 1px solid var(--gv-line);
+            border-radius: 12px;
+            background: #fbfcf8;
+        }
+
+        .rv-slot.off {
+            opacity: .55;
+            background: #f0f0ed;
+        }
+
+        .rv-slot-time {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .rv-switch {
+            border: 0;
+            border-radius: 999px;
+            padding: 6px 9px;
+            font-size: 10px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .rv-switch.on {
+            background: var(--gv-green-soft);
+            color: var(--gv-green-dark);
+        }
+
+        .rv-switch.off {
+            background: #e8e8e5;
+            color: #666;
+        }
+
+        .rv-month {
+            display: none;
+            margin-top: 15px;
+            padding: 18px;
+        }
+
+        .rv-month.open {
+            display: block;
+        }
+
+        .rv-month-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 13px;
+        }
+
+        .rv-month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .rv-month-weekday {
+            padding: 8px 2px;
+            text-align: center;
+            color: var(--gv-muted);
+            font-size: 10px;
+            font-weight: 900;
+        }
+
+        .rv-month-day {
+            min-height: 51px;
+            padding: 7px 2px;
+            border: 1px solid var(--gv-line);
+            border-radius: 10px;
+            background: #fbfcf8;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .rv-month-day:hover,
+        .rv-month-day.selected {
+            background: var(--gv-green-soft);
+        }
+
+        .rv-month-day.empty {
+            visibility: hidden;
+        }
+
+        .rv-month-number {
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .rv-month-count {
+            margin-top: 4px;
+            font-size: 9px;
+            color: var(--gv-green-dark);
+        }
+
+        .rv-pending {
+            margin-bottom: 15px;
+            padding: 11px 14px;
+            border-radius: 13px;
+            background: #fff6e2;
+            color: #735716;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .rv-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(25,40,29,.42);
+            z-index: 999;
+        }
+
+        .rv-modal-backdrop.open {
+            display: flex;
+        }
+
+        .rv-modal {
+            width: min(560px, 100%);
+            max-height: 90vh;
+            overflow: auto;
+            background: #fff;
+            border-radius: 22px;
+            padding: 21px;
+            box-shadow: 0 25px 70px rgba(0,0,0,.22);
+        }
+
+        .rv-modal h2 {
+            margin: 0 0 5px;
+        }
+
+        .rv-modal-sub {
+            color: var(--gv-muted);
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        .rv-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+        }
+
+        .rv-field {
+            display: grid;
+            gap: 5px;
+        }
+
+        .rv-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .rv-field label {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .rv-field input,
+        .rv-field textarea {
+            width: 100%;
+            border: 1px solid #d9e0d6;
+            border-radius: 11px;
+            padding: 10px 11px;
+            outline: none;
+            background: #fff;
+        }
+
+        .rv-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .rv-field input:focus,
+        .rv-field textarea:focus {
+            border-color: rgba(47,107,63,.55);
+        }
+
+        .rv-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .rv-error {
+            display: none;
+            padding: 9px 11px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background: #fbeaea;
+            color: var(--gv-danger);
+            font-size: 12px;
+        }
+
+        @media (max-width: 1120px) {
+            .rv-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .rv-sidebar {
+                position: static;
+                height: auto;
+            }
+
+            .rv-days {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .rv-bottom {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .rv-main {
+                padding: 15px;
+            }
+
+            .rv-hero,
+            .rv-toolbar,
+            .rv-month-head {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .rv-days {
+                grid-template-columns: 1fr;
+            }
+
+            .rv-slot-grid,
+            .rv-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rv-field.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
+</head>
+
+<body>
+
+<div class="rv-layout">
+
+    <aside class="rv-sidebar">
+        <div class="rv-brand">
+            <img src="/static/logo.png" alt="Green Vita">
+            <div>
+                <strong>Green Vita</strong>
+                <small>پنل مدیریت</small>
+            </div>
+        </div>
+
+        <nav class="rv-nav">
+            <a href="/dashboard/">🏠 داشبورد</a>
+            <a href="/reservations" class="active">📅 مدیریت رزروها</a>
+            <a href="/contactus/">🔗 Smart Bio</a>
+        </nav>
+
+        <form method="post" action="/logout" class="rv-logout">
+            <button type="submit">↪ خروج</button>
+        </form>
+    </aside>
+
+    <main class="rv-main">
+
+        <section class="rv-hero">
+            <div>
+                <div class="rv-eyebrow">GREEN VITA · RESERVATIONS</div>
+                <h1>مدیریت رزروها</h1>
+                <p>رزرو سایت، ویزیت بات و رزرو تلفنی در یک نمای واحد.</p>
+            </div>
+
+            <div class="rv-actions">
+                <button class="rv-btn rv-btn-primary" type="button"
+                        onclick="openManualModal()">
+                    ＋ رزرو تلفنی
+                </button>
+
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="toggleMonth()">
+                    🗓 تقویم ماهانه
+                </button>
+            </div>
+        </section>
+
+        <div id="pendingBox"></div>
+
+        <section class="rv-card rv-toolbar">
+            <div>
+                <div class="rv-toolbar-title">۷ روز آینده</div>
+                <div class="rv-toolbar-sub">
+                    امروز + شش روز بعد
+                </div>
+            </div>
+
+            <div class="rv-actions">
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="shiftDays(-7)">
+                    ← ۷ روز قبل
+                </button>
+
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="goToday()">
+                    امروز
+                </button>
+
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="shiftDays(7)">
+                    ۷ روز بعد →
+                </button>
+            </div>
+        </section>
+
+        <section id="daysGrid" class="rv-days"></section>
+
+        <section id="monthCard" class="rv-card rv-month">
+            <div class="rv-month-head">
+                <div>
+                    <h2 class="rv-section-title">تقویم ماهانه</h2>
+                    <div id="monthTitle" class="rv-section-sub"></div>
+                </div>
+
+                <div class="rv-actions">
+                    <button class="rv-btn rv-btn-soft" type="button"
+                            onclick="changeMonth(-1)">
+                        ماه قبل
+                    </button>
+                    <button class="rv-btn rv-btn-soft" type="button"
+                            onclick="changeMonth(1)">
+                        ماه بعد
+                    </button>
+                </div>
+            </div>
+
+            <div id="monthGrid" class="rv-month-grid"></div>
+        </section>
+
+        <section class="rv-bottom">
+
+            <section class="rv-card rv-section">
+                <h2 class="rv-section-title">جزئیات روز</h2>
+                <div id="selectedDateTitle" class="rv-section-sub"></div>
+                <div id="detailsList"></div>
+            </section>
+
+            <section class="rv-card rv-section">
+                <h2 class="rv-section-title">بازه‌های زمانی</h2>
+                <div class="rv-section-sub">
+                    فعال یا غیرفعال‌کردن Slot بدون تغییر رزروهای موجود
+                </div>
+                <div id="slotGrid" class="rv-slot-grid"></div>
+            </section>
+
+        </section>
+
+    </main>
+</div>
+
+
+<!-- Manual / Phone Reservation -->
+<div id="manualModal" class="rv-modal-backdrop">
+    <div class="rv-modal">
+
+        <h2>ثبت رزرو تلفنی</h2>
+        <div class="rv-modal-sub">
+            این رزرو از طریق پنل ادمین ثبت می‌شود.
+        </div>
+
+        <form id="manualForm">
+
+            <div class="rv-form-grid">
+
+                <div class="rv-field">
+                    <label for="manualName">نام مشتری *</label>
+                    <input id="manualName" required>
+                </div>
+
+                <div class="rv-field">
+                    <label for="manualPhone">شماره تماس</label>
+                    <input id="manualPhone" inputmode="tel">
+                </div>
+
+                <div class="rv-field">
+                    <label for="manualPlant">نام گیاه</label>
+                    <input id="manualPlant">
+                </div>
+
+                <div class="rv-field">
+                    <label for="manualTime">ساعت *</label>
+                    <input id="manualTime" type="time" required>
+                </div>
+
+                <div class="rv-field full">
+                    <label for="manualNote">توضیحات</label>
+                    <textarea id="manualNote"></textarea>
+                </div>
+
+            </div>
+
+            <div id="manualError" class="rv-error"></div>
+
+            <div class="rv-modal-actions">
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="closeManualModal()">
+                    انصراف
+                </button>
+
+                <button class="rv-btn rv-btn-primary" type="submit">
+                    ثبت رزرو
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+(function () {
+    "use strict";
+
+    const state = {
+        startDate: startOfDay(new Date()),
+        selectedDate: null,
+        days: [],
+        monthCursor: startOfDay(new Date()),
+    };
+
+    const faWeekdays = [
+        "دوشنبه",
+        "سه‌شنبه",
+        "چهارشنبه",
+        "پنجشنبه",
+        "جمعه",
+        "شنبه",
+        "یکشنبه"
+    ];
+
+    function startOfDay(date) {
+        return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+    }
+
+    function pad(value) {
+        return String(value).padStart(2, "0");
+    }
+
+    function isoDate(date) {
+        return (
+            date.getFullYear() +
+            "-" +
+            pad(date.getMonth() + 1) +
+            "-" +
+            pad(date.getDate())
+        );
+    }
+
+    function parseDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    }
+
+    function formatDate(value) {
+        return new Intl.DateTimeFormat("fa-IR", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        }).format(parseDate(value));
+    }
+
+    function formatShortDate(value) {
+        return new Intl.DateTimeFormat("fa-IR", {
+            month: "long",
+            day: "numeric",
+        }).format(parseDate(value));
+    }
+
+    function formatTime(value) {
+        const date = new Date(value);
+        return pad(date.getHours()) + ":" + pad(date.getMinutes());
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    async function loadOverview() {
+        const response = await fetch(
+            "/dashboard/api/reservations/overview?start_date=" +
+            encodeURIComponent(isoDate(state.startDate)) +
+            "&days=7",
+            {
+                credentials: "same-origin",
+                cache: "no-store",
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("overview_request_failed");
+        }
+
+        const data = await response.json();
+
+        state.days = data.days || [];
+
+        if (!state.selectedDate || !state.days.some(
+            day => day.date === state.selectedDate
+        )) {
+            state.selectedDate = data.start_date;
+        }
+
+        const pendingBox = document.getElementById("pendingBox");
+
+        pendingBox.innerHTML =
+            data.pending_requests > 0
+                ? `<div class="rv-pending">
+                    🔔 ${Number(data.pending_requests).toLocaleString("fa-IR")}
+                    درخواست ویزیت هنوز زمان‌بندی نشده است.
+                  </div>`
+                : "";
+
+        renderDays();
+        renderSelectedDay();
+    }
+
+    function renderDays() {
+        const root = document.getElementById("daysGrid");
+
+        root.innerHTML = state.days.map(day => {
+            const events = day.events || [];
+
+            return `
+                <article
+                    class="rv-card rv-day
+                    ${day.is_today ? "today" : ""}
+                    ${day.date === state.selectedDate ? "selected" : ""}"
+                    data-date="${day.date}"
+                >
+                    <div class="rv-day-head">
+                        <div>
+                            <div class="rv-day-name">
+                                ${escapeHtml(day.weekday)}
+                            </div>
+                            <div class="rv-day-date">
+                                ${escapeHtml(formatShortDate(day.date))}
+                            </div>
+                        </div>
+
+                        <div class="rv-count">
+                            ${Number(day.count || 0).toLocaleString("fa-IR")}
+                        </div>
+                    </div>
+
+                    ${
+                        events.length
+                            ? events.slice(0, 5).map(event => `
+                                <div class="rv-event">
+                                    <div class="rv-time">
+                                        ${formatTime(event.start_at)}
+                                    </div>
+
+                                    <div class="rv-event-main">
+                                        <div class="rv-event-name">
+                                            ${escapeHtml(event.name)}
+                                        </div>
+
+                                        <div class="rv-source">
+                                            ${escapeHtml(event.source_label)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join("")
+                            : `
+                                <div class="rv-empty">
+                                    رزروی برای این روز ثبت نشده.
+                                </div>
+                            `
+                    }
+
+                    ${
+                        events.length > 5
+                            ? `
+                                <div class="rv-empty">
+                                    + ${events.length - 5} مورد دیگر
+                                </div>
+                              `
+                            : ""
+                    }
+                </article>
+            `;
+        }).join("");
+
+        root.querySelectorAll("[data-date]").forEach(node => {
+            node.addEventListener("click", () => {
+                state.selectedDate = node.dataset.date;
+                renderDays();
+                renderSelectedDay();
+            });
+        });
+    }
+
+    function renderSelectedDay() {
+        const day = state.days.find(
+            item => item.date === state.selectedDate
+        );
+
+        if (!day) {
+            return;
+        }
+
+        document.getElementById("selectedDateTitle").textContent =
+            formatDate(day.date);
+
+        const details = document.getElementById("detailsList");
+        const slotGrid = document.getElementById("slotGrid");
+
+        const events = day.events || [];
+        const slots = day.slots || [];
+
+        details.innerHTML = events.length
+            ? events.map(event => `
+                <div class="rv-item">
+                    <div class="rv-item-head">
+                        <div class="rv-item-name">
+                            ${escapeHtml(event.name)}
+                        </div>
+                        <strong>
+                            ${formatTime(event.start_at)}
+                        </strong>
+                    </div>
+
+                    <div class="rv-item-meta">
+                        ${escapeHtml(event.source_label)}
+                        ${
+                            event.phone
+                                ? " · " + escapeHtml(event.phone)
+                                : ""
+                        }
+                    </div>
+                </div>
+            `).join("")
+            : `
+                <div class="rv-empty">
+                    برای این روز رزروی ثبت نشده است.
+                </div>
+            `;
+
+        slotGrid.innerHTML = slots.length
+            ? slots.map(slot => `
+                <div class="rv-slot ${slot.enabled ? "" : "off"}">
+                    <span class="rv-slot-time">
+                        ${formatTime(slot.start_at)}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="rv-switch ${slot.enabled ? "on" : "off"}"
+                        onclick="toggleSlot(${slot.id}, ${!slot.enabled})"
+                    >
+                        ${slot.enabled ? "فعال" : "غیرفعال"}
+                    </button>
+                </div>
+            `).join("")
+            : `
+                <div class="rv-empty">
+                    برای این روز Slot ثبت نشده است.
+                </div>
+            `;
+    }
+
+    window.toggleSlot = async function (slotId, enabled) {
+        try {
+            const response = await fetch(
+                "/api/slots/" +
+                encodeURIComponent(slotId) +
+                "/toggle-enabled?enabled=" +
+                encodeURIComponent(enabled ? "true" : "false"),
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("toggle_failed");
+            }
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.error || "toggle_failed");
+            }
+
+            await loadOverview();
+
+        } catch (error) {
+            console.error(error);
+            alert("تغییر وضعیت Slot انجام نشد.");
+        }
+    };
+
+    window.shiftDays = function (amount) {
+        state.startDate = startOfDay(state.startDate);
+        state.startDate.setDate(
+            state.startDate.getDate() + amount
+        );
+        state.selectedDate = null;
+        loadOverview().catch(console.error);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.goToday = function () {
+        state.startDate = startOfDay(new Date());
+        state.selectedDate = null;
+        loadOverview().catch(console.error);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.toggleMonth = function () {
+        const card = document.getElementById("monthCard");
+
+        card.classList.toggle("open");
+
+        if (card.classList.contains("open")) {
+            renderMonth();
+        }
+    };
+
+    window.changeMonth = function (amount) {
+        state.monthCursor.setMonth(
+            state.monthCursor.getMonth() + amount
+        );
+        renderMonth();
+    };
+
+    function renderMonth() {
+        const root = document.getElementById("monthGrid");
+
+        document.getElementById("monthTitle").textContent =
+            new Intl.DateTimeFormat("fa-IR", {
+                month: "long",
+                year: "numeric",
+            }).format(state.monthCursor);
+
+        const year = state.monthCursor.getFullYear();
+        const month = state.monthCursor.getMonth();
+
+        const first = new Date(year, month, 1);
+        const last = new Date(year, month + 1, 0);
+
+        let html = faWeekdays.map(day =>
+            `<div class="rv-month-weekday">${day.slice(0,1)}</div>`
+        ).join("");
+
+        // JS Sunday = 0. Persian/Jalali UI is Saturday-first, but
+        // the Gregorian monthly visual is kept stable here.
+        const offset = first.getDay();
+
+        for (let i = 0; i < offset; i++) {
+            html += `<div class="rv-month-day empty"></div>`;
+        }
+
+        for (let dayNumber = 1; dayNumber <= last.getDate(); dayNumber++) {
+            const date = new Date(year, month, dayNumber);
+            const key = isoDate(date);
+
+            const sourceDay = state.days.find(
+                item => item.date === key
+            );
+
+            const count = sourceDay ? sourceDay.count : 0;
+
+            html += `
+                <div
+                    class="rv-month-day
+                    ${key === state.selectedDate ? "selected" : ""}"
+                    onclick="jumpToDate('${key}')"
+                >
+                    <div class="rv-month-number">
+                        ${dayNumber.toLocaleString("fa-IR")}
+                    </div>
+
+                    <div class="rv-month-count">
+                        ${
+                            count
+                                ? Number(count).toLocaleString("fa-IR") + " رزرو"
+                                : "—"
+                        }
+                    </div>
+                </div>
+            `;
+        }
+
+        root.innerHTML = html;
+    }
+
+    window.jumpToDate = function (date) {
+        state.startDate = parseDate(date);
+        state.selectedDate = date;
+        document.getElementById("monthCard").classList.remove("open");
+
+        loadOverview().catch(console.error);
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
+    window.openManualModal = function () {
+        document.getElementById("manualError").style.display = "none";
+        document.getElementById("manualModal").classList.add("open");
+
+        const defaultDate = state.selectedDate ||
+            isoDate(new Date());
+
+        document.getElementById("manualForm").dataset.date =
+            defaultDate;
+    };
+
+    window.closeManualModal = function () {
+        document.getElementById("manualModal").classList.remove("open");
+        document.getElementById("manualForm").reset();
+        document.getElementById("manualError").style.display = "none";
+    };
+
+    document.getElementById("manualForm").addEventListener(
+        "submit",
+        async function (event) {
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const errorBox = document.getElementById("manualError");
+
+            errorBox.style.display = "none";
+
+            const date = form.dataset.date || isoDate(new Date());
+            const time = document.getElementById("manualTime").value;
+
+            if (!time) {
+                errorBox.textContent = "ساعت رزرو را وارد کنید.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            const startAt =
+                date + "T" + time + ":00+03:30";
+
+            const params = new URLSearchParams({
+                start_at: startAt,
+                customer_name:
+                    document.getElementById("manualName").value.trim(),
+                customer_phone:
+                    document.getElementById("manualPhone").value.trim(),
+                customer_plant:
+                    document.getElementById("manualPlant").value.trim(),
+            });
+
+            const note =
+                document.getElementById("manualNote").value.trim();
+
+            if (note) {
+                params.set("admin_note", note);
+            }
+
+            try {
+                const response = await fetch(
+                    "/api/calendar/manual-appointments?" +
+                    params.toString(),
+                    {
+                        method: "POST",
+                        credentials: "same-origin",
+                    }
+                );
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.detail ||
+                        result.error ||
+                        "manual_booking_failed"
+                    );
+                }
+
+                if (result.success === false) {
+                    throw new Error(
+                        result.error ||
+                        "manual_booking_failed"
+                    );
+                }
+
+                closeManualModal();
+
+                state.startDate = parseDate(date);
+                state.selectedDate = date;
+
+                await loadOverview();
+
+                alert("رزرو تلفنی با موفقیت ثبت شد.");
+
+            } catch (error) {
+                console.error(error);
+                errorBox.textContent =
+                    error.message || "ثبت رزرو انجام نشد.";
+                errorBox.style.display = "block";
+            }
+        }
+    );
+
+    document.getElementById("manualModal").addEventListener(
+        "click",
+        function (event) {
+            if (event.target === this) {
+                closeManualModal();
+            }
+        }
+    );
+
+    loadOverview().catch(error => {
+        console.error(error);
+
+        document.getElementById("daysGrid").innerHTML =
+            `<div class="rv-card rv-section">
+                خطا در بارگذاری اطلاعات رزروها.
+             </div>`;
+    });
+})();
+</script>
+
+</body>
+</html>

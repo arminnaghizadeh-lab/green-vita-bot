@@ -27,6 +27,12 @@ class VisitAppointment(Base, TimestampMixin):
         index=True,
     )
 
+    identification_id: Mapped[int | None] = mapped_column(
+        ForeignKey("plant_identifications.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+
     start_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
@@ -83,6 +89,7 @@ class VisitAppointment(Base, TimestampMixin):
     )
 
     diagnosis = relationship("Diagnosis", back_populates="appointment")
+    identification = relationship("PlantIdentification")
 
     __table_args__ = (
         Index("ix_visit_appointments_start_at", "start_at"),

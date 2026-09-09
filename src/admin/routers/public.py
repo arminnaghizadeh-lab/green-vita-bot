@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 
@@ -37,6 +38,14 @@ async def about(request: Request):
         {"request": request},
     )
 
+
+
+@router.get("/call/", include_in_schema=False)
+async def call():
+    return RedirectResponse(
+        url="tel:+989128111058",
+        status_code=302,
+    )
 
 @router.get("/contact/", include_in_schema=False)
 async def contact(request: Request):

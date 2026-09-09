@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
+    {% include "booking/pwa-head.html" %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{{ service.title }} | گرین ویتا</title>
@@ -177,6 +178,27 @@ h2{font-size:19px;margin-top:30px}
   line-height:1.8;
 }
 
+.date-navigation{
+  display:flex;
+  justify-content:center;
+  margin-top:14px;
+}
+
+.date-next-button{
+  border:1px solid #dce5dd;
+  border-radius:12px;
+  background:#fff;
+  color:#28743b;
+  padding:11px 18px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.date-next-button:hover{
+  background:#edf8ef;
+}
+
 .success{
   margin-top:22px;
   padding:20px;
@@ -230,6 +252,16 @@ select{
 <h2>انتخاب تاریخ</h2>
 <div id="dates" class="dates">
 <div class="date">در حال بارگذاری...</div>
+</div>
+
+<div class="date-navigation">
+  <button
+    type="button"
+    id="dates-next"
+    class="date-next-button"
+  >
+    ۷ روز بعد
+  </button>
 </div>
 
 <div id="timesSection" class="hidden" style="margin-top:28px">
@@ -404,6 +436,7 @@ let selectedSlot = null;
 let selectedDuration = null;
 let selectedEndTime = null;
 let selectedAmount = 0;
+let bookingWeekOffset = 0;
 
 const draftKey = "greenVitaBookingDraft";
 
@@ -522,11 +555,19 @@ function loadDates(){
     {weekday:"long"}
   );
 
-  for(let i = 0; i < 7; i++){
-    const dt = new Date();
+  const base = new Date();
+  base.setHours(12,0,0,0);
 
-    dt.setHours(12,0,0,0);
-    dt.setDate(dt.getDate() + i);
+  base.setDate(
+    base.getDate() + (bookingWeekOffset * 7)
+  );
+
+  for(let i = 0; i < 7; i++){
+    const dt = new Date(base);
+
+    dt.setDate(
+      base.getDate() + i
+    );
 
     const p = jalaliParts(dt);
     const value = `${p.year}-${p.month}-${p.day}`;
@@ -551,7 +592,11 @@ function loadDates(){
 
   let targetDate = null;
 
-  if(savedDraft && savedDraft.selected_date){
+  if(
+    bookingWeekOffset === 0 &&
+    savedDraft &&
+    savedDraft.selected_date
+  ){
     targetDate =
       dates.querySelector(
         `.date[data-date="${savedDraft.selected_date}"]`
@@ -1018,6 +1063,27 @@ confirmBtn.addEventListener(
     }
   }
 );
+
+
+document
+  .getElementById("dates-next")
+  .addEventListener("click", () => {
+    bookingWeekOffset += 1;
+
+    selectedDate = null;
+    selectedSlot = null;
+    selectedDuration = null;
+    selectedEndTime = null;
+    selectedAmount = 0;
+
+    resetAfterDateChange();
+    loadDates();
+
+    dates.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  });
 
 restoreCustomerFields();
 loadDates();
