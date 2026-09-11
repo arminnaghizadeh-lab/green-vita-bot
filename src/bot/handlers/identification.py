@@ -24,7 +24,15 @@ from src.bot.keyboards import (
     get_identification_result_keyboard,
     get_skip_details_keyboard,
 )
-from src.bot.keyboards.main_menu import BTN_IDENTIFY
+from src.bot.keyboards.main_menu import (
+    BTN_ABOUT,
+    BTN_DIAGNOSE,
+    BTN_EXPERT_VISIT,
+    BTN_HELP,
+    BTN_IDENTIFY,
+    BTN_MY_PLANTS,
+    BTN_START,
+)
 from src.bot.states import DiagnosisStates, ExpertVisitStates, IdentificationStates
 from src.core.config import get_settings
 from src.core.exceptions import AIProviderError
@@ -216,7 +224,20 @@ async def handle_identification_photo(
     await status_message.edit_text(message_text, reply_markup=keyboard)
 
 
-@router.message(IdentificationStates.waiting_photo)
+@router.message(
+    IdentificationStates.waiting_photo,
+    lambda message: bool(message.text)
+    and message.text
+    not in {
+        BTN_START,
+        BTN_DIAGNOSE,
+        BTN_IDENTIFY,
+        BTN_EXPERT_VISIT,
+        BTN_MY_PLANTS,
+        BTN_ABOUT,
+        BTN_HELP,
+    },
+)
 async def handle_identification_waiting_non_photo(message: Message) -> None:
     await message.answer(_ASK_FOR_PHOTO_TEXT)
 

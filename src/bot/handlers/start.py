@@ -2,6 +2,7 @@
 
 from aiogram import Router
 from aiogram.filters import CommandStart
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,7 +31,13 @@ WELCOME_TEXT = (
 
 @router.message(CommandStart())
 @router.message(lambda message: message.text == BTN_START)
-async def handle_start(message: Message, session: AsyncSession) -> None:
+async def handle_start(
+    message: Message,
+    session: AsyncSession,
+    state: FSMContext,
+) -> None:
+    await state.clear()
+
     user_repo = UserRepository(session)
     user, created = await user_repo.get_or_create(
         telegram_id=message.from_user.id,

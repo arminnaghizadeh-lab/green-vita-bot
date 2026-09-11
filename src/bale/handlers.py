@@ -56,20 +56,22 @@ UNKNOWN_TEXT = (
 
 
 MAIN_MENU = {
-    "inline_keyboard": [
+    "keyboard": [
         [
-            {"text": "🩺 تشخیص بیماری", "callback_data": "diagnose"},
-            {"text": "🔍 شناسایی گیاه", "callback_data": "identify"},
+            {"text": "🩺 تشخیص بیماری"},
+            {"text": "🔍 شناسایی گیاه"},
         ],
         [
-            {"text": "🌱 گیاهان من", "callback_data": "plants"},
-            {"text": "📞 درخواست ویزیت متخصص", "callback_data": "visit"},
+            {"text": "🌱 گیاهان من"},
+            {"text": "📞 درخواست ویزیت متخصص"},
         ],
         [
-            {"text": "ℹ️ درباره ما", "callback_data": "about"},
-            {"text": "🆘 راهنما", "callback_data": "help"},
+            {"text": "ℹ️ درباره ما"},
+            {"text": "🆘 راهنما"},
         ],
-    ]
+    ],
+    "resize_keyboard": True,
+    "is_persistent": True,
 }
 
 BACK_HOME_MENU = {
@@ -140,17 +142,9 @@ def _bale_phone_request_markup() -> dict[str, Any]:
 
 
 def _bale_remove_phone_keyboard_markup() -> dict[str, Any]:
-    """Remove phone reply keyboard while keeping the Home inline button."""
+    """Remove the temporary phone reply keyboard."""
     return {
         "remove_keyboard": True,
-        "inline_keyboard": [
-            [
-                {
-                    "text": "🏠 منوی اصلی",
-                    "callback_data": "home",
-                }
-            ]
-        ],
     }
 
 
@@ -203,6 +197,13 @@ async def handle_start(
     chat_id: int,
 ) -> None:
     await _register_user(message)
+
+    sender = message.get("from") or {}
+    bale_id = sender.get("id")
+
+    if bale_id is not None:
+        await clear_state(int(bale_id))
+
     await _send_menu(
         client,
         chat_id=chat_id,
@@ -848,6 +849,12 @@ async def _finish_bale_expert_visit(
         },
     )
 
+    await _send_menu(
+        client,
+        chat_id=chat_id,
+        text="🌿 منوی اصلی گرین ویتا",
+    )
+
 
 async def _run_bale_identification(
     client: Any,
@@ -1417,6 +1424,34 @@ async def dispatch_message(
         )
 
         return
+
+    # ---------------------------------------------------------
+    # Bale main Reply Keyboard buttons
+    # ---------------------------------------------------------
+    if bale_id is not None and text and not command:
+        if text == "🩺 تشخیص بیماری":
+            await handle_diagnose(client, message, chat_id)
+            return
+
+        if text == "🔍 شناسایی گیاه":
+            await handle_identify(client, message, chat_id)
+            return
+
+        if text == "🌱 گیاهان من":
+            await handle_plants(client, message, chat_id)
+            return
+
+        if text == "📞 درخواست ویزیت متخصص":
+            await handle_visit(client, message, chat_id)
+            return
+
+        if text == "ℹ️ درباره ما":
+            await handle_about(client, message, chat_id)
+            return
+
+        if text == "🆘 راهنما":
+            await handle_help(client, message, chat_id)
+            return
 
     # ---------------------------------------------------------
     # Bale diagnosis conversation states

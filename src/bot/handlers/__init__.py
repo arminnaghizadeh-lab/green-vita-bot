@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from src.bot.handlers import about, diagnosis, help, identification, plants, start
+from src.bot.handlers import about, diagnosis, help, identification, main_menu, plants, start
 
 
 def get_root_router() -> Router:
@@ -13,6 +13,10 @@ def get_root_router() -> Router:
     به هندلر محدودتر بدهیم. plants هیچ هندلر عکسی ندارد، پس محل ثبتش بی‌اثر است.
     """
     root = Router(name="root")
+    # Main menu must be registered first so its buttons always
+    # override any active FSM state.
+    root.include_router(main_menu.router)
+
     root.include_router(start.router)
     root.include_router(help.router)
     root.include_router(about.router)
