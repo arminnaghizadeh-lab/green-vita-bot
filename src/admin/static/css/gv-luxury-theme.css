@@ -1,0 +1,2519 @@
+/* =========================================================
+   GREEN VITA — LUXURY / NATURAL / MEDICAL THEME
+   Global theme layer
+   Palette:
+   BG            #F7FAF2
+   Sidebar       #021408
+   Primary       #8BC53D
+   Primary Dark  #022F12
+   Surface       #FFFFFF
+   Soft          #E4F0CC
+   Text          #021408
+   Gold          #C6A15B
+   Gold Soft     #E8D8B5
+   ========================================================= */
+
+:root {
+    --gv-bg: #F7FAF2;
+    --gv-sidebar: #021408;
+
+    --gv-primary: #8BC53D;
+    --gv-primary-dark: #022F12;
+
+    --gv-surface: #FFFFFF;
+    --gv-soft: #E4F0CC;
+
+    --gv-text: #021408;
+    --gv-text-soft: #66736A;
+    --gv-muted: #8A948E;
+
+    --gv-border: #E3E9DF;
+
+    --gv-gold: #C6A15B;
+    --gv-gold-soft: #E8D8B5;
+
+    --gv-danger: #B84A4A;
+    --gv-warning: #B98224;
+    --gv-success: #3E7D4A;
+
+    --gv-radius-sm: 10px;
+    --gv-radius-md: 14px;
+    --gv-radius-lg: 18px;
+    --gv-radius-xl: 24px;
+
+    --gv-shadow-sm: 0 4px 14px rgba(2, 20, 8, .05);
+    --gv-shadow: 0 10px 30px rgba(2, 20, 8, .07);
+    --gv-shadow-hover: 0 16px 38px rgba(2, 20, 8, .11);
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+html,
+body {
+    background: var(--gv-bg);
+    color: var(--gv-text);
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--gv-text);
+}
+
+.text-gray-800,
+.text-gray-900,
+.text-gray-700 {
+    color: var(--gv-text) !important;
+}
+
+.text-gray-500,
+.text-gray-600,
+.text-gray-400 {
+    color: var(--gv-text-soft) !important;
+}
+
+/* =========================================================
+   COMMON SURFACES
+   ========================================================= */
+
+.card,
+.panel,
+.stat-card,
+.dashboard-card,
+.content-card,
+.calendar-card,
+.visit-card,
+.reservation-card {
+    background: var(--gv-surface);
+    border-color: var(--gv-border);
+    box-shadow: var(--gv-shadow-sm);
+    border-radius: var(--gv-radius-lg);
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+    color: var(--gv-primary-dark);
+}
+
+a:hover {
+    color: var(--gv-primary);
+}
+
+/* =========================================================
+   PRIMARY BUTTONS
+   ========================================================= */
+
+button.bg-green-600,
+button.bg-green-700,
+a.bg-green-600,
+a.bg-green-700,
+.bg-green-600,
+.bg-green-700 {
+    background-color: var(--gv-primary-dark) !important;
+    color: #fff !important;
+}
+
+button.bg-green-600:hover,
+button.bg-green-700:hover,
+a.bg-green-600:hover,
+a.bg-green-700:hover,
+.bg-green-600:hover,
+.bg-green-700:hover {
+    background-color: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+.btn-primary,
+.button-primary,
+.primary-btn {
+    background: var(--gv-primary-dark);
+    color: #fff;
+    border: 1px solid var(--gv-primary-dark);
+    border-radius: var(--gv-radius-md);
+    box-shadow: var(--gv-shadow-sm);
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.btn-primary:hover,
+.button-primary:hover,
+.primary-btn:hover {
+    background: var(--gv-primary);
+    color: var(--gv-primary-dark);
+    box-shadow: var(--gv-shadow);
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   OUTLINE / SOFT BUTTONS
+   ========================================================= */
+
+.btn-secondary,
+.button-secondary,
+.secondary-btn {
+    background: var(--gv-surface);
+    color: var(--gv-primary-dark);
+    border: 1px solid var(--gv-border);
+    border-radius: var(--gv-radius-md);
+}
+
+.btn-secondary:hover,
+.button-secondary:hover,
+.secondary-btn:hover {
+    background: var(--gv-soft);
+    border-color: rgba(139, 197, 61, .45);
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+input,
+select,
+textarea {
+    border-color: var(--gv-border);
+    background: var(--gv-surface);
+    color: var(--gv-text);
+    border-radius: var(--gv-radius-md);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--gv-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 197, 61, .16);
+}
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+table {
+    background: var(--gv-surface);
+}
+
+thead {
+    background: #F3F7EE;
+}
+
+th {
+    color: var(--gv-primary-dark);
+}
+
+td {
+    border-color: var(--gv-border);
+}
+
+tbody tr:hover {
+    background: #FAFCF7;
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge-success,
+.status-success {
+    background: #E7F2E5;
+    color: #2F6539;
+}
+
+.badge-warning,
+.status-warning {
+    background: #F7ECD5;
+    color: #805B16;
+}
+
+.badge-danger,
+.status-danger {
+    background: #F8E4E4;
+    color: #8D3535;
+}
+
+/* =========================================================
+   PREMIUM / GOLD DETAILS
+   Gold is intentionally restrained.
+   ========================================================= */
+
+.gv-gold,
+.premium-badge {
+    color: var(--gv-gold);
+}
+
+.gv-gold-border {
+    border-color: var(--gv-gold);
+}
+
+.gv-premium {
+    border: 1px solid rgba(198, 161, 91, .45);
+    box-shadow:
+        0 8px 24px rgba(2, 20, 8, .06),
+        inset 0 0 0 1px rgba(232, 216, 181, .35);
+}
+
+/* =========================================================
+   GREENVITA BRAND ACCENTS
+   ========================================================= */
+
+.gv-brand-accent {
+    color: var(--gv-primary);
+}
+
+.gv-brand-soft {
+    background: var(--gv-soft);
+    color: var(--gv-primary-dark);
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(2, 20, 8, .18);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(2, 20, 8, .32);
+}
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+::selection {
+    background: var(--gv-soft);
+    color: var(--gv-primary-dark);
+}
+
+/* =========================================================
+   DASHBOARD — LUXURY HEADER / SIDEBAR
+   ========================================================= */
+
+body.gv-dashboard {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text);
+}
+
+/* ---------- Header ---------- */
+
+body.gv-dashboard .topbar {
+    background: rgba(255, 255, 255, .94) !important;
+    border-bottom: 1px solid var(--gv-border) !important;
+    box-shadow: 0 4px 18px rgba(2, 20, 8, .045) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+body.gv-dashboard .topbar .brand strong {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .topbar .brand span {
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .topbar .logout {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    border-radius: 12px;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+body.gv-dashboard .topbar .logout:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    transform: translateY(-1px);
+}
+
+/* ---------- Sidebar ---------- */
+
+body.gv-dashboard .gv-sidebar {
+    background: linear-gradient(
+        180deg,
+        #021408 0%,
+        #022F12 100%
+    ) !important;
+    color: #fff;
+    border-left: 1px solid rgba(139, 197, 61, .10);
+    box-shadow: -10px 0 32px rgba(2, 20, 8, .16);
+}
+
+/* Brand area */
+
+body.gv-dashboard .gv-sidebar-brand {
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    margin-bottom: 18px;
+}
+
+body.gv-dashboard .gv-sidebar-brand strong {
+    color: #fff;
+}
+
+body.gv-dashboard .gv-sidebar-brand small {
+    color: rgba(255, 255, 255, .62);
+}
+
+/* Navigation */
+
+body.gv-dashboard .gv-sidebar-nav a,
+body.gv-dashboard .gv-sidebar-logout button {
+    color: rgba(255, 255, 255, .80);
+    border-radius: 13px;
+    transition:
+        background .18s ease,
+        color .18s ease,
+        transform .18s ease;
+}
+
+body.gv-dashboard .gv-sidebar-nav a:hover,
+body.gv-dashboard .gv-sidebar-logout button:hover {
+    background: rgba(139, 197, 61, .10) !important;
+    color: #fff !important;
+    transform: translateX(-2px);
+}
+
+/* Active navigation */
+
+body.gv-dashboard .gv-sidebar-nav a.active {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    box-shadow: 0 8px 22px rgba(139, 197, 61, .16);
+    font-weight: 800;
+}
+
+/* Logout */
+
+body.gv-dashboard .gv-sidebar-logout button {
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 0;
+    padding-top: 16px;
+}
+
+
+
+/* =========================================================
+   DASHBOARD — LUXURY CONTENT / HERO / CARDS
+   ========================================================= */
+
+/* ---------- Main content ---------- */
+
+body.gv-dashboard .container {
+    background: transparent;
+}
+
+/* ---------- Hero ---------- */
+
+body.gv-dashboard .hero {
+    background:
+        linear-gradient(
+            135deg,
+            #FFFFFF 0%,
+            #F7FAF2 58%,
+            #E4F0CC 100%
+        ) !important;
+
+    border: 1px solid rgba(139, 197, 61, .18) !important;
+    border-radius: var(--gv-radius-xl) !important;
+    box-shadow: var(--gv-shadow) !important;
+    color: var(--gv-text) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle premium botanical accent */
+
+body.gv-dashboard .hero::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    left: -55px;
+    bottom: -80px;
+    border-radius: 50%;
+    border: 1px solid rgba(198, 161, 91, .22);
+    pointer-events: none;
+}
+
+body.gv-dashboard .hero h1,
+body.gv-dashboard .hero h2,
+body.gv-dashboard .hero h3 {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .hero p {
+    color: var(--gv-text-soft);
+}
+
+/* ---------- Generic dashboard cards ---------- */
+
+body.gv-dashboard .card,
+body.gv-dashboard .stat-card,
+body.gv-dashboard .dashboard-card,
+body.gv-dashboard .panel,
+body.gv-dashboard .section-card {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-lg) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+    color: var(--gv-text);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body.gv-dashboard .card:hover,
+body.gv-dashboard .stat-card:hover,
+body.gv-dashboard .dashboard-card:hover,
+body.gv-dashboard .panel:hover,
+body.gv-dashboard .section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--gv-shadow-hover) !important;
+    border-color: rgba(139, 197, 61, .28) !important;
+}
+
+/* ---------- Headings ---------- */
+
+body.gv-dashboard .container h1,
+body.gv-dashboard .container h2,
+body.gv-dashboard .container h3 {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .container h2 {
+    letter-spacing: -.01em;
+}
+
+/* ---------- Gold premium accents ---------- */
+
+body.gv-dashboard .gold,
+body.gv-dashboard .premium,
+body.gv-dashboard .featured {
+    color: var(--gv-gold) !important;
+}
+
+body.gv-dashboard .premium-badge,
+body.gv-dashboard .featured-badge {
+    background: var(--gv-gold-soft) !important;
+    color: #6B5326 !important;
+    border: 1px solid rgba(198, 161, 91, .30) !important;
+}
+
+/* ---------- Buttons ---------- */
+
+body.gv-dashboard .btn-primary,
+body.gv-dashboard .primary-btn,
+body.gv-dashboard button.primary {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    border-radius: 12px;
+}
+
+body.gv-dashboard .btn-primary:hover,
+body.gv-dashboard .primary-btn:hover,
+body.gv-dashboard button.primary:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* ---------- Install PWA button ---------- */
+
+body.gv-dashboard .gv-install-btn {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    box-shadow: 0 8px 20px rgba(2, 20, 8, .12);
+}
+
+body.gv-dashboard .gv-install-btn:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* ---------- Tables ---------- */
+
+body.gv-dashboard table {
+    border-color: var(--gv-border);
+}
+
+body.gv-dashboard table thead th {
+    background: #F7FAF2 !important;
+    color: var(--gv-primary-dark);
+    border-bottom: 1px solid var(--gv-border);
+}
+
+body.gv-dashboard table tbody tr {
+    border-bottom: 1px solid var(--gv-border);
+}
+
+body.gv-dashboard table tbody tr:hover {
+    background: rgba(228, 240, 204, .35);
+}
+
+/* ---------- Soft highlighted areas ---------- */
+
+body.gv-dashboard .soft,
+body.gv-dashboard .highlight {
+    background: var(--gv-soft) !important;
+    color: var(--gv-primary-dark);
+}
+
+/* ---------- Focus ---------- */
+
+body.gv-dashboard input:focus,
+body.gv-dashboard select:focus,
+body.gv-dashboard textarea:focus,
+body.gv-dashboard button:focus-visible,
+body.gv-dashboard a:focus-visible {
+    outline: 2px solid rgba(139, 197, 61, .45);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   DASHBOARD — CALENDAR / SMART BIO
+   ========================================================= */
+
+/* ---------- Shared premium section surface ---------- */
+
+body.gv-dashboard .gv-dashboard-calendar-card,
+body.gv-dashboard .smart-bio-analytics {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-xl) !important;
+    box-shadow: var(--gv-shadow) !important;
+    color: var(--gv-text);
+}
+
+/* ---------- Section headers ---------- */
+
+body.gv-dashboard .gv-dashboard-calendar-head,
+body.gv-dashboard .smart-bio-head {
+    border-bottom: 1px solid var(--gv-border);
+}
+
+body.gv-dashboard .gv-dashboard-calendar-head h2,
+body.gv-dashboard .smart-bio-head h2 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-head p,
+body.gv-dashboard .smart-bio-head p {
+    color: var(--gv-text-soft) !important;
+}
+
+/* ---------- Primary links ---------- */
+
+body.gv-dashboard .primary-link {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(2, 20, 8, .08);
+    transition:
+        background .18s ease,
+        color .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+body.gv-dashboard .primary-link:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(139, 197, 61, .16);
+}
+
+/* ---------- Calendar toolbar ---------- */
+
+body.gv-dashboard .gv-dashboard-calendar-toolbar {
+    background: var(--gv-bg) !important;
+    border: 1px solid var(--gv-border);
+    border-radius: 14px;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-toolbar strong {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .gv-dashboard-calendar-toolbar button {
+    background: #fff !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 10px;
+}
+
+body.gv-dashboard .gv-dashboard-calendar-toolbar button:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139, 197, 61, .35) !important;
+}
+
+/* ---------- Calendar weekdays ---------- */
+
+body.gv-dashboard .gv-dashboard-weekdays {
+    color: var(--gv-muted);
+}
+
+body.gv-dashboard .gv-dashboard-weekdays span {
+    font-weight: 700;
+}
+
+/* ---------- Calendar cells ---------- */
+
+body.gv-dashboard .gv-dashboard-calendar-grid {
+    color: var(--gv-text);
+}
+
+body.gv-dashboard .gv-dashboard-calendar-grid > * {
+    border-color: var(--gv-border);
+}
+
+body.gv-dashboard .gv-dashboard-calendar-grid > *:hover {
+    background: rgba(228, 240, 204, .42);
+}
+
+/* ---------- Smart Bio periods ---------- */
+
+body.gv-dashboard .smart-bio-period,
+body.gv-dashboard .smart-bio-total,
+body.gv-dashboard .smart-bio-top-channel,
+body.gv-dashboard .smart-bio-channel-stat,
+body.gv-dashboard .smart-bio-channel,
+body.gv-dashboard .smart-bio-recent {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-md) !important;
+    box-shadow: var(--gv-shadow-sm);
+}
+
+/* Small metric cards */
+
+body.gv-dashboard .smart-bio-period span,
+body.gv-dashboard .smart-bio-total span,
+body.gv-dashboard .smart-bio-top-channel span {
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .smart-bio-period strong,
+body.gv-dashboard .smart-bio-total strong,
+body.gv-dashboard .smart-bio-top-channel strong {
+    color: var(--gv-primary-dark);
+}
+
+/* Total metric — premium treatment */
+
+body.gv-dashboard .smart-bio-total {
+    background:
+        linear-gradient(
+            135deg,
+            #F7FAF2 0%,
+            #E4F0CC 100%
+        ) !important;
+    border-color: rgba(139, 197, 61, .22) !important;
+}
+
+body.gv-dashboard .smart-bio-total strong {
+    color: var(--gv-primary-dark);
+}
+
+/* Top channel — subtle gold accent */
+
+body.gv-dashboard .smart-bio-top-channel {
+    border-color: rgba(198, 161, 91, .28) !important;
+    background:
+        linear-gradient(
+            135deg,
+            #FFFFFF 0%,
+            #FBF8F0 100%
+        ) !important;
+}
+
+body.gv-dashboard .smart-bio-top-channel > span {
+    color: var(--gv-gold) !important;
+}
+
+body.gv-dashboard .smart-bio-top-channel strong {
+    color: var(--gv-primary-dark);
+}
+
+/* Channel statistics */
+
+body.gv-dashboard .smart-bio-channel-stats h3 {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .smart-bio-channel-stat-head {
+    color: var(--gv-text);
+}
+
+body.gv-dashboard .smart-bio-channel-stat-head strong {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .smart-bio-channel-stat-head small {
+    color: var(--gv-muted);
+}
+
+/* Progress bars */
+
+body.gv-dashboard .smart-bio-progress {
+    background: #EEF2EA !important;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+body.gv-dashboard .smart-bio-progress > * {
+    background: var(--gv-primary) !important;
+    border-radius: inherit;
+}
+
+/* Recent activity */
+
+body.gv-dashboard .smart-bio-recent h3,
+body.gv-dashboard .smart-bio-channels h3 {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .smart-bio-recent-row {
+    border-bottom: 1px solid var(--gv-border);
+}
+
+body.gv-dashboard .smart-bio-recent-row:hover {
+    background: rgba(228, 240, 204, .25);
+}
+
+/* ---------- Gold micro-accent ---------- */
+
+body.gv-dashboard .smart-bio-head h2::first-letter {
+    color: var(--gv-gold);
+}
+
+
+/* =========================================================
+   DASHBOARD — OVERVIEW / STATS
+   ========================================================= */
+
+/* ---------- Overview section ---------- */
+
+body.gv-dashboard .gv-admin-overview {
+    background: transparent;
+}
+
+body.gv-dashboard .gv-overview-head {
+    color: var(--gv-text);
+}
+
+body.gv-dashboard .gv-overview-head h2 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body.gv-dashboard .gv-overview-head p {
+    color: var(--gv-text-soft) !important;
+}
+
+/* ---------- Overview cards ---------- */
+
+body.gv-dashboard .gv-overview-card {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-lg) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+    color: var(--gv-text);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body.gv-dashboard .gv-overview-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gv-shadow-hover) !important;
+    border-color: rgba(139, 197, 61, .28) !important;
+}
+
+/* Primary overview card */
+
+body.gv-dashboard .gv-overview-card.gv-card-primary {
+    background:
+        linear-gradient(
+            135deg,
+            #022F12 0%,
+            #021408 100%
+        ) !important;
+    border-color: rgba(139, 197, 61, .18) !important;
+    color: #fff;
+    box-shadow: 0 14px 34px rgba(2, 20, 8, .16) !important;
+}
+
+body.gv-dashboard .gv-overview-card.gv-card-primary:hover {
+    border-color: rgba(139, 197, 61, .38) !important;
+}
+
+/* Overview icons */
+
+body.gv-dashboard .gv-overview-card .gv-card-icon {
+    background: var(--gv-soft) !important;
+    color: var(--gv-primary-dark) !important;
+    border-radius: 14px;
+}
+
+body.gv-dashboard .gv-overview-card.gv-card-primary .gv-card-icon {
+    background: rgba(139, 197, 61, .16) !important;
+    color: var(--gv-primary) !important;
+}
+
+/* Overview text */
+
+body.gv-dashboard .gv-overview-card h3,
+body.gv-dashboard .gv-overview-card strong {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .gv-overview-card.gv-card-primary h3,
+body.gv-dashboard .gv-overview-card.gv-card-primary strong {
+    color: #fff;
+}
+
+body.gv-dashboard .gv-overview-card p,
+body.gv-dashboard .gv-overview-card span {
+    color: var(--gv-text-soft);
+}
+
+body.gv-dashboard .gv-overview-card.gv-card-primary p,
+body.gv-dashboard .gv-overview-card.gv-card-primary span {
+    color: rgba(255,255,255,.68);
+}
+
+/* ---------- Overview mini cards ---------- */
+
+body.gv-dashboard .gv-overview-mini {
+    background: rgba(255,255,255,.88) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-md) !important;
+    box-shadow: var(--gv-shadow-sm);
+}
+
+body.gv-dashboard .gv-overview-mini strong {
+    color: var(--gv-primary-dark);
+}
+
+body.gv-dashboard .gv-overview-mini span {
+    color: var(--gv-muted);
+}
+
+/* ---------- Main stats ---------- */
+
+body.gv-dashboard .stats {
+    background: transparent;
+}
+
+body.gv-dashboard .stats .stat-card {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-lg) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+    color: var(--gv-text);
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body.gv-dashboard .stats .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gv-shadow-hover) !important;
+    border-color: rgba(139, 197, 61, .28) !important;
+}
+
+/* Subtle green accent line */
+
+body.gv-dashboard .stats .stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42px;
+    height: 3px;
+    background: var(--gv-primary);
+    border-radius: 0 0 0 8px;
+}
+
+/* Stats labels */
+
+body.gv-dashboard .stats .stat-card span {
+    color: var(--gv-text-soft) !important;
+}
+
+/* Stats numbers */
+
+body.gv-dashboard .stats .stat-card strong {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 900;
+}
+
+/* Featured visit stat */
+
+body.gv-dashboard .stats .stat-card.highlight {
+    background:
+        linear-gradient(
+            135deg,
+            #F7FAF2 0%,
+            #E4F0CC 100%
+        ) !important;
+    border-color: rgba(139, 197, 61, .24) !important;
+}
+
+body.gv-dashboard .stats .stat-card.highlight::before {
+    background: var(--gv-gold);
+    width: 58px;
+}
+
+body.gv-dashboard .stats .stat-card.highlight span {
+    color: var(--gv-primary-dark) !important;
+}
+
+body.gv-dashboard .stats .stat-card.highlight strong {
+    color: var(--gv-primary-dark) !important;
+}
+
+/* ---------- Responsive spacing ---------- */
+
+@media (max-width: 768px) {
+    body.gv-dashboard .gv-overview-card,
+    body.gv-dashboard .stats .stat-card {
+        border-radius: 16px !important;
+    }
+}
+
+
+/* =========================================================
+   GLOBAL PAGE THEME
+   Applies Green Vita Luxury Design System to all pages
+   without changing page structure or JavaScript.
+   ========================================================= */
+
+/* ---------- Global page shell ---------- */
+
+body.login-page,
+body:not(.gv-dashboard) {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text) !important;
+}
+
+body:not(.gv-dashboard) {
+    font-family: inherit;
+}
+
+body:not(.gv-dashboard) ::selection {
+    background: var(--gv-soft);
+    color: var(--gv-primary-dark);
+}
+
+/* ---------- Login ---------- */
+
+body.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 15% 15%, rgba(139,197,61,.12), transparent 30%),
+        linear-gradient(145deg, #F7FAF2 0%, #EEF4E7 100%) !important;
+}
+
+body.login-page .login-card {
+    background: rgba(255,255,255,.96) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 18px 55px rgba(2,20,8,.10) !important;
+}
+
+body.login-page .login-logo {
+    border-radius: 18px;
+}
+
+body.login-page .muted {
+    color: var(--gv-text-soft) !important;
+}
+
+body.login-page .login-card label {
+    color: var(--gv-primary-dark) !important;
+}
+
+body.login-page .login-card input {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    color: var(--gv-text) !important;
+    border-radius: 12px !important;
+}
+
+body.login-page .login-card input:focus {
+    border-color: var(--gv-primary) !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.16) !important;
+}
+
+body.login-page .login-card button,
+body.login-page .login-card input[type="submit"] {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body.login-page .login-card button:hover,
+body.login-page .login-card input[type="submit"]:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body.login-page .alert {
+    background: #F8E4E4 !important;
+    color: #8D3535 !important;
+    border: 1px solid rgba(184,74,74,.20) !important;
+    border-radius: 12px !important;
+}
+
+/* =========================================================
+   RESERVATIONS
+   ========================================================= */
+
+
+body:has(.rv-layout) .rv-sidebar {
+    background: linear-gradient(180deg, #021408 0%, #022F12 100%) !important;
+    color: #fff !important;
+    box-shadow: -10px 0 32px rgba(2,20,8,.16) !important;
+}
+
+body:has(.rv-layout) .rv-brand {
+    color: #fff !important;
+}
+
+body:has(.rv-layout) .rv-nav a {
+    color: rgba(255,255,255,.80) !important;
+    border-radius: 13px !important;
+}
+
+body:has(.rv-layout) .rv-nav a:hover,
+body:has(.rv-layout) .rv-nav a.active {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+
+
+body:has(.rv-layout) .rv-hero {
+    background:
+        linear-gradient(135deg, #FFFFFF 0%, #F7FAF2 60%, #E4F0CC 100%) !important;
+    border: 1px solid rgba(139,197,61,.18) !important;
+    border-radius: 24px !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+body:has(.rv-layout) .rv-hero h1,
+body:has(.rv-layout) .rv-section-title {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-hero p,
+body:has(.rv-layout) .rv-section-sub,
+body:has(.rv-layout) .rv-toolbar-sub {
+    color: var(--gv-text-soft) !important;
+}
+
+body:has(.rv-layout) .rv-card {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-lg) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:has(.rv-layout) .rv-btn-primary {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-btn-primary:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-btn-soft {
+    background: #fff !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+}
+
+body:has(.rv-layout) .rv-btn-soft:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.35) !important;
+}
+
+body:has(.rv-layout) .rv-btn-danger {
+    background: #F8E4E4 !important;
+    color: #8D3535 !important;
+    border-color: rgba(184,74,74,.20) !important;
+}
+
+
+body:has(.rv-layout) .rv-slot {
+    background: #fff !important;
+    border-color: var(--gv-border) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-slot.off {
+    background: #F3F5F1 !important;
+    color: var(--gv-muted) !important;
+}
+
+body:has(.rv-layout) .rv-modal {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 22px 60px rgba(2,20,8,.16) !important;
+}
+
+body:has(.rv-layout) .rv-field input,
+body:has(.rv-layout) .rv-field textarea {
+    background: #fff !important;
+    color: var(--gv-text) !important;
+    border-color: var(--gv-border) !important;
+    border-radius: 12px !important;
+}
+
+
+/* =========================================================
+   SMART BIO
+   ========================================================= */
+
+body:has(.bio-page) {
+    background:
+        radial-gradient(circle at 15% 10%, rgba(139,197,61,.10), transparent 32%),
+        linear-gradient(145deg, #F7FAF2 0%, #EEF4E7 100%) !important;
+    color: var(--gv-text) !important;
+}
+
+body:has(.bio-page) .bio-card {
+    background: rgba(255,255,255,.96) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 26px !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+
+body:has(.bio-page) .bio-description,
+body:has(.bio-page) .bio-footer {
+    color: var(--gv-text-soft) !important;
+}
+
+body:has(.bio-page) .bio-link {
+    background: #fff !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+    border-radius: 16px !important;
+}
+
+body:has(.bio-page) .bio-link:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.30) !important;
+    color: var(--gv-primary-dark) !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+body:has(.bio-page) .link-icon {
+    background: var(--gv-soft) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+
+/* =========================================================
+   BOOKING — SHARED
+   ========================================================= */
+
+body:has(.wrap) {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text) !important;
+}
+
+body:has(.wrap) .wrap {
+    color: var(--gv-text);
+}
+
+body:has(.wrap) .back {
+    color: var(--gv-primary-dark) !important;
+}
+
+
+body:has(.wrap) .card {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 22px !important;
+    box-shadow: var(--gv-shadow) !important;
+    color: var(--gv-text) !important;
+}
+
+body:has(.wrap) h1,
+body:has(.wrap) h2,
+body:has(.wrap) h3 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.wrap) .hero {
+    background:
+        linear-gradient(135deg, #FFFFFF 0%, #F7FAF2 58%, #E4F0CC 100%) !important;
+    border: 1px solid rgba(139,197,61,.18) !important;
+    border-radius: 22px !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+body:has(.wrap) .track-card,
+body:has(.wrap) .service-card,
+body:has(.wrap) .summary,
+body:has(.wrap) .result {
+    background: #fff !important;
+    border-color: var(--gv-border) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:has(.wrap) .date,
+body:has(.wrap) .times button,
+body:has(.wrap) .time,
+body:has(.wrap) .date-next-button {
+    background: #fff !important;
+    border-color: var(--gv-border) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.wrap) .date:hover,
+body:has(.wrap) .date.active,
+body:has(.wrap) .times button:hover,
+body:has(.wrap) .times button.active,
+body:has(.wrap) .date-next-button:hover {
+    background: var(--gv-primary) !important;
+    border-color: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.wrap) input,
+body:has(.wrap) textarea,
+body:has(.wrap) select {
+    background: #fff !important;
+    color: var(--gv-text) !important;
+    border-color: var(--gv-border) !important;
+}
+
+body:has(.wrap) input:focus,
+body:has(.wrap) textarea:focus,
+body:has(.wrap) select:focus {
+    border-color: var(--gv-primary) !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.15) !important;
+}
+
+body:has(.wrap) .submit,
+body:has(.wrap) button[type="submit"],
+body:has(.wrap) .track-button,
+body:has(.wrap) #searchBtn {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--gv-primary-dark) !important;
+    border-radius: 12px !important;
+}
+
+body:has(.wrap) .submit:hover,
+body:has(.wrap) .track-button:hover,
+body:has(.wrap) #searchBtn:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.wrap) .message {
+    border-radius: 12px !important;
+}
+
+body:has(.wrap) .success {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.30) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.wrap) .tracking {
+    color: var(--gv-gold) !important;
+}
+
+/* Booking landing page */
+
+body:has(.services) .service-card {
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+body:has(.services) .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gv-shadow-hover) !important;
+    border-color: rgba(139,197,61,.30) !important;
+}
+
+body:has(.services) .choose,
+body:has(.services) .track-button {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--gv-primary-dark) !important;
+}
+
+body:has(.services) .choose:hover,
+body:has(.services) .track-button:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* =========================================================
+   PUBLIC WEBSITE
+   ========================================================= */
+
+body:has(.site-header) {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text) !important;
+}
+
+body:has(.site-header) .site-header {
+    background: rgba(255,255,255,.94) !important;
+    border-bottom: 1px solid var(--gv-border) !important;
+    box-shadow: 0 4px 18px rgba(2,20,8,.045) !important;
+    backdrop-filter: blur(14px);
+}
+
+body:has(.site-header) .brand {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.site-header) .brand-mark {
+    background: var(--gv-soft) !important;
+}
+
+body:has(.site-header) .menu a {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.site-header) .menu a:hover {
+    color: var(--gv-primary) !important;
+}
+
+body:has(.site-header) .menu .cta {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border-radius: 12px !important;
+}
+
+
+body:has(.site-header) .hero {
+    color: var(--gv-text) !important;
+}
+
+body:has(.site-header) .hero h1,
+body:has(.site-header) .hero h2,
+body:has(.site-header) .section-head h2 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.site-header) .hero p,
+body:has(.site-header) .section-head p {
+    color: var(--gv-text-soft) !important;
+}
+
+body:has(.site-header) .hero-card {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow) !important;
+    border-radius: 22px !important;
+}
+
+body:has(.site-header) .section {
+    color: var(--gv-text) !important;
+}
+
+body:has(.site-header) .site-footer {
+    background: var(--gv-sidebar) !important;
+    color: rgba(255,255,255,.78) !important;
+    border-top: 1px solid rgba(139,197,61,.10);
+}
+
+/* =========================================================
+   GLOBAL RESPONSIVE SAFETY
+   ========================================================= */
+
+@media (max-width: 700px) {
+    body:has(.wrap) .card,
+    body:has(.rv-layout) .rv-card,
+    body.login-page .login-card,
+    body:has(.bio-page) .bio-card {
+        border-radius: 18px !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — RESERVATIONS LUXURY POLISH
+   ========================================================= */
+
+body:has(.rv-layout) {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text) !important;
+}
+
+/* Sidebar */
+body:has(.rv-layout) .rv-sidebar {
+    background: linear-gradient(
+        180deg,
+        #021408 0%,
+        #022F12 100%
+    ) !important;
+    border-left: 1px solid rgba(139,197,61,.10);
+    box-shadow: -10px 0 32px rgba(2,20,8,.16);
+}
+
+body:has(.rv-layout) .rv-brand {
+    border-bottom-color: rgba(255,255,255,.08) !important;
+}
+
+body:has(.rv-layout) .rv-brand strong {
+    color: #fff !important;
+}
+
+body:has(.rv-layout) .rv-brand small {
+    color: rgba(255,255,255,.62) !important;
+}
+
+body:has(.rv-layout) .rv-nav a {
+    color: rgba(255,255,255,.80) !important;
+    transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+
+body:has(.rv-layout) .rv-nav a:hover {
+    background: rgba(139,197,61,.10) !important;
+    color: #fff !important;
+    transform: translateX(-2px);
+}
+
+body:has(.rv-layout) .rv-nav a.active {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    box-shadow: 0 8px 22px rgba(139,197,61,.16);
+}
+
+body:has(.rv-layout) .rv-logout button {
+    border-color: rgba(255,255,255,.08) !important;
+    color: rgba(255,255,255,.78) !important;
+}
+
+body:has(.rv-layout) .rv-logout button:hover {
+    background: rgba(139,197,61,.10) !important;
+    color: #fff !important;
+}
+
+/* Main / hero */
+body:has(.rv-layout) .rv-main {
+    background: transparent !important;
+}
+
+body:has(.rv-layout) .rv-hero {
+    padding: 26px 28px;
+    border-radius: 24px !important;
+    background:
+        linear-gradient(
+            135deg,
+            #F7FAF2 0%,
+            #EEF5E6 58%,
+            #E4F0CC 100%
+        ) !important;
+    border: 1px solid rgba(139,197,61,.18) !important;
+    box-shadow: var(--gv-shadow) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+body:has(.rv-layout) .rv-hero::after {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    left: -55px;
+    bottom: -75px;
+    border-radius: 50%;
+    border: 1px solid rgba(198,161,91,.22);
+    pointer-events: none;
+}
+
+body:has(.rv-layout) .rv-eyebrow {
+    color: var(--gv-gold) !important;
+}
+
+body:has(.rv-layout) .rv-hero h1 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-hero p,
+body:has(.rv-layout) .rv-toolbar-sub {
+    color: var(--gv-text-soft) !important;
+}
+
+/* Buttons */
+body:has(.rv-layout) .rv-btn {
+    border-radius: 12px !important;
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+body:has(.rv-layout) .rv-btn:hover {
+    transform: translateY(-1px);
+}
+
+body:has(.rv-layout) .rv-btn-primary {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    box-shadow: 0 7px 18px rgba(2,20,8,.09);
+}
+
+body:has(.rv-layout) .rv-btn-primary:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    box-shadow: 0 9px 22px rgba(139,197,61,.16);
+}
+
+body:has(.rv-layout) .rv-btn-soft {
+    background: #F1F6EB !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+}
+
+body:has(.rv-layout) .rv-btn-soft:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.30) !important;
+}
+
+body:has(.rv-layout) .rv-btn-danger {
+    background: #F8E4E4 !important;
+    color: #8D3535 !important;
+    border: 1px solid rgba(184,74,74,.16) !important;
+}
+
+/* Cards */
+body:has(.rv-layout) .rv-card {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: var(--gv-radius-lg) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:has(.rv-layout) .rv-card:hover {
+    border-color: rgba(139,197,61,.22);
+}
+
+/* Toolbar */
+body:has(.rv-layout) .rv-toolbar {
+    background: #EEF5E6 !important;
+}
+
+body:has(.rv-layout) .rv-toolbar-title {
+    color: var(--gv-primary-dark) !important;
+}
+
+/* Days */
+body:has(.rv-layout) .rv-day {
+    background: #F7FAF2 !important;
+    border-color: var(--gv-border) !important;
+}
+
+body:has(.rv-layout) .rv-day:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.30) !important;
+    box-shadow: var(--gv-shadow-sm);
+    transform: translateY(-2px);
+}
+
+/* Events */
+body:has(.rv-layout) .rv-event {
+    background: #EEF5E6 !important;
+    border-color: rgba(139,197,61,.18) !important;
+}
+
+body:has(.rv-layout) .rv-event:first-of-type {
+    border-right-color: var(--gv-primary) !important;
+}
+
+body:has(.rv-layout) .rv-event-name {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-source {
+    color: var(--gv-text-soft) !important;
+}
+
+/* Calendar */
+body:has(.rv-layout) .rv-month {
+    background: var(--gv-surface) !important;
+}
+
+body:has(.rv-layout) .rv-month-head {
+    border-bottom-color: var(--gv-border) !important;
+}
+
+body:has(.rv-layout) .rv-section-title {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-month-weekday {
+    color: var(--gv-muted) !important;
+}
+
+body:has(.rv-layout) .rv-month-day {
+    background: #F7FAF2 !important;
+    border-color: var(--gv-border) !important;
+}
+
+body:has(.rv-layout) .rv-month-day:hover,
+body:has(.rv-layout) .rv-month-day.selected {
+    background: var(--gv-soft) !important;
+    border-color: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-month-count {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+}
+
+/* Slots */
+body:has(.rv-layout) .rv-slot {
+    background: #F7FAF2 !important;
+    border-color: var(--gv-border) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-slot:hover {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.35) !important;
+}
+
+body:has(.rv-layout) .rv-slot.off {
+    background: #E1E9DA !important;
+    color: var(--gv-muted) !important;
+}
+
+/* Modal */
+body:has(.rv-layout) .rv-modal-backdrop {
+    background: rgba(2,20,8,.48) !important;
+}
+
+body:has(.rv-layout) .rv-modal {
+    background: #F1F6EB !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 22px 60px rgba(2,20,8,.18) !important;
+}
+
+body:has(.rv-layout) .rv-modal h2 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-modal-sub {
+    color: var(--gv-text-soft) !important;
+}
+
+body:has(.rv-layout) .rv-field label {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.rv-layout) .rv-field input,
+body:has(.rv-layout) .rv-field textarea {
+    background: #F7FAF2 !important;
+    border-color: var(--gv-border) !important;
+    color: var(--gv-text) !important;
+    border-radius: 12px !important;
+}
+
+body:has(.rv-layout) .rv-field input:focus,
+body:has(.rv-layout) .rv-field textarea:focus {
+    border-color: var(--gv-primary) !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.15) !important;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+    body:has(.rv-layout) .rv-hero {
+        padding: 20px;
+        border-radius: 18px !important;
+    }
+}
+
+/* =========================================================
+   GREEN VITA — BOOKING LUXURY POLISH
+   ========================================================= */
+
+body:has(.services),
+body:has(.track-card),
+body:has(#previewCard),
+body:has(#dates) {
+    background: var(--gv-bg) !important;
+    color: var(--gv-text) !important;
+}
+
+/* Shared booking surface */
+body:has(.services) .container,
+body:has(.track-card) .wrap,
+body:has(#previewCard) .wrap,
+body:has(#dates) .wrap {
+    color: var(--gv-text) !important;
+}
+
+body:has(.services) .hero,
+body:has(.track-card) .card,
+body:has(#previewCard) .card,
+body:has(#dates) .card {
+    background:
+        linear-gradient(135deg,#F7FAF2 0%,#EEF5E6 60%,#E4F0CC 100%) !important;
+    border: 1px solid rgba(139,197,61,.18) !important;
+    border-radius: 22px !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+/* Services */
+body:has(.services) .service-card {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 18px !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+body:has(.services) .service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--gv-shadow-hover) !important;
+    border-color: rgba(139,197,61,.32) !important;
+}
+
+body:has(.services) .choose,
+body:has(.services) .track-button {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border-color: var(--gv-primary-dark) !important;
+    border-radius: 12px !important;
+    transition: .18s ease;
+}
+
+body:has(.services) .choose:hover,
+body:has(.services) .track-button:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+    transform: translateY(-1px);
+}
+
+/* Dates / times */
+body:has(#dates) .date,
+body:has(#dates) .times > *,
+body:has(#dates) .date-next-button {
+    background: #F1F6EB !important;
+    border: 1px solid var(--gv-border) !important;
+    color: var(--gv-primary-dark) !important;
+    border-radius: 14px !important;
+}
+
+body:has(#dates) .date:hover,
+body:has(#dates) .date.active,
+body:has(#dates) .times > *:hover,
+body:has(#dates) .times > *.active,
+body:has(#dates) .date-next-button:hover {
+    background: var(--gv-primary) !important;
+    border-color: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* Form */
+body:has(#customerSection) .field label {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 800;
+}
+
+body:has(#customerSection) .field input,
+body:has(#customerSection) .field textarea {
+    background: #F1F6EB !important;
+    border: 1px solid var(--gv-border) !important;
+    color: var(--gv-text) !important;
+    border-radius: 12px !important;
+}
+
+body:has(#customerSection) .field input:focus,
+body:has(#customerSection) .field textarea:focus {
+    border-color: var(--gv-primary) !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.15) !important;
+}
+
+/* Submit / confirmation */
+body:has(#submitBtn) #submitBtn,
+body:has(#confirmBtn) #confirmBtn {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    border: 1px solid var(--gv-primary-dark) !important;
+    border-radius: 12px !important;
+}
+
+body:has(#submitBtn) #submitBtn:hover,
+body:has(#confirmBtn) #confirmBtn:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(#previewSection) .summary {
+    background: #F1F6EB !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 16px !important;
+}
+
+body:has(#previewSection) .summary-row {
+    border-color: var(--gv-border) !important;
+}
+
+body:has(#previewSection) .summary-row.total {
+    background: var(--gv-soft) !important;
+    color: var(--gv-primary-dark) !important;
+    border-radius: 12px;
+}
+
+body:has(#success),
+body:has(#result) .result {
+    background: var(--gv-soft) !important;
+    border-color: rgba(139,197,61,.25) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(#success) .tracking,
+body:has(#result) .tracking {
+    color: var(--gv-gold) !important;
+    font-weight: 900;
+}
+
+/* Back link */
+body:has(.wrap) .back {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 800;
+}
+
+body:has(.wrap) .back:hover {
+    color: var(--gv-primary) !important;
+}
+
+@media (max-width: 700px) {
+    body:has(.wrap) .card {
+        border-radius: 18px !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — VISITS + SMART BIO LUXURY POLISH
+   ========================================================= */
+
+/* ---------- Visit pages ---------- */
+
+body:not(.gv-dashboard) .bg-white {
+    background: #F7FAF2 !important;
+}
+
+body:not(.gv-dashboard) .bg-white.rounded-xl,
+body:not(.gv-dashboard) .bg-white.rounded-2xl {
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:not(.gv-dashboard) .text-gray-500,
+body:not(.gv-dashboard) .text-gray-600 {
+    color: var(--gv-text-soft) !important;
+}
+
+body:not(.gv-dashboard) .text-gray-700,
+body:not(.gv-dashboard) .text-gray-800,
+body:not(.gv-dashboard) .text-gray-900 {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:not(.gv-dashboard) .bg-gray-100 {
+    background: #EEF5E6 !important;
+}
+
+body:not(.gv-dashboard) .bg-emerald-700 {
+    background: var(--gv-primary-dark) !important;
+}
+
+body:not(.gv-dashboard) .hover\:bg-emerald-800:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:not(.gv-dashboard) table {
+    border-color: var(--gv-border) !important;
+}
+
+body:not(.gv-dashboard) thead {
+    background: #EAF2E1 !important;
+}
+
+body:not(.gv-dashboard) tbody tr:hover {
+    background: #EEF5E6 !important;
+}
+
+/* ---------- Smart Bio ---------- */
+
+body:has(.bio-page) {
+    background:
+        radial-gradient(circle at 15% 12%, rgba(139,197,61,.10), transparent 30%),
+        linear-gradient(145deg,#F7FAF2 0%,#EEF5E6 100%) !important;
+}
+
+body:has(.bio-page) .bio-card {
+    background: #F7FAF2 !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+body:has(.bio-page) .bio-title {
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.bio-page) .bio-description {
+    color: var(--gv-text-soft) !important;
+}
+
+body:has(.bio-page) .bio-link {
+    background: #EAF4DE !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:has(.bio-page) .bio-link:hover {
+    background: #E4F0CC !important;
+    border-color: rgba(139,197,61,.34) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--gv-shadow) !important;
+}
+
+body:has(.bio-page) .link-icon {
+    background: #D7EAC0 !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.bio-page) .link-arrow {
+    color: var(--gv-gold) !important;
+}
+
+body:has(.bio-page) .bio-footer {
+    color: var(--gv-text-soft) !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — LOGIN + PUBLIC LUXURY POLISH
+   ========================================================= */
+
+/* ---------- Login ---------- */
+
+body.login-page {
+    background:
+        radial-gradient(circle at 12% 12%, rgba(139,197,61,.10), transparent 28%),
+        linear-gradient(145deg,#F7FAF2 0%,#EEF5E6 100%) !important;
+}
+
+body.login-page .login-card {
+    background: #F7FAF2 !important;
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 20px 55px rgba(2,20,8,.10) !important;
+}
+
+body.login-page .login-card input {
+    background: #EEF5E6 !important;
+    border-color: var(--gv-border) !important;
+}
+
+body.login-page .login-card button {
+    background: var(--gv-primary-dark) !important;
+    border-color: var(--gv-primary-dark) !important;
+}
+
+body.login-page .login-card button:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* ---------- Public ---------- */
+
+body:has(.site-header) {
+    background: var(--gv-bg) !important;
+}
+
+body:has(.site-header) .site-header {
+    background: rgba(247,250,242,.94) !important;
+    border-bottom: 1px solid var(--gv-border) !important;
+}
+
+body:has(.site-header) .hero {
+    background:
+        linear-gradient(135deg,#F7FAF2 0%,#EEF5E6 58%,#E4F0CC 100%) !important;
+    border-radius: 24px;
+}
+
+body:has(.site-header) .hero-card,
+body:has(.site-header) .section-card {
+    background: #EAF4DE !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+body:has(.site-header) .menu .cta {
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+}
+
+body:has(.site-header) .menu .cta:hover {
+    background: var(--gv-primary) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+body:has(.site-header) .site-footer {
+    background: var(--gv-primary-dark) !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — RESPONSIVE LUXURY SYSTEM
+   ========================================================= */
+
+/* Dashboard mobile */
+@media (max-width: 768px) {
+    body.gv-dashboard .gv-sidebar {
+        width: min(84vw, 300px);
+    }
+
+    body.gv-dashboard .container {
+        width: calc(100% - 20px);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body.gv-dashboard .hero {
+        padding: 20px;
+    }
+
+    body.gv-dashboard .stats {
+        gap: 10px;
+    }
+
+    body.gv-dashboard .stats .stat-card {
+        min-width: 0;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-card,
+    body.gv-dashboard .smart-bio-analytics {
+        overflow: hidden;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 430px) {
+    body.gv-dashboard .hero h1 {
+        font-size: 1.45rem;
+    }
+
+    body.gv-dashboard .stats .stat-card {
+        padding: 14px;
+    }
+
+    body.gv-dashboard .stats .stat-card strong {
+        font-size: 1.5rem;
+    }
+}
+
+/* Reservations */
+@media (max-width: 650px) {
+    body:has(.rv-layout) .rv-main {
+        padding: 15px !important;
+    }
+
+    body:has(.rv-layout) .rv-hero,
+    body:has(.rv-layout) .rv-toolbar,
+    body:has(.rv-layout) .rv-month-head {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    body:has(.rv-layout) .rv-actions {
+        width: 100%;
+    }
+
+    body:has(.rv-layout) .rv-btn {
+        flex: 1 1 auto;
+    }
+
+    body:has(.rv-layout) .rv-modal {
+        width: calc(100% - 24px);
+        max-height: calc(100vh - 24px);
+        overflow-y: auto;
+    }
+}
+
+/* Booking */
+@media (max-width: 600px) {
+    body:has(.wrap) {
+        overflow-x: hidden;
+    }
+
+    body:has(.wrap) .wrap {
+        width: min(100%, 680px);
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    body:has(.wrap) .card {
+        padding: 18px !important;
+    }
+
+    body:has(.services) .services {
+        grid-template-columns: 1fr !important;
+    }
+
+    body:has(#dates) .dates,
+    body:has(#dates) .times {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body:has(#customerSection) .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body:has(#previewCard) .summary-row {
+        gap: 8px;
+    }
+}
+
+/* Smart Bio */
+@media (max-width: 480px) {
+    body:has(.bio-page) .bio-card {
+        width: calc(100% - 24px) !important;
+        padding: 22px !important;
+        border-radius: 20px !important;
+    }
+
+    body:has(.bio-page) .bio-link {
+        min-height: 56px;
+    }
+}
+
+/* Login */
+@media (max-width: 480px) {
+    body.login-page {
+        padding: 14px;
+    }
+
+    body.login-page .login-card {
+        width: 100%;
+        border-radius: 20px !important;
+        padding: 22px !important;
+    }
+}
+
+/* Public */
+@media (max-width: 650px) {
+    body:has(.site-header) .site-header {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    body:has(.site-header) .hero {
+        border-radius: 18px !important;
+    }
+
+    body:has(.site-header) .hero-card {
+        border-radius: 18px !important;
+    }
+}
+
+/* Prevent horizontal overflow */
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   GREEN VITA — UI INTERACTION POLISH
+   ========================================================= */
+
+a,
+button,
+input,
+select,
+textarea {
+    transition:
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        box-shadow .18s ease,
+        transform .18s ease,
+        opacity .18s ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid rgba(139,197,61,.55);
+    outline-offset: 2px;
+}
+
+/* Cards */
+body.gv-dashboard .card:hover,
+body.gv-dashboard .dashboard-card:hover,
+body.gv-dashboard .panel:hover,
+body.gv-dashboard .section-card:hover,
+body.gv-dashboard .stat-card:hover,
+body.gv-dashboard .gv-overview-card:hover,
+body:has(.rv-layout) .rv-card:hover,
+body:has(.services) .service-card:hover {
+    box-shadow: var(--gv-shadow-hover) !important;
+}
+
+/* Buttons */
+body.gv-dashboard button:hover,
+body.gv-dashboard a.primary-link:hover,
+body:has(.rv-layout) .rv-btn:hover,
+body:has(.wrap) button:hover,
+body:has(.site-header) .cta:hover {
+    cursor: pointer;
+}
+
+/* Gold should remain subtle */
+body.gv-dashboard .premium-badge,
+body.gv-dashboard .featured-badge,
+body:has(.rv-layout) .rv-eyebrow,
+body:has(.wrap) .tracking {
+    letter-spacing: .01em;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — DASHBOARD MOBILE FINAL FIX
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    html,
+    body,
+    body.gv-dashboard {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden !important;
+    }
+
+    body.gv-dashboard .topbar {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        padding: 10px 14px !important;
+        min-height: 64px !important;
+        box-sizing: border-box !important;
+        border-radius: 0 !important;
+    }
+
+    body.gv-dashboard .topbar .brand {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    body.gv-dashboard .topbar .brand strong {
+        font-size: 15px !important;
+        white-space: nowrap;
+    }
+
+    body.gv-dashboard .topbar .logout {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    body.gv-dashboard .gv-sidebar {
+        width: min(84vw, 300px) !important;
+        max-width: min(84vw, 300px) !important;
+    }
+
+    body.gv-dashboard .container {
+        width: calc(100% - 20px) !important;
+        max-width: none !important;
+        margin: 14px 10px 30px !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    body.gv-dashboard .hero {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 18px !important;
+        margin: 0 0 14px !important;
+        border-radius: 18px !important;
+    }
+
+    body.gv-dashboard .hero h1 {
+        font-size: 1.45rem !important;
+        line-height: 1.45 !important;
+        word-break: normal;
+    }
+
+    body.gv-dashboard .hero p {
+        font-size: .9rem !important;
+        line-height: 1.8 !important;
+    }
+
+    body.gv-dashboard .hero .primary-link {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin-top: 14px !important;
+    }
+
+    body.gv-dashboard .stats {
+        width: 100% !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    body.gv-dashboard .stats .stat-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        padding: 14px !important;
+        min-height: 100px !important;
+    }
+
+    body.gv-dashboard .stats .stat-card span {
+        font-size: .78rem !important;
+        line-height: 1.5 !important;
+    }
+
+    body.gv-dashboard .stats .stat-card strong {
+        font-size: 1.45rem !important;
+        line-height: 1.2 !important;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-card,
+    body.gv-dashboard .smart-bio-analytics {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-head,
+    body.gv-dashboard .smart-bio-head {
+        gap: 12px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-head .primary-link,
+    body.gv-dashboard .smart-bio-head .primary-link {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    body.gv-dashboard .smart-bio-periods {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.gv-dashboard table {
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 430px) {
+
+    body.gv-dashboard .container {
+        width: calc(100% - 12px) !important;
+        margin-left: 6px !important;
+        margin-right: 6px !important;
+    }
+
+    body.gv-dashboard .hero {
+        padding: 16px !important;
+    }
+
+    body.gv-dashboard .stats {
+        gap: 8px !important;
+    }
+
+    body.gv-dashboard .stats .stat-card {
+        padding: 12px !important;
+        min-height: 92px !important;
+    }
+
+    body.gv-dashboard .stats .stat-card strong {
+        font-size: 1.3rem !important;
+    }
+
+    body.gv-dashboard .gv-dashboard-calendar-card,
+    body.gv-dashboard .smart-bio-analytics {
+        padding: 14px !important;
+    }
+}
+
