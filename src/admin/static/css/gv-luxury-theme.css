@@ -2517,3 +2517,1336 @@ body:has(.wrap) .tracking {
     }
 }
 
+
+/* =========================================================
+   GREEN VITA — PUBLIC HOME V2 / LUXURY CLINIC
+   ========================================================= */
+
+:root {
+    --gv-public-dark: #021408;
+    --gv-public-primary: #8bc53d;
+    --gv-public-primary-dark: #022f12;
+    --gv-public-soft: #e4f0cc;
+    --gv-public-gold: #c6a15b;
+    --gv-public-gold-soft: #e8d8b5;
+}
+
+/* Header */
+body:not(.gv-dashboard) .site-header {
+    background: rgba(255,255,255,.92);
+    border-bottom: 1px solid rgba(2,47,18,.08);
+    box-shadow: 0 6px 24px rgba(2,20,8,.04);
+}
+
+body:not(.gv-dashboard) .brand {
+    color: var(--gv-public-dark);
+}
+
+body:not(.gv-dashboard) .brand-mark {
+    background: var(--gv-public-primary-dark);
+    box-shadow: 0 9px 24px rgba(2,47,18,.16);
+}
+
+body:not(.gv-dashboard) .menu a {
+    color: #536158;
+}
+
+body:not(.gv-dashboard) .menu a:hover {
+    background: var(--gv-public-soft);
+    color: var(--gv-public-dark);
+}
+
+body:not(.gv-dashboard) .menu .cta {
+    background: var(--gv-public-primary-dark);
+    box-shadow: 0 8px 20px rgba(2,47,18,.14);
+}
+
+/* Hero */
+body:not(.gv-dashboard) .hero {
+    padding-top: 72px;
+}
+
+body:not(.gv-dashboard) .eyebrow {
+    background: var(--gv-public-soft);
+    color: var(--gv-public-primary-dark);
+    border: 1px solid rgba(139,197,61,.20);
+}
+
+body:not(.gv-dashboard) .hero h1,
+body:not(.gv-dashboard) .section-head h2 {
+    color: var(--gv-public-dark);
+}
+
+body:not(.gv-dashboard) .hero h1 {
+    font-weight: 900;
+    letter-spacing: -.4px;
+}
+
+body:not(.gv-dashboard) .hero p {
+    color: #657168;
+}
+
+body:not(.gv-dashboard) .btn-primary {
+    background: var(--gv-public-primary-dark);
+    border-color: var(--gv-public-primary-dark);
+    box-shadow: 0 11px 25px rgba(2,47,18,.16);
+}
+
+body:not(.gv-dashboard) .btn-primary:hover {
+    background: var(--gv-public-primary);
+    border-color: var(--gv-public-primary);
+    color: var(--gv-public-dark);
+    transform: translateY(-2px);
+}
+
+body:not(.gv-dashboard) .btn-secondary {
+    background: #fff;
+    border-color: rgba(2,47,18,.10);
+}
+
+body:not(.gv-dashboard) .btn-secondary:hover {
+    border-color: rgba(139,197,61,.35);
+    background: var(--gv-public-soft);
+    transform: translateY(-2px);
+}
+
+/* Hero visual */
+body:not(.gv-dashboard) .hero-card {
+    position: relative;
+    min-height: 390px;
+    background:
+        radial-gradient(
+            circle at 20% 18%,
+            rgba(139,197,61,.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 82% 82%,
+            rgba(198,161,91,.18),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            #dfeccf 0%,
+            #eef3e7 52%,
+            #f3ecdc 100%
+        );
+    border: 1px solid rgba(139,197,61,.14);
+    box-shadow: 0 28px 65px rgba(2,20,8,.11);
+}
+
+body:not(.gv-dashboard) .hero-card::before {
+    content: "🌿";
+    position: absolute;
+    top: 34px;
+    right: 38px;
+    font-size: 76px;
+    opacity: .14;
+    transform: rotate(-8deg);
+}
+
+body:not(.gv-dashboard) .hero-card::after {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    left: -28px;
+    top: -28px;
+    border-radius: 50%;
+    border: 1px solid rgba(198,161,91,.28);
+}
+
+body:not(.gv-dashboard) .hero-card-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,.88);
+    border: 1px solid rgba(198,161,91,.18);
+    box-shadow: 0 14px 35px rgba(2,20,8,.08);
+}
+
+body:not(.gv-dashboard) .hero-card-content strong {
+    color: var(--gv-public-dark);
+}
+
+/* Services */
+body:not(.gv-dashboard) .section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+body:not(.gv-dashboard) .service {
+    position: relative;
+    background: #fff;
+    border-color: rgba(2,47,18,.08);
+    box-shadow: 0 12px 30px rgba(2,20,8,.055);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body:not(.gv-dashboard) .service::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    border-radius: 22px 22px 0 0;
+    background: linear-gradient(
+        90deg,
+        var(--gv-public-primary),
+        var(--gv-public-gold)
+    );
+    opacity: .75;
+}
+
+body:not(.gv-dashboard) .service:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139,197,61,.25);
+    box-shadow: 0 20px 40px rgba(2,20,8,.09);
+}
+
+body:not(.gv-dashboard) .service-icon {
+    background: var(--gv-public-soft);
+    border: 1px solid rgba(139,197,61,.16);
+}
+
+body:not(.gv-dashboard) .service h3 {
+    color: var(--gv-public-dark);
+}
+
+body:not(.gv-dashboard) .service-price {
+    color: var(--gv-public-primary-dark);
+}
+
+/* Features */
+body:not(.gv-dashboard) .feature {
+    background: #fff;
+    border-color: rgba(2,47,18,.08);
+    box-shadow: 0 10px 28px rgba(2,20,8,.045);
+}
+
+body:not(.gv-dashboard) .feature strong {
+    color: var(--gv-public-dark);
+}
+
+/* Tracking CTA */
+body:not(.gv-dashboard) .tracking {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(139,197,61,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            var(--gv-public-dark),
+            var(--gv-public-primary-dark)
+        );
+    border: 1px solid rgba(139,197,61,.12);
+    box-shadow: 0 24px 50px rgba(2,20,8,.12);
+}
+
+body:not(.gv-dashboard) .tracking::after {
+    content: "✦";
+    position: absolute;
+    left: 34px;
+    bottom: 18px;
+    color: rgba(198,161,91,.42);
+    font-size: 34px;
+}
+
+body:not(.gv-dashboard) .tracking .btn:hover {
+    background: var(--gv-public-soft);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+body:not(.gv-dashboard) .site-footer {
+    border-top-color: rgba(2,47,18,.08);
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+    body:not(.gv-dashboard) .hero {
+        padding-top: 38px;
+    }
+
+    body:not(.gv-dashboard) .hero h1 {
+        font-size: clamp(32px, 9vw, 46px);
+        line-height: 1.38;
+    }
+
+    body:not(.gv-dashboard) .hero p {
+        font-size: 15px;
+    }
+
+    body:not(.gv-dashboard) .hero-actions {
+        flex-direction: column;
+    }
+
+    body:not(.gv-dashboard) .hero-actions .btn {
+        width: 100%;
+    }
+
+    body:not(.gv-dashboard) .hero-card {
+        min-height: 300px;
+        padding: 20px;
+        border-radius: 24px;
+    }
+
+    body:not(.gv-dashboard) .hero-card::before {
+        font-size: 58px;
+        top: 24px;
+        right: 24px;
+    }
+
+    body:not(.gv-dashboard) .section-head h2 {
+        font-size: 28px;
+    }
+
+    body:not(.gv-dashboard) .service {
+        padding: 20px;
+    }
+
+    body:not(.gv-dashboard) .tracking {
+        padding: 26px 22px;
+        border-radius: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:not(.gv-dashboard) .service,
+    body:not(.gv-dashboard) .btn {
+        transition: none !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — ABOUT + CONTACT V2
+   ========================================================= */
+
+body:not(.gv-dashboard) .page {
+    padding-top: 58px;
+    padding-bottom: 58px;
+}
+
+body:not(.gv-dashboard) .page-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(2,47,18,.08);
+    border-radius: 28px;
+    box-shadow: 0 20px 50px rgba(2,20,8,.07);
+}
+
+body:not(.gv-dashboard) .page-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    border-radius: 28px 28px 0 0;
+    background: linear-gradient(
+        90deg,
+        #8bc53d,
+        #c6a15b,
+        #8bc53d
+    );
+}
+
+body:not(.gv-dashboard) .page-card h1 {
+    color: #021408;
+    font-weight: 900;
+}
+
+body:not(.gv-dashboard) .page-card h2 {
+    color: #022f12;
+    font-weight: 900;
+}
+
+body:not(.gv-dashboard) .page-card p {
+    color: #647168;
+}
+
+body:not(.gv-dashboard) .contact-page {
+    max-width: 980px;
+}
+
+/* Contact links */
+body:not(.gv-dashboard) .contact-links > a {
+    position: relative !important;
+    background: #fff !important;
+    border: 1px solid rgba(2,47,18,.08) !important;
+    box-shadow: 0 10px 28px rgba(2,20,8,.05);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+body:not(.gv-dashboard) .contact-links > a:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139,197,61,.30) !important;
+    box-shadow: 0 18px 38px rgba(2,20,8,.09);
+}
+
+body:not(.gv-dashboard) .contact-links > a > span:first-child {
+    background: #022f12 !important;
+    box-shadow: 0 8px 18px rgba(2,47,18,.15);
+}
+
+body:not(.gv-dashboard) .contact-links > a strong {
+    color: #021408 !important;
+}
+
+body:not(.gv-dashboard) .contact-links > a span:last-child {
+    color: #56705e !important;
+}
+
+/* Contact emergency block */
+body:not(.gv-dashboard) .contact-page > div[style*="linear-gradient"] {
+    background:
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(139,197,61,.18),
+            transparent 28%
+        ),
+        linear-gradient(
+            135deg,
+            #021408,
+            #022f12
+        ) !important;
+    border: 1px solid rgba(139,197,61,.12);
+    box-shadow: 0 22px 45px rgba(2,20,8,.13) !important;
+}
+
+/* Buttons */
+body:not(.gv-dashboard) .page-card .btn {
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background-color .18s ease;
+}
+
+body:not(.gv-dashboard) .page-card .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* About content rhythm */
+body:not(.gv-dashboard) .page-card > h2 {
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(2,47,18,.07);
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+    body:not(.gv-dashboard) .page {
+        padding-top: 32px;
+        padding-bottom: 35px;
+    }
+
+    body:not(.gv-dashboard) .page-card {
+        padding: 28px 18px !important;
+        border-radius: 22px;
+    }
+
+    body:not(.gv-dashboard) .page-card h1 {
+        font-size: 32px !important;
+        line-height: 1.4 !important;
+    }
+
+    body:not(.gv-dashboard) .page-card h2 {
+        font-size: 22px;
+    }
+
+    body:not(.gv-dashboard) .contact-page > div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    body:not(.gv-dashboard) .contact-page > div[style*="linear-gradient"] {
+        padding: 22px !important;
+        border-radius: 20px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:not(.gv-dashboard) .contact-links > a,
+    body:not(.gv-dashboard) .page-card .btn {
+        transition: none !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING V2 / PREMIUM CUSTOMER FLOW
+   ========================================================= */
+
+/* Booking landing */
+body:has(.services) {
+    background:
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(139,197,61,.10),
+            transparent 28%
+        ),
+        linear-gradient(145deg,#f7faf2 0%,#f3f6ef 100%);
+}
+
+body:has(.services) .service-card {
+    position: relative;
+    background: #fff !important;
+    border: 1px solid rgba(2,47,18,.08) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 14px 35px rgba(2,20,8,.055) !important;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+    overflow: hidden;
+}
+
+body:has(.services) .service-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        #8bc53d,
+        #c6a15b
+    );
+}
+
+body:has(.services) .service-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139,197,61,.28) !important;
+    box-shadow: 0 22px 45px rgba(2,20,8,.10) !important;
+}
+
+body:has(.services) .service-image,
+body:has(.services) .service-placeholder {
+    border-radius: 18px !important;
+}
+
+body:has(.services) .choose,
+body:has(.services) .track-button {
+    background: #022f12 !important;
+    border-color: #022f12 !important;
+    box-shadow: 0 9px 22px rgba(2,47,18,.14);
+    transition:
+        transform .18s ease,
+        background-color .18s ease,
+        box-shadow .18s ease;
+}
+
+body:has(.services) .choose:hover,
+body:has(.services) .track-button:hover {
+    background: #8bc53d !important;
+    color: #021408 !important;
+    transform: translateY(-2px);
+}
+
+/* Booking service / preview / track */
+body:has(.wrap) {
+    background:
+        radial-gradient(
+            circle at 12% 4%,
+            rgba(139,197,61,.10),
+            transparent 26%
+        ),
+        linear-gradient(145deg,#f7faf2 0%,#f3f6ef 100%);
+}
+
+body:has(.wrap) .wrap {
+    max-width: 760px;
+}
+
+body:has(.wrap) .card {
+    background: #fff !important;
+    border: 1px solid rgba(2,47,18,.08) !important;
+    border-radius: 26px !important;
+    box-shadow: 0 20px 50px rgba(2,20,8,.075) !important;
+}
+
+body:has(.wrap) .back {
+    color: #022f12 !important;
+    font-weight: 800;
+}
+
+body:has(.wrap) .back:hover {
+    color: #8bc53d !important;
+}
+
+/* Dates / times */
+body:has(.wrap) .date,
+body:has(.wrap) .time {
+    border: 1px solid rgba(2,47,18,.09) !important;
+    background: #fff !important;
+    border-radius: 14px !important;
+    transition:
+        transform .18s ease,
+        background-color .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+body:has(.wrap) .date:hover,
+body:has(.wrap) .time:hover {
+    border-color: rgba(139,197,61,.38) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(2,20,8,.07);
+}
+
+body:has(.wrap) .date.active,
+body:has(.wrap) .time.active,
+body:has(.wrap) .date.selected,
+body:has(.wrap) .time.selected {
+    background: #e4f0cc !important;
+    border-color: #8bc53d !important;
+    color: #022f12 !important;
+    box-shadow: 0 8px 22px rgba(139,197,61,.15);
+}
+
+/* Form */
+body:has(#customerSection) .field input,
+body:has(#customerSection) .field textarea,
+body:has(#customerSection) .field select {
+    background: #fbfcf8 !important;
+    border: 1px solid rgba(2,47,18,.11) !important;
+    border-radius: 14px !important;
+}
+
+body:has(#customerSection) .field input:focus,
+body:has(#customerSection) .field textarea:focus,
+body:has(#customerSection) .field select:focus {
+    border-color: #8bc53d !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.14) !important;
+    outline: none;
+}
+
+body:has(#customerSection) .submit,
+body:has(#previewCard) #confirmBtn,
+body:has(#result) #editBtn {
+    background: #022f12 !important;
+    border-color: #022f12 !important;
+    box-shadow: 0 10px 24px rgba(2,47,18,.14);
+}
+
+body:has(#customerSection) .submit:hover,
+body:has(#previewCard) #confirmBtn:hover,
+body:has(#result) #editBtn:hover {
+    background: #8bc53d !important;
+    border-color: #8bc53d !important;
+    color: #021408 !important;
+    transform: translateY(-2px);
+}
+
+/* Summary */
+body:has(#previewCard) .summary,
+body:has(#result) .result {
+    background: #fbfcf8 !important;
+    border: 1px solid rgba(2,47,18,.08) !important;
+    border-radius: 18px !important;
+}
+
+body:has(#previewCard) .summary-row,
+body:has(#result) .row {
+    border-color: rgba(2,47,18,.07) !important;
+}
+
+body:has(#previewCard) .summary-row.total,
+body:has(#result) .tracking {
+    background: #e4f0cc !important;
+    border-radius: 14px !important;
+    color: #022f12 !important;
+}
+
+/* Success */
+body:has(.success) .success {
+    border: 1px solid rgba(139,197,61,.20) !important;
+    box-shadow: 0 12px 28px rgba(2,20,8,.06);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    body:has(.services) .service-card {
+        border-radius: 20px !important;
+    }
+
+    body:has(.wrap) .card {
+        padding: 20px !important;
+        border-radius: 22px !important;
+    }
+
+    body:has(.wrap) .date,
+    body:has(.wrap) .time {
+        min-height: 48px;
+    }
+
+    body:has(#customerSection) .submit,
+    body:has(#previewCard) #confirmBtn,
+    body:has(#result) #editBtn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body:has(.services) .service-card,
+    body:has(.services) .choose,
+    body:has(.services) .track-button,
+    body:has(.wrap) .date,
+    body:has(.wrap) .time,
+    body:has(#customerSection) .submit {
+        transition: none !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING DATE COLOR FIX
+   ========================================================= */
+
+body:has(#dates) .date,
+body:has(#dates) .date strong,
+body:has(#dates) .date small {
+    color: #021408 !important;
+}
+
+body:has(#dates) .date:hover,
+body:has(#dates) .date:hover strong,
+body:has(#dates) .date:hover small,
+body:has(#dates) .date.active,
+body:has(#dates) .date.active strong,
+body:has(#dates) .date.active small,
+body:has(#dates) .date.selected,
+body:has(#dates) .date.selected strong,
+body:has(#dates) .date.selected small {
+    color: #ffffff !important;
+}
+
+body:has(#dates) .date {
+    background: #ffffff !important;
+    border-color: rgba(2,47,18,.12) !important;
+}
+
+body:has(#dates) .date:hover,
+body:has(#dates) .date.active,
+body:has(#dates) .date.selected {
+    background: #8bc53d !important;
+    border-color: #8bc53d !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING DATE BUTTON / MOBILE SAFARI FIX
+   ========================================================= */
+
+body:has(#dates) .date {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-text-fill-color: #021408 !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: #021408 !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+}
+
+body:has(#dates) .date strong,
+body:has(#dates) .date small {
+    color: #021408 !important;
+    -webkit-text-fill-color: #021408 !important;
+    text-decoration: none !important;
+}
+
+body:has(#dates) .date:hover,
+body:has(#dates) .date.active,
+body:has(#dates) .date.selected {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    background: #8bc53d !important;
+    border-color: #8bc53d !important;
+}
+
+body:has(#dates) .date:hover strong,
+body:has(#dates) .date:hover small,
+body:has(#dates) .date.active strong,
+body:has(#dates) .date.active small,
+body:has(#dates) .date.selected strong,
+body:has(#dates) .date.selected small {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING SERVICE SQUARE CARDS
+   Desktop: 4 columns
+   Mobile: 1 column
+   ========================================================= */
+
+body:has(.services) .services {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+}
+
+body:has(.services) .service-card {
+    aspect-ratio: 1 / 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding: 18px !important;
+    overflow: hidden !important;
+    border-radius: 22px !important;
+}
+
+body:has(.services) .service-card .service-image,
+body:has(.services) .service-card .service-placeholder {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    object-fit: cover !important;
+    border-radius: 16px !important;
+    margin-bottom: 14px !important;
+}
+
+body:has(.services) .service-card .service-placeholder {
+    display: grid !important;
+    place-items: center !important;
+    background: #e4f0cc !important;
+    font-size: 52px !important;
+}
+
+body:has(.services) .service-card h2 {
+    margin: 0 0 6px !important;
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+    color: #021408 !important;
+}
+
+body:has(.services) .service-card .price {
+    margin: 4px 0 12px !important;
+}
+
+body:has(.services) .service-card .choose {
+    width: 100% !important;
+    min-height: 44px !important;
+    flex: 0 0 auto !important;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+    body:has(.services) .services {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    body:has(.services) .services {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    body:has(.services) .service-card {
+        aspect-ratio: 1 / 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING SERVICE IMAGE SQUARE
+   ========================================================= */
+
+body:has(.services) .service-card .service-image {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 16px !important;
+    margin: 0 0 14px !important;
+    flex: 0 0 auto !important;
+}
+
+body:has(.services) .service-card .service-placeholder {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    flex: 0 0 auto !important;
+    margin: 0 0 14px !important;
+    border-radius: 16px !important;
+    display: grid !important;
+    place-items: center !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING DESKTOP 4 SMALL CARDS
+   ========================================================= */
+
+@media (min-width: 1001px) {
+    body:has(.services) .services {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 16px !important;
+        max-width: 1040px !important;
+        margin: 0 auto !important;
+    }
+
+    body:has(.services) .service-card {
+        width: 100% !important;
+        padding: 14px !important;
+        border-radius: 18px !important;
+    }
+
+    body:has(.services) .service-card .service-image,
+    body:has(.services) .service-card .service-placeholder {
+        aspect-ratio: 1 / 1 !important;
+        width: 100% !important;
+        border-radius: 13px !important;
+        margin-bottom: 10px !important;
+    }
+
+    body:has(.services) .service-card h2 {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+    }
+
+    body:has(.services) .service-card .price {
+        font-size: 15px !important;
+        margin: 3px 0 9px !important;
+    }
+
+    body:has(.services) .service-card .choose {
+        min-height: 40px !important;
+        padding: 9px 10px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* Laptop */
+@media (min-width: 769px) and (max-width: 1000px) {
+    body:has(.services) .services {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Phone: one card per row */
+@media (max-width: 768px) {
+    body:has(.services) .services {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING FINAL SERVICE GRID
+   Laptop/Desktop: 4 in one row
+   Phone: 1 per row
+   ========================================================= */
+
+@media (min-width: 769px) {
+    body:has(.services) .services {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        max-width: none !important;
+        gap: 16px !important;
+    }
+
+    body:has(.services) .service-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    body:has(.services) .services {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — BOOKING CARD TEXT CENTER
+   ========================================================= */
+
+body:has(.services) .service-card {
+    text-align: center !important;
+}
+
+body:has(.services) .service-card h2,
+body:has(.services) .service-card .price,
+body:has(.services) .service-card .choose {
+    text-align: center !important;
+}
+
+body:has(.services) .service-card .price {
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — VISITS V2 / MEDICAL LUXURY
+   ========================================================= */
+
+/* Page background */
+body:has(.space-y-6) {
+    background: #f7faf2 !important;
+}
+
+/* Main headings */
+body:has(.space-y-6) h1 {
+    color: #021408 !important;
+    font-weight: 900 !important;
+}
+
+body:has(.space-y-6) h2 {
+    color: #022f12 !important;
+}
+
+/* Cards */
+body:has(.space-y-6) .bg-white {
+    background: #fff !important;
+    border-color: rgba(2,47,18,.08) !important;
+    box-shadow: 0 12px 32px rgba(2,20,8,.055) !important;
+}
+
+/* Metric cards */
+body:has(.space-y-6) .grid > .bg-white,
+body:has(.space-y-6) .grid > [class*="bg-"] {
+    border-radius: 18px !important;
+}
+
+body:has(.space-y-6) .text-2xl {
+    color: #021408 !important;
+}
+
+/* Green actions */
+body:has(.space-y-6) .bg-emerald-700 {
+    background: #022f12 !important;
+}
+
+body:has(.space-y-6) .bg-emerald-700:hover,
+body:has(.space-y-6) .hover\:bg-emerald-800:hover {
+    background: #8bc53d !important;
+    color: #021408 !important;
+}
+
+/* Soft action buttons */
+body:has(.space-y-6) .bg-gray-100 {
+    border: 1px solid rgba(2,47,18,.08) !important;
+    color: #34443a !important;
+}
+
+body:has(.space-y-6) .bg-gray-100:hover {
+    background: #e4f0cc !important;
+    color: #022f12 !important;
+}
+
+/* Inputs */
+body:has(.space-y-6) input,
+body:has(.space-y-6) select,
+body:has(.space-y-6) textarea {
+    background: #fbfcf8 !important;
+    border-color: rgba(2,47,18,.11) !important;
+    border-radius: 12px !important;
+}
+
+body:has(.space-y-6) input:focus,
+body:has(.space-y-6) select:focus,
+body:has(.space-y-6) textarea:focus {
+    border-color: #8bc53d !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.14) !important;
+    outline: none !important;
+}
+
+/* Table */
+body:has(table) table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+body:has(table) thead {
+    background: #f7faf2 !important;
+}
+
+body:has(table) th {
+    color: #536158 !important;
+    font-weight: 800 !important;
+}
+
+body:has(table) tbody tr {
+    border-bottom-color: rgba(2,47,18,.06) !important;
+}
+
+body:has(table) tbody tr:hover {
+    background: rgba(228,240,204,.32) !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    body:has(.space-y-6) {
+        overflow-x: hidden !important;
+    }
+
+    body:has(.space-y-6) .text-2xl {
+        font-size: 1.35rem !important;
+        line-height: 1.5 !important;
+    }
+
+    body:has(.space-y-6) table {
+        min-width: 760px;
+    }
+
+    body:has(.space-y-6) .overflow-x-auto {
+        border-radius: 16px;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — RESERVATIONS + CALENDAR V2
+   ========================================================= */
+
+/* ---------- RESERVATIONS ---------- */
+
+body:has(.rv-layout) {
+    background: #f7faf2 !important;
+}
+
+body:has(.rv-layout) .rv-card {
+    background: #fff !important;
+    border-color: rgba(2,47,18,.08) !important;
+    box-shadow: 0 12px 32px rgba(2,20,8,.055) !important;
+}
+
+body:has(.rv-layout) .rv-hero {
+    background:
+        radial-gradient(circle at 90% 10%,rgba(139,197,61,.18),transparent 28%),
+        linear-gradient(135deg,#021408,#022f12) !important;
+    border: 1px solid rgba(139,197,61,.12);
+    box-shadow: 0 20px 45px rgba(2,20,8,.12);
+}
+
+body:has(.rv-layout) .rv-eyebrow {
+    color: #c6a15b !important;
+}
+
+body:has(.rv-layout) .rv-btn-primary {
+    background: #8bc53d !important;
+    color: #021408 !important;
+    border-color: #8bc53d !important;
+}
+
+body:has(.rv-layout) .rv-btn-primary:hover {
+    background: #c6a15b !important;
+    border-color: #c6a15b !important;
+}
+
+body:has(.rv-layout) .rv-btn-soft {
+    background: #fff !important;
+    color: #022f12 !important;
+    border-color: rgba(2,47,18,.10) !important;
+}
+
+body:has(.rv-layout) .rv-btn-soft:hover {
+    background: #e4f0cc !important;
+    border-color: rgba(139,197,61,.28) !important;
+}
+
+body:has(.rv-layout) .rv-day,
+body:has(.rv-layout) .rv-month-day,
+body:has(.rv-layout) .rv-slot {
+    background: #fff !important;
+    border-color: rgba(2,47,18,.08) !important;
+}
+
+body:has(.rv-layout) .rv-day:hover,
+body:has(.rv-layout) .rv-month-day:hover,
+body:has(.rv-layout) .rv-slot:hover {
+    border-color: rgba(139,197,61,.35) !important;
+    box-shadow: 0 8px 20px rgba(2,20,8,.06);
+}
+
+body:has(.rv-layout) .rv-day.active,
+body:has(.rv-layout) .rv-month-day.active {
+    background: #e4f0cc !important;
+    border-color: #8bc53d !important;
+    color: #022f12 !important;
+}
+
+body:has(.rv-layout) .rv-event {
+    border-right-color: #8bc53d !important;
+}
+
+body:has(.rv-layout) .rv-modal {
+    background: #fff !important;
+    border: 1px solid rgba(2,47,18,.08);
+    box-shadow: 0 28px 70px rgba(2,20,8,.18);
+}
+
+body:has(.rv-layout) .rv-field input,
+body:has(.rv-layout) .rv-field textarea,
+body:has(.rv-layout) .rv-field select {
+    background: #fbfcf8 !important;
+    border-color: rgba(2,47,18,.11) !important;
+    border-radius: 12px !important;
+}
+
+body:has(.rv-layout) .rv-field input:focus,
+body:has(.rv-layout) .rv-field textarea:focus,
+body:has(.rv-layout) .rv-field select:focus {
+    border-color: #8bc53d !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.14) !important;
+    outline: none !important;
+}
+
+/* ---------- CALENDAR ---------- */
+
+body:has(.gv-calendar-page) {
+    background: #f7faf2 !important;
+}
+
+body:has(.gv-calendar-page) .gv-calendar-shell,
+body:has(.gv-calendar-page) .gv-panel {
+    background: #fff !important;
+    border-color: rgba(2,47,18,.08) !important;
+    box-shadow: 0 12px 32px rgba(2,20,8,.055) !important;
+}
+
+body:has(.gv-calendar-page) .gv-calendar-header {
+    background:
+        radial-gradient(circle at 90% 10%,rgba(139,197,61,.15),transparent 28%),
+        linear-gradient(135deg,#021408,#022f12) !important;
+    color: #fff;
+    border-radius: 24px;
+}
+
+body:has(.gv-calendar-page) .gv-eyebrow {
+    color: #c6a15b !important;
+}
+
+body:has(.gv-calendar-page) .gv-primary-btn {
+    background: #8bc53d !important;
+    color: #021408 !important;
+}
+
+body:has(.gv-calendar-page) .gv-primary-btn:hover {
+    background: #c6a15b !important;
+}
+
+body:has(.gv-calendar-page) .gv-secondary-btn {
+    background: #fff !important;
+    color: #022f12 !important;
+    border-color: rgba(2,47,18,.10) !important;
+}
+
+body:has(.gv-calendar-page) .gv-secondary-btn:hover {
+    background: #e4f0cc !important;
+}
+
+body:has(.gv-calendar-page) .gv-icon-btn,
+body:has(.gv-calendar-page) .gv-today-btn {
+    border-color: rgba(2,47,18,.10) !important;
+    background: #fff !important;
+    color: #022f12 !important;
+}
+
+body:has(.gv-calendar-page) .gv-icon-btn:hover,
+body:has(.gv-calendar-page) .gv-today-btn:hover {
+    background: #e4f0cc !important;
+    border-color: #8bc53d !important;
+}
+
+body:has(.gv-calendar-page) .gv-calendar-grid > *,
+body:has(.gv-calendar-page) .gv-day-events,
+body:has(.gv-calendar-page) .gv-slots,
+body:has(.gv-calendar-page) .gv-request-list {
+    border-color: rgba(2,47,18,.07) !important;
+}
+
+body:has(.gv-calendar-page) .gv-request-item,
+body:has(.gv-calendar-page) .gv-day-number,
+body:has(.gv-calendar-page) .gv-calendar-grid > * {
+    transition: background-color .18s ease,
+                border-color .18s ease,
+                box-shadow .18s ease;
+}
+
+body:has(.gv-calendar-page) .gv-request-item:hover,
+body:has(.gv-calendar-page) .gv-request-item.is-selected {
+    background: #e4f0cc !important;
+    border-color: rgba(139,197,61,.30) !important;
+}
+
+body:has(.gv-calendar-page) .gv-event-time {
+    color: #022f12 !important;
+}
+
+body:has(.gv-calendar-page) .gv-event-main {
+    border-right-color: #8bc53d !important;
+}
+
+body:has(.gv-calendar-page) .calendar-modal-card {
+    background: #fff !important;
+    border: 1px solid rgba(2,47,18,.08) !important;
+    box-shadow: 0 28px 70px rgba(2,20,8,.18) !important;
+}
+
+body:has(.gv-calendar-page) .modal-form-group input,
+body:has(.gv-calendar-page) .modal-form-group textarea,
+body:has(.gv-calendar-page) .modal-form-group select {
+    background: #fbfcf8 !important;
+    border-color: rgba(2,47,18,.11) !important;
+    border-radius: 12px !important;
+}
+
+body:has(.gv-calendar-page) .modal-form-group input:focus,
+body:has(.gv-calendar-page) .modal-form-group textarea:focus,
+body:has(.gv-calendar-page) .modal-form-group select:focus {
+    border-color: #8bc53d !important;
+    box-shadow: 0 0 0 3px rgba(139,197,61,.14) !important;
+    outline: none !important;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    body:has(.rv-layout) .rv-hero,
+    body:has(.gv-calendar-page) .gv-calendar-header {
+        border-radius: 18px !important;
+    }
+
+    body:has(.rv-layout) .rv-card,
+    body:has(.gv-calendar-page) .gv-panel,
+    body:has(.gv-calendar-page) .gv-calendar-shell {
+        border-radius: 18px !important;
+    }
+}
+
+
+/* Persian date display */
+body:has(#dates) .date small {
+    direction: rtl !important;
+    unicode-bidi: plaintext !important;
+    text-align: center !important;
+    display: block !important;
+    font-family: "Vazir", Tahoma, sans-serif !important;
+}
+

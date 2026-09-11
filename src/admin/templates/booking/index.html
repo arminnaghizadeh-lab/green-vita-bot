@@ -14,7 +14,7 @@
 
         body {
             margin: 0;
-            font-family: Tahoma, Arial, sans-serif;
+            font-family: "Vazir", Tahoma, Arial, sans-serif;
             background: #f7f8f5;
             color: #26352b;
         }
@@ -86,8 +86,9 @@
 
         .services {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            width: 100%;
         }
 
         .service-card {
@@ -99,11 +100,13 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
+            text-align: center;
+            align-items: center;
         }
 
         .service-image {
             width: 100%;
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 1 / 1;
             border-radius: 14px;
             object-fit: cover;
             background: #edf1eb;
@@ -111,7 +114,7 @@
 
         .service-placeholder {
             width: 100%;
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 1 / 1;
             border-radius: 14px;
             background: #edf1eb;
             display: flex;
@@ -123,11 +126,15 @@
         .service-card h2 {
             margin: 0;
             font-size: 20px;
+            width: 100%;
+            text-align: center;
         }
 
         .price {
+            width: 100%;
             font-weight: bold;
             font-size: 18px;
+            text-align: center;
         }
 
         .price small {
@@ -136,6 +143,7 @@
         }
 
         .choose {
+            width: 100%;
             border: 0;
             border-radius: 12px;
             padding: 13px 16px;
@@ -185,8 +193,8 @@ select{
   font-family: "Vazir", sans-serif !important;
 }
 \n</style>
-  <link rel="stylesheet" href="/admin/static/css/global-vazir.css">
-    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=12">
+  <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
 </head>
 
 <body>
@@ -215,7 +223,35 @@ select{
         {% for service in services %}
         <article class="service-card">
 
-            {% if service.image_url %}
+            {% if service.id == 1 %}
+                <img
+                    class="service-image"
+                    src="https://shermila.net/wp-content/uploads/2025/05/GiyahNakhleNicolai.jpg"
+                    alt="ویزیت گیاهان آپارتمانی"
+                    loading="lazy"
+                >
+            {% elif service.id == 2 %}
+                <img
+                    class="service-image"
+                    src="https://pardisnadi.ir/wp-content/uploads/2023/11/%D8%A7%D8%B5%D9%88%D9%84-%D9%86%DA%AF%D9%87%D8%AF%D8%A7%D8%B1%DB%8C-%D9%81%D8%B6%D8%A7%DB%8C-%D8%B3%D8%A8%D8%B2.jpg"
+                    alt="ویزیت گیاهان فضای باز"
+                    loading="lazy"
+                >
+            {% elif service.id == 3 %}
+                <img
+                    class="service-image"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtSPwkOX3Ypli20UCFtdv1qNmRDocQLBBCOyCY5VbzOMSz7BRuIo5Kx9lL&s=10"
+                    alt="ویزیت باغات"
+                    loading="lazy"
+                >
+            {% elif service.id == 4 %}
+                <img
+                    class="service-image"
+                    src="https://cdn.tamin24.ir/posts/images/67188.jpg"
+                    alt="مشاوره تلفنی"
+                    loading="lazy"
+                >
+            {% elif service.image_url %}
                 <img
                     class="service-image"
                     src="{{ service.image_url }}"
@@ -230,7 +266,7 @@ select{
 
             <div class="price">
                 {% if service.price %}
-                    {{ "{:,}".format(service.price|int) }}
+                    {{ "{:,}".format(service.price|int).replace("0","۰").replace("1","۱").replace("2","۲").replace("3","۳").replace("4","۴").replace("5","۵").replace("6","۶").replace("7","۷").replace("8","۸").replace("9","۹") }}
                     <small>تومان</small>
                 {% else %}
                     رایگان
@@ -238,7 +274,7 @@ select{
             </div>
 
             <a class="choose" href="/booking/service/{{ service.id }}/">
-                انتخاب خدمت
+                انتخاب
             </a>
 
         </article>

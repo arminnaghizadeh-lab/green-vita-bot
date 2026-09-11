@@ -127,3 +127,42 @@ textarea,
 select {
     font-family: "Vazir", sans-serif !important;
 }
+
+/* =========================================================
+   GREEN VITA — GLOBAL VAZIR FONT
+   Mobile + Desktop / All UI Elements
+   ========================================================= */
+
+html,
+body,
+body * {
+    font-family: "Vazir", Tahoma, Arial, sans-serif !important;
+}
+
+input,
+textarea,
+select,
+button,
+option,
+label,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+small,
+strong,
+b,
+div,
+section,
+article,
+header,
+footer,
+nav,
+main {
+    font-family: "Vazir", Tahoma, Arial, sans-serif !important;
+}
