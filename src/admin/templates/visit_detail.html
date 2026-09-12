@@ -53,7 +53,9 @@
     <label class="block text-sm font-semibold mb-2">وضعیت</label>
     <select name="status" class="w-full border rounded-lg px-3 py-2 mb-4">
         {% for key, label in status_labels.items() %}
+        {% if key != "pending" %}
         <option value="{{ key }}" {% if diagnosis.visit_status.value == key %}selected{% endif %}>{{ label }}</option>
+        {% endif %}
         {% endfor %}
     </select>
 
