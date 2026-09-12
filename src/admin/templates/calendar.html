@@ -1512,7 +1512,7 @@
 
     document.addEventListener(
         "click",
-        event => {
+        async event => {
 
             const requestButton =
                 event.target.closest(
@@ -1661,30 +1661,65 @@
         }
     );
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        async () => {
+    async function initializeCalendarPage() {
 
-            const today =
-                jalaliNow();
+        const today =
+            jalaliNow();
 
-            currentJalali = [
-                today[0],
-                today[1],
-                1
-            ];
+        currentJalali = [
+            today[0],
+            today[1],
+            1
+        ];
 
-            selectedJalali = today;
+        selectedJalali = today;
 
-            try {
-                await loadCalendarRequests();
-            } catch (error) {
-                console.error(error);
-            }
-
-            await loadCalendar();
+        try {
+            await loadCalendarRequests();
+        } catch (error) {
+            console.error(error);
         }
-    );
+
+        await loadCalendar();
+    }
+
+    async function bootRequestQueue() {
+        try {
+            const data = await gvApi("/api/calendar/requests");
+
+            requests = Array.isArray(data.requests)
+                ? data.requests
+                : [];
+
+            renderRequestPanel();
+
+            console.info(
+                "Green Vita calendar request queue:",
+                requests.length
+            );
+        } catch (error) {
+            console.error(
+                "Green Vita calendar request queue failed:",
+                error
+            );
+        }
+    }
+
+    window.__gvCalendarRequestBoot = bootRequestQueue;
+
+    // Request queue is intentionally bootstrapped independently
+    // from the rest of the calendar initialization.
+    setTimeout(bootRequestQueue, 0);
+
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeCalendarPage,
+            { once: true }
+        );
+    } else {
+        initializeCalendarPage();
+    }
 
 })();
 </script>
