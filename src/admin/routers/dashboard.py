@@ -86,7 +86,10 @@ async def reservations_overview(
 
     active_booking_statuses = (
         BookingStatus.PENDING,
+        BookingStatus.REVIEWING,
+        BookingStatus.SCHEDULED,
         BookingStatus.CONFIRMED,
+        BookingStatus.IN_PROGRESS,
     )
 
     active_appointment_statuses = (
@@ -407,7 +410,10 @@ async def admin_overview(
             Booking.status.in_(
                 [
                     BookingStatus.PENDING,
+                    BookingStatus.REVIEWING,
+                    BookingStatus.SCHEDULED,
                     BookingStatus.CONFIRMED,
+                    BookingStatus.IN_PROGRESS,
                 ]
             ),
         )

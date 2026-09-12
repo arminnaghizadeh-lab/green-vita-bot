@@ -230,7 +230,10 @@ async def get_shared_occupied_starts(
             Booking.status.in_(
                 (
                     BookingStatus.PENDING,
+                    BookingStatus.REVIEWING,
+                    BookingStatus.SCHEDULED,
                     BookingStatus.CONFIRMED,
+                    BookingStatus.IN_PROGRESS,
                 )
             ),
         )

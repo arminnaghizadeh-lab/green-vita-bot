@@ -3,6 +3,13 @@
 {% block title %}صف یکپارچه ویزیت | {{ app_name }}{% endblock %}
 
 {% block content %}
+
+{% include "partials/visit_scheduler_picker.html" %}
+
+
+
+
+
 <div class="space-y-6" dir="rtl">
 
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -133,7 +140,7 @@
                     <th class="px-4 py-3 text-right">مراجع</th>
                     <th class="px-4 py-3 text-right">گیاه / خدمت</th>
                     <th class="px-4 py-3 text-right">وضعیت</th>
-                    <th class="px-4 py-3 text-right">زمان</th>
+                    <th class="px-4 py-3 text-right">زمان درخواست</th>
                     <th class="px-4 py-3 text-right">عملیات</th>
                 </tr>
                 </thead>
@@ -147,9 +154,6 @@
                     <td class="px-4 py-4">
                         <div class="font-bold font-mono">
                             #{{ item.number }}
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{ item.created_at.strftime('%Y-%m-%d %H:%M') }}
                         </div>
                     </td>
 
@@ -201,25 +205,9 @@
                     </td>
 
                     <td class="px-4 py-4 whitespace-nowrap">
-
-                        {% if item.scheduled_at %}
-
-                            <div class="font-semibold">
-                                {{ item.scheduled_at.strftime('%Y-%m-%d') }}
-                            </div>
-
-                            <div class="text-xs text-emerald-700">
-                                {{ item.scheduled_at.strftime('%H:%M') }}
-                            </div>
-
-                        {% else %}
-
-                            <span class="text-amber-700 font-semibold">
-                                —
-                            </span>
-
-                        {% endif %}
-
+                        <div class="font-semibold">
+                            {{ item.request_time }}
+                        </div>
                     </td>
 
                     <td class="px-4 py-4">
@@ -228,21 +216,14 @@
 
                             {% if item.needs_schedule %}
 
-                            <form method="post"
-                                  action="/api/visit-queue/{{ item.kind }}/{{ item.id }}/schedule"
-                                  class="space-y-2">
-
-                                <input type="datetime-local"
-                                       name="start_at"
-                                       required
-                                       class="w-full border rounded-lg px-3 py-2 text-sm">
-
-                                <button type="submit"
-                                        class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-3 py-2 text-sm font-semibold">
-                                    📅 زمان‌بندی
-                                </button>
-
-                            </form>
+                            <button
+                                type="button"
+                                class="gv-queue-schedule-btn"
+                                data-queue-schedule-kind="{{ item.kind }}"
+                                data-queue-schedule-id="{{ item.id }}"
+                            >
+                                📅 انتخاب تاریخ و زمان
+                            </button>
 
                             {% endif %}
 
@@ -278,30 +259,14 @@
                                 <select name="status"
                                         class="flex-1 border rounded-lg px-2 py-2 text-xs">
 
-                                    <option value="reviewing"
-                                        {% if item.status == "reviewing" %}selected{% endif %}>
-                                        بررسی
+                                    {% for key, label in status_labels.items() %}
+                                    {% if key != "pending" %}
+                                    <option value="{{ key }}"
+                                            {% if item.status == key %}selected{% endif %}>
+                                        {{ label }}
                                     </option>
-
-                                    <option value="confirmed"
-                                        {% if item.status == "confirmed" %}selected{% endif %}>
-                                        تأیید
-                                    </option>
-
-                                    <option value="in_progress"
-                                        {% if item.status == "in_progress" %}selected{% endif %}>
-                                        در حال انجام
-                                    </option>
-
-                                    <option value="completed"
-                                        {% if item.status == "completed" %}selected{% endif %}>
-                                        انجام شد
-                                    </option>
-
-                                    <option value="cancelled"
-                                        {% if item.status == "cancelled" %}selected{% endif %}>
-                                        لغو
-                                    </option>
+                                    {% endif %}
+                                    {% endfor %}
 
                                 </select>
 
@@ -319,27 +284,16 @@
                                   class="flex gap-2">
 
                                 <select name="status"
-                                        class="flex-1 border rounded-lg px-2 py-2 text-xs">
+                                        class="flex-1 border rounded-lg px-3 py-2 text-sm bg-white">
 
-                                    <option value="pending"
-                                        {% if item.status == "pending" %}selected{% endif %}>
-                                        در انتظار
+                                    {% for key, label in status_labels.items() %}
+                                    {% if key != "pending" %}
+                                    <option value="{{ key }}"
+                                            {% if item.status == key %}selected{% endif %}>
+                                        {{ label }}
                                     </option>
-
-                                    <option value="confirmed"
-                                        {% if item.status == "confirmed" %}selected{% endif %}>
-                                        تأیید
-                                    </option>
-
-                                    <option value="completed"
-                                        {% if item.status == "completed" %}selected{% endif %}>
-                                        انجام شد
-                                    </option>
-
-                                    <option value="cancelled"
-                                        {% if item.status == "cancelled" %}selected{% endif %}>
-                                        لغو
-                                    </option>
+                                    {% endif %}
+                                    {% endfor %}
 
                                 </select>
 
@@ -377,5 +331,8 @@
 
     </div>
 </div>
+
+
+
 {% endblock %}
 

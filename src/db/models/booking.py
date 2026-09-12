@@ -29,9 +29,12 @@ class BookingSource(str, enum.Enum):
 
 class BookingStatus(str, enum.Enum):
     PENDING = "pending"
+    REVIEWING = "reviewing"
+    SCHEDULED = "scheduled"
     CONFIRMED = "confirmed"
-    CANCELLED = "cancelled"
+    IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
+    CANCELLED = "cancelled"
 
 
 class Service(Base, TimestampMixin):

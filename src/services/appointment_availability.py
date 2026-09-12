@@ -18,7 +18,10 @@ from src.db.models.visit_appointment import (
 
 ACTIVE_BOOKING_STATUSES = (
     BookingStatus.PENDING,
+    BookingStatus.REVIEWING,
+    BookingStatus.SCHEDULED,
     BookingStatus.CONFIRMED,
+    BookingStatus.IN_PROGRESS,
 )
 
 ACTIVE_VISIT_STATUSES = (

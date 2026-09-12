@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
+import jdatetime
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -40,6 +41,17 @@ from src.services.visit_scheduler import (
 
 router = APIRouter(tags=["visits"])
 templates = Jinja2Templates(directory="src/admin/templates")
+
+def _format_request_datetime(value):
+    if not value:
+        return "—"
+
+    jalali_dt = jdatetime.datetime.fromgregorian(datetime=value)
+
+    return jalali_dt.strftime("%Y/%m/%d - %H:%M").translate(
+        str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
+    )
+
 
 STATUS_LABELS = {
     VisitStatus.PENDING.value: "در انتظار بررسی",
@@ -997,6 +1009,7 @@ async def visits_list(
                     "legacy": "◌ قدیمی",
                 }.get(raw_source, raw_source),
                 "created_at": diagnosis.created_at,
+                "request_time": _format_request_datetime(diagnosis.created_at),
                 "scheduled_at": (
                     appointment.start_at
                     if appointment is not None
@@ -1069,6 +1082,7 @@ async def visits_list(
                     "legacy": "◌ قدیمی",
                 }.get(raw_source, raw_source),
                 "created_at": identification.created_at,
+                "request_time": _format_request_datetime(identification.created_at),
                 "scheduled_at": (
                     appointment.start_at
                     if appointment is not None
@@ -1134,6 +1148,7 @@ async def visits_list(
                 "source": "website",
                 "source_label": "🌐 سایت",
                 "created_at": booking.created_at,
+                "request_time": _format_request_datetime(booking.created_at),
                 "scheduled_at": time_slot.starts_at,
                 "appointment_id": None,
                 "needs_schedule": False,
@@ -1324,10 +1339,7 @@ async def unified_visit_status(
             )
 
         booking_allowed = {
-            "pending",
-            "confirmed",
-            "completed",
-            "cancelled",
+            status.value for status in BookingStatus
         }
 
         if status not in booking_allowed:
@@ -1606,6 +1618,7 @@ async def identification_visit_detail(
             "identification": identification,
             "user": user,
             "appointment": appointment,
+            "request_time": _format_request_datetime(identification.created_at),
             "status_labels": STATUS_LABELS,
             "status_classes": STATUS_CLASSES,
         },
@@ -1845,6 +1858,7 @@ async def visit_detail(
             "user": user,
             "plant": plant,
             "appointment": appointment,
+            "request_time": _format_request_datetime(diagnosis.created_at),
             "status_labels": STATUS_LABELS,
             "status_classes": STATUS_CLASSES,
         },

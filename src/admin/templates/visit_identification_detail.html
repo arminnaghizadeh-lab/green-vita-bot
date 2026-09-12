@@ -3,9 +3,13 @@
 
 {% block title %}
 درخواست ویزیت شناسایی #{{ identification.id }} | {{ app_name }}
+
+
+
 {% endblock %}
 
 {% block content %}
+{% include "partials/visit_scheduler_picker.html" %}
 <div class="space-y-6" dir="rtl">
 
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -126,16 +130,72 @@
                     {% endfor %}
                 </select>
 
+                <div class="mb-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
+                    <div class="text-xs text-gray-500 mb-1">زمان درخواست</div>
+                    <div class="font-semibold text-gray-800">
+                        {{ request_time }}
+                    </div>
+                </div>
+
                 <label class="block text-sm font-semibold mb-2">
                     زمان ویزیت
                 </label>
 
+                {% if identification.visit_scheduled_at %}
+                <div class="mb-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <div class="text-xs text-emerald-700 mb-1">زمان اختصاص‌داده‌شده</div>
+                    <div
+                        class="font-bold text-emerald-950"
+                        data-visit-time-utc="{{ identification.visit_scheduled_at.isoformat() }}"
+                    >
+                        در حال نمایش زمان...
+                    </div>
+                </div>
+
                 <input
-                    type="datetime-local"
+                    type="hidden"
                     name="scheduled_at"
-                    value="{{ identification.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if identification.visit_scheduled_at else (appointment.start_at.strftime('%Y-%m-%dT%H:%M') if appointment else '') }}"
-                    class="w-full border rounded-lg px-3 py-2 mb-4"
+                    value="{{ identification.visit_scheduled_at.isoformat() }}"
                 >
+
+                <button
+                    type="button"
+                    class="w-full mb-4 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+                    data-queue-schedule-kind="identification"
+                    data-queue-schedule-id="{{ identification.id }}"
+                >
+                    ✏️ ویرایش زمان ویزیت
+                </button>
+                {% elif appointment %}
+                <input
+                    type="hidden"
+                    name="scheduled_at"
+                    value="{{ appointment.start_at.isoformat() }}"
+                >
+
+                <div class="mb-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <div class="text-xs text-emerald-700 mb-1">زمان اختصاص‌داده‌شده</div>
+                    <div
+                        class="font-bold text-emerald-950"
+                        data-visit-time-utc="{{ appointment.start_at.isoformat() }}"
+                    >
+                        در حال نمایش زمان...
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    class="w-full mb-4 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+                    data-queue-schedule-kind="identification"
+                    data-queue-schedule-id="{{ identification.id }}"
+                >
+                    ✏️ ویرایش زمان ویزیت
+                </button>
+                {% else %}
+                <div class="mb-4 text-sm text-gray-500">
+                    هنوز زمانی برای ویزیت ثبت نشده است.
+                </div>
+                {% endif %}
 
                 <label class="block text-sm font-semibold mb-2">
                     یادداشت داخلی
@@ -157,35 +217,37 @@
 
             </form>
 
-            <div class="bg-white rounded-2xl shadow-sm border p-5 text-sm">
-                <h2 class="font-bold mb-3">وضعیت فعلی</h2>
-
-                <span class="px-3 py-2 rounded-full
-                    {{ status_classes.get(
-                        identification.visit_status.value,
-                        'bg-gray-100 text-gray-700'
-                    ) }}">
-                    {{ status_labels.get(
-                        identification.visit_status.value,
-                        identification.visit_status.value
-                    ) }}
-                </span>
-
-                {% if identification.visit_scheduled_at %}
-                <p class="mt-4">
-                    <span class="text-gray-500">زمان ویزیت:</span>
-                    {{ identification.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}
-                </p>
-                {% endif %}
-
-                {% if appointment %}
-                <p class="mt-2 text-xs text-gray-400">
-                    Appointment #{{ appointment.id }}
-                </p>
-                {% endif %}
-            </div>
-
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formatter = new Intl.DateTimeFormat(
+        "fa-IR-u-ca-persian",
+        {
+            timeZone: "Asia/Tehran",
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+    document.querySelectorAll("[data-visit-time-utc]").forEach(el => {
+        const value = el.dataset.visitTimeUtc;
+
+        if (!value) return;
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return;
+
+        el.textContent = formatter.format(date);
+    });
+});
+</script>
+
 {% endblock %}

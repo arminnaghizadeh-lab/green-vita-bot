@@ -1,7 +1,11 @@
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
 {% extends "base.html" %}
-{% block title %}درخواست ویزیت #{{ diagnosis.id }} | {{ app_name }}{% endblock %}
+{% block title %}درخواست ویزیت #{{ diagnosis.id }} | {{ app_name }}
+
+
+{% endblock %}
 {% block content %}
+{% include "partials/visit_scheduler_picker.html" %}
 <div class="flex items-center justify-between mb-6">
     <div>
         <h1 class="text-2xl font-bold">🩺 درخواست ویزیت #{{ diagnosis.id }}</h1>
@@ -59,10 +63,45 @@
         {% endfor %}
     </select>
 
-    <label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
-    <input type="datetime-local" name="scheduled_at"
-           value="{{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%dT%H:%M') if diagnosis.visit_scheduled_at else '' }}"
-           class="w-full border rounded-lg px-3 py-2 mb-4">
+    <div class="mb-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
+    <div class="text-xs text-gray-500 mb-1">زمان درخواست</div>
+    <div class="font-semibold text-gray-800">
+        {{ request_time }}
+    </div>
+</div>
+
+<label class="block text-sm font-semibold mb-2">زمان ویزیت</label>
+
+    {% if diagnosis.visit_scheduled_at %}
+    <div class="mb-3 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+        <div class="text-xs text-emerald-700 mb-1">زمان اختصاص‌داده‌شده</div>
+        <div
+            class="font-bold text-emerald-950"
+            data-visit-time-utc="{{ diagnosis.visit_scheduled_at.isoformat() }}"
+        >
+            در حال نمایش زمان...
+        </div>
+    </div>
+
+    <input
+        type="hidden"
+        name="scheduled_at"
+        value="{{ diagnosis.visit_scheduled_at.isoformat() }}"
+    >
+
+    <button
+        type="button"
+        class="w-full mb-4 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+        data-queue-schedule-kind="diagnosis"
+        data-queue-schedule-id="{{ diagnosis.id }}"
+    >
+        ✏️ ویرایش زمان ویزیت
+    </button>
+    {% else %}
+    <div class="mb-4 text-sm text-gray-500">
+        هنوز زمانی برای ویزیت ثبت نشده است.
+    </div>
+    {% endif %}
 
     <label class="block text-sm font-semibold mb-2">یادداشت داخلی</label>
     <textarea name="admin_note" rows="6" class="w-full border rounded-lg px-3 py-2 mb-4" placeholder="این یادداشت فقط برای مدیریت Green Vita است...">{{ diagnosis.admin_notes or '' }}</textarea>
@@ -70,15 +109,36 @@
     <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-3 font-semibold">ذخیره تغییرات</button>
 </form>
 
-<div class="bg-white rounded-xl shadow p-5 text-sm">
-    <h2 class="font-bold mb-3">وضعیت فعلی</h2>
-    <span class="px-3 py-2 rounded-full {{ status_classes.get(diagnosis.visit_status.value, 'bg-gray-100 text-gray-700') }}">
-        {{ status_labels.get(diagnosis.visit_status.value, diagnosis.visit_status.value) }}
-    </span>
-    {% if diagnosis.visit_scheduled_at %}
-    <p class="mt-4"><span class="text-gray-500">زمان ویزیت:</span> {{ diagnosis.visit_scheduled_at.strftime('%Y-%m-%d %H:%M') }}</p>
-    {% endif %}
 </div>
 </div>
-</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formatter = new Intl.DateTimeFormat(
+        "fa-IR-u-ca-persian",
+        {
+            timeZone: "Asia/Tehran",
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+    document.querySelectorAll("[data-visit-time-utc]").forEach(el => {
+        const value = el.dataset.visitTimeUtc;
+
+        if (!value) return;
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return;
+
+        el.textContent = formatter.format(date);
+    });
+});
+</script>
+
 {% endblock %}

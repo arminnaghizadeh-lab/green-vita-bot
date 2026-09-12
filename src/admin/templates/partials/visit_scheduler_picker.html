@@ -1,0 +1,766 @@
+<style>
+    .gv-queue-schedule-btn {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 700;
+        background: #8bc53d;
+        color: #021408;
+        cursor: pointer;
+    }
+
+    .gv-queue-schedule-btn:hover {
+        background: #c6a15b;
+    }
+
+    .gv-queue-picker-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 20, 8, .48);
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+    }
+
+    .gv-queue-picker {
+        width: min(760px, 100%);
+        max-height: min(88vh, 820px);
+        overflow: auto;
+        background: #fff;
+        border: 1px solid rgba(2,47,18,.10);
+        border-radius: 24px;
+        box-shadow: 0 28px 80px rgba(2,20,8,.22);
+        padding: 20px;
+        direction: rtl;
+    }
+
+    .gv-queue-picker-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .gv-queue-picker-title {
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .gv-queue-picker-subtitle {
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .gv-queue-day .day-name {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .gv-queue-day .day-number {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .gv-queue-day .day-year {
+        display: inline-block;
+        margin-right: 3px;
+        font-size: 11px;
+        font-weight: 400;
+        color: #64748b;
+    }
+
+    .gv-queue-picker-close {
+        border: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #f4f7ef;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+    .gv-queue-days {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .gv-queue-day {
+        border: 1px solid rgba(2,47,18,.10);
+        background: #fbfcf8;
+        border-radius: 14px;
+        padding: 10px 6px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .gv-queue-day.is-selected {
+        background: #8bc53d;
+        border-color: #8bc53d;
+        color: #021408;
+    }
+
+    .gv-queue-nav {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .gv-queue-nav button {
+        border: 1px solid rgba(2,47,18,.10);
+        background: #fff;
+        color: #022f12;
+        border-radius: 12px;
+        padding: 9px 12px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .gv-queue-nav button:hover {
+        border-color: #8bc53d;
+        background: #e4f0cc;
+    }
+
+    .gv-queue-today-btn {
+        min-width: 190px;
+        background: #f7faf2 !important;
+        border-color: rgba(139,197,61,.35) !important;
+        text-align: center;
+    }
+
+    .gv-queue-nav .prev-week {
+        justify-self: start;
+    }
+
+    .gv-queue-nav .next-week {
+        justify-self: end;
+    }
+
+    .gv-queue-slots {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .gv-queue-slot {
+        border: 1px solid #dfe7d7;
+        background: #fbfcf8;
+        color: #022f12;
+        border-radius: 12px;
+        padding: 10px;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+    .gv-queue-slot:hover {
+        border-color: #8bc53d;
+        background: #e4f0cc;
+    }
+
+    .gv-queue-slot.busy,
+    .gv-queue-slot:disabled {
+        background: #f1f3ef;
+        color: #9aa39a;
+        cursor: not-allowed;
+    }
+
+    .gv-queue-status {
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #f7faf2;
+        color: #405344;
+        font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+        .gv-queue-days {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .gv-queue-slots {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+</style>
+
+<div id="gv-queue-picker-root" hidden></div>
+
+<script>
+(function () {
+    "use strict";
+
+    const PERSIAN_WEEKDAYS = [
+        "شنبه", "یکشنبه", "دوشنبه",
+        "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
+    ];
+
+    const PERSIAN_MONTHS = [
+        "فروردین", "اردیبهشت", "خرداد",
+        "تیر", "مرداد", "شهریور",
+        "مهر", "آبان", "آذر",
+        "دی", "بهمن", "اسفند"
+    ];
+
+    const root = document.getElementById("gv-queue-picker-root");
+
+    let selectedKind = null;
+    let selectedRecordId = null;
+    let currentJalali = null;
+    let selectedJalali = null;
+
+    function formatPersianNumber(value) {
+        return String(value).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+    }
+
+    function jalaliToGregorian(jy, jm, jd) {
+        jy += 1595;
+
+        const days =
+            -355668 +
+            (365 * jy) +
+            Math.floor(jy / 33) * 8 +
+            Math.floor(((jy % 33) + 3) / 4) +
+            jd +
+            (jm < 7
+                ? (jm - 1) * 31
+                : ((jm - 7) * 30) + 186);
+
+        let gy = 400 * Math.floor(days / 146097);
+        let gd = days % 146097;
+
+        if (gd > 36524) {
+            gy += 100 * Math.floor(--gd / 36524);
+            gd %= 36524;
+
+            if (gd >= 365) {
+                gd++;
+            }
+        }
+
+        gy += 4 * Math.floor(gd / 1461);
+        gd %= 1461;
+
+        if (gd > 365) {
+            gy += Math.floor((gd - 1) / 365);
+            gd = (gd - 1) % 365;
+        }
+
+        let gdYear = gy;
+        const leap = !(gdYear % 4) &&
+            ((gdYear % 100) || !(gdYear % 400));
+
+        const monthDays = [
+            31, leap ? 29 : 28, 31, 30, 31, 30,
+            31, 31, 30, 31, 30, 31
+        ];
+
+        let gm = 0;
+        while (gm < 12 && gd >= monthDays[gm]) {
+            gd -= monthDays[gm];
+            gm++;
+        }
+
+        return [gdYear, gm + 1, gd + 1];
+    }
+
+    function gregorianToJalali(gy, gm, gd) {
+        const gdm = [
+            0, 31, 59, 90, 120, 151,
+            181, 212, 243, 273, 304, 334
+        ];
+
+        let gy2 = gm > 2 ? gy + 1 : gy;
+
+        let days =
+            355666 +
+            (365 * gy) +
+            Math.floor((gy2 + 3) / 4) -
+            Math.floor((gy2 + 99) / 100) +
+            Math.floor((gy2 + 399) / 400) +
+            gd +
+            gdm[gm - 1];
+
+        let jy = -1595 + 33 * Math.floor(days / 12053);
+
+        days %= 12053;
+
+        jy += 4 * Math.floor(days / 1461);
+
+        days %= 1461;
+
+        if (days > 365) {
+            jy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+
+        const jm = days < 186
+            ? 1 + Math.floor(days / 31)
+            : 7 + Math.floor((days - 186) / 30);
+
+        const jd = 1 +
+            (days < 186
+                ? days % 31
+                : (days - 186) % 30);
+
+        return [jy, jm, jd];
+    }
+
+    function jalaliToDate(jy, jm, jd, hour = 0, minute = 0) {
+        const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+
+        return new Date(
+            gy,
+            gm - 1,
+            gd,
+            hour,
+            minute,
+            0,
+            0
+        );
+    }
+
+    function jalaliNow() {
+        const now = new Date();
+
+        return gregorianToJalali(
+            now.getFullYear(),
+            now.getMonth() + 1,
+            now.getDate()
+        );
+    }
+
+    function formatPersianDate(jalali) {
+        return `${PERSIAN_WEEKDAYS[jalaliDayOfWeek(...jalali)]} ${formatPersianNumber(jalali[2])} ${PERSIAN_MONTHS[jalali[1] - 1]} ${formatPersianNumber(jalali[0])}`;
+    }
+
+    function jalaliAddDays(jalali, delta) {
+        const date = jalaliToDate(
+            jalali[0],
+            jalali[1],
+            jalali[2],
+            12,
+            0
+        );
+
+        date.setDate(date.getDate() + delta);
+
+        return gregorianToJalali(
+            date.getFullYear(),
+            date.getMonth() + 1,
+            date.getDate()
+        );
+    }
+
+    function sameJalali(a, b) {
+        return a && b &&
+            a[0] === b[0] &&
+            a[1] === b[1] &&
+            a[2] === b[2];
+    }
+
+    function isJalaliBefore(a, b) {
+        if (!a || !b) {
+            return false;
+        }
+
+        if (a[0] !== b[0]) {
+            return a[0] < b[0];
+        }
+
+        if (a[1] !== b[1]) {
+            return a[1] < b[1];
+        }
+
+        return a[2] < b[2];
+    }
+
+    function jalaliDayOfWeek(jy, jm, jd) {
+        const date = jalaliToDate(jy, jm, jd);
+        return (date.getDay() + 1) % 7;
+    }
+
+    async function api(url, options = {}) {
+        const response = await fetch(
+            url,
+            {
+                credentials: "same-origin",
+                ...options,
+                headers: {
+                    "Accept": "application/json",
+                    ...(options.headers || {})
+                }
+            }
+        );
+
+        const type =
+            response.headers.get("content-type") || "";
+
+        const data = type.includes("application/json")
+            ? await response.json()
+            : { detail: await response.text() };
+
+        if (!response.ok) {
+            throw new Error(
+                data?.detail || `خطای ${response.status}`
+            );
+        }
+
+        return data;
+    }
+
+    function openPicker(kind, recordId) {
+        selectedKind = kind;
+        selectedRecordId = Number(recordId);
+
+        const today = jalaliNow();
+
+        currentJalali = today;
+        selectedJalali = today;
+
+        root.hidden = false;
+
+        renderPicker();
+        loadSlots();
+    }
+
+    function closePicker() {
+        root.hidden = true;
+        selectedKind = null;
+        selectedRecordId = null;
+    }
+
+    function renderPicker() {
+        const days = [];
+
+        for (let i = 0; i < 7; i++) {
+            days.push(
+                jalaliAddDays(currentJalali, i)
+            );
+        }
+
+        root.innerHTML = `
+            <div class="gv-queue-picker-backdrop">
+                <div class="gv-queue-picker">
+                    <div class="gv-queue-picker-head">
+                        <div>
+                            <div class="gv-queue-picker-title">
+                                انتخاب زمان ویزیت
+                            </div>
+                            <div class="gv-queue-picker-subtitle">
+                                درخواست #${selectedKind === "identification" ? "I-" : "D-"}${selectedRecordId}
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="gv-queue-picker-close"
+                            data-queue-close
+                        >×</button>
+                    </div>
+
+                    <div class="gv-queue-nav">
+                        <button
+                            type="button"
+                            class="prev-week"
+                            data-queue-prev
+                        >
+                            ‹ هفته قبل
+                        </button>
+
+                        <button
+                            type="button"
+                            class="gv-queue-today-btn"
+                            data-queue-today
+                        >
+                            امروز (${formatPersianDate(jalaliNow())})
+                        </button>
+
+                        <button
+                            type="button"
+                            class="next-week"
+                            data-queue-next
+                        >
+                            هفته بعد ›
+                        </button>
+                    </div>
+
+                    <div class="gv-queue-days">
+                        ${days.map(day => `
+                            <button
+                                type="button"
+                                class="gv-queue-day ${sameJalali(day, selectedJalali) ? "is-selected" : ""}"
+                                data-queue-day="${day.join("-")}"
+                            >
+                                <span class="day-name">
+                                    ${PERSIAN_WEEKDAYS[jalaliDayOfWeek(...day)]}
+                                </span>
+                                <span class="day-number">
+                                    ${formatPersianNumber(day[2])} ${PERSIAN_MONTHS[day[1] - 1]}
+                                    <span class="day-year">
+                                        ${formatPersianNumber(day[0])}
+                                    </span>
+                                </span>
+                            </button>
+                        `).join("")}
+                    </div>
+
+                    <div class="gv-queue-status" id="gv-queue-slot-status">
+                        در حال بررسی زمان‌های آزاد...
+                    </div>
+
+                    <div class="gv-queue-slots" id="gv-queue-slots"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadSlots() {
+        const container =
+            document.getElementById("gv-queue-slots");
+
+        const status =
+            document.getElementById("gv-queue-slot-status");
+
+        if (!container || !selectedJalali) {
+            return;
+        }
+
+        container.innerHTML = "";
+
+        const today = jalaliNow();
+
+        if (isJalaliBefore(selectedJalali, today)) {
+            status.textContent =
+                "این روز گذشته است و زمان‌های آن قابل انتخاب نیستند.";
+
+            return;
+        }
+
+        status.textContent =
+            "در حال بررسی زمان‌های آزاد...";
+
+        try {
+            const start = jalaliToDate(
+                selectedJalali[0],
+                selectedJalali[1],
+                selectedJalali[2],
+                9,
+                0
+            );
+
+            const end = jalaliToDate(
+                selectedJalali[0],
+                selectedJalali[1],
+                selectedJalali[2],
+                18,
+                0
+            );
+
+            const params = new URLSearchParams({
+                start_at: start.toISOString(),
+                end_at: end.toISOString(),
+                step_minutes: "60"
+            });
+
+            const data = await api(
+                `/api/calendar/slots?${params.toString()}`
+            );
+
+            const slots = data.slots || [];
+
+            if (!slots.length) {
+                status.textContent =
+                    "در این روز زمانی برای انتخاب وجود ندارد.";
+                return;
+            }
+
+            const available = slots.filter(
+                slot => slot.available
+            );
+
+            if (!available.length) {
+                status.textContent =
+                    "در این روز هیچ زمان آزادی وجود ندارد.";
+            } else {
+                status.textContent =
+                    `${formatPersianNumber(available.length)} زمان آزاد پیدا شد.`;
+            }
+
+            slots.forEach(slot => {
+                const button =
+                    document.createElement("button");
+
+                button.type = "button";
+                const slotDate = new Date(slot.start_at);
+                const slotDay = gregorianToJalali(
+                    slotDate.getFullYear(),
+                    slotDate.getMonth() + 1,
+                    slotDate.getDate()
+                );
+
+                const pastSlot =
+                    isJalaliBefore(slotDay, today);
+
+                button.className =
+                    "gv-queue-slot" +
+                    ((!slot.available || pastSlot) ? " busy" : "");
+
+                button.disabled =
+                    !slot.available || pastSlot;
+
+                const dt = new Date(slot.start_at);
+
+                button.textContent =
+                    `${formatPersianNumber(String(dt.getHours()).padStart(2, "0"))}:${formatPersianNumber(String(dt.getMinutes()).padStart(2, "0"))}`;
+
+                if (pastSlot) {
+                    button.textContent += " · گذشته";
+                } else if (!slot.available) {
+                    button.textContent += " · رزرو شده";
+                }
+
+                button.dataset.queueStartAt =
+                    slot.start_at;
+
+                container.appendChild(button);
+            });
+
+        } catch (error) {
+            status.textContent =
+                error.message || "خطا در دریافت زمان‌های آزاد";
+        }
+    }
+
+    async function scheduleSelected(startAt) {
+        const params = new URLSearchParams({
+            start_at: startAt
+        });
+
+        const response = await fetch(
+            `/api/visit-queue/${selectedKind}/${selectedRecordId}/schedule`,
+            {
+                method: "POST",
+                credentials: "same-origin",
+                body: params
+            }
+        );
+
+        if (!response.ok && response.status !== 303) {
+            let detail = "خطا در ثبت زمان ویزیت";
+
+            try {
+                const data = await response.json();
+                detail = data.detail || detail;
+            } catch (_) {}
+
+            throw new Error(detail);
+        }
+
+        window.location.reload();
+    }
+
+    root.addEventListener("click", event => {
+        if (event.target.closest("[data-queue-close]")) {
+            closePicker();
+            return;
+        }
+
+        const dayButton =
+            event.target.closest("[data-queue-day]");
+
+        if (dayButton) {
+            selectedJalali =
+                dayButton.dataset.queueDay
+                    .split("-")
+                    .map(Number);
+
+            renderPicker();
+            loadSlots();
+            return;
+        }
+
+        if (event.target.closest("[data-queue-prev]")) {
+            currentJalali =
+                jalaliAddDays(currentJalali, -7);
+
+            selectedJalali = currentJalali;
+
+            renderPicker();
+            loadSlots();
+            return;
+        }
+
+        if (event.target.closest("[data-queue-next]")) {
+            currentJalali =
+                jalaliAddDays(currentJalali, 7);
+
+            selectedJalali = currentJalali;
+
+            renderPicker();
+            loadSlots();
+            return;
+        }
+
+        if (event.target.closest("[data-queue-today]")) {
+            currentJalali = jalaliNow();
+            selectedJalali = currentJalali;
+
+            renderPicker();
+            loadSlots();
+            return;
+        }
+
+        const slot =
+            event.target.closest("[data-queue-start-at]");
+
+        if (slot && !slot.disabled) {
+            scheduleSelected(
+                slot.dataset.queueStartAt
+            ).catch(error => {
+                const status =
+                    document.getElementById(
+                        "gv-queue-slot-status"
+                    );
+
+                if (status) {
+                    status.textContent =
+                        error.message || "خطا در ثبت زمان";
+                }
+            });
+        }
+    });
+
+    document.addEventListener("click", event => {
+        const button =
+            event.target.closest(
+                "[data-queue-schedule-kind]"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        openPicker(
+            button.dataset.queueScheduleKind,
+            button.dataset.queueScheduleId
+        );
+    });
+})();
+</script>
