@@ -1,63 +1,221 @@
 {% extends "public/base.html" %}
 
-{% block title %}Green Vita | کلینیک گیاه پزشکی{% endblock %}
+{% block title %}Green Vita | کلینیک گیاه پزشکی
+
+<!-- GREEN VITA WORKING HERO SCROLL -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const stage = document.querySelector('.gv-home-stage');
+  const pin = document.querySelector('.gv-home-pin');
+  const hero = document.querySelector('.gv-home-hero');
+  const services = document.querySelector('.gv-home-services');
+  const header = document.querySelector('.site-header');
+
+  if (!stage || !pin || !hero || !services) {
+    console.error('Green Vita hero/services elements not found.');
+    return;
+  }
+
+  const important = (el, prop, value) => {
+    el.style.setProperty(prop, value, 'important');
+  };
+
+  const HOLD = 0;
+  let stageStart = 0;
+  let heroH = 0;
+  let ticking = false;
+
+  function measure() {
+    heroH = window.innerHeight;
+    stageStart = stage.getBoundingClientRect().top + window.scrollY;
+
+    important(stage, 'position', 'relative');
+    important(stage, 'overflow', 'visible');
+    important(stage, 'height', `calc(${heroH}px + ${services.scrollHeight}px)`);
+
+    important(pin, 'width', '100%');
+    important(pin, 'height', `${heroH}px`);
+
+    important(hero, 'width', '100%');
+    important(hero, 'height', `${heroH}px`);
+
+    important(services, 'width', '100%');
+  }
+
+  function render() {
+    ticking = false;
+
+    const d = Math.max(0, window.scrollY - stageStart);
+
+    if (d < heroH) {
+      important(pin, 'position', 'fixed');
+      important(pin, 'top', '0');
+      important(pin, 'left', '0');
+      important(pin, 'right', '0');
+      important(pin, 'height', `${heroH}px`);
+      important(pin, 'z-index', '900');
+
+      important(services, 'position', 'absolute');
+      important(services, 'top', '0');
+      important(services, 'left', '0');
+      important(services, 'z-index', '1');
+
+      important(hero, 'position', 'absolute');
+      important(hero, 'top', '0');
+      important(hero, 'left', '0');
+      important(hero, 'z-index', '2');
+      important(hero, 'display', 'block');
+
+      const progress = Math.min(d / heroH, 1);
+
+      important(
+        hero,
+        'transform',
+        `translate3d(0, ${-progress * 100}%, 0)`
+      );
+
+      important(hero, 'visibility', 'visible');
+      important(hero, 'pointer-events', 'auto');
+
+    } else if (d < heroH + HOLD) {
+      /* SHORT PAUSE — HERO GONE, SERVICES HOLDS */
+      important(pin, 'position', 'fixed');
+      important(pin, 'top', '0');
+      important(pin, 'left', '0');
+      important(pin, 'right', '0');
+      important(pin, 'height', `${heroH}px`);
+      important(pin, 'z-index', '900');
+
+      important(hero, 'position', 'absolute');
+      important(hero, 'top', '0');
+      important(hero, 'left', '0');
+      important(hero, 'transform', 'translate3d(0,-100%,0)');
+      important(hero, 'visibility', 'hidden');
+      important(hero, 'pointer-events', 'none');
+      important(hero, 'z-index', '0');
+
+      important(services, 'position', 'absolute');
+      important(services, 'top', '0');
+      important(services, 'left', '0');
+      important(services, 'width', '100%');
+      important(services, 'z-index', '2');
+      important(services, 'visibility', 'visible');
+
+    } else {
+      /* NORMAL PAGE SCROLL */
+      important(pin, 'position', 'absolute');
+      important(pin, 'top', `${heroH + HOLD}px`);
+      important(pin, 'left', '0');
+      important(pin, 'right', '0');
+      important(pin, 'height', `${services.scrollHeight}px`);
+      important(pin, 'z-index', '1');
+
+      important(hero, 'position', 'absolute');
+      important(hero, 'top', '0');
+      important(hero, 'left', '0');
+      important(hero, 'transform', 'translate3d(0,-100%,0)');
+      important(hero, 'visibility', 'hidden');
+      important(hero, 'pointer-events', 'none');
+      important(hero, 'z-index', '0');
+
+      important(services, 'position', 'relative');
+      important(services, 'top', '0');
+      important(services, 'left', '0');
+      important(services, 'width', '100%');
+      important(services, 'z-index', '2');
+      important(services, 'visibility', 'visible');
+    }
+  }
+
+  function tick() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(render);
+    }
+  }
+
+  if (header) {
+    important(header, 'position', 'fixed');
+    important(header, 'top', '0');
+    important(header, 'left', '0');
+    important(header, 'right', '0');
+    important(header, 'z-index', '10000');
+  }
+
+  measure();
+  render();
+
+  window.addEventListener('scroll', tick, { passive: true });
+
+  window.addEventListener('resize', () => {
+    measure();
+    render();
+  }, { passive: true });
+
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(() => {
+      measure();
+      render();
+    });
+
+    observer.observe(hero);
+    observer.observe(services);
+  }
+
+  console.log('✅ Green Vita working Hero / Services scroll restored.');
+});
+</script>
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/home-luxury.css?v=3">
+{% endblock %}
 
 {% block content %}
 
-<section class="hero">
-    <div class="container hero-grid">
 
-        <div>
-            <span class="eyebrow">🌱 کلینیک تخصصی گیاه پزشکی Green Vita</span>
 
-            <h1>
-                حال خوب گیاهت،
-                از یک تشخیص درست شروع می‌شود.
-            </h1>
+<link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css">
 
-            <p>
-                خدمات تخصصی تشخیص، ویزیت و مشاوره گیاهان را با رویکرد علمی
-                و دلسوزانه دریافت کنید و برای سلامت بهتر گیاهان‌تان قدم بردارید.
-            </p>
+<div class="gv-home-stage">
 
-            <div class="hero-actions">
-                <a href="/booking/" class="btn btn-primary">
-                    رزرو آنلاین
-                </a>
+    <div class="gv-home-pin">
 
-                <a href="/booking/track/" class="btn btn-secondary">
-                    پیگیری / ویرایش رزرو
-                </a>
-            </div>
-        </div>
-
-        <div class="hero-card">
-            <div class="hero-card-content">
-                <strong>🌿 Green Vita</strong>
-                <span>
-                    تشخیص دقیق، برنامه مراقبت مناسب و همراهی تخصصی
-                    برای گیاهان آپارتمانی، فضای باز و باغات.
-                </span>
-            </div>
-        </div>
-
+    <div class="gv-home-hero">
+        <div id="root"></div>
+        <script type="module" src="/static/react/green-vita-hero/green-vita-hero.js"></script>
     </div>
-</section>
 
-<section class="section">
+    <section class="section gv-home-services" id="services">
     <div class="container">
 
-        <div class="section-head">
-            <h2>خدمات ما</h2>
-            <p>خدمت موردنظر را انتخاب کنید و زمان مناسب خود را رزرو کنید.</p>
+        <div class="section-head gv-services-heading">
+            <span class="gv-services-eyebrow">GREEN VITA SERVICES</span>
+            <h2>برای هر گیاه، یک مسیر تخصصی</h2>
+            <p>تشخیص، ویزیت و مشاوره را متناسب با شرایط واقعی گیاه انتخاب کنید.</p>
         </div>
 
         <div class="services">
 
             {% set icons = ["🪴", "🌳", "🌿", "📞"] %}
+            {% set service_images = [
+                "/static/images/services/apartment.jpeg",
+                "/static/images/services/outdoor.jpg",
+                "/static/images/services/gardens.jpg",
+                "/static/images/services/phone.jpg"
+            ] %}
 
             {% for service in services %}
             <article class="service">
+
+                <div class="service-image">
+                    <img
+                        src="{{ service_images[loop.index0] if loop.index0 < 4 else '/static/images/services/apartment.jpeg' }}"
+                        alt="{{ service.title }}"
+                        loading="lazy"
+                    >
+                </div>
 
                 <div class="service-icon">
                     {{ icons[loop.index0] if loop.index0 < 4 else "🌱" }}
@@ -66,7 +224,7 @@
                 <h3>{{ service.title }}</h3>
 
                 <p>
-                    {{ service.description or "مشاوره و خدمت تخصصی گیاه پزشکی گرین ویتا." }}
+                    {{ service.description or "" }}
                 </p>
 
                 {% if service.price %}
@@ -80,7 +238,7 @@
                 {% endif %}
 
                 <a href="/booking/service/{{ service.id }}/" class="btn btn-primary">
-                    انتخاب خدمت
+                    انتخاب سرویس
                 </a>
 
             </article>
@@ -88,48 +246,323 @@
 
         </div>
     </div>
-</section>
+    </section>
 
-<section class="section">
+    </div>
+
+</div>
+
+<section class="section gv-home-trust">
     <div class="container">
-
-        <div class="feature-grid">
+        <div class="feature-grid" id="diagnosis">
 
             <div class="feature">
                 <strong>🔬 تشخیص تخصصی</strong>
-                <p>تصمیم‌گیری بر پایه بررسی دقیق وضعیت گیاه و علائم آن.</p>
+                <p>بررسی علمی علائم و انتخاب مسیر مناسب برای درمان گیاه.</p>
             </div>
 
             <div class="feature">
-                <strong>📅 رزرو آنلاین</strong>
-                <p>انتخاب خدمت، تاریخ و زمان مناسب در چند مرحله ساده.</p>
+                <strong>🪴 ویزیت متناسب با گیاه</strong>
+                <p>برای آپارتمان، فضای باز و باغات، خدمت متناسب با شرایط گیاه دریافت می‌کنید.</p>
             </div>
 
             <div class="feature">
-                <strong>🔁 پیگیری و ویرایش</strong>
-                <p>رزرو خود را با کد پیگیری مشاهده و در زمان مجاز ویرایش کنید.</p>
+                <strong>📅 رزرو و پیگیری ساده</strong>
+                <p>زمان مناسب را انتخاب کنید و وضعیت درخواست خود را همیشه دنبال کنید.</p>
             </div>
 
         </div>
-
+    </div>
+</section>
+<section class="gv-final-cta">
+    <div class="gv-final-cta-inner">
+        <h2>گیاهت را تنها نگذار.</h2>
+        <p>
+            یک تشخیص درست می‌تواند مسیر سلامت گیاه را عوض کند.
+            ویزیت موردنیازت را انتخاب کن و شروع کنیم.
+        </p>
+        <a href="/booking/">رزرو ویزیت</a>
     </div>
 </section>
 
-<section class="section">
+
+<section class="section gv-blog-strip" id="blog">
     <div class="container">
-        <div class="tracking">
-
+        <div class="gv-blog-card">
             <div>
-                <h2>قبلاً رزرو کرده‌اید؟</h2>
-                <p>با کد پیگیری و شماره تماس، وضعیت رزرو را مشاهده کنید.</p>
+                <span class="eyebrow">🌿 Green Vita</span>
+                <h2>دانش بهتر، گیاه سالم‌تر</h2>
+                <p>
+                    آموزش‌ها، نکات مراقبت و تجربه‌های تخصصی گرین‌ویتا
+                    برای نگهداری بهتر از گیاهان.
+                </p>
             </div>
-
-            <a href="/booking/track/" class="btn">
-                پیگیری رزرو
-            </a>
-
+            <span class="gv-blog-coming">وبلاگ به‌زودی</span>
         </div>
     </div>
 </section>
+
+<!-- GREEN VITA HERO / SERVICES SCROLL -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const stage = document.querySelector(".gv-home-stage");
+  const pin = document.querySelector(".gv-home-pin");
+  const hero = document.querySelector(".gv-home-hero");
+  const services = document.querySelector(".gv-home-services");
+  const header = document.querySelector(".site-header");
+
+  if (!stage || !pin || !hero || !services) return;
+
+  const important = (el, prop, value) =>
+    el.style.setProperty(prop, value, "important");
+
+  let stageStart = 0;
+  let heroH = 0;
+  let ticking = false;
+  let scrollLocked = false;
+  let heroDone = false;
+  let lockY = 0;
+  let keyboardReady = true;
+
+  const navigationKeys = new Set([
+    "ArrowDown",
+    "ArrowUp",
+    "PageDown",
+    "PageUp",
+    "Space",
+    "Home",
+    "End"
+  ]);
+
+  const heldKeys = new Set();
+
+  function measure() {
+    heroH = window.innerHeight;
+    stageStart =
+      stage.getBoundingClientRect().top + window.scrollY;
+
+    important(stage, "position", "relative");
+    important(stage, "overflow", "visible");
+    important(
+      stage,
+      "height",
+      `calc(${heroH}px + ${services.scrollHeight}px)`
+    );
+
+    important(pin, "width", "100%");
+    important(pin, "height", `${heroH}px`);
+    important(hero, "width", "100%");
+    important(hero, "height", `${heroH}px`);
+
+    if (scrollLocked) {
+      lockY = stageStart + heroH;
+      window.scrollTo(0, lockY);
+    }
+  }
+
+  function continuePage() {
+    scrollLocked = false;
+    heroDone = true;
+
+    important(pin, "position", "absolute");
+    important(pin, "top", `${heroH}px`);
+    important(pin, "left", "0");
+    important(pin, "right", "0");
+    important(pin, "width", "100%");
+    important(pin, "height", `${services.scrollHeight}px`);
+    important(pin, "z-index", "1");
+
+    important(hero, "position", "absolute");
+    important(hero, "top", "0");
+    important(hero, "left", "0");
+    important(hero, "width", "100%");
+    important(hero, "transform", "translate3d(0,-100%,0)");
+    important(hero, "visibility", "hidden");
+    important(hero, "pointer-events", "none");
+    important(hero, "z-index", "0");
+
+    important(services, "position", "relative");
+    important(services, "top", "0");
+    important(services, "left", "0");
+    important(services, "width", "100%");
+    important(services, "z-index", "2");
+    important(services, "visibility", "visible");
+  }
+
+  function lockAtEnd() {
+    scrollLocked = true;
+    lockY = stageStart + heroH;
+    window.scrollTo(0, lockY);
+  }
+
+  function render() {
+    ticking = false;
+
+    if (heroDone && window.scrollY < stageStart + heroH - 2) {
+      heroDone = false;
+      scrollLocked = false;
+    }
+
+    if (heroDone) return;
+
+    if (scrollLocked) {
+      if (Math.abs(window.scrollY - lockY) > 1) {
+        window.scrollTo(0, lockY);
+      }
+      return;
+    }
+
+    const d = Math.max(0, window.scrollY - stageStart);
+
+    if (d < heroH) {
+      important(pin, "position", "fixed");
+      important(pin, "top", "0");
+      important(pin, "left", "0");
+      important(pin, "right", "0");
+      important(pin, "height", `${heroH}px`);
+      important(pin, "z-index", "900");
+
+      important(services, "position", "absolute");
+      important(services, "top", "0");
+      important(services, "left", "0");
+      important(services, "width", "100%");
+      important(services, "z-index", "1");
+
+      important(hero, "position", "absolute");
+      important(hero, "top", "0");
+      important(hero, "left", "0");
+      important(hero, "width", "100%");
+      important(hero, "z-index", "2");
+      important(hero, "visibility", "visible");
+      important(hero, "pointer-events", "auto");
+
+      const progress = Math.min(d / heroH, 1);
+
+      important(
+        hero,
+        "transform",
+        `translate3d(0, ${-progress * 100}%, 0)`
+      );
+    } else {
+      lockAtEnd();
+    }
+  }
+
+  function tick() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(render);
+    }
+  }
+
+  /* Separate Hero movement from the next mouse-wheel gesture. */
+  let lastWheelTime = 0;
+  const WHEEL_GESTURE_GAP = 280;
+
+  window.addEventListener(
+    "wheel",
+    () => {
+      const now = performance.now();
+
+      if (!scrollLocked || heroDone) {
+        lastWheelTime = now;
+        return;
+      }
+
+      /*
+       * The wheel event immediately following the Hero exit
+       * belongs to the same gesture and is ignored.
+       */
+      if (now - lastWheelTime < WHEEL_GESTURE_GAP) {
+        lastWheelTime = now;
+        return;
+      }
+
+      /*
+       * A genuinely new wheel gesture starts Services.
+       */
+      continuePage();
+      lastWheelTime = now;
+    },
+    { passive: true, capture: true }
+  );
+
+  /* Keyboard must be released, then pressed again */
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      if (!navigationKeys.has(event.code)) return;
+
+      heldKeys.add(event.code);
+
+      if (!scrollLocked || heroDone) return;
+
+      if (!keyboardReady) {
+        event.preventDefault();
+        return;
+      }
+
+      continuePage();
+      keyboardReady = false;
+    },
+    { capture: true }
+  );
+
+  window.addEventListener(
+    "keyup",
+    (event) => {
+      if (!navigationKeys.has(event.code)) return;
+
+      heldKeys.delete(event.code);
+
+      if (heldKeys.size === 0) {
+        keyboardReady = true;
+      }
+    },
+    { capture: true }
+  );
+
+  if (header) {
+    important(header, "position", "fixed");
+    important(header, "top", "0");
+    important(header, "left", "0");
+    important(header, "right", "0");
+    important(header, "z-index", "10000");
+  }
+
+  window.addEventListener("scroll", () => {
+    if (
+      heroDone &&
+      window.scrollY < stageStart + heroH - 2
+    ) {
+      heroDone = false;
+      scrollLocked = false;
+      ticking = false;
+      render();
+      return;
+    }
+
+    tick();
+  }, { passive: true });
+
+  window.addEventListener("resize", () => {
+    measure();
+    if (!heroDone) render();
+  });
+
+  if ("ResizeObserver" in window) {
+    const observer = new ResizeObserver(() => {
+      measure();
+      if (!heroDone) render();
+    });
+
+    observer.observe(hero);
+    observer.observe(services);
+  }
+
+  measure();
+  render();
+});
+</script>
 
 {% endblock %}
