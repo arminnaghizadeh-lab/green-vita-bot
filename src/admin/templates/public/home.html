@@ -1,193 +1,140 @@
 {% extends "public/base.html" %}
 
 {% block title %}Green Vita | کلینیک گیاه پزشکی
+<script id="gv-card-master-final">
+(() => {
+  const cards = [
+    ...document.querySelectorAll(
+      '.gv-home-services .services > .service'
+    )
+  ];
 
-<!-- GREEN VITA WORKING HERO SCROLL -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const stage = document.querySelector('.gv-home-stage');
-  const pin = document.querySelector('.gv-home-pin');
-  const hero = document.querySelector('.gv-home-hero');
-  const services = document.querySelector('.gv-home-services');
-  const header = document.querySelector('.site-header');
+  if (cards.length < 4) return;
 
-  if (!stage || !pin || !hero || !services) {
-    console.error('Green Vita hero/services elements not found.');
-    return;
-  }
+  const master = cards[0];
 
-  const important = (el, prop, value) => {
-    el.style.setProperty(prop, value, 'important');
-  };
+  const apply = () => {
+    const masterHeight = master.getBoundingClientRect().height;
 
-  const HOLD = 0;
-  let stageStart = 0;
-  let heroH = 0;
-  let ticking = false;
-
-  function measure() {
-    heroH = window.innerHeight;
-    stageStart = stage.getBoundingClientRect().top + window.scrollY;
-
-    important(stage, 'position', 'relative');
-    important(stage, 'overflow', 'visible');
-    important(stage, 'height', `calc(${heroH}px + ${services.scrollHeight}px)`);
-
-    important(pin, 'width', '100%');
-    important(pin, 'height', `${heroH}px`);
-
-    important(hero, 'width', '100%');
-    important(hero, 'height', `${heroH}px`);
-
-    important(services, 'width', '100%');
-  }
-
-  function render() {
-    ticking = false;
-
-    const d = Math.max(0, window.scrollY - stageStart);
-
-    if (d < heroH) {
-      important(pin, 'position', 'fixed');
-      important(pin, 'top', '0');
-      important(pin, 'left', '0');
-      important(pin, 'right', '0');
-      important(pin, 'height', `${heroH}px`);
-      important(pin, 'z-index', '900');
-
-      important(services, 'position', 'absolute');
-      important(services, 'top', '0');
-      important(services, 'left', '0');
-      important(services, 'z-index', '1');
-
-      important(hero, 'position', 'absolute');
-      important(hero, 'top', '0');
-      important(hero, 'left', '0');
-      important(hero, 'z-index', '2');
-      important(hero, 'display', 'block');
-
-      const progress = Math.min(d / heroH, 1);
-
-      important(
-        hero,
-        'transform',
-        `translate3d(0, ${-progress * 100}%, 0)`
+    cards.slice(1).forEach(card => {
+      card.style.setProperty(
+        'height',
+        `${masterHeight}px`,
+        'important'
       );
 
-      important(hero, 'visibility', 'visible');
-      important(hero, 'pointer-events', 'auto');
-
-    } else if (d < heroH + HOLD) {
-      /* SHORT PAUSE — HERO GONE, SERVICES HOLDS */
-      important(pin, 'position', 'fixed');
-      important(pin, 'top', '0');
-      important(pin, 'left', '0');
-      important(pin, 'right', '0');
-      important(pin, 'height', `${heroH}px`);
-      important(pin, 'z-index', '900');
-
-      important(hero, 'position', 'absolute');
-      important(hero, 'top', '0');
-      important(hero, 'left', '0');
-      important(hero, 'transform', 'translate3d(0,-100%,0)');
-      important(hero, 'visibility', 'hidden');
-      important(hero, 'pointer-events', 'none');
-      important(hero, 'z-index', '0');
-
-      important(services, 'position', 'absolute');
-      important(services, 'top', '0');
-      important(services, 'left', '0');
-      important(services, 'width', '100%');
-      important(services, 'z-index', '2');
-      important(services, 'visibility', 'visible');
-
-    } else {
-      /* NORMAL PAGE SCROLL */
-      important(pin, 'position', 'absolute');
-      important(pin, 'top', `${heroH + HOLD}px`);
-      important(pin, 'left', '0');
-      important(pin, 'right', '0');
-      important(pin, 'height', `${services.scrollHeight}px`);
-      important(pin, 'z-index', '1');
-
-      important(hero, 'position', 'absolute');
-      important(hero, 'top', '0');
-      important(hero, 'left', '0');
-      important(hero, 'transform', 'translate3d(0,-100%,0)');
-      important(hero, 'visibility', 'hidden');
-      important(hero, 'pointer-events', 'none');
-      important(hero, 'z-index', '0');
-
-      important(services, 'position', 'relative');
-      important(services, 'top', '0');
-      important(services, 'left', '0');
-      important(services, 'width', '100%');
-      important(services, 'z-index', '2');
-      important(services, 'visibility', 'visible');
-    }
-  }
-
-  function tick() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(render);
-    }
-  }
-
-  if (header) {
-    important(header, 'position', 'fixed');
-    important(header, 'top', '0');
-    important(header, 'left', '0');
-    important(header, 'right', '0');
-    important(header, 'z-index', '10000');
-  }
-
-  measure();
-  render();
-
-  window.addEventListener('scroll', tick, { passive: true });
-
-  window.addEventListener('resize', () => {
-    measure();
-    render();
-  }, { passive: true });
-
-  if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(() => {
-      measure();
-      render();
+      card.style.setProperty(
+        'min-height',
+        `${masterHeight}px`,
+        'important'
+      );
     });
+  };
 
-    observer.observe(hero);
-    observer.observe(services);
-  }
+  let timer = null;
 
-  console.log('✅ Green Vita working Hero / Services scroll restored.');
-});
+  const onResize = () => {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      cards.slice(1).forEach(card => {
+        card.style.removeProperty('height');
+        card.style.removeProperty('min-height');
+      });
+
+      requestAnimationFrame(apply);
+    }, 100);
+  };
+
+  window.addEventListener('resize', onResize, { passive: true });
+
+  const observer = new ResizeObserver(() => {
+    requestAnimationFrame(apply);
+  });
+
+  observer.observe(master);
+
+  apply();
+})();
 </script>
+
+<script src="/static/js/gv-card-responsive.js?v=20260921-final2"></script>
 
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/home-luxury.css?v=3">
+<link rel="stylesheet" href="/static/css/home-luxury.css?v=20260921-hero-dingding-final1">
+<link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css">
 {% endblock %}
 
 {% block content %}
 
+<!-- =======================================================
+     HERO — ONLY SPECIAL SCROLL ELEMENT
+     ======================================================= -->
 
-
-<link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css">
-
-<div class="gv-home-stage">
-
-    <div class="gv-home-pin">
-
-    <div class="gv-home-hero">
+<div
+    class="gv-home-stage"
+    style="
+        position:relative!important;
+        width:100%!important;
+        height:100vh!important;
+        min-height:0!important;
+        margin:0!important;
+        padding:0!important;
+        overflow:visible!important;
+        z-index:10!important;
+    "
+>
+    <div
+        class="gv-home-hero"
+        style="
+            position:fixed!important;
+            top:0!important;
+            left:0!important;
+            right:0!important;
+            width:100%!important;
+            height:100vh!important;
+            z-index:900!important;
+            visibility:visible!important;
+            opacity:1!important;
+        "
+    >
+        <div class="gv-home-hero">
         <div id="root"></div>
         <script type="module" src="/static/react/green-vita-hero/green-vita-hero.js"></script>
     </div>
+    </div>
+</div>
 
-    <section class="section gv-home-services" id="services">
+<!-- =======================================================
+     ONE CONTINUOUS NORMAL PAGE FLOW
+     ======================================================= -->
+
+<div
+    class="gv-home-content"
+    style="
+        position:relative!important;
+        display:block!important;
+        width:100%!important;
+        min-height:0!important;
+        height:auto!important;
+        margin:0!important;
+        padding:0!important;
+        overflow:visible!important;
+        z-index:1!important;
+    "
+>
+    <section
+    class="section gv-home-services"
+    id="services"
+   
+ style="
+        min-height:0!important;
+        height:auto!important;
+        margin:0!important;
+        padding-bottom:6px!important;
+    ">
     <div class="container">
 
         <div class="section-head gv-services-heading">
@@ -229,31 +176,303 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 {% if service.price %}
                 <div class="service-price">
-                    هر ساعت ویزیت متخصص
-                    {{ "{:,}".format(service.price|int) }}
-                    تومان
+                    <span class="service-price-label">هر ساعت ویزیت متخصص</span>
+                    <span class="service-price-amount">{{ "{:,}".format(service.price|int) }} تومان</span>
                 </div>
                 {% else %}
                 <div class="service-price">رایگان</div>
                 {% endif %}
 
-                <a href="/booking/service/{{ service.id }}/" class="btn btn-primary">
+                <a href="/booking/?service={{ service.id }}" class="btn btn-primary">
                     انتخاب سرویس
                 </a>
+                <div class="gv-service-green-real-box" aria-hidden="true"></div>
 
             </article>
             {% endfor %}
 
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
     </section>
 
-    </div>
-
-</div>
-
-<section class="section gv-home-trust">
+    <section
+    class="gv-customer-trust" style="
+        position:relative!important;
+        display:block!important;
+        width:100%!important;
+        margin-top:100px!important;
+        margin-bottom:0!important;
+        transform:none!important;
+        opacity:1!important;
+        visibility:visible!important;
+        z-index:auto!important;
+    ">
     <div class="container">
+        <div
+            class="gv-customer-stats"
+           
+         style="display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-flow:row!important;width:100%!important;overflow:hidden!important;border:1px solid #DCE6D7!important;border-radius:22px!important;background:#FFFFFF!important;box-shadow:0 14px 38px rgba(2,20,8,.07)!important;">
+
+            <div
+                class="gv-customer-stat"
+                style="
+                    position:relative;
+                    display:block;
+                    padding:28px 20px;
+                    text-align:center;
+                    font-family:'Vazir',Tahoma,Arial,sans-serif;
+                "
+             style="display:block!important;width:auto!important;min-width:0!important;text-align:center!important;padding:28px 20px!important;font-family:'Vazir',Tahoma,Arial,sans-serif!important;">
+                <strong
+                    style="
+                        display:block;
+                        margin:0 0 6px;
+                        color:#022F12;
+                        font-size:28px;
+                        font-weight:700;
+                    "
+                >+۴۰۰</strong>
+                <span
+                    style="
+                        display:block;
+                        color:#7C8B82;
+                        font-size:13px;
+                    "
+                >گیاه درمان‌شده</span>
+            </div>
+
+            <div
+                class="gv-customer-stat"
+                style="
+                    position:relative;
+                    display:block;
+                    padding:28px 20px;
+                    text-align:center;
+                    font-family:'Vazir',Tahoma,Arial,sans-serif;
+                    border-right:1px solid #DCE6D7;
+                "
+             style="display:block!important;width:auto!important;min-width:0!important;text-align:center!important;padding:28px 20px!important;font-family:'Vazir',Tahoma,Arial,sans-serif!important;">
+                <strong
+                    style="
+                        display:block;
+                        margin:0 0 6px;
+                        color:#022F12;
+                        font-size:28px;
+                        font-weight:700;
+                    "
+                >۵ سال</strong>
+                <span
+                    style="
+                        display:block;
+                        color:#7C8B82;
+                        font-size:13px;
+                    "
+                >تجربه تخصصی</span>
+            </div>
+
+            <div
+                class="gv-customer-stat"
+                style="
+                    position:relative;
+                    display:block;
+                    padding:28px 20px;
+                    text-align:center;
+                    font-family:'Vazir',Tahoma,Arial,sans-serif;
+                    border-right:1px solid #DCE6D7;
+                "
+             style="display:block!important;width:auto!important;min-width:0!important;text-align:center!important;padding:28px 20px!important;font-family:'Vazir',Tahoma,Arial,sans-serif!important;">
+                <strong
+                    style="
+                        display:block;
+                        margin:0 0 6px;
+                        color:#022F12;
+                        font-size:28px;
+                        font-weight:700;
+                    "
+                >۴ نوع</strong>
+                <span
+                    style="
+                        display:block;
+                        color:#7C8B82;
+                        font-size:13px;
+                    "
+                >خدمت ویزیت</span>
+            </div>
+
+            <div
+                class="gv-customer-stat"
+                style="
+                    position:relative;
+                    display:block;
+                    padding:28px 20px;
+                    text-align:center;
+                    font-family:'Vazir',Tahoma,Arial,sans-serif;
+                    border-right:1px solid #DCE6D7;
+                "
+             style="display:block!important;width:auto!important;min-width:0!important;text-align:center!important;padding:28px 20px!important;font-family:'Vazir',Tahoma,Arial,sans-serif!important;">
+                <strong
+                    style="
+                        display:block;
+                        margin:0 0 6px;
+                        color:#022F12;
+                        font-size:22px;
+                        font-weight:700;
+                    "
+                >رضایت بالا</strong>
+                <span
+                    style="
+                        display:block;
+                        color:#7C8B82;
+                        font-size:13px;
+                    "
+                >از مشتریان</span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    <section class="gv-visit-process">
+        <div class="container">
+
+            <div class="gv-visit-process-head">
+                <span>HOW IT WORKS</span>
+                <h2>روند ویزیت</h2>
+                <p>از پیدا کردن مشکل تا شروع مسیر درمان، قدم‌به‌قدم کنارت هستیم.</p>
+            </div>
+
+            <div class="gv-visit-process-grid">
+
+                <article class="gv-visit-step">
+                    <div class="gv-visit-step-number">۱</div>
+                    <div>
+                        <h3>ثبت درخواست</h3>
+                        <p>نوع ویزیتت را انتخاب کن و زمان مناسب را رزرو کن.</p>
+                    </div>
+                </article>
+
+                <article class="gv-visit-step">
+                    <div class="gv-visit-step-number">۲</div>
+                    <div>
+                        <h3>بررسی مشکل</h3>
+                        <p>علائم، عکس‌ها، شرایط نگهداری و سابقه گیاه بررسی می‌شود.</p>
+                    </div>
+                </article>
+
+                <article class="gv-visit-step">
+                    <div class="gv-visit-step-number">۳</div>
+                    <div>
+                        <h3>تشخیص تخصصی</h3>
+                        <p>علت اصلی مشکل گیاه مشخص می‌شود، نه فقط نشانه‌های ظاهری.</p>
+                    </div>
+                </article>
+
+                <article class="gv-visit-step">
+                    <div class="gv-visit-step-number">۴</div>
+                    <div>
+                        <h3>برنامه درمان</h3>
+                        <p>راهکار درمان و مراقبت متناسب با شرایط گیاه بهت داده می‌شود.</p>
+                    </div>
+                </article>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="gv-treatment-cases">
+        <div class="container">
+
+            <div class="gv-treatment-cases-head">
+                <span>REAL CASES</span>
+                <h2>نمونه‌های واقعی درمان</h2>
+                <p>هر گیاه داستان خودش را دارد؛ تشخیص درست، اولین قدم برای نجات آن است.</p>
+            </div>
+
+            <div class="gv-treatment-cases-grid">
+
+                <article class="gv-treatment-case">
+                    <div class="gv-treatment-case-tag">پرنده‌بهشتی</div>
+                    <h3>بازگشت گیاه بعد از دو ویزیت</h3>
+                    <p>
+                        این گیاه در طول مسیر درمان، در دو نوبت با فاصله حدود دو ماه
+                        بررسی شد و بعد از اصلاح شرایط نگهداری و ادامه مراقبت‌ها،
+                        به وضعیت مطلوب برگشت.
+                    </p>
+                    <span>دو ویزیت · پیگیری مرحله‌ای</span>
+                </article>
+
+                <article class="gv-treatment-case">
+                    <div class="gv-treatment-case-tag">یوکا</div>
+                    <h3>مشکل ریشه از خاک و زهکشی</h3>
+                    <p>
+                        عامل اصلی افت گیاه، پوسیدگی ریشه در اثر خاک نامناسب و
+                        زهکشی ضعیف بود. بخش‌های سالم شناسایی و جدا شدند تا
+                        امکان ادامه رشد و نجات گیاه فراهم شود.
+                    </p>
+                    <span>بررسی ریشه · اصلاح خاک · نجات بخش‌های سالم</span>
+                </article>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section gv-home-trust">
+    <div class="container">
+
+        <div
+            class="gv-trust-head"
+            style="
+                max-width:720px;
+                margin:0 auto 30px;
+                text-align:center;
+            "
+        >
+            <span
+                style="
+                    display:block;
+                    margin-bottom:10px;
+                    color:#C6A15B;
+                    font-size:11px;
+                    font-weight:700;
+                    letter-spacing:.18em;
+                "
+            >WHY GREEN VITA</span>
+
+            <h2
+                style="
+                    margin:0;
+                    color:#022F12;
+                    font-size:clamp(30px,4vw,44px);
+                    font-weight:800;
+                    line-height:1.25;
+                "
+            >چرا گرین ویتا؟</h2>
+
+            <p
+                style="
+                    margin:12px auto 0;
+                    color:#66756C;
+                    font-size:15px;
+                    line-height:2;
+                "
+            >تشخیص درست، ویزیت متناسب و پیگیری برای اینکه مسیر درمان گیاهت روشن‌تر باشه.</p>
+        </div>
+
         <div class="feature-grid" id="diagnosis">
 
             <div class="feature">
@@ -274,24 +493,553 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
 </section>
-<section class="gv-final-cta">
-    <div class="gv-final-cta-inner">
-        <h2>گیاهت را تنها نگذار.</h2>
+
+
+<!-- ================= GREEN VITA BOT PROMO ================= -->
+<section class="gv-bot-promo" id="green-vita-bots">
+  <div class="gv-bot-promo-orb gv-bot-orb-1"></div>
+  <div class="gv-bot-promo-orb gv-bot-orb-2"></div>
+
+  <div class="container gv-bot-promo-inner">
+
+    <div class="gv-bot-promo-head">
+      <span class="gv-bot-eyebrow">GREEN VITA ASSISTANT</span>
+      <h2>دستیار گرین‌ویتا همیشه کنارت هست</h2>
+      <p>
+        تشخیص اولیه گیاه، دریافت راهنمایی و ارتباط سریع با گرین‌ویتا؛
+        همین حالا از ربات استفاده کن.
+      </p>
+    </div>
+
+    <div class="gv-bot-promo-showcase">
+<div class="gv-bot-chat">
+
+        <div class="gv-chat-top">
+          <div class="gv-chat-avatar">🌿</div>
+          <div>
+            <strong>Green Vita AI</strong>
+            <span><i></i> آنلاین</span>
+          </div>
+        </div>
+
+        <div class="gv-chat-body">
+          <div class="gv-chat-art" aria-hidden="true">
+            <img src="/static/images/robotic-hand.png" alt="">
+          </div>
+
+          <!-- BOT MESSAGE 1 -->
+        <div class="gv-chat-msg gv-chat-msg-bot">
+          <div class="gv-chat-line">
+            <img
+              src="https://web.bale.ai/emoji-data/img-apple-64/1f33f.png"
+              alt="🌿"
+              class="gv-chat-emoji"
+            >
+            <span>به دستیار هوشمند گرین ویتا خوش آمدید!</span>
+          </div>
+          <div class="gv-chat-text">
+            من دستیار هوشمند کلینیک گیاه‌پزشکی گرین‌ویتا هستم.<br>
+            از منوی پایین می‌توانید بخش موردنظر را انتخاب کنید.
+          </div>
+        </div>
+
+        <!-- USER MESSAGE 1 -->
+        <div class="gv-chat-msg gv-chat-msg-user">
+          می‌خوام بیماری گیاهم رو تشخیص بدم.
+        </div>
+
+        <!-- BOT MESSAGE 2 -->
+        <div class="gv-chat-msg gv-chat-msg-bot">
+          <div class="gv-chat-line">
+            <img
+              src="https://web.bale.ai/emoji-data/img-apple-64/1fa7a.png"
+              alt="🩺"
+              class="gv-chat-emoji"
+            >
+            <span>تشخیص بیماری گیاه</span>
+          </div>
+          <div class="gv-chat-text">
+            <img
+              src="https://web.bale.ai/emoji-data/img-apple-64/1f4f7.png"
+              alt="📷"
+              class="gv-chat-emoji"
+            >
+            یک عکس واضح و نزدیک از برگ، ساقه یا قسمت آسیب‌دیده گیاه بفرست.<br>
+            بعد از دریافت عکس، ازت اسم یا نوع گیاه رو می‌پرسم و سپس تحلیل هوش مصنوعی رو انجام می‌دم.
+          </div>
+        </div>
+
+        <!-- USER MESSAGE 2 -->
+        <div class="gv-chat-msg gv-chat-msg-user">
+          اینم عکس گیاه من.
+        </div>
+
+        <!-- BOT MESSAGE 3 -->
+        <div class="gv-chat-msg gv-chat-msg-bot">
+          <div class="gv-chat-line">
+            <img
+              src="https://web.bale.ai/emoji-data/img-apple-64/1f50e.png"
+              alt="🔎"
+              class="gv-chat-emoji"
+            >
+            <span>در حال تحلیل عکس توسط هوش مصنوعی...</span>
+          </div>
+          <div class="gv-chat-text">
+            چند لحظه صبر کن.
+          </div>
+        </div>
+
+        <div class="gv-chat-typing">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="gv-chat-bottom">
+          <span>پیام خود را ارسال کنید...</span>
+          <b>➤</b>
+        </div>
+
+      </div>
+
+      <div class="gv-bot-promo-copy">
+
+        <div class="gv-bot-copy-badge">
+          <span>AI</span>
+          <strong>همیشه در دسترس</strong>
+        </div>
+
+        <h3>مشکل گیاهت رو با ما در میون بذار</h3>
+
         <p>
-            یک تشخیص درست می‌تواند مسیر سلامت گیاه را عوض کند.
-            ویزیت موردنیازت را انتخاب کن و شروع کنیم.
+          عکس گیاهت رو بفرست، راهنمایی اولیه بگیر و اگر نیاز بود
+          برای ویزیت تخصصی با گرین‌ویتا در ارتباط باش.
         </p>
-        <a href="/booking/">رزرو ویزیت</a>
+
+        <div class="gv-bot-actions">
+
+          <a
+            class="gv-bot-btn gv-bot-btn-telegram"
+            href="https://t.me/GreenVita_AI_Bot"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="gv-bot-btn-icon"><img src="/static/icons/telegram.svg" alt="تلگرام"></span>
+            <span>
+              <small>تلگرام</small>
+              شروع گفتگو
+            </span>
+            <b>↗</b>
+          </a>
+
+          <a
+            class="gv-bot-btn gv-bot-btn-bale"
+            href="https://ble.ir/greenvita_ai_bot"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="gv-bot-btn-icon"><img src="/static/icons/bale.png?v=4" alt="بله"></span>
+            <span>
+              <small>بله</small>
+              شروع گفتگو
+            </span>
+            <b>↗</b>
+          </a>
+
+        </div>
+
+        <div class="gv-bot-trust">
+          <span>●</span>
+          پاسخ‌گویی سریع
+          <i></i>
+          <span>●</span>
+          راهنمایی اولیه
+          <i></i>
+          <span>●</span>
+          ارتباط مستقیم
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ================= END GREEN VITA BOT PROMO ================= -->
+
+<section class="gv-home-testimonials">
+        <div class="container">
+
+            <div class="gv-testimonials-head">
+                <span>حرف شما</span>
+                <h2>تجربه شما برای ما ارزشمنده</h2>
+                <p>بعضی از تجربه‌هایی که همراهان گرین ویتا با ما به اشتراک گذاشتند.</p>
+            </div>
+
+            <div class="gv-testimonials-grid">
+
+                <article class="gv-testimonial-card">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        تشخیص آنلاین با عکس خیلی سریع بود و باعث شد زودتر و به موقع
+                        ویزیت حضوری رزرو کنم و بتونم قبل از نابودی گیاه، نجاتش بدم.
+                    </p>
+                    <strong>نگار / اصفهان</strong>
+                </article>
+
+                <article class="gv-testimonial-card">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        برای باغ پدرم مشاوره گرفتم، برنامه درمانی دقیقی دادن که
+                        همون فصل جواب داد.
+                    </p>
+                    <strong style="display:block; transform:translateY(28px);">رضا / کرج</strong>
+                </article>
+
+                <article class="gv-testimonial-card">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        فکر می‌کردم گلدون مونسترام دیگه نجات پیدا نمی‌کنه.
+                        با یه ویزیت و بررسی تخصصی مشکل خاک و آبیاری مشخص شد.
+                    </p>
+                    <strong>شیوا / تهران</strong>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <section
+    class="gv-home-faq"
+    id="faq"
+   
+ style="
+        position:relative!important;
+        display:block!important;
+        width:100%!important;
+        transform:none!important;
+        opacity:1!important;
+        visibility:visible!important;
+        z-index:auto!important;
+    ">
+    <div class="container">
+
+        <div
+            class="gv-faq-head"
+           
+        >
+            <span
+                style="
+                    display:block;
+                    margin-bottom:10px;
+                    color:#C6A15B;
+                    font-size:11px;
+                    font-weight:700;
+                    letter-spacing:.18em;
+                "
+            >FAQ</span>
+
+            <h2
+                style="
+                    margin:0;
+                    color:#022F12;
+                    font-family:'Garamond','Times New Roman',serif;
+                    font-size:52px;
+                    font-weight:400;
+                    line-height:1.1;
+                "
+            >سوالات متداول</h2>
+
+            <p
+                style="
+                    margin:14px 0 0;
+                    color:#66756C;
+                    font-size:15px;
+                    line-height:2;
+                "
+            >قبل از رزرو، این سوالات رو جواب دادیم.</p>
+        </div>
+
+        <div
+            class="gv-faq-list"
+            style="
+                max-width:900px;
+                margin:0 auto;
+                display:grid;
+                gap:12px;
+            "
+        >
+
+            <details
+                class="gv-faq-item"
+                style="
+                    overflow:hidden;
+                    border:1px solid #DCE6D7;
+                    border-radius:20px;
+                    background:#FFFFFF;
+                    box-shadow:0 10px 30px rgba(2,20,8,.045);
+                "
+            >
+                <summary
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:20px;
+                        padding:22px 24px;
+                        cursor:pointer;
+                        list-style:none;
+                        color:#022F12;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:15px;
+                        font-weight:600;
+                    "
+                >
+                    <span>آیا باید گیاه رو بیارم یا شما میاید؟</span>
+                    <b
+                        style="
+                            width:34px;
+                            height:34px;
+                            flex:0 0 34px;
+                            display:grid;
+                            place-items:center;
+                            border-radius:50%;
+                            background:#E4F0CC;
+                            color:#022F12;
+                            font-size:21px;
+                            font-weight:400;
+                        "
+                    >+</b>
+                </summary>
+
+                <div
+                    class="gv-faq-answer"
+                    style="
+                        padding:0 24px 23px;
+                        color:#66756C;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:14px;
+                        line-height:2;
+                    "
+                >
+                    برای ویزیت آپارتمانی و فضای باز، کارشناس به محل شما میاد.
+                    فقط برای مشاوره تلفنی نیازی به حضور نیست.
+                </div>
+            </details>
+
+            <details
+                class="gv-faq-item"
+                style="
+                    overflow:hidden;
+                    border:1px solid #DCE6D7;
+                    border-radius:20px;
+                    background:#FFFFFF;
+                    box-shadow:0 10px 30px rgba(2,20,8,.045);
+                "
+            >
+                <summary
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:20px;
+                        padding:22px 24px;
+                        cursor:pointer;
+                        list-style:none;
+                        color:#022F12;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:15px;
+                        font-weight:600;
+                    "
+                >
+                    <span>اگه بعد از ویزیت گیاه بهبود پیدا نکنه چی؟</span>
+                    <b
+                        style="
+                            width:34px;
+                            height:34px;
+                            flex:0 0 34px;
+                            display:grid;
+                            place-items:center;
+                            border-radius:50%;
+                            background:#E4F0CC;
+                            color:#022F12;
+                            font-size:21px;
+                            font-weight:400;
+                        "
+                    >+</b>
+                </summary>
+
+                <div
+                    class="gv-faq-answer"
+                    style="
+                        padding:0 24px 23px;
+                        color:#66756C;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:14px;
+                        line-height:2;
+                    "
+                >
+                    برای اکثر خدمات یک پیگیری رایگان ۲ هفته بعد از ویزیت داریم
+                    تا مطمئن بشیم روند درمان درست پیش می‌ره.
+                </div>
+            </details>
+
+            <details
+                class="gv-faq-item"
+                style="
+                    overflow:hidden;
+                    border:1px solid #DCE6D7;
+                    border-radius:20px;
+                    background:#FFFFFF;
+                    box-shadow:0 10px 30px rgba(2,20,8,.045);
+                "
+            >
+                <summary
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:20px;
+                        padding:22px 24px;
+                        cursor:pointer;
+                        list-style:none;
+                        color:#022F12;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:15px;
+                        font-weight:600;
+                    "
+                >
+                    <span>هزینه نهایی همون قیمتیه که نوشته شده؟</span>
+                    <b
+                        style="
+                            width:34px;
+                            height:34px;
+                            flex:0 0 34px;
+                            display:grid;
+                            place-items:center;
+                            border-radius:50%;
+                            background:#E4F0CC;
+                            color:#022F12;
+                            font-size:21px;
+                            font-weight:400;
+                        "
+                    >+</b>
+                </summary>
+
+                <div
+                    class="gv-faq-answer"
+                    style="
+                        padding:0 24px 23px;
+                        color:#66756C;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:14px;
+                        line-height:2;
+                    "
+                >
+                    قیمت‌ها برای یک ساعت ویزیت در داخل شهر تهران هستش و در مورد
+                    ویزیت‌های خارج از تهران پس از بررسی‌های لازم، هزینه دقیق
+                    نهایی و رزرو ثبت می‌شه، بدون سورپرایز.
+                </div>
+            </details>
+
+            <details
+                class="gv-faq-item"
+                style="
+                    overflow:hidden;
+                    border:1px solid #DCE6D7;
+                    border-radius:20px;
+                    background:#FFFFFF;
+                    box-shadow:0 10px 30px rgba(2,20,8,.045);
+                "
+            >
+                <summary
+                    style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        gap:20px;
+                        padding:22px 24px;
+                        cursor:pointer;
+                        list-style:none;
+                        color:#022F12;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:15px;
+                        font-weight:600;
+                    "
+                >
+                    <span>می‌تونم نوبت رو کنسل یا جابه‌جا کنم؟</span>
+                    <b
+                        style="
+                            width:34px;
+                            height:34px;
+                            flex:0 0 34px;
+                            display:grid;
+                            place-items:center;
+                            border-radius:50%;
+                            background:#E4F0CC;
+                            color:#022F12;
+                            font-size:21px;
+                            font-weight:400;
+                        "
+                    >+</b>
+                </summary>
+
+                <div
+                    class="gv-faq-answer"
+                    style="
+                        padding:0 24px 23px;
+                        color:#66756C;
+                        font-family:'Vazir',Tahoma,Arial,sans-serif;
+                        font-size:14px;
+                        line-height:2;
+                    "
+                >
+                    بله، تا 24 ساعت قبل از نوبت از طریق پنل کاربری یا واتساپ
+                    قابل تغییره.
+                </div>
+            </details>
+
+        </div>
     </div>
 </section>
 
+    <section class="gv-final-cta">
+    <div class="gv-final-cta-inner">
+        <h2>گیاهت را تنها نگذار.</h2>
+        <p>
+            یک تشخیص درست می‌تونه مسیر سلامت گیاه رو عوض کنه.
+            ویزیت مورد نیازت رو انتخاب کن تا<br>
+            <strong>شروع کنیم.</strong>
+        </p>
+        <a
+    href="/booking/"
+    class="cta"
+    style="
+        display:inline-flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        height:44px !important;
+        min-height:44px !important;
+        padding:0 22px !important;
+        background:rgb(139,197,61) !important;
+        background-image:none !important;
+        color:rgb(2,47,18) !important;
+        border:1px solid rgba(139,197,61,.45) !important;
+        border-radius:999px !important;
+        font-size:14px !important;
+        font-weight:700 !important;
+        line-height:1 !important;
+        text-decoration:none !important;
+        box-shadow:rgba(139,197,61,.2) 0 8px 24px, rgba(255,255,255,.24) 0 1px 0 inset !important;
+    "
+>رزرو ویزیت</a>
+    </div>
+</section>
 
-<section class="section gv-blog-strip" id="blog">
+    <section class="section gv-blog-strip" id="blog">
     <div class="container">
         <div class="gv-blog-card">
             <div>
                 <span class="eyebrow">🌿 Green Vita</span>
-                <h2>دانش بهتر، گیاه سالم‌تر</h2>
+                <h2>دانش بیشتر، گیاه سالم‌تر</h2>
                 <p>
                     آموزش‌ها، نکات مراقبت و تجربه‌های تخصصی گرین‌ویتا
                     برای نگهداری بهتر از گیاهان.
@@ -301,268 +1049,572 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </div>
 </section>
+</div>
 
-<!-- GREEN VITA HERO / SERVICES SCROLL -->
+
+<!-- =======================================================
+     HERO CONTROLLER
+     ONLY HERO MOVES — PAGE ITSELF SCROLLS NORMALLY
+     ======================================================= -->
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const stage = document.querySelector(".gv-home-stage");
-  const pin = document.querySelector(".gv-home-pin");
   const hero = document.querySelector(".gv-home-hero");
-  const services = document.querySelector(".gv-home-services");
+  const content = document.querySelector(".gv-home-content");
   const header = document.querySelector(".site-header");
 
-  if (!stage || !pin || !hero || !services) return;
+  if (!stage || !hero || !content) {
+    console.error("Green Vita Hero / Content not found.");
+    return;
+  }
 
-  const important = (el, prop, value) =>
+  const important = (el, prop, value) => {
     el.style.setProperty(prop, value, "important");
+  };
 
-  let stageStart = 0;
-  let heroH = 0;
-  let ticking = false;
-  let scrollLocked = false;
-  let heroDone = false;
-  let lockY = 0;
-  let keyboardReady = true;
+  let heroHeight = window.innerHeight;
+  let progress = 0;
+  let mode = "hero";
+  let lastWheelTime = 0;
 
-  const navigationKeys = new Set([
-    "ArrowDown",
-    "ArrowUp",
-    "PageDown",
-    "PageUp",
-    "Space",
-    "Home",
-    "End"
-  ]);
-
-  const heldKeys = new Set();
+  const NEW_GESTURE_GAP = 280;
 
   function measure() {
-    heroH = window.innerHeight;
-    stageStart =
-      stage.getBoundingClientRect().top + window.scrollY;
+    heroHeight = window.innerHeight;
 
+    /*
+     * The Stage itself takes NO layout space.
+     * The normal Content begins at the very top of the page.
+     */
     important(stage, "position", "relative");
+    important(stage, "width", "100%");
+    important(stage, "height", "0");
+    important(stage, "min-height", "0");
+    important(stage, "margin", "0");
+    important(stage, "padding", "0");
     important(stage, "overflow", "visible");
-    important(
-      stage,
-      "height",
-      `calc(${heroH}px + ${services.scrollHeight}px)`
-    );
 
-    important(pin, "width", "100%");
-    important(pin, "height", `${heroH}px`);
-    important(hero, "width", "100%");
-    important(hero, "height", `${heroH}px`);
+    /*
+     * Entire page content is normal document flow,
+     * starting from y=0 underneath the Hero.
+     */
+    important(content, "position", "relative");
+    important(content, "top", "auto");
+    important(content, "left", "auto");
+    important(content, "right", "auto");
+    important(content, "width", "100%");
+    important(content, "margin", "0");
+    important(content, "padding", "0");
+    important(content, "transform", "none");
+    important(content, "z-index", "1");
 
-    if (scrollLocked) {
-      lockY = stageStart + heroH;
-      window.scrollTo(0, lockY);
-    }
-  }
-
-  function continuePage() {
-    scrollLocked = false;
-    heroDone = true;
-
-    important(pin, "position", "absolute");
-    important(pin, "top", `${heroH}px`);
-    important(pin, "left", "0");
-    important(pin, "right", "0");
-    important(pin, "width", "100%");
-    important(pin, "height", `${services.scrollHeight}px`);
-    important(pin, "z-index", "1");
-
-    important(hero, "position", "absolute");
+    /*
+     * Hero is the ONLY overlay.
+     */
+    important(hero, "position", "fixed");
     important(hero, "top", "0");
     important(hero, "left", "0");
+    important(hero, "right", "0");
     important(hero, "width", "100%");
-    important(hero, "transform", "translate3d(0,-100%,0)");
-    important(hero, "visibility", "hidden");
-    important(hero, "pointer-events", "none");
-    important(hero, "z-index", "0");
+    important(hero, "height", `${heroHeight}px`);
+    important(hero, "z-index", "9000");
+    important(hero, "display", "block");
+    important(hero, "visibility", "visible");
 
-    important(services, "position", "relative");
-    important(services, "top", "0");
-    important(services, "left", "0");
-    important(services, "width", "100%");
-    important(services, "z-index", "2");
-    important(services, "visibility", "visible");
-  }
-
-  function lockAtEnd() {
-    scrollLocked = true;
-    lockY = stageStart + heroH;
-    window.scrollTo(0, lockY);
-  }
-
-  function render() {
-    ticking = false;
-
-    if (heroDone && window.scrollY < stageStart + heroH - 2) {
-      heroDone = false;
-      scrollLocked = false;
-    }
-
-    if (heroDone) return;
-
-    if (scrollLocked) {
-      if (Math.abs(window.scrollY - lockY) > 1) {
-        window.scrollTo(0, lockY);
-      }
-      return;
-    }
-
-    const d = Math.max(0, window.scrollY - stageStart);
-
-    if (d < heroH) {
-      important(pin, "position", "fixed");
-      important(pin, "top", "0");
-      important(pin, "left", "0");
-      important(pin, "right", "0");
-      important(pin, "height", `${heroH}px`);
-      important(pin, "z-index", "900");
-
-      important(services, "position", "absolute");
-      important(services, "top", "0");
-      important(services, "left", "0");
-      important(services, "width", "100%");
-      important(services, "z-index", "1");
-
-      important(hero, "position", "absolute");
-      important(hero, "top", "0");
-      important(hero, "left", "0");
-      important(hero, "width", "100%");
-      important(hero, "z-index", "2");
-      important(hero, "visibility", "visible");
-      important(hero, "pointer-events", "auto");
-
-      const progress = Math.min(d / heroH, 1);
-
-      important(
-        hero,
-        "transform",
-        `translate3d(0, ${-progress * 100}%, 0)`
-      );
-    } else {
-      lockAtEnd();
+    if (header) {
+      important(header, "position", "fixed");
+      important(header, "top", "0");
+      important(header, "left", "0");
+      important(header, "right", "0");
+      important(header, "z-index", "10000");
     }
   }
 
-  function tick() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(render);
-    }
+  function renderHero() {
+    important(
+      hero,
+      "transform",
+      `translate3d(0, ${-progress * 100}%, 0)`
+    );
   }
 
-  /* Separate Hero movement from the next mouse-wheel gesture. */
-  let lastWheelTime = 0;
-  const WHEEL_GESTURE_GAP = 280;
+  function enterHeroMode() {
+    mode = "hero";
+    progress = 1;
+
+    window.scrollTo(0, 0);
+
+    measure();
+    renderHero();
+  }
+
+  function finishHero() {
+    /*
+     * Current wheel movement is consumed here.
+     * The page remains at y=0.
+     * The NEXT wheel gesture starts normal scrolling.
+     */
+    progress = 1;
+    mode = "hero-end";
+
+    window.scrollTo(0, 0);
+    renderHero();
+  }
+
+  /*
+   * ======================================================
+   * WHEEL
+   * ======================================================
+   */
 
   window.addEventListener(
     "wheel",
-    () => {
+    (event) => {
       const now = performance.now();
 
-      if (!scrollLocked || heroDone) {
+      /*
+       * HERO:
+       * Browser scrolling is completely blocked.
+       * Only Hero moves.
+       */
+      if (mode === "hero") {
+        event.preventDefault();
+
+        const amount =
+          Math.min(
+            Math.abs(event.deltaY) /
+              Math.max(heroHeight, 1),
+            0.14
+          );
+
+        if (event.deltaY > 0) {
+          progress = Math.min(
+            1,
+            progress + amount
+          );
+        } else if (event.deltaY < 0) {
+          progress = Math.max(
+            0,
+            progress - amount
+          );
+        }
+
+        window.scrollTo(0, 0);
+        renderHero();
+
+        if (progress >= 1) {
+          finishHero();
+        }
+
         lastWheelTime = now;
         return;
       }
 
       /*
-       * The wheel event immediately following the Hero exit
-       * belongs to the same gesture and is ignored.
+       * HERO COMPLETELY GONE:
+       * Keep the current gesture locked.
+       * A NEW gesture releases native page scrolling.
        */
-      if (now - lastWheelTime < WHEEL_GESTURE_GAP) {
+      if (mode === "hero-end") {
+        const newGesture =
+          now - lastWheelTime >
+          NEW_GESTURE_GAP;
+
         lastWheelTime = now;
+
+        if (!newGesture) {
+          event.preventDefault();
+          window.scrollTo(0, 0);
+          return;
+        }
+
+        /*
+         * IMPORTANT:
+         * Do NOT preventDefault.
+         * Do NOT scrollBy.
+         *
+         * The browser receives this wheel event normally.
+         */
+        mode = "normal";
         return;
       }
 
       /*
-       * A genuinely new wheel gesture starts Services.
+       * NORMAL PAGE:
+       * Completely native browser scrolling.
+       *
+       * Only intercept when user reaches the very top
+       * and starts scrolling upward again.
        */
-      continuePage();
+      if (
+        mode === "normal" &&
+        window.scrollY <= 0 &&
+        event.deltaY < 0
+      ) {
+        event.preventDefault();
+
+        enterHeroMode();
+
+        const amount =
+          Math.min(
+            Math.abs(event.deltaY) /
+              Math.max(heroHeight, 1),
+            0.14
+          );
+
+        progress = Math.max(
+          0,
+          progress - amount
+        );
+
+        renderHero();
+      }
+
       lastWheelTime = now;
     },
-    { passive: true, capture: true }
+    {
+      passive: false,
+      capture: true
+    }
   );
 
-  /* Keyboard must be released, then pressed again */
+  /*
+   * Never allow page movement while Hero is active.
+   */
   window.addEventListener(
-    "keydown",
-    (event) => {
-      if (!navigationKeys.has(event.code)) return;
+    "scroll",
+    () => {
+      if (
+        mode === "hero" ||
+        mode === "hero-end"
+      ) {
+        if (window.scrollY !== 0) {
+          window.scrollTo(0, 0);
+        }
+      }
+    },
+    { passive: true }
+  );
 
-      heldKeys.add(event.code);
+  /*
+   * Resize
+   */
+  window.addEventListener(
+    "resize",
+    () => {
+      measure();
+      renderHero();
+    },
+    { passive: true }
+  );
 
-      if (!scrollLocked || heroDone) return;
 
-      if (!keyboardReady) {
-        event.preventDefault();
+  /* GREEN VITA SAFARI TOUCH CONTROLLER START */
+
+  let touchLastY = null;
+  let touchActive = false;
+
+  /*
+   * Green Vita Hero mobile inertia
+   *
+   * The Hero already uses its own progress controller.
+   * We only add a short deceleration tail after release.
+   */
+  let touchVelocity = 0;
+  let touchLastTime = 0;
+  let touchInertiaFrame = null;
+
+  function stopHeroTouchInertia() {
+    if (touchInertiaFrame !== null) {
+      cancelAnimationFrame(touchInertiaFrame);
+      touchInertiaFrame = null;
+    }
+
+    touchVelocity = 0;
+  }
+
+  function startHeroTouchInertia() {
+    /*
+     * Only Hero mode gets custom inertia.
+     * Normal page scrolling remains completely native.
+     */
+    if (mode !== "hero") return;
+    if (touchVelocity <= 0.18) return;
+
+    let velocity = Math.min(touchVelocity, 0.70);
+    let previousTime = performance.now();
+    const startedAt = previousTime;
+
+    const animate = (now) => {
+      if (mode !== "hero") {
+        touchInertiaFrame = null;
         return;
       }
 
-      continuePage();
-      keyboardReady = false;
+      const dt = Math.min(32, now - previousTime);
+      previousTime = now;
+
+      /*
+       * Continue the same Hero progress movement,
+       * not the browser page scroll.
+       */
+      const amount =
+        (velocity * dt * 4) /
+        Math.max(heroHeight, 1);
+
+      progress = Math.min(1, progress + amount);
+
+      window.scrollTo(0, 0);
+      renderHero();
+
+      /*
+       * Soft friction.
+       */
+      velocity *= Math.pow(0.88, dt / 16);
+
+      const elapsed = now - startedAt;
+
+      if (
+        velocity > 0.035 &&
+        elapsed < 320 &&
+        progress < 1
+      ) {
+        touchInertiaFrame = requestAnimationFrame(animate);
+      } else {
+        touchInertiaFrame = null;
+        touchVelocity = 0;
+
+        if (progress >= 1) {
+          progress = 1;
+          mode = "normal";
+          window.scrollTo(0, 0);
+          renderHero();
+        }
+      }
+    };
+
+    touchInertiaFrame = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener(
+    "touchstart",
+    (event) => {
+      if (!event.touches || !event.touches.length) return;
+
+      stopHeroTouchInertia();
+
+      touchLastY = event.touches[0].clientY;
+      touchLastTime = performance.now();
+      touchVelocity = 0;
+      touchActive = true;
+
+      /*
+       * Hero is already completely gone.
+       * Release immediately so Safari can use native scrolling.
+       */
+      if (mode === "hero-end") {
+        mode = "normal";
+      }
     },
-    { capture: true }
+    { passive: true }
   );
 
   window.addEventListener(
-    "keyup",
+    "touchmove",
     (event) => {
-      if (!navigationKeys.has(event.code)) return;
+      if (!touchActive) return;
+      if (!event.touches || !event.touches.length) return;
+      if (touchLastY === null) return;
 
-      heldKeys.delete(event.code);
+      const currentY = event.touches[0].clientY;
+      const now = performance.now();
 
-      if (heldKeys.size === 0) {
-        keyboardReady = true;
+      const deltaY = touchLastY - currentY;
+      const deltaTime = Math.max(8, now - touchLastTime);
+
+      /*
+       * Positive velocity = finger moving upward.
+       */
+      const instantVelocity = deltaY / deltaTime;
+
+      /*
+       * Smooth velocity sampling to avoid jumps.
+       */
+      touchVelocity =
+        touchVelocity * 0.65 +
+        instantVelocity * 0.35;
+
+      touchLastY = currentY;
+      touchLastTime = now;
+
+      /*
+       * HERO:
+       * Native Safari scrolling is blocked while Hero is active.
+       */
+      if (mode === "hero") {
+        event.preventDefault();
+
+        const amount = Math.min(
+          Math.max(deltaY / Math.max(heroHeight, 1), -0.14),
+          0.14
+        );
+
+        if (deltaY > 0) {
+          progress = Math.min(1, progress + amount);
+        } else if (deltaY < 0) {
+          progress = Math.max(0, progress + amount);
+        }
+
+        window.scrollTo(0, 0);
+        renderHero();
+
+        /*
+         * Hero is now completely gone.
+         * The next touch movement becomes native Safari scroll.
+         */
+        if (progress >= 1) {
+          progress = 1;
+          mode = "normal";
+          window.scrollTo(0, 0);
+          renderHero();
+        }
+
+        return;
       }
+
+      /*
+       * NORMAL:
+       * Do NOT preventDefault.
+       * Safari receives the touch normally.
+       */
     },
-    { capture: true }
+    { passive: false }
   );
 
-  if (header) {
-    important(header, "position", "fixed");
-    important(header, "top", "0");
-    important(header, "left", "0");
-    important(header, "right", "0");
-    important(header, "z-index", "10000");
-  }
+  window.addEventListener(
+    "touchend",
+    () => {
+      if (touchActive && mode === "hero") {
+        startHeroTouchInertia();
+      }
 
-  window.addEventListener("scroll", () => {
-    if (
-      heroDone &&
-      window.scrollY < stageStart + heroH - 2
-    ) {
-      heroDone = false;
-      scrollLocked = false;
-      ticking = false;
-      render();
-      return;
-    }
+      touchActive = false;
+      touchLastY = null;
+      touchLastTime = 0;
+    },
+    { passive: true }
+  );
 
-    tick();
-  }, { passive: true });
+  window.addEventListener(
+    "touchcancel",
+    () => {
+      stopHeroTouchInertia();
 
-  window.addEventListener("resize", () => {
-    measure();
-    if (!heroDone) render();
-  });
+      touchActive = false;
+      touchLastY = null;
+      touchLastTime = 0;
+    },
+    { passive: true }
+  );
 
-  if ("ResizeObserver" in window) {
-    const observer = new ResizeObserver(() => {
-      measure();
-      if (!heroDone) render();
+  /* GREEN VITA SAFARI TOUCH CONTROLLER END */
+
+
+  /*
+   * INITIAL STATE
+   */
+  measure();
+  window.scrollTo(0, 0);
+  renderHero();
+
+  console.log(
+    "✅ Green Vita: Hero overlay + native single-flow page active."
+  );
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const faqItems = [
+        ...document.querySelectorAll(".gv-home-faq .gv-faq-item")
+    ];
+
+    faqItems.forEach(item => {
+        item.addEventListener("toggle", () => {
+            if (!item.open) return;
+
+            faqItems.forEach(other => {
+                if (other !== item) {
+                    other.open = false;
+                }
+            });
+        });
     });
 
-    observer.observe(hero);
-    observer.observe(services);
-  }
+    console.log("✅ FAQ single-open accordion enabled.");
+});
+</script>
 
-  measure();
-  render();
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const items = [
+        ...document.querySelectorAll(".gv-home-faq .gv-faq-item")
+    ];
+
+    if (!items.length) return;
+
+    const syncIcon = (item) => {
+        const icon = item.querySelector("summary b");
+        if (!icon) return;
+
+        icon.textContent = item.open ? "−" : "+";
+
+        icon.style.setProperty(
+            "display",
+            "flex",
+            "important"
+        );
+        icon.style.setProperty(
+            "align-items",
+            "center",
+            "important"
+        );
+        icon.style.setProperty(
+            "justify-content",
+            "center",
+            "important"
+        );
+    };
+
+    items.forEach(item => {
+        syncIcon(item);
+
+        item.addEventListener("toggle", () => {
+            if (item.open) {
+                items.forEach(other => {
+                    if (other !== item && other.open) {
+                        other.open = false;
+                        syncIcon(other);
+                    }
+                });
+            }
+
+            syncIcon(item);
+        });
+    });
+
+    console.log(
+        "✅ FAQ: single-open + centered + / −"
+    );
 });
 </script>
 
 {% endblock %}
+
+
+
+

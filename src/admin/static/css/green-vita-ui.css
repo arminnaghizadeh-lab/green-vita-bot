@@ -3555,3 +3555,1705 @@ html body .site-header .menu a.cta {
     width:min(290px, calc(100vw - 28px)) !important;
   }
 }
+
+/* FINAL — Booking Track page */
+body:has(input[placeholder*="GV-ABC12345"]) > main,
+body:has(input[placeholder*="GV-ABC12345"]) > footer {
+  position: relative !important;
+  top: 70px !important;
+}
+
+body:has(input[placeholder*="GV-ABC12345"]) .gv-whatsapp-float,
+body:has(input[placeholder*="GV-ABC12345"]) .gv-contact-float-wrap {
+  top: auto !important;
+  transform: none !important;
+}
+
+body:has(input[placeholder*="GV-ABC12345"]) .gv-track-brand {
+  text-align: center !important;
+}
+
+body:has(input[placeholder*="GV-ABC12345"]) .gv-track-brand * {
+  text-align: center !important;
+}
+
+/* FINAL — Footer brand one-line centered */
+.site-footer .footer-inner > div:first-child{
+  text-align:center !important;
+  white-space:nowrap !important;
+}
+
+.site-footer .footer-inner > div:first-child strong,
+.site-footer .footer-inner > div:first-child span{
+  display:inline !important;
+  width:auto !important;
+  white-space:nowrap !important;
+  margin:0 !important;
+}
+
+.site-footer .footer-inner > div:first-child strong::after{
+  content:"  " !important;
+}
+
+/* FINAL — Footer brand: one line + centered */
+.site-footer .container.footer-inner{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:16px !important;
+  flex-wrap:nowrap !important;
+  white-space:nowrap !important;
+  text-align:center !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   GREEN VITA FOOTER TICKER — FINAL
+   ========================================================= */
+
+.site-footer {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden !important;
+}
+
+.site-footer .footer-inner {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
+}
+
+.site-footer .gv-footer-ticker {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden !important;
+  box-sizing: border-box;
+  position: relative;
+  white-space: nowrap;
+  direction: ltr !important;
+}
+
+.site-footer .gv-footer-ticker-track {
+  display: flex !important;
+  flex-direction: row !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  flex-wrap: nowrap !important;
+  direction: ltr !important;
+  will-change: transform;
+}
+
+.site-footer .gv-footer-ticker-group {
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  max-width: none !important;
+}
+
+.site-footer .gv-footer-ticker-group span {
+  display: block !important;
+  width: max-content !important;
+  max-width: none !important;
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+  direction: rtl !important;
+  padding-right: 18px;
+  box-sizing: border-box;
+}
+
+/* Green Vita footer background */
+.site-footer {
+  background: #022F12 !important;
+}
+
+
+/* Footer ticker background */
+.site-footer .gv-footer-ticker {
+  background: #021408 !important;
+}
+
+
+.site-footer .gv-footer-ticker {
+  background: #022F12 !important;
+}
+
+
+.site-footer .gv-footer-ticker {
+  background: #022F12 !important;
+}
+
+
+
+/* =========================================================
+   GREEN VITA — TESTIMONIALS
+   ========================================================= */
+
+.gv-home-testimonials {
+    padding: 70px 0 34px;
+}
+
+.gv-testimonials-head {
+    max-width: 760px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.gv-testimonials-head > span {
+    display: block;
+    margin-bottom: 10px;
+    color: #C6A15B;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+.gv-testimonials-head h2 {
+    margin: 0;
+    color: #022F12;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.gv-testimonials-head p {
+    margin: 12px auto 0;
+    color: #66756C;
+    font-size: 15px;
+    line-height: 2;
+}
+
+.gv-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.gv-testimonial-card {
+    position: relative;
+    min-width: 0;
+    padding: 28px 24px 24px;
+    background: #FFFFFF;
+    border: 1px solid rgba(2,47,18,.09);
+    border-radius: 20px;
+    box-shadow: 0 18px 45px rgba(2,47,18,.07);
+}
+
+.gv-testimonial-quote {
+    color: #8BC53D;
+    font-family: Georgia, serif;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: .65;
+    margin-bottom: 16px;
+}
+
+.gv-testimonial-card p {
+    margin: 0 0 22px;
+    color: #33402F;
+    font-size: 15px;
+    line-height: 2;
+}
+
+.gv-testimonial-card strong {
+    color: #022F12;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+@media (max-width: 900px) {
+    .gv-testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gv-home-testimonials {
+        padding: 54px 0 28px;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — VISIT PROCESS
+   ========================================================= */
+
+.gv-visit-process {
+    padding: 68px 0 52px;
+}
+
+.gv-visit-process-head {
+    max-width: 700px;
+    margin: 0 auto 34px;
+    text-align: center;
+}
+
+.gv-visit-process-head > span {
+    display: block;
+    margin-bottom: 10px;
+    color: #C6A15B;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+.gv-visit-process-head h2 {
+    margin: 0;
+    color: #022F12;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.gv-visit-process-head p {
+    margin: 12px auto 0;
+    color: #66756C;
+    font-size: 15px;
+    line-height: 2;
+}
+
+.gv-visit-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.gv-visit-step {
+    position: relative;
+    min-width: 0;
+    min-height: 190px;
+    padding: 24px 20px;
+    background: #FFFFFF;
+    border: 1px solid rgba(2,47,18,.09);
+    border-radius: 20px;
+    box-shadow: 0 16px 38px rgba(2,47,18,.06);
+}
+
+.gv-visit-step-number {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #8BC53D;
+    color: #022F12;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.gv-visit-step h3 {
+    margin: 0 0 10px;
+    color: #022F12;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.gv-visit-step p {
+    margin: 0;
+    color: #66756C;
+    font-size: 14px;
+    line-height: 1.95;
+}
+
+@media (max-width: 900px) {
+    .gv-visit-process-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .gv-visit-process {
+        padding: 52px 0 40px;
+    }
+
+    .gv-visit-process-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .gv-visit-step {
+        min-height: auto;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .gv-visit-step-number {
+        flex: 0 0 38px;
+        margin-bottom: 0;
+    }
+}
+
+
+/* =========================================================
+   GREEN VITA — REAL TREATMENT CASES
+   ========================================================= */
+
+.gv-treatment-cases {
+    padding: 58px 0 20px;
+}
+
+.gv-treatment-cases-head {
+    max-width: 760px;
+    margin: 0 auto 32px;
+    text-align: center;
+}
+
+.gv-treatment-cases-head > span {
+    display: block;
+    margin-bottom: 10px;
+    color: #C6A15B;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+.gv-treatment-cases-head h2 {
+    margin: 0;
+    color: #022F12;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.gv-treatment-cases-head p {
+    margin: 12px auto 0;
+    color: #66756C;
+    font-size: 15px;
+    line-height: 2;
+}
+
+.gv-treatment-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.gv-treatment-case {
+    position: relative;
+    padding: 28px 26px 24px;
+    background: #FFFFFF;
+    border: 1px solid rgba(2,47,18,.09);
+    border-radius: 22px;
+    box-shadow: 0 16px 42px rgba(2,47,18,.06);
+}
+
+.gv-treatment-case-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 12px;
+    margin-bottom: 16px;
+    border-radius: 999px;
+    background: #E4F0CC;
+    color: #022F12;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.gv-treatment-case h3 {
+    margin: 0 0 12px;
+    color: #022F12;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+.gv-treatment-case p {
+    margin: 0 0 20px;
+    color: #556157;
+    font-size: 14.5px;
+    line-height: 2;
+}
+
+.gv-treatment-case > span {
+    display: block;
+    color: #7C8B82;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .gv-treatment-cases {
+        padding: 48px 0 12px;
+    }
+
+    .gv-treatment-cases-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .gv-treatment-case {
+        padding: 24px 20px;
+    }
+}
+
+/* =========================================================
+   GREEN VITA — WHY GREEN VITA
+   ========================================================= */
+
+.gv-trust-head {
+    max-width: 720px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.gv-trust-head > span {
+    display: block;
+    margin-bottom: 10px;
+    color: #C6A15B;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+}
+
+.gv-trust-head h2 {
+    margin: 0;
+    color: #022F12;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.gv-trust-head p {
+    margin: 12px auto 0;
+    color: #66756C;
+    font-size: 15px;
+    line-height: 2;
+}
+
+
+/* Apartment visit card — final image focus */
+.gv-home-services .service:first-child img {
+  object-position: 50% 60% !important;
+}
+
+
+/* Mobile Hero final position */
+@media (max-width: 640px) {
+  .gv-home-hero {
+    transform: translateY(-30px) !important;
+  }
+}
+
+
+
+/* =========================================================
+   GREEN VITA — BOT PROMO / PREMIUM INTERACTIVE SECTION
+   ========================================================= */
+
+.gv-bot-promo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 30px auto 0;
+  padding: 92px 0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(139,197,61,.14), transparent 32%),
+    radial-gradient(circle at 85% 75%, rgba(212,180,110,.11), transparent 30%),
+    linear-gradient(145deg, #021408 0%, #062414 48%, #021408 100%);
+  color: #fff;
+}
+
+.gv-bot-promo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .22;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.16) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(139,197,61,.2) 0 1px, transparent 1.5px);
+  background-size: 95px 95px, 135px 135px;
+  animation: gvBotParticles 18s linear infinite;
+}
+
+.gv-bot-promo::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border: 1px solid rgba(212,180,110,.16);
+  border-radius: 0;
+}
+
+.gv-bot-promo-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(55px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.gv-bot-orb-1 {
+  width: 220px;
+  height: 220px;
+  top: 8%;
+  left: -80px;
+  background: rgba(139,197,61,.16);
+  animation: gvBotOrb1 9s ease-in-out infinite alternate;
+}
+
+.gv-bot-orb-2 {
+  width: 260px;
+  height: 260px;
+  right: -100px;
+  bottom: -70px;
+  background: rgba(212,180,110,.12);
+  animation: gvBotOrb2 11s ease-in-out infinite alternate;
+}
+
+.gv-bot-promo-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.gv-bot-promo-head {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.gv-bot-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+  color: #d4b46e;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .19em;
+}
+
+.gv-bot-eyebrow::before,
+.gv-bot-eyebrow::after {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4b46e);
+}
+
+.gv-bot-eyebrow::after {
+  background: linear-gradient(90deg, #d4b46e, transparent);
+}
+
+.gv-bot-promo-head h2 {
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: clamp(29px, 4vw, 46px);
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+
+.gv-bot-promo-head p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: rgba(255,255,255,.68);
+  font-size: 15px;
+  line-height: 2;
+}
+
+.gv-bot-promo-showcase {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(300px, .9fr) minmax(360px, 1.1fr);
+  align-items: center;
+  gap: clamp(38px, 7vw, 100px);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.gv-bot-chat {
+  position: relative;
+  width: min(100%, 365px);
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 30px;
+  background: rgba(255,255,255,.075);
+  box-shadow:
+    0 35px 90px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  transform: perspective(1100px) rotateY(7deg) rotateX(2deg);
+  transition: transform .6s cubic-bezier(.2,.8,.2,1), box-shadow .6s ease;
+}
+
+.gv-bot-chat::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: 31px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(139,197,61,.8),
+    transparent 35%,
+    transparent 65%,
+    rgba(212,180,110,.65)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: gvBotBorder 5s linear infinite;
+}
+
+.gv-bot-chat:hover {
+  transform: perspective(1100px) rotateY(0deg) rotateX(0deg) translateY(-7px);
+  box-shadow:
+    0 45px 100px rgba(0,0,0,.45),
+    0 0 45px rgba(139,197,61,.09);
+}
+
+.gv-chat-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 13px 16px;
+}
+
+.gv-chat-avatar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #8bc53d, #497d1e);
+  box-shadow: 0 8px 22px rgba(139,197,61,.24);
+  font-size: 21px;
+}
+
+.gv-chat-top strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+}
+
+.gv-chat-top span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  color: rgba(255,255,255,.5);
+  font-size: 10px;
+}
+
+.gv-chat-top i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8bc53d;
+  box-shadow: 0 0 9px rgba(139,197,61,.8);
+}
+
+.gv-chat-body {
+  min-height: 325px;
+  padding: 22px 15px 14px;
+  border-radius: 22px;
+  background: rgba(0,0,0,.19);
+}
+
+.gv-chat-msg {
+  width: fit-content;
+  max-width: 82%;
+  margin-bottom: 12px;
+  padding: 10px 13px;
+  border-radius: 15px;
+  font-size: 11.5px;
+  line-height: 1.7;
+  animation: gvChatMessage 1s both;
+}
+
+.gv-chat-msg-bot {
+  border: 1px solid rgba(139,197,61,.13);
+  border-bottom-right-radius: 5px;
+  background: rgba(139,197,61,.12);
+  color: rgba(255,255,255,.9);
+}
+
+.gv-chat-msg-user {
+  margin-left: auto;
+  border: 1px solid rgba(212,180,110,.15);
+  border-bottom-left-radius: 5px;
+  background: rgba(212,180,110,.1);
+  color: rgba(255,255,255,.82);
+  animation-delay: .35s;
+}
+
+.gv-chat-msg-bot:nth-child(3) { animation-delay: .65s; }
+.gv-chat-msg-bot:nth-child(4) { animation-delay: .95s; }
+
+.gv-chat-typing {
+  display: flex;
+  gap: 4px;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 9px 12px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.06);
+}
+
+.gv-chat-typing span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.55);
+  animation: gvTyping 1.2s infinite ease-in-out;
+}
+
+.gv-chat-typing span:nth-child(2) { animation-delay: .15s; }
+.gv-chat-typing span:nth-child(3) { animation-delay: .3s; }
+
+.gv-chat-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 0;
+  padding: 11px 13px 13px;
+  color: rgba(255,255,255,.32);
+  font-size: 10px;
+}
+
+.gv-chat-bottom b {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(139,197,61,.18);
+  color: #8bc53d;
+  font-size: 13px;
+}
+
+.gv-bot-promo-copy {
+  max-width: 520px;
+}
+
+.gv-bot-copy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 20px;
+  padding: 7px 11px 7px 7px;
+  border: 1px solid rgba(212,180,110,.22);
+  border-radius: 999px;
+  background: rgba(212,180,110,.07);
+  color: rgba(255,255,255,.72);
+  font-size: 11px;
+}
+
+.gv-bot-copy-badge span {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #8bc53d;
+  color: #021408;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.gv-bot-promo-copy h3 {
+  margin: 0 0 15px;
+  color: #fff;
+  font-size: clamp(25px, 3vw, 36px);
+  line-height: 1.35;
+}
+
+.gv-bot-promo-copy > p {
+  margin: 0 0 27px;
+  color: rgba(255,255,255,.62);
+  font-size: 14px;
+  line-height: 2;
+}
+
+.gv-bot-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.gv-bot-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 68px;
+  padding: 9px 11px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 17px;
+  color: #fff !important;
+  text-decoration: none !important;
+  background: rgba(255,255,255,.065);
+  box-shadow: 0 12px 28px rgba(0,0,0,.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform .35s ease, border-color .35s ease, background .35s ease, box-shadow .35s ease;
+}
+
+.gv-bot-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.11), transparent);
+  transform: skewX(-18deg);
+  transition: left .7s ease;
+}
+
+.gv-bot-btn:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139,197,61,.42);
+  background: rgba(139,197,61,.1);
+  box-shadow: 0 18px 38px rgba(0,0,0,.25), 0 0 25px rgba(139,197,61,.07);
+}
+
+.gv-bot-btn:hover::after {
+  left: 125%;
+}
+
+.gv-bot-btn-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.08);
+  font-size: 17px;
+}
+
+.gv-bot-btn span:not(.gv-bot-btn-icon) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.gv-bot-btn small {
+  color: rgba(255,255,255,.42);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.gv-bot-btn > b {
+  color: #8bc53d;
+  font-size: 15px;
+}
+
+.gv-bot-btn-telegram .gv-bot-btn-icon {
+  color: #7fc9ef;
+}
+
+.gv-bot-btn-bale .gv-bot-btn-icon {
+  color: #8bc53d;
+}
+
+.gv-bot-trust {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 21px;
+  color: rgba(255,255,255,.4);
+  font-size: 9.5px;
+}
+
+.gv-bot-trust span {
+  color: #8bc53d;
+  font-size: 7px;
+}
+
+.gv-bot-trust i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.18);
+}
+
+@keyframes gvBotParticles {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 95px 95px, -135px 135px; }
+}
+
+@keyframes gvBotOrb1 {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to { transform: translate3d(80px,35px,0) scale(1.15); }
+}
+
+@keyframes gvBotOrb2 {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to { transform: translate3d(-70px,-35px,0) scale(1.12); }
+}
+
+@keyframes gvBotBorder {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes gvChatMessage {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gvTyping {
+  0%, 60%, 100% { opacity: .25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (max-width: 900px) {
+  .gv-bot-promo {
+    padding: 72px 0;
+  }
+
+  .gv-bot-promo-showcase {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .gv-bot-promo-copy {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .gv-bot-trust {
+    justify-content: center;
+  }
+
+  .gv-bot-chat {
+    transform: none;
+  }
+
+  .gv-bot-chat:hover {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 560px) {
+  .gv-bot-promo {
+    padding: 58px 0;
+  }
+
+  .gv-bot-promo-head {
+    margin-bottom: 36px;
+  }
+
+  .gv-bot-promo-head h2 {
+    font-size: 29px;
+  }
+
+  .gv-bot-promo-head p {
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .gv-bot-chat {
+    width: min(100%, 335px);
+    border-radius: 25px;
+  }
+
+  .gv-chat-body {
+    min-height: 285px;
+  }
+
+  .gv-bot-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .gv-bot-btn {
+    min-height: 64px;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-bot-promo::before,
+  .gv-bot-orb-1,
+  .gv-bot-orb-2,
+  .gv-bot-chat::before,
+  .gv-chat-msg,
+  .gv-chat-typing span {
+    animation: none !important;
+  }
+
+  .gv-bot-chat,
+  .gv-bot-btn {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   BOT PROMO — MOBILE LUXURY REFINEMENT
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+  .gv-bot-promo {
+    margin-top: 0;
+    padding: 66px 16px 72px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 24%, rgba(139,197,61,.14), transparent 34%),
+      radial-gradient(circle at 0% 80%, rgba(212,180,110,.09), transparent 32%),
+      linear-gradient(160deg, #021408 0%, #062515 52%, #021408 100%);
+  }
+
+  .gv-bot-promo::after {
+    border-color: rgba(212,180,110,.10);
+  }
+
+  .gv-bot-promo-head {
+    margin: 0 auto 38px;
+    padding: 0 6px;
+  }
+
+  .gv-bot-eyebrow {
+    margin-bottom: 12px;
+    font-size: 9px;
+    letter-spacing: .16em;
+  }
+
+  .gv-bot-eyebrow::before,
+  .gv-bot-eyebrow::after {
+    width: 17px;
+  }
+
+  .gv-bot-promo-head h2 {
+    margin-bottom: 13px;
+    font-size: 28px;
+    line-height: 1.45;
+  }
+
+  .gv-bot-promo-head p {
+    max-width: 330px;
+    font-size: 13px;
+    line-height: 2;
+    color: rgba(255,255,255,.58);
+  }
+
+  .gv-bot-promo-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  /* Floating chat / phone */
+
+  .gv-bot-chat {
+    width: min(100%, 328px);
+    margin: 0 auto;
+    padding: 8px;
+    border-radius: 27px;
+    transform: none;
+    background: rgba(255,255,255,.065);
+    box-shadow:
+      0 30px 75px rgba(0,0,0,.38),
+      0 0 55px rgba(139,197,61,.075),
+      inset 0 1px 0 rgba(255,255,255,.12);
+    animation: gvMobileFloat 5s ease-in-out infinite;
+  }
+
+  .gv-bot-chat::before {
+    border-radius: 28px;
+  }
+
+  .gv-chat-top {
+    padding: 12px 11px 14px;
+  }
+
+  .gv-chat-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+
+  .gv-chat-body {
+    min-height: 280px;
+    padding: 20px 13px 12px;
+    border-radius: 20px;
+  }
+
+  .gv-chat-msg {
+    margin-bottom: 11px;
+    padding: 9px 12px;
+    font-size: 11px;
+    border-radius: 14px;
+  }
+
+  .gv-chat-bottom {
+    padding: 10px 11px 11px;
+  }
+
+  /* Copy becomes editorial instead of card-like */
+
+  .gv-bot-promo-copy {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .gv-bot-copy-badge {
+    margin-bottom: 17px;
+    padding: 6px 10px 6px 6px;
+    font-size: 10px;
+  }
+
+  .gv-bot-copy-badge span {
+    width: 24px;
+    height: 24px;
+  }
+
+  .gv-bot-promo-copy h3 {
+    margin-bottom: 12px;
+    font-size: 25px;
+    line-height: 1.45;
+  }
+
+  .gv-bot-promo-copy > p {
+    margin: 0 auto 24px;
+    max-width: 320px;
+    font-size: 13px;
+    line-height: 2;
+    color: rgba(255,255,255,.57);
+  }
+
+  /* CTA buttons */
+
+  .gv-bot-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    width: 100%;
+  }
+
+  .gv-bot-btn {
+    min-height: 63px;
+    padding: 8px 9px;
+    border-radius: 17px;
+    gap: 8px;
+    background: rgba(255,255,255,.055);
+  }
+
+  .gv-bot-btn-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    font-size: 15px;
+  }
+
+  .gv-bot-btn span:not(.gv-bot-btn-icon) {
+    font-size: 11px;
+    align-items: flex-start;
+  }
+
+  .gv-bot-btn small {
+    font-size: 8px;
+  }
+
+  .gv-bot-btn > b {
+    font-size: 13px;
+  }
+
+  .gv-bot-trust {
+    justify-content: center;
+    gap: 7px;
+    margin-top: 17px;
+    font-size: 8.5px;
+  }
+
+  @keyframes gvMobileFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+}
+
+@media (max-width: 380px) {
+
+  .gv-bot-promo {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .gv-bot-promo-head h2 {
+    font-size: 26px;
+  }
+
+  .gv-bot-chat {
+    width: min(100%, 310px);
+  }
+
+  .gv-bot-actions {
+    gap: 7px;
+  }
+
+  .gv-bot-btn {
+    min-height: 59px;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .gv-bot-btn-icon {
+    width: 31px;
+    height: 31px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-bot-chat {
+    animation: none !important;
+  }
+}
+
+
+/* =========================================================
+   BOT PROMO — ROBOTIC HAND BACKGROUND ART
+   Decorative layer only — existing UI stays intact
+   ========================================================= */
+
+.gv-bot-promo-showcase {
+  position: relative !important;
+  isolation: isolate;
+}
+
+.gv-bot-robot-art {
+  position: absolute;
+  z-index: 0;
+  left: -2%;
+  top: 4%;
+  width: 54%;
+  height: 92%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.gv-bot-robot-art::before {
+  content: "";
+  position: absolute;
+  width: 68%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(139,197,61,.12);
+  filter: blur(55px);
+}
+
+.gv-bot-robot-art img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  max-width: 470px;
+  max-height: 470px;
+  object-fit: contain;
+  opacity: .92;
+  filter:
+    drop-shadow(0 28px 38px rgba(0,0,0,.30))
+    drop-shadow(0 0 25px rgba(139,197,61,.10));
+  transform: translateY(4%);
+  animation: gvRobotArtFloat 6s ease-in-out infinite;
+}
+
+.gv-bot-chat,
+.gv-bot-promo-copy {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes gvRobotArtFloat {
+  0%, 100% {
+    transform: translateY(4%);
+  }
+  50% {
+    transform: translateY(1%);
+  }
+}
+
+@media (max-width: 900px) {
+  .gv-bot-robot-art {
+    left: -7%;
+    top: 2%;
+    width: 62%;
+    height: 72%;
+  }
+
+  .gv-bot-robot-art img {
+    max-width: 360px;
+    max-height: 360px;
+    opacity: .62;
+  }
+}
+
+@media (max-width: 560px) {
+  .gv-bot-robot-art {
+    left: -10%;
+    top: 0;
+    width: 78%;
+    height: 48%;
+  }
+
+  .gv-bot-robot-art img {
+    max-width: 310px;
+    max-height: 310px;
+    opacity: .34;
+  }
+
+  .gv-bot-robot-art::before {
+    width: 72%;
+    filter: blur(42px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-bot-robot-art img {
+    animation: none !important;
+  }
+}
+
+/* BOT ROBOT ART — BOTTOM LEFT POSITION */
+
+.gv-bot-robot-art {
+  left: -4% !important;
+  top: auto !important;
+  bottom: -8% !important;
+  width: 52% !important;
+  height: 68% !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+}
+
+.gv-bot-robot-art img {
+  width: min(100%, 460px) !important;
+  max-height: 460px !important;
+  transform: none !important;
+}
+
+@media (max-width: 900px) {
+  .gv-bot-robot-art {
+    left: -8% !important;
+    bottom: -5% !important;
+    width: 58% !important;
+    height: 55% !important;
+  }
+
+  .gv-bot-robot-art img {
+    max-width: 350px !important;
+    max-height: 350px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .gv-bot-robot-art {
+    left: -10% !important;
+    bottom: -4% !important;
+    width: 66% !important;
+    height: 42% !important;
+  }
+
+  .gv-bot-robot-art img {
+    max-width: 290px !important;
+    max-height: 290px !important;
+    opacity: .38 !important;
+  }
+}
+
+
+
+/* BOT CHAT ART — INSIDE CHAT BODY */
+
+.gv-chat-body {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.gv-chat-art {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: -38px !important;
+  width: 92% !important;
+  height: 72% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.gv-chat-art img {
+  width: 100% !important;
+  max-width: 300px !important;
+  max-height: 300px !important;
+  object-fit: contain !important;
+  opacity: .30 !important;
+  filter:
+    drop-shadow(0 16px 24px rgba(0,0,0,.35))
+    drop-shadow(0 0 20px rgba(139,197,61,.08)) !important;
+}
+
+.gv-chat-body .gv-chat-msg,
+.gv-chat-body .gv-chat-typing {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    bottom: -28px !important;
+    width: 100% !important;
+    height: 68% !important;
+  }
+
+  .gv-chat-art img {
+    max-width: 250px !important;
+    max-height: 250px !important;
+    opacity: .24 !important;
+  }
+}
+
+/* BOT CHAT ART — MOVE SLIGHTLY UP */
+
+.gv-chat-art {
+  bottom: 8px !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    bottom: 6px !important;
+  }
+}
+
+
+/* BOT CHAT ART — BOTTOM LEFT INSIDE CHAT */
+
+.gv-chat-art {
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 68% !important;
+  height: 58% !important;
+  transform: none !important;
+  justify-content: flex-start !important;
+  align-items: flex-end !important;
+}
+
+.gv-chat-art img {
+  width: 100% !important;
+  max-width: 250px !important;
+  max-height: 250px !important;
+  object-position: left bottom !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 72% !important;
+    height: 54% !important;
+  }
+
+  .gv-chat-art img {
+    max-width: 220px !important;
+    max-height: 220px !important;
+  }
+}
+
+
+/* BOT CHAT ART — LARGER */
+
+.gv-chat-art {
+  width: 82% !important;
+  height: 72% !important;
+}
+
+.gv-chat-art img {
+  max-width: 320px !important;
+  max-height: 320px !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    width: 84% !important;
+    height: 68% !important;
+  }
+
+  .gv-chat-art img {
+    max-width: 270px !important;
+    max-height: 270px !important;
+  }
+}
+
+
+/* BOT CHAT ART — 2X LARGER */
+
+.gv-chat-art {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.gv-chat-art img {
+  width: 200% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .gv-chat-art img {
+    width: 200% !important;
+  }
+}
+
+
+/* BOT CHAT ART — RESTORE PREVIOUS SIZE */
+
+.gv-chat-art {
+  width: 82% !important;
+  height: 72% !important;
+}
+
+.gv-chat-art img {
+  width: 100% !important;
+  max-width: 320px !important;
+  max-height: 320px !important;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-art {
+    width: 84% !important;
+    height: 68% !important;
+  }
+
+  .gv-chat-art img {
+    width: 100% !important;
+    max-width: 270px !important;
+    max-height: 270px !important;
+  }
+}
+
+
+/* BOT CHAT — MESSAGE REFINEMENT */
+
+.gv-chat-msg {
+  position: relative;
+  z-index: 2;
+}
+
+.gv-chat-msg-bot {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  text-align: right;
+}
+
+.gv-chat-msg-user {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+  text-align: right;
+}
+
+.gv-chat-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.gv-chat-text {
+  line-height: 1.8;
+}
+
+.gv-chat-emoji {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  object-fit: contain;
+  vertical-align: -3px;
+}
+
+@media (max-width: 560px) {
+  .gv-chat-emoji {
+    width: 14px;
+    height: 14px;
+    flex-basis: 14px;
+  }
+}
+
+
+/* BOT BUTTON — REAL CONTACT ICONS */
+
+.gv-bot-btn-icon img {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.gv-bot-btn-bale .gv-bot-btn-icon img {
+  width: 23px;
+  height: 23px;
+}
+
+@media (max-width: 560px) {
+  .gv-bot-btn-icon img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .gv-bot-btn-bale .gv-bot-btn-icon img {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+
+/* BOT BUTTONS — WHITE TELEGRAM / BALE ICONS */
+
+.gv-bot-btn-icon img {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.96;
+}
+
+
+/* BOT TRUST — CENTER ALIGN */
+
+.gv-bot-trust {
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100%;
+}
+
