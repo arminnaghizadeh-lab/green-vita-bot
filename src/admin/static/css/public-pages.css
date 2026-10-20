@@ -1,0 +1,726 @@
+/* =========================================================
+   GREEN VITA — SAFARI MOBILE HORIZONTAL OVERFLOW FIX
+   ========================================================= */
+
+@supports (-webkit-touch-callout: none) {
+    @media (max-width: 700px) {
+
+        .gv-inner-page,
+        .gv-inner-page *,
+        .gv-inner-page *::before,
+        .gv-inner-page *::after {
+            box-sizing: border-box;
+        }
+
+        .gv-inner-page {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .gv-inner-hero,
+        .gv-inner-grid,
+        .gv-inner-card,
+        .gv-contact-main,
+        .gv-contact-grid,
+        .gv-emergency {
+            max-width: 100%;
+        }
+
+        .gv-inner-hero,
+        .gv-inner-card,
+        .gv-contact-main,
+        .gv-emergency {
+            width: 100%;
+        }
+
+        .gv-contact-grid {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .gv-contact-card {
+            min-width: 0;
+            max-width: 100%;
+        }
+
+        .gv-contact-card strong,
+        .gv-contact-card span {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+    }
+}
+
+/* =========================================================
+   GREEN VITA — PUBLIC INNER PAGES
+   ========================================================= */
+
+.gv-inner-page {
+    min-height: calc(100vh - 80px);
+    background:
+        radial-gradient(circle at 85% 5%, rgba(198,161,91,.10), transparent 28%),
+        var(--gv-color-bg);
+    padding: 110px 0 100px;
+}
+
+.gv-inner-hero {
+    max-width: 920px;
+    margin: 0 auto 46px;
+    padding: 64px 58px;
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at 82% 20%, rgba(139,197,61,.16), transparent 28%),
+        linear-gradient(135deg, #021408, #022F12);
+    color: #fff;
+    box-shadow: 0 24px 60px rgba(2,20,8,.14);
+}
+
+.gv-inner-eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    color: #C6A15B;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+}
+
+.gv-inner-hero h1 {
+    margin: 0;
+    color: #fff;
+    font-family: "Garamond", "Times New Roman", serif;
+    font-size: clamp(42px, 6vw, 70px);
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+.gv-inner-hero p {
+    max-width: 680px;
+    margin: 20px 0 0;
+    color: rgba(255,255,255,.76);
+    line-height: 2;
+}
+
+.gv-inner-grid {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    gap: 18px;
+}
+
+.gv-inner-card {
+    padding: 34px;
+    border: 1px solid var(--gv-color-border);
+    border-radius: 24px;
+    background: rgba(255,255,255,.88);
+    box-shadow: 0 16px 45px rgba(2,20,8,.05);
+}
+
+.gv-inner-card h2 {
+    margin: 0 0 14px;
+    color: var(--gv-color-primary-dark);
+    font-size: 23px;
+}
+
+.gv-inner-card p {
+    margin: 0;
+    color: var(--gv-color-text-soft);
+    line-height: 2;
+}
+
+.gv-inner-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.gv-inner-actions a {
+    min-height: 46px;
+    padding: 0 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+.gv-inner-primary {
+    background: var(--gv-color-primary);
+    color: var(--gv-color-primary-dark);
+}
+
+.gv-inner-secondary {
+    border: 1px solid var(--gv-color-border);
+    background: #fff;
+    color: var(--gv-color-primary-dark);
+}
+
+.gv-contact-brand {
+    text-align: center;
+    margin-bottom: 34px;
+}
+
+.gv-contact-logo {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 20px;
+    padding: 12px;
+    display: grid;
+    place-items: center;
+    border-radius: 26px;
+    background: #fff;
+    border: 1px solid var(--gv-color-border);
+    box-shadow: 0 18px 40px rgba(2,20,8,.08);
+}
+
+.gv-contact-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gv-contact-brand h1 {
+    margin: 0 0 8px;
+    color: var(--gv-color-primary-dark);
+    font-family: "Garamond", "Times New Roman", serif;
+    font-size: clamp(38px, 5vw, 58px);
+    font-weight: 400;
+}
+
+.gv-contact-brand p {
+    margin: 0;
+    color: var(--gv-color-text-soft);
+    line-height: 1.9;
+}
+
+.gv-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 16px;
+}
+
+.gv-contact-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 92px;
+    padding: 20px;
+    border: 1px solid var(--gv-color-border);
+    border-radius: 20px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 12px 35px rgba(2,20,8,.04);
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.gv-contact-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gv-color-gold-soft);
+    box-shadow: 0 20px 45px rgba(2,20,8,.09);
+}
+
+.gv-contact-icon {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    display: grid;
+    place-items: center;
+    padding: 11px;
+    border-radius: 16px;
+    background: var(--gv-color-primary-dark);
+}
+
+.gv-contact-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.gv-contact-card strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--gv-color-primary-dark);
+    font-size: 17px;
+}
+
+.gv-contact-card span {
+    display: block;
+    color: var(--gv-color-text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.gv-contact-arrow {
+    margin-right: auto;
+    color: var(--gv-color-gold);
+    font-size: 21px;
+}
+
+.gv-emergency {
+    margin-top: 22px;
+    padding: 30px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(139,197,61,.18), transparent 28%),
+        linear-gradient(135deg, #021408, #022F12);
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 20px 48px rgba(2,20,8,.14);
+}
+
+.gv-emergency-mark {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 14px;
+}
+
+.gv-emergency-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gv-emergency strong {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 22px;
+}
+
+.gv-emergency span {
+    color: rgba(255,255,255,.72);
+    font-size: 14px;
+}
+
+@media (max-width: 700px) {
+    .gv-inner-page {
+        padding: 78px 0 72px;
+    }
+
+    .gv-inner-hero {
+        padding: 42px 28px;
+        border-radius: 24px;
+    }
+
+    .gv-inner-card {
+        padding: 26px;
+    }
+
+    .gv-contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* CONTACT — DARK GREEN MAIN PANEL */
+
+.gv-contact-main {
+    background:
+        radial-gradient(circle at 85% 10%, rgba(139,197,61,.14), transparent 28%),
+        linear-gradient(135deg, #021408, #022F12) !important;
+    border-color: rgba(198,161,91,.20) !important;
+    box-shadow: 0 24px 60px rgba(2,20,8,.16) !important;
+}
+
+.gv-contact-main .gv-contact-brand h1 {
+    color: #ffffff !important;
+}
+
+.gv-contact-main .gv-contact-brand p {
+    color: rgba(255,255,255,.72) !important;
+}
+
+.gv-contact-main .gv-inner-eyebrow {
+    color: #C6A15B !important;
+}
+
+
+/* ABOUT — DARK GREEN HERO */
+
+.gv-inner-hero {
+    background:
+        radial-gradient(circle at 85% 10%, rgba(139,197,61,.14), transparent 28%),
+        linear-gradient(135deg, #021408, #022F12) !important;
+    border: 1px solid rgba(198,161,91,.20) !important;
+    box-shadow: 0 24px 60px rgba(2,20,8,.16) !important;
+}
+
+.gv-inner-hero h1 {
+    color: #ffffff !important;
+}
+
+.gv-inner-hero p {
+    color: rgba(255,255,255,.72) !important;
+}
+
+.gv-inner-hero .gv-inner-eyebrow {
+    color: #C6A15B !important;
+}
+
+
+/* TEMP SAFARI HORIZONTAL TEST */
+@media (max-width: 700px) {
+    html:has(.gv-inner-page),
+    body:has(.gv-inner-page) {
+        overflow-x: hidden !important;
+    }
+}
+
+/* =========================================
+   ABOUT — CINEMATIC HERO
+   ========================================= */
+
+.gv-about-cinematic-hero{
+    margin:0 0 34px;
+}
+
+.gv-about-cinematic-frame{
+    position:relative;
+    width:100%;
+    height:clamp(320px, 44vw, 560px);
+    overflow:hidden;
+    border-radius:30px;
+    background:#021408;
+    isolation:isolate;
+    box-shadow:
+        0 30px 80px rgba(2,20,8,.22),
+        0 10px 30px rgba(2,20,8,.12);
+}
+
+.gv-about-cinematic-frame::before{
+    content:"";
+    position:absolute;
+    inset:1px;
+    z-index:5;
+    pointer-events:none;
+    border:1px solid rgba(232,216,183,.30);
+    border-radius:29px;
+}
+
+.gv-about-cinematic-frame img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    transform:scale(1.045);
+    filter:
+        saturate(.88)
+        contrast(1.08)
+        brightness(.82);
+    transition:
+        transform 1.4s cubic-bezier(.2,.65,.2,1),
+        filter 1.2s ease;
+}
+
+.gv-about-cinematic-frame:hover img{
+    transform:scale(1.09);
+    filter:
+        saturate(.96)
+        contrast(1.06)
+        brightness(.88);
+}
+
+.gv-about-cinematic-overlay{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2,20,8,.08) 0%,
+            rgba(2,20,8,.02) 42%,
+            rgba(2,20,8,.48) 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(2,20,8,.20) 0%,
+            transparent 45%,
+            rgba(2,20,8,.15) 100%
+        );
+}
+
+.gv-about-cinematic-vignette{
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    box-shadow:
+        inset 0 0 100px rgba(2,20,8,.28),
+        inset 0 -80px 90px rgba(2,20,8,.18);
+}
+
+@media (max-width:700px){
+    .gv-about-cinematic-hero{
+        margin-bottom:24px;
+    }
+
+    .gv-about-cinematic-frame{
+        height:330px;
+        border-radius:22px;
+        box-shadow:
+            0 22px 55px rgba(2,20,8,.19),
+            0 8px 24px rgba(2,20,8,.10);
+    }
+
+    .gv-about-cinematic-frame::before{
+        border-radius:21px;
+    }
+
+    .gv-about-cinematic-frame img{
+        transform:scale(1.035);
+    }
+}
+
+/* =========================================
+   ABOUT — HERO IMAGE INSIDE CARD
+   ========================================= */
+
+.gv-about-hero-card{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(190px,260px);
+    gap:clamp(22px,3vw,38px);
+    align-items:center;
+    overflow:hidden;
+}
+
+.gv-about-hero-copy{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-width:0;
+}
+
+.gv-about-hero-copy p{
+    position:relative;
+    z-index:2;
+}
+
+.gv-about-hero-image{
+    position:relative;
+    width:100%;
+    height:clamp(230px,24vw,300px);
+    overflow:hidden;
+    border-radius:20px;
+    background:#021408;
+    box-shadow:
+        0 16px 35px rgba(2,20,8,.16),
+        inset 0 0 0 1px rgba(232,216,183,.18);
+    isolation:isolate;
+}
+
+.gv-about-hero-image img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    transform:scale(1.025);
+    filter:
+        saturate(.9)
+        contrast(1.06)
+        brightness(.86);
+    transition:
+        transform 1.2s cubic-bezier(.2,.65,.2,1),
+        filter 1s ease;
+}
+
+.gv-about-hero-image:hover img{
+    transform:scale(1.06);
+    filter:
+        saturate(.96)
+        contrast(1.06)
+        brightness(.91);
+}
+
+.gv-about-hero-image::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+    border:1px solid rgba(232,216,183,.30);
+    border-radius:20px;
+}
+
+.gv-about-hero-image-overlay{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2,20,8,.03) 0%,
+            rgba(2,20,8,.07) 48%,
+            rgba(2,20,8,.32) 100%
+        );
+}
+
+@media (max-width:760px){
+    .gv-about-hero-card{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .gv-about-hero-image{
+        order:1;
+        width:100%;
+        height:210px;
+        border-radius:18px;
+    }
+
+    .gv-about-hero-image::before{
+        border-radius:18px;
+    }
+
+    .gv-about-hero-copy{
+        order:2;
+    }
+}
+
+
+/* =========================================================
+   FINAL — ABOUT GREEN VITA MOBILE IMAGE
+   Perfect square crop
+   ========================================================= */
+
+@media (max-width:760px){
+    .gv-inner-page .container .gv-about-hero-card .gv-about-hero-image{
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+        max-height:none !important;
+        aspect-ratio:1 / 1 !important;
+        border-radius:18px !important;
+        overflow:hidden !important;
+    }
+
+    .gv-inner-page .container .gv-about-hero-card .gv-about-hero-image img{
+        width:100% !important;
+        height:100% !important;
+        min-height:0 !important;
+        object-fit:cover !important;
+        object-position:center center !important;
+    }
+}
+
+
+/* =========================================================
+   FINAL — ABOUT GREEN VITA MOBILE IMAGE
+   3px inset + perfect square crop
+   ========================================================= */
+
+@media (max-width:760px){
+    .gv-inner-page .container .gv-about-hero-card .gv-about-hero-image{
+        width:calc(100% - 6px) !important;
+        height:auto !important;
+        min-height:0 !important;
+        max-height:none !important;
+        aspect-ratio:1 / 1 !important;
+
+        margin:3px auto 0 !important;
+
+        border-radius:18px !important;
+        overflow:hidden !important;
+    }
+
+    .gv-inner-page .container .gv-about-hero-card .gv-about-hero-image img{
+        width:100% !important;
+        height:100% !important;
+        min-height:0 !important;
+
+        object-fit:cover !important;
+        object-position:center center !important;
+    }
+}
+
+
+/* FINAL — About Green Vita intro text */
+.gv-about-hero-copy p{
+  text-align: justify !important;
+  text-justify: inter-word !important;
+}
+
+
+/* FINAL — ABOUT INFO CARDS TEXT ALIGNMENT */
+.gv-inner-page .gv-inner-card p{
+    text-align:justify !important;
+}
+
+/* GV-CONTACT-ICON-OVERFLOW-FIX-START */
+.gv-contact-card {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+.gv-contact-card > .gv-contact-icon {
+  box-sizing: border-box !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  flex: 0 0 52px !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  overflow: hidden !important;
+  line-height: 0 !important;
+}
+
+.gv-contact-card > .gv-contact-icon img {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 30px !important;
+  height: 30px !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  flex: 0 0 30px !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.gv-contact-card > span:not(.gv-contact-icon):not(.gv-contact-arrow) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.gv-contact-card > .gv-contact-arrow {
+  flex: 0 0 auto !important;
+}
+/* GV-CONTACT-ICON-OVERFLOW-FIX-END */
+
+/* GV-CONTACT-LOGO-85-START */
+.gv-contact-logo {
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.gv-contact-logo > img {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 85px !important;
+  height: 85px !important;
+  min-width: 85px !important;
+  min-height: 85px !important;
+  max-width: 85px !important;
+  max-height: 85px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+/* GV-CONTACT-LOGO-85-END */

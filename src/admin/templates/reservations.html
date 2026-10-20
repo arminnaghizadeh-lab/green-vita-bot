@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="/static/css/admin.css">
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
     <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
 
@@ -110,21 +111,6 @@
         .rv-nav a:hover,
         .rv-nav a.active {
             background: rgba(255,255,255,.14);
-        }
-
-        .rv-logout {
-            margin-top: 22px;
-        }
-
-        .rv-logout button {
-            width: 100%;
-            padding: 11px;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,.15);
-            border-radius: 13px;
-            background: transparent;
-            cursor: pointer;
-            font-weight: 800;
         }
 
         .rv-main {
@@ -609,36 +595,49 @@
             }
         }
     </style>
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
+    
+    
+    
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+
+<style id="GV_RESERVATIONS_EMBED_MODE">
+body.gv-reservations-embed .gv-admin-sidebar,
+body.gv-reservations-embed .gv-admin-topbar {
+    display: none !important;
+}
+
+body.gv-reservations-embed .gv-admin-shell-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.gv-reservations-embed .rv-main {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+</style>
+
+
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
 </head>
 
-<body>
+<body class="{% if request.query_params.get("embed") == "1" %}gv-reservations-embed{% endif %}">
 
-<div class="rv-layout">
+{% include "partials/admin-sidebar.html" %}
 
-    <aside class="rv-sidebar">
-        <div class="rv-brand">
-            <img src="/static/logo.png" alt="Green Vita">
-            <div>
-                <strong>Green Vita</strong>
-                <small>پنل مدیریت</small>
-            </div>
-        </div>
+<div class="gv-admin-shell-content">
+    {% include "partials/admin-topbar.html" %}
 
-        <nav class="rv-nav">
-            <a href="/dashboard/">🏠 داشبورد</a>
-            <a href="/visits">🩺 درخواست‌های ویزیت</a>
-            <a href="/calendar">📅 تقویم و زمان‌بندی</a>
-            <a href="/reservations" class="active">🗓 مدیریت رزروهای سایت</a>
-            <a href="/contactus/">🔗 Smart Bio</a>
-        </nav>
-
-        <form method="post" action="/logout" class="rv-logout">
-            <button type="submit">↪ خروج</button>
-        </form>
-    </aside>
+    {% include "partials/visit_scheduler_picker.html" %}
 
     <main class="rv-main">
 
@@ -651,7 +650,7 @@
 
             <div class="rv-actions">
                 <button class="rv-btn rv-btn-primary" type="button"
-                        onclick="openManualModal()">
+                        onclick="openManualPhonePicker()">
                     ＋ رزرو تلفنی
                 </button>
 
@@ -799,12 +798,44 @@
 (function () {
     "use strict";
 
+    function getQueryDate() {
+        const params = new URLSearchParams(window.location.search);
+        const value = params.get("date");
+
+        if (!value || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) {
+            return null;
+        }
+
+        return value;
+    }
+
+    function getBookingId() {
+        const params = new URLSearchParams(window.location.search);
+        const value = params.get("booking_id");
+
+        if (!value || !/^\\d+$/.test(value)) {
+            return null;
+        }
+
+        return value;
+    }
+
+    const queryDate = getQueryDate();
+    const queryBookingId = getBookingId();
+
+
+
     const state = {
-        startDate: startOfDay(new Date()),
-        selectedDate: null,
+        startDate: queryDate
+            ? parseDate(queryDate)
+            : tehranTodayDate(),
+        selectedDate: queryDate,
         days: [],
-        monthCursor: startOfDay(new Date()),
+        monthCursor: queryDate
+            ? parseDate(queryDate)
+            : tehranTodayDate(),
     };
+
 
     const faWeekdays = [
         "دوشنبه",
@@ -815,6 +846,21 @@
         "شنبه",
         "یکشنبه"
     ];
+
+    function tehranTodayDate() {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Asia/Tehran",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).formatToParts(new Date());
+
+        const year = Number(parts.find(p => p.type === "year").value);
+        const month = Number(parts.find(p => p.type === "month").value);
+        const day = Number(parts.find(p => p.type === "day").value);
+
+        return new Date(year, month - 1, day);
+    }
 
     function startOfDay(date) {
         return new Date(
@@ -877,6 +923,9 @@
         const response = await fetch(
             "/dashboard/api/reservations/overview?start_date=" +
             encodeURIComponent(isoDate(state.startDate)) +
+            (queryBookingId
+                ? "&booking_id=" + encodeURIComponent(queryBookingId)
+                : "") +
             "&days=7",
             {
                 credentials: "same-origin",
@@ -892,10 +941,13 @@
 
         state.days = data.days || [];
 
-        if (!state.selectedDate || !state.days.some(
-            day => day.date === state.selectedDate
-        )) {
+        if (
+            queryBookingId ||
+            !state.selectedDate ||
+            !state.days.some(day => day.date === state.selectedDate)
+        ) {
             state.selectedDate = data.start_date;
+            state.monthCursor = parseDate(data.start_date);
         }
 
         const pendingBox = document.getElementById("pendingBox");
@@ -1036,18 +1088,33 @@
 
         slotGrid.innerHTML = slots.length
             ? slots.map(slot => `
-                <div class="rv-slot ${slot.enabled ? "" : "off"}">
+                <div class="rv-slot ${slot.reserved ? "reserved" : (slot.enabled ? "" : "off")}">
                     <span class="rv-slot-time">
                         ${formatTime(slot.start_at)}
                     </span>
 
-                    <button
-                        type="button"
-                        class="rv-switch ${slot.enabled ? "on" : "off"}"
-                        onclick="toggleSlot(${slot.id}, ${!slot.enabled})"
-                    >
-                        ${slot.enabled ? "فعال" : "غیرفعال"}
-                    </button>
+                    ${
+                        slot.reserved
+                            ? `
+                                <button
+                                    type="button"
+                                    class="rv-switch reserved"
+                                    disabled
+                                    aria-disabled="true"
+                                >
+                                    رزرو شده
+                                </button>
+                            `
+                            : `
+                                <button
+                                    type="button"
+                                    class="rv-switch ${slot.enabled ? "on" : "off"}"
+                                    onclick="toggleSlot(${slot.id}, ${!slot.enabled})"
+                                >
+                                    ${slot.enabled ? "فعال" : "غیرفعال"}
+                                </button>
+                            `
+                    }
                 </div>
             `).join("")
             : `
@@ -1060,7 +1127,7 @@
     window.toggleSlot = async function (slotId, enabled) {
         try {
             const response = await fetch(
-                "/api/slots/" +
+                "/booking/api/slots/" +
                 encodeURIComponent(slotId) +
                 "/toggle-enabled?enabled=" +
                 encodeURIComponent(enabled ? "true" : "false"),
@@ -1099,7 +1166,7 @@
     };
 
     window.goToday = function () {
-        state.startDate = startOfDay(new Date());
+        state.startDate = tehranTodayDate();
         state.selectedDate = null;
         loadOverview().catch(console.error);
         window.scrollTo({ top: 0, behavior: "smooth" });

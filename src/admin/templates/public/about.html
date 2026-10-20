@@ -1,41 +1,92 @@
 {% extends "public/base.html" %}
 
-{% block title %}درباره ما | Green Vita{% endblock %}
+{% block title %}درباره کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+
+{% block meta_description %}درباره کلینیک گیاه پزشکی گرین ویتا؛ آشنایی با رویکرد تخصصی ما در تشخیص، درمان و مراقبت از گیاهان آپارتمانی، فضای باز و باغات.{% endblock %}
+
+{% block og_title %}درباره کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+{% block og_description %}آشنایی با کلینیک گیاه پزشکی گرین ویتا، رویکرد تخصصی ما و خدمات ویزیت گیاهان آپارتمانی، فضای باز، باغات و ویزیت آنلاین.{% endblock %}
+{% block twitter_title %}درباره کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+{% block twitter_description %}آشنایی با کلینیک گیاه پزشکی گرین ویتا و رویکرد تخصصی آن در تشخیص و درمان مشکلات گیاهان.{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://greenvitaclinic.ir/about/#webpage",
+  "url": "https://greenvitaclinic.ir/about/",
+  "name": "درباره کلینیک گیاه پزشکی گرین ویتا",
+  "description": "آشنایی با کلینیک گیاه پزشکی گرین ویتا و رویکرد تخصصی آن.",
+  "inLanguage": "fa-IR",
+  "about": {
+    "@id": "https://greenvitaclinic.ir/#business"
+  }
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/public-pages.css?v=20260926-about-justify1">
+{% endblock %}
 
 {% block content %}
-<section class="page">
+<section class="gv-inner-page">
     <div class="container">
-        <div class="page-card">
 
-            <span class="eyebrow">🌿 درباره Green Vita</span>
+        <header class="gv-inner-hero gv-about-hero-card">
+    <div class="gv-about-hero-copy">
+        <span class="gv-inner-eyebrow">ABOUT GREEN VITA</span>
 
-            <h1>کلینیک گیاه پزشکی گرین ویتا</h1>
+        <h1>کلینیک گیاه پزشکی گرین ویتا</h1>
 
-            <p>
-                Green Vita با هدف ارائه خدمات تخصصی و کاربردی در حوزه سلامت
-                گیاهان شکل گرفته است؛ از گیاهان آپارتمانی تا فضای سبز و باغات.
-            </p>
+        <p>
+            جایی برای تشخیص دقیق‌تر، مراقبت اصولی‌تر و تصمیم‌گیری بهتر<br>
+            <span style="color:#fff !important;">
+                گرین ویتا با بیش از <strong>۷ سال تجربه در زمینه گیاه‌پزشکی</strong> شکل گرفته است؛
+                با هدفی ساده اما مهم:
+                <strong>گیاه را دقیق‌تر بشناسیم، علت مشکل را پیدا کنیم و راهکاری متناسب با شرایط واقعی آن ارائه دهیم.</strong>
+                تجربه ویزیت‌های متعدد و مواجهه با شرایط متنوع گیاهان به ما آموخته است که هر گیاه، شرایط و مسئله خاص خودش را دارد.
+                ما تلاش می‌کنیم این تفاوت را در تشخیص، درمان و مراقبت جدی بگیریم.
+            </span>
+        </p>
+    </div>
 
-            <h2>رویکرد ما</h2>
+    <div class="gv-about-hero-image">
+        <img
+            src="/static/images/about-hero.PNG?v=2"
+            alt="کلینیک گیاه پزشکی گرین ویتا"
+            loading="eager"
+            fetchpriority="high"
+        >
+        <div class="gv-about-hero-image-overlay"></div>
+    </div>
+</header>
 
-            <p>
-                تلاش ما این است که به‌جای ارائه راهکارهای کلی، مشکل گیاه را
-                دقیق‌تر بررسی کنیم و متناسب با شرایط آن، راهکار قابل اجرا ارائه دهیم.
-            </p>
+<div class="gv-inner-grid">
 
-            <h2>خدمات تخصصی</h2>
+            <article class="gv-inner-card">
+                <h2>رویکرد ما</h2>
+                <p>
+                    تلاش ما این است که به‌جای ارائه راهکارهای عمومی، وضعیت گیاه را با توجه به علائم، شرایط نگهداری و محیطی و عوامل مؤثر بررسی کنیم؛ تا ضمن درمان مشکل موجود، علت آن نیز شناسایی شود و از تکرار آن پیشگیری کنیم و راهکاری متناسب، علمی و قابل اجرا ارائه دهیم.
+                </p>
+            </article>
 
-            <p>
-                ویزیت گیاهان آپارتمانی، ویزیت گیاهان فضای باز، ویزیت باغات
-                و مشاوره تلفنی تخصصی از خدمات Green Vita هستند.
-            </p>
+            <article class="gv-inner-card">
+                <h2>خدمات تخصصی</h2>
+                <p>
+                    ویزیت گیاهان آپارتمانی، ویزیت گیاهان فضای باز، ویزیت باغات
+                    و ویزیت آنلاین از خدمات Green Vita هستند.
+                </p>
 
-            <div class="hero-actions">
-                <a href="/booking/" class="btn btn-primary">رزرو آنلاین</a>
-                <a href="/contact/" class="btn btn-secondary">تماس با ما</a>
-            </div>
+                <div class="gv-inner-actions">
+                    <a href="/booking/" class="gv-inner-primary gv-booking-live-cta">رزرو آنلاین</a>
+                    <a href="/contact/" class="gv-inner-secondary">تماس با ما</a>
+                </div>
+            </article>
 
         </div>
+
     </div>
 </section>
 {% endblock %}

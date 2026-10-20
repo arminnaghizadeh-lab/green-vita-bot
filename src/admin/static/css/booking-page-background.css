@@ -1,0 +1,39 @@
+/* GV-BOOKING-PAGES-VIEWPORT-BG */
+body.gv-booking-page,
+body:has(main.gv-booking-track-page) {
+  isolation: isolate !important;
+  background: transparent !important;
+}
+
+body.gv-booking-page::before,
+body:has(main.gv-booking-track-page)::before {
+  content: "";
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #f7faf4;
+  background-image:
+    linear-gradient(
+      rgba(247,250,244,.52),
+      rgba(247,250,244,.68)
+    ),
+    url("/static/images/diagnosis.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body.gv-booking-page,
+body:has(main.gv-booking-track-page) {
+  background-color: transparent !important;
+}
+
+@media (max-width: 600px) {
+  body.gv-booking-page::before,
+  body:has(main.gv-booking-track-page)::before {
+    background-position: 85% center;
+  }
+}
+/* END GV-BOOKING-PAGES-VIEWPORT-BG */

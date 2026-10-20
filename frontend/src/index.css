@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #010101;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-garamond {
+  font-family: "Garamond", "Times New Roman", serif;
+}
+
+.mobile-menu-glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.45),
+    rgba(255,255,255,.15) 20%,
+    rgba(255,255,255,0) 40%,
+    rgba(255,255,255,0) 60%,
+    rgba(255,255,255,.15) 80%,
+    rgba(255,255,255,.45)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.liquid-glass:hover {
+  background: rgba(255,255,255,.04);
+}
+
+.liquid-glass:active {
+  transform: scale(.98);
+}
+
+/* =========================================================
+   GREEN VITA HERO — TYPOGRAPHY
+   Persian UI uses the project's Vazir font.
+   Garamond remains reserved for the cinematic Latin heading.
+   ========================================================= */
+
+html,
+body,
+#root {
+  font-family: "Vazir", Tahoma, Arial, sans-serif;
+}
+
+#root {
+  direction: rtl;
+}
+
+#root button,
+#root a,
+#root p,
+#root span,
+#root nav,
+#root div {
+  font-family: "Vazir", Tahoma, Arial, sans-serif;
+}
+
+#root .font-garamond {
+  font-family: "Garamond", "Times New Roman", serif !important;
+  direction: ltr;
+}
+
+
+
+#root .font-vazir {
+  font-family: "Vazir", Tahoma, Arial, sans-serif !important;
+  direction: rtl;
+  unicode-bidi: plaintext;
+}
+
+/* =========================================================
+   HERO TITLES — SOFT GREEN GLOW
+   ========================================================= */
+
+#root .font-garamond,
+#root .font-vazir {
+  text-shadow:
+    0 0 8px rgba(139, 197, 61, .32),
+    0 0 22px rgba(139, 197, 61, .20),
+    0 4px 28px rgba(0, 0, 0, .28);
+}
+
+#root .font-vazir {
+  color: #F3FFE7;
+}
+
+#root .font-garamond {
+  color: #FFFFFF;
+}
+
+
+/* HERO — ORIGINAL TEXT COLORS + PHOSPHORESCENT HALO */
+
+#root .font-garamond {
+  color: inherit !important;
+  text-shadow:
+    0 0 3px rgba(217, 255, 154, .85),
+    0 0 10px rgba(139, 255, 61, .9),
+    0 0 24px rgba(95, 255, 40, .72),
+    0 0 48px rgba(74, 255, 30, .45);
+}
+
+#root .font-vazir {
+  color: inherit !important;
+  text-shadow:
+    0 0 3px rgba(217, 255, 154, .85),
+    0 0 10px rgba(139, 255, 61, .9),
+    0 0 24px rgba(95, 255, 40, .72),
+    0 0 48px rgba(74, 255, 30, .45);
+}
+

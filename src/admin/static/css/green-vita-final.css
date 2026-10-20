@@ -1,0 +1,3462 @@
+/* ============================================================
+   GREEN VITA — FINAL ADMIN UI LAYER
+   ------------------------------------------------------------
+   Purpose:
+   - Final visual override layer
+   - No JS / API / booking / business logic changes
+   - Loaded AFTER all existing admin CSS
+   ============================================================ */
+
+:root {
+    --gv-bg: var(--gv-color-bg);
+    --gv-surface: var(--gv-color-surface);
+    --gv-surface-soft: var(--gv-color-surface-soft);
+
+    --gv-sidebar: var(--gv-color-sidebar);
+    --gv-sidebar-2: #03200D;
+
+    --gv-primary: var(--gv-color-primary);
+    --gv-primary-dark: var(--gv-color-primary-dark);
+    --gv-primary-soft: var(--gv-color-primary-soft);
+
+    --gv-gold: var(--gv-color-gold);
+    --gv-gold-soft: var(--gv-color-gold-soft);
+
+    --gv-text: var(--gv-color-text);
+    --gv-text-soft: var(--gv-color-text-soft);
+    --gv-text-muted: #7C8B82;
+
+    --gv-border: var(--gv-color-border);
+    --gv-border-soft: var(--gv-color-border-soft);
+
+    --gv-success: var(--gv-color-success);
+    --gv-warning: var(--gv-color-warning);
+    --gv-danger: var(--gv-color-danger);
+    --gv-info: var(--gv-color-info);
+
+    --gv-shadow-sm:
+        var(--gv-token-shadow-sm);
+
+    --gv-shadow:
+        var(--gv-token-shadow-md);
+
+    --gv-shadow-lg:
+        var(--gv-token-shadow-lg);
+
+    --gv-radius-sm: var(--gv-token-radius-sm);
+    --gv-radius: 16px;
+    --gv-radius-lg: var(--gv-token-radius-lg);
+
+    --gv-transition:
+        var(--gv-transition);
+
+    --gv-font:
+        var(--gv-font-family);
+}
+
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+html {
+    background: var(--gv-bg) !important;
+}
+
+body {
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(139,197,61,.055),
+            transparent 30%
+        ),
+        var(--gv-bg) !important;
+
+    color: var(--gv-text) !important;
+    font-family: var(--gv-font) !important;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(2,47,18,.28) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgba(2,47,18,.22);
+    border-radius: 99px;
+}
+
+
+/* ============================================================
+   LINKS
+   ============================================================ */
+
+a {
+    transition:
+        color var(--gv-transition),
+        background var(--gv-transition),
+        border-color var(--gv-transition),
+        box-shadow var(--gv-transition);
+}
+
+a:not(.btn):not(.button) {
+    color: var(--gv-primary-dark);
+}
+
+a:not(.btn):not(.button):hover {
+    color: var(--gv-primary);
+}
+
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+aside,
+.sidebar,
+.admin-sidebar,
+.side-bar,
+[class*="sidebar"] {
+    background:
+        linear-gradient(
+            180deg,
+            var(--gv-sidebar) 0%,
+            #03190A 100%
+        ) !important;
+
+    color: #F5F8F2 !important;
+    border-right: 1px solid rgba(200,169,107,.16) !important;
+    box-shadow: 10px 0 35px rgba(2,20,8,.08);
+}
+
+aside a,
+.sidebar a,
+.admin-sidebar a,
+.side-bar a,
+[class*="sidebar"] a {
+    color: rgba(255,255,255,.72) !important;
+    border-radius: 12px !important;
+    transition:
+        background var(--gv-transition),
+        color var(--gv-transition),
+        transform var(--gv-transition);
+}
+
+aside a:hover,
+.sidebar a:hover,
+.admin-sidebar a:hover,
+.side-bar a:hover,
+[class*="sidebar"] a:hover {
+    color: #FFFFFF !important;
+    background: rgba(139,197,61,.10) !important;
+}
+
+aside a.active,
+.sidebar a.active,
+.admin-sidebar a.active,
+.side-bar a.active,
+[class*="sidebar"] a.active,
+aside [aria-current="page"],
+.sidebar [aria-current="page"],
+.admin-sidebar [aria-current="page"] {
+    color: #FFFFFF !important;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139,197,61,.20),
+            rgba(139,197,61,.07)
+        ) !important;
+
+    box-shadow:
+        inset 3px 0 0 var(--gv-primary),
+        0 5px 18px rgba(0,0,0,.14) !important;
+}
+
+aside .logo,
+.sidebar .logo,
+.admin-sidebar .logo {
+    color: #FFFFFF !important;
+}
+
+
+/* ============================================================
+   TOP / HEADER
+   ============================================================ */
+
+header,
+.topbar,
+.admin-header,
+.navbar {
+    background:
+        rgba(255,255,255,.90) !important;
+
+    border-bottom: 1px solid var(--gv-border-soft) !important;
+
+    box-shadow:
+        0 4px 20px rgba(2,20,8,.045) !important;
+
+    backdrop-filter: blur(12px);
+}
+
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+main,
+.main-content,
+.content,
+.admin-content {
+    color: var(--gv-text) !important;
+}
+
+
+/* ============================================================
+   PAGE TITLES
+   ============================================================ */
+
+h1,
+h2,
+h3,
+h4 {
+    color: var(--gv-primary-dark) !important;
+    letter-spacing: -.02em;
+}
+
+h1 {
+    font-weight: 750 !important;
+}
+
+h2,
+h3 {
+    font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   CARDS / PANELS
+   ============================================================ */
+
+.card,
+.panel,
+.box,
+.dashboard-card,
+.stat-card,
+.widget,
+[class*="card"] {
+    background: var(--gv-surface) !important;
+    border: 1px solid var(--gv-border-soft) !important;
+    border-radius: var(--gv-radius) !important;
+
+    box-shadow: var(--gv-shadow-sm) !important;
+
+    transition:
+        transform var(--gv-transition),
+        box-shadow var(--gv-transition),
+        border-color var(--gv-transition);
+}
+
+.card:hover,
+.panel:hover,
+.dashboard-card:hover,
+.stat-card:hover,
+.widget:hover {
+    border-color: rgba(139,197,61,.35) !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -40px auto;
+
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,197,61,.12),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+button,
+.btn,
+.button,
+input[type="submit"],
+input[type="button"] {
+    font-family: inherit !important;
+    border-radius: 11px !important;
+    transition:
+        transform var(--gv-transition),
+        box-shadow var(--gv-transition),
+        background var(--gv-transition),
+        border-color var(--gv-transition);
+}
+
+button:hover,
+.btn:hover,
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    transform: translateY(-1px);
+}
+
+button:active,
+.btn:active,
+.button:active,
+input[type="submit"]:active,
+input[type="button"]:active {
+    transform: translateY(0);
+}
+
+
+/* Primary actions */
+.btn-primary,
+button.primary,
+button[type="submit"],
+input[type="submit"],
+a.btn-primary {
+    background:
+        linear-gradient(
+            135deg,
+            var(--gv-primary),
+            #72AE2C
+        ) !important;
+
+    color: #FFFFFF !important;
+
+    border: 1px solid rgba(2,47,18,.18) !important;
+
+    box-shadow:
+        0 7px 18px rgba(89,136,35,.18) !important;
+}
+
+.btn-primary:hover,
+button.primary:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover,
+a.btn-primary:hover {
+    box-shadow:
+        0 10px 24px rgba(89,136,35,.24) !important;
+}
+
+
+/* Secondary */
+.btn-secondary,
+button.secondary,
+.button.secondary {
+    background: #FFFFFF !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+}
+
+.btn-secondary:hover,
+button.secondary:hover,
+.button.secondary:hover {
+    border-color: var(--gv-gold) !important;
+}
+
+
+/* Gold / premium actions */
+.btn-gold,
+.gold,
+.premium,
+[data-variant="gold"] {
+    background:
+        linear-gradient(
+            135deg,
+            #D8C08D,
+            var(--gv-gold)
+        ) !important;
+
+    color: var(--gv-primary-dark) !important;
+
+    border: 1px solid rgba(200,169,107,.55) !important;
+
+    box-shadow:
+        0 7px 18px rgba(200,169,107,.20) !important;
+}
+
+
+/* ============================================================
+   FORM ELEMENTS
+   ============================================================ */
+
+input,
+select,
+textarea {
+    font-family: inherit !important;
+
+    color: var(--gv-text) !important;
+    background: #FFFFFF !important;
+
+    border: 1px solid var(--gv-border) !important;
+    border-radius: 11px !important;
+
+    box-shadow: none !important;
+
+    transition:
+        border-color var(--gv-transition),
+        box-shadow var(--gv-transition),
+        background var(--gv-transition);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: #BFD0B9 !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none !important;
+
+    border-color: var(--gv-primary) !important;
+
+    box-shadow:
+        0 0 0 4px rgba(139,197,61,.13) !important;
+}
+
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+
+table {
+    width: 100%;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+
+    background: var(--gv-surface) !important;
+
+    border: 1px solid var(--gv-border-soft) !important;
+    border-radius: var(--gv-radius) !important;
+
+    overflow: hidden;
+}
+
+thead th {
+    background:
+        linear-gradient(
+            180deg,
+            #F8FAF5,
+            #F1F5EC
+        ) !important;
+
+    color: var(--gv-primary-dark) !important;
+
+    font-weight: 700 !important;
+
+    border-bottom:
+        1px solid var(--gv-border) !important;
+}
+
+tbody td {
+    border-bottom:
+        1px solid var(--gv-border-soft) !important;
+}
+
+tbody tr {
+    transition:
+        background var(--gv-transition);
+}
+
+tbody tr:hover {
+    background:
+        rgba(228,240,204,.30) !important;
+}
+
+tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+
+/* ============================================================
+   BADGES / STATUS
+   ============================================================ */
+
+.badge,
+.status,
+[class*="badge"],
+[class*="status"] {
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+}
+
+.badge-success,
+.status-success,
+.success {
+    background: rgba(46,139,87,.11) !important;
+    color: var(--gv-success) !important;
+    border: 1px solid rgba(46,139,87,.20) !important;
+}
+
+.badge-warning,
+.status-warning,
+.warning {
+    background: rgba(185,133,35,.11) !important;
+    color: #8A641A !important;
+    border: 1px solid rgba(185,133,35,.20) !important;
+}
+
+.badge-danger,
+.status-danger,
+.danger {
+    background: rgba(201,74,74,.10) !important;
+    color: var(--gv-danger) !important;
+    border: 1px solid rgba(201,74,74,.19) !important;
+}
+
+.badge-info,
+.status-info,
+.info {
+    background: rgba(61,112,143,.10) !important;
+    color: var(--gv-info) !important;
+    border: 1px solid rgba(61,112,143,.19) !important;
+}
+
+
+/* ============================================================
+   CALENDAR / BOOKING UI
+   ============================================================ */
+
+.calendar,
+.booking-calendar,
+.fc,
+.flatpickr-calendar {
+    background: #FFFFFF !important;
+    border-color: var(--gv-border) !important;
+    border-radius: var(--gv-radius) !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+.fc .fc-toolbar-title,
+.calendar-title {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 750 !important;
+}
+
+.fc .fc-button {
+    background: #FFFFFF !important;
+    color: var(--gv-primary-dark) !important;
+    border: 1px solid var(--gv-border) !important;
+    box-shadow: none !important;
+}
+
+.fc .fc-button:hover {
+    background: var(--gv-primary-soft) !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: var(--gv-primary) !important;
+    border-color: var(--gv-primary) !important;
+    color: #FFFFFF !important;
+}
+
+
+/* ============================================================
+   ALERTS / NOTICES
+   ============================================================ */
+
+.alert,
+.notice,
+.message {
+    border-radius: var(--gv-radius-sm) !important;
+    border: 1px solid var(--gv-border-soft) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+
+.modal,
+.dialog,
+[role="dialog"] {
+    border-radius: var(--gv-radius-lg) !important;
+    border: 1px solid var(--gv-border-soft) !important;
+
+    box-shadow:
+        0 30px 80px rgba(2,20,8,.18) !important;
+}
+
+
+/* ============================================================
+   DIVIDERS
+   ============================================================ */
+
+hr {
+    border: 0 !important;
+    border-top:
+        1px solid var(--gv-border-soft) !important;
+}
+
+
+/* ============================================================
+   ICON CONTAINERS
+   ============================================================ */
+
+.icon-box,
+.stat-icon,
+.action-icon {
+    background: var(--gv-primary-soft) !important;
+    color: var(--gv-primary-dark) !important;
+    border-radius: 14px !important;
+}
+
+
+/* ============================================================
+   FOCUS ACCESSIBILITY
+   ============================================================ */
+
+:focus-visible {
+    outline:
+        3px solid rgba(139,197,61,.28) !important;
+
+    outline-offset: 2px !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .card,
+    .panel,
+    .dashboard-card,
+    .stat-card {
+        border-radius: 14px !important;
+    }
+
+    table {
+        font-size: .93rem;
+    }
+}
+
+@media (max-width: 640px) {
+
+    main,
+    .main-content,
+    .content,
+    .admin-content {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .card,
+    .panel,
+    .dashboard-card,
+    .stat-card {
+        border-radius: 13px !important;
+    }
+
+    button,
+    .btn,
+    .button {
+        min-height: 42px;
+    }
+}
+
+
+/* ============================================================
+   REDUCE MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================================
+   GREEN VITA — FINAL UI / PHASE 2
+   Real selectors from Dashboard / Reservations / Booking
+   ============================================================ */
+
+/* =========================
+   DASHBOARD
+   ========================= */
+
+body.gv-dashboard {
+    background:
+        radial-gradient(
+            circle at 92% 0%,
+            rgba(139,197,61,.08),
+            transparent 26%
+        ),
+        var(--gv-bg) !important;
+}
+
+.gv-dashboard .topbar {
+    min-height: 76px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gv-dashboard .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gv-dashboard .brand img,
+.gv-sidebar-brand img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.gv-dashboard .brand strong,
+.gv-dashboard .brand span {
+    display: block;
+}
+
+.gv-dashboard .brand strong {
+    color: var(--gv-primary-dark);
+    font-weight: 800;
+}
+
+.gv-dashboard .brand span {
+    margin-top: 2px;
+    color: var(--gv-text-muted);
+    font-size: .78rem;
+}
+
+.gv-dashboard .logout {
+    min-height: 40px;
+    padding: 9px 15px;
+    border: 1px solid var(--gv-border);
+    border-radius: 11px;
+    background: #fff;
+    color: var(--gv-primary-dark);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.gv-dashboard .logout:hover {
+    border-color: var(--gv-gold);
+    background: #fffdf8;
+}
+
+.gv-sidebar {
+    background:
+        linear-gradient(
+            180deg,
+            #021408 0%,
+            #03200D 100%
+        ) !important;
+
+    border-left: 1px solid rgba(200,169,107,.14);
+    box-shadow: -8px 0 28px rgba(2,20,8,.06);
+}
+
+.gv-sidebar-brand {
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(232,216,183,.15);
+}
+
+.gv-sidebar-brand strong,
+.gv-sidebar-brand small {
+    display: block;
+}
+
+.gv-sidebar-brand strong {
+    color: #fff;
+    margin-top: 8px;
+}
+
+.gv-sidebar-brand small {
+    margin-top: 2px;
+    color: rgba(255,255,255,.62);
+}
+
+.gv-sidebar-nav {
+    gap: 6px !important;
+}
+
+.gv-sidebar-nav a {
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    padding: 11px 13px !important;
+}
+
+.gv-sidebar-nav a:hover {
+    background: rgba(139,197,61,.08) !important;
+}
+
+.gv-sidebar-nav a.active {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139,197,61,.20),
+            rgba(139,197,61,.06)
+        ) !important;
+
+    border-color: rgba(139,197,61,.12) !important;
+    box-shadow: inset 3px 0 0 var(--gv-primary);
+}
+
+.gv-sidebar-logout {
+    margin-top: auto;
+}
+
+.gv-sidebar-logout button {
+    width: 100%;
+    padding: 11px 13px;
+    background: rgba(255,255,255,.035) !important;
+    color: rgba(255,255,255,.82) !important;
+    border: 1px solid transparent !important;
+}
+
+.gv-sidebar-logout button:hover {
+    background: rgba(200,169,107,.10) !important;
+    border-color: rgba(200,169,107,.18) !important;
+    color: #fff !important;
+}
+
+.gv-pending-badge {
+    background: var(--gv-gold) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+.gv-dashboard .container {
+    max-width: 1500px;
+    padding-top: 28px;
+    padding-bottom: 36px;
+}
+
+.gv-dashboard .hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.gv-dashboard .hero p {
+    color: var(--gv-text-soft) !important;
+}
+
+.gv-dashboard-actions {
+    gap: 9px !important;
+}
+
+.gv-dashboard .primary-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 15px;
+    border-radius: 11px;
+    text-decoration: none;
+    background: var(--gv-primary-dark) !important;
+    color: #fff !important;
+    font-weight: 800;
+    box-shadow: 0 7px 18px rgba(2,47,18,.16);
+}
+
+.gv-dashboard .primary-link:hover {
+    background: #075321 !important;
+    color: #fff !important;
+}
+
+.gv-push-btn {
+    min-height: 42px;
+    padding: 10px 14px !important;
+    border: 1px solid var(--gv-border) !important;
+    background: #fff !important;
+    color: var(--gv-primary-dark) !important;
+    font-weight: 800 !important;
+}
+
+.gv-push-btn:hover {
+}
+
+/* =========================
+   SMART BIO
+   ========================= */
+
+.smart-bio-analytics {
+    margin-top: 22px;
+    overflow: hidden;
+}
+
+.smart-bio-periods {
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+}
+
+.smart-bio-period,
+.smart-bio-total,
+.smart-bio-top-channel {
+    background: var(--gv-surface-soft) !important;
+    border: 1px solid var(--gv-border-soft) !important;
+    border-radius: 14px !important;
+}
+
+.smart-bio-period {
+    padding: 15px;
+}
+
+.smart-bio-period span,
+.smart-bio-total span,
+.smart-bio-top-channel span {
+    display: block;
+    color: var(--gv-text-muted);
+    font-size: .78rem;
+}
+
+.smart-bio-period strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--gv-primary-dark);
+    font-size: 1.45rem;
+}
+
+.smart-bio-total {
+    margin: 0 22px 12px;
+    padding: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            #F7FAF2,
+            #EEF6E4
+        ) !important;
+}
+
+.smart-bio-total strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--gv-primary-dark);
+    font-size: 2rem;
+}
+
+.smart-bio-top-channel {
+    margin: 0 22px 22px;
+    padding: 15px 17px;
+    border-color: rgba(200,169,107,.28) !important;
+    background: #FFFDF8 !important;
+}
+
+
+/* =========================
+   RESERVATIONS
+   ========================= */
+
+.rv-layout {
+    min-height: 100vh;
+    grid-template-columns: 245px minmax(0,1fr) !important;
+    background: var(--gv-bg);
+}
+
+.rv-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 22px 15px !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #021408 0%,
+            #03200D 100%
+        ) !important;
+
+    border-left: 1px solid rgba(200,169,107,.14);
+    box-shadow: -8px 0 28px rgba(2,20,8,.06);
+}
+
+.rv-brand {
+    padding: 4px 8px 18px !important;
+    margin-bottom: 18px !important;
+    border-bottom-color: rgba(232,216,183,.15) !important;
+}
+
+.rv-brand img {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+}
+
+.rv-brand strong {
+    color: #fff !important;
+}
+
+.rv-brand small {
+    color: rgba(255,255,255,.62) !important;
+}
+
+.rv-nav {
+    gap: 6px !important;
+}
+
+.rv-nav a {
+    color: rgba(255,255,255,.76) !important;
+    border: 1px solid transparent;
+}
+
+.rv-nav a:hover,
+.rv-nav a.active {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139,197,61,.20),
+            rgba(139,197,61,.06)
+        ) !important;
+
+    border-color: rgba(139,197,61,.12);
+    box-shadow: inset 3px 0 0 var(--gv-primary);
+}
+
+.rv-main {
+    padding: 30px !important;
+    max-width: 1500px;
+}
+
+.rv-eyebrow {
+    color: var(--gv-gold) !important;
+}
+
+.rv-card {
+    border: 1px solid var(--gv-border-soft) !important;
+    border-radius: var(--gv-radius) !important;
+    box-shadow: var(--gv-shadow-sm) !important;
+}
+
+.rv-toolbar {
+    padding: 16px 18px !important;
+    border-bottom: 1px solid var(--gv-border-soft);
+}
+
+.rv-btn-primary {
+    background: var(--gv-primary-dark) !important;
+    box-shadow: 0 7px 18px rgba(2,47,18,.14);
+}
+
+.rv-btn-primary:hover {
+    background: #075321 !important;
+}
+
+.rv-btn-soft {
+    background: var(--gv-primary-soft) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+.rv-day {
+    border-radius: 16px !important;
+}
+
+.rv-day:hover,
+.rv-day.selected {
+    border-color: rgba(139,197,61,.28) !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+.rv-day.today {
+    outline: 2px solid rgba(139,197,61,.28) !important;
+}
+
+
+/* =========================
+   BOOKING
+   ========================= */
+
+.bk-card {
+    background: #fff !important;
+    border: 1px solid var(--gv-border-soft) !important;
+    border-radius: 24px !important;
+    box-shadow: var(--gv-shadow) !important;
+}
+
+.bk-hero h1 {
+    color: var(--gv-primary-dark) !important;
+}
+
+.bk-hero p {
+    color: var(--gv-text-muted) !important;
+}
+
+.svc-pick label {
+    background: #fff !important;
+    border-color: var(--gv-border) !important;
+    border-radius: 16px !important;
+}
+
+.svc-pick label:hover,
+.svc-pick label:has(input:checked) {
+    border-color: var(--gv-primary) !important;
+    background: #F9FCEF !important;
+    box-shadow: 0 7px 20px rgba(2,47,18,.07) !important;
+}
+
+.svc-pick .price {
+    color: var(--gv-gold) !important;
+    font-weight: 800;
+}
+
+.next-btn,
+.submit {
+    background:
+        linear-gradient(
+            135deg,
+            var(--gv-primary),
+            #72AE2C
+        ) !important;
+
+    border-color: var(--gv-primary) !important;
+}
+
+.next-btn:hover:not(:disabled),
+.submit:hover:not(:disabled) {
+    box-shadow: 0 11px 26px rgba(89,136,35,.23) !important;
+}
+
+.back-btn {
+    background: #fff !important;
+    border: 1px solid var(--gv-border) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+.week-nav button,
+.date,
+.time {
+    border-color: var(--gv-border) !important;
+    background: #fff !important;
+}
+
+.date:hover,
+.date.active,
+.time.active {
+    background: var(--gv-primary) !important;
+    border-color: var(--gv-primary) !important;
+}
+
+.field-group input,
+.field-group textarea,
+.field input,
+.field textarea {
+    border-color: var(--gv-border) !important;
+    border-radius: 12px !important;
+}
+
+.field-group input:focus,
+.field-group textarea:focus,
+.field input:focus,
+.field textarea:focus {
+    border-color: var(--gv-primary) !important;
+    box-shadow: 0 0 0 4px rgba(139,197,61,.12) !important;
+}
+
+.summary,
+#previewSection .summary {
+    background: #FBFDF8 !important;
+    border-color: var(--gv-border-soft) !important;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1100px) {
+    .rv-days {
+        grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+    }
+}
+
+@media (max-width: 900px) {
+
+}
+
+@media (max-width: 700px) {
+    .gv-dashboard .topbar {
+        padding: 10px 14px;
+    }
+
+    .gv-dashboard .container {
+        padding-top: 18px;
+    }
+
+    .smart-bio-periods {
+        grid-template-columns: 1fr;
+    }
+
+    .rv-days {
+        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    }
+
+    .rv-nav {
+        grid-template-columns: 1fr;
+    }
+
+    .rv-main {
+        padding: 14px !important;
+    }
+}
+
+/* ============================================================
+   END FINAL UI / PHASE 2
+   ============================================================ */
+
+/* ============================================================
+   GREEN VITA — FINAL UI / PHASE 3
+   Precision polish
+   ============================================================ */
+
+/* ---------- Global admin geometry ---------- */
+
+.gv-dashboard,
+.rv-layout {
+    min-width: 0;
+}
+
+.gv-dashboard h1,
+.gv-dashboard h2,
+.gv-dashboard h3,
+.rv-main h1,
+.rv-main h2,
+.rv-main h3 {
+    line-height: 1.35;
+}
+
+/* ---------- Consistent typography ---------- */
+
+.gv-dashboard,
+.rv-layout,
+.bk-card,
+.bk-hero {
+}
+
+/* ---------- Reservation month / sections ---------- */
+
+.rv-month,
+.rv-section {
+    overflow: hidden;
+}
+
+.rv-month > *,
+.rv-section > * {
+    max-width: 100%;
+}
+
+.rv-toolbar-title {
+    color: var(--gv-primary-dark) !important;
+}
+
+.rv-toolbar-sub {
+    color: var(--gv-text-muted) !important;
+}
+
+.rv-btn {
+    min-height: 40px;
+}
+
+.rv-btn-danger {
+    background: #FEF2F2 !important;
+    border: 1px solid #F5CACA !important;
+}
+
+.rv-btn-danger:hover {
+    background: #FDE8E8 !important;
+}
+
+/* ---------- Reservation days ---------- */
+
+.rv-day {
+    background: #FFFFFF !important;
+    border: 1px solid var(--gv-border-soft);
+}
+
+.rv-day.today {
+    background:
+        linear-gradient(
+            180deg,
+            #FBFDF7,
+            #FFFFFF
+        ) !important;
+}
+
+.rv-day.selected {
+    border-color: rgba(139,197,61,.45) !important;
+    background: #FAFDF4 !important;
+}
+
+.rv-count {
+    background: var(--gv-primary-soft) !important;
+    color: var(--gv-primary-dark) !important;
+}
+
+/* ---------- Booking stepper ---------- */
+
+.stepper {
+    color: var(--gv-text-muted);
+}
+
+.stepper .st.active .circle,
+.stepper .st.active::before {
+    background: var(--gv-primary) !important;
+}
+
+.stepper .circle {
+    border-color: var(--gv-border) !important;
+    color: var(--gv-text-soft);
+}
+
+.stepper .st.active .circle {
+    color: #fff !important;
+    border-color: var(--gv-primary) !important;
+    box-shadow:
+        0 5px 14px rgba(139,197,61,.22);
+}
+
+.stepper .lbl {
+    font-weight: 700;
+}
+
+/* ---------- Booking cards ---------- */
+
+.bk-step h2 {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 800;
+}
+
+.svc-pick label {
+    transition:
+        transform var(--gv-transition),
+        border-color var(--gv-transition),
+        box-shadow var(--gv-transition),
+        background var(--gv-transition);
+}
+
+.svc-pick label:hover {
+    transform: translateY(-1px);
+}
+
+/* ---------- Booking navigation ---------- */
+
+.week-nav {
+    background: var(--gv-surface-soft) !important;
+    border: 1px solid var(--gv-border-soft);
+    border-radius: 15px;
+    padding: 7px;
+}
+
+.week-nav button:hover {
+    border-color: var(--gv-gold) !important;
+    background: #FFFDF8 !important;
+}
+
+.range {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 800;
+}
+
+/* ---------- Booking availability ---------- */
+
+.slot-grid > button,
+.slot-grid > .slot,
+.cal-week > button {
+    transition:
+        transform var(--gv-transition),
+        background var(--gv-transition),
+        border-color var(--gv-transition),
+        box-shadow var(--gv-transition);
+}
+
+.slot-grid > button:hover,
+.slot-grid > .slot:hover,
+.cal-week > button:hover {
+    transform: translateY(-1px);
+}
+
+.slot-grid > button.active,
+.slot-grid > .slot.active,
+.cal-week > button.active {
+    background: var(--gv-primary) !important;
+    border-color: var(--gv-primary) !important;
+    color: #FFFFFF !important;
+}
+
+/* ---------- Form labels ---------- */
+
+.field-group label,
+.field label {
+    color: var(--gv-primary-dark) !important;
+    font-weight: 700;
+}
+
+/* ---------- Focus ---------- */
+
+.gv-dashboard input:focus,
+.gv-dashboard select:focus,
+.gv-dashboard textarea:focus,
+.rv-main input:focus,
+.rv-main select:focus,
+.rv-main textarea:focus,
+.bk-card input:focus,
+.bk-card select:focus,
+.bk-card textarea:focus {
+    border-color: var(--gv-primary) !important;
+
+    box-shadow:
+        0 0 0 4px rgba(139,197,61,.11) !important;
+}
+
+/* ---------- Mobile spacing ---------- */
+
+@media (max-width: 640px) {
+
+    .gv-dashboard .hero {
+}
+}
+
+/* ============================================================
+   END FINAL UI / PHASE 3
+   ============================================================ */
+
+
+
+/* ============================================================
+   GREEN VITA — UNIFIED ADMIN SIDEBAR
+   ============================================================ */
+
+.gv-admin-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-end: 0;
+
+    width: 250px;
+    z-index: 900;
+
+    padding: 22px 15px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #021408 0%,
+            #03200D 100%
+        );
+
+    border-left:
+        1px solid rgba(200,169,107,.14);
+
+    box-shadow:
+        -10px 0 35px rgba(2,20,8,.08);
+
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.gv-admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 2px 7px 19px;
+    margin-bottom: 18px;
+
+    border-bottom:
+        1px solid rgba(232,216,183,.15);
+}
+
+.gv-admin-sidebar-brand img {
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+
+    border-radius: 12px;
+
+    background: #fff;
+}
+
+.gv-admin-sidebar-brand strong,
+.gv-admin-sidebar-brand small {
+    display: block;
+}
+
+.gv-admin-sidebar-brand strong {
+    color: #fff;
+    font-size: .98rem;
+    font-weight: 850;
+}
+
+.gv-admin-sidebar-brand small {
+    margin-top: 3px;
+
+    color: rgba(255,255,255,.60);
+
+    font-size: .72rem;
+}
+
+.gv-admin-sidebar-nav {
+    display: grid;
+    gap: 6px;
+}
+
+.gv-admin-sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 44px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+    border: 1px solid transparent;
+
+    color: rgba(255,255,255,.76);
+
+    text-decoration: none;
+
+    font-weight: 750;
+
+    transition:
+        background var(--gv-transition),
+        color var(--gv-transition),
+        border-color var(--gv-transition),
+        transform var(--gv-transition);
+}
+
+.gv-admin-sidebar-nav a span:first-child {
+    width: 24px;
+
+    flex: 0 0 24px;
+
+    text-align: center;
+}
+
+.gv-admin-sidebar-nav a:hover {
+    color: #fff;
+
+    background:
+        rgba(139,197,61,.09);
+
+    border-color:
+        rgba(139,197,61,.10);
+
+    transform: translateX(-1px);
+}
+
+.gv-admin-sidebar-nav a.active {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(139,197,61,.20),
+            rgba(139,197,61,.055)
+        );
+
+    border-color:
+        rgba(139,197,61,.13);
+
+    box-shadow:
+        inset -3px 0 0 var(--gv-primary);
+}
+
+.gv-admin-sidebar-nav a:last-child {
+    margin-top: 7px;
+
+    border-color:
+        rgba(200,169,107,.16);
+
+    background:
+        rgba(200,169,107,.055);
+}
+
+.gv-admin-sidebar-nav a:last-child:hover {
+    background:
+        rgba(200,169,107,.11);
+
+    border-color:
+        rgba(200,169,107,.25);
+}
+
+
+/* Shared admin content offset */
+.gv-admin-shell-content {
+    margin-inline-end: 250px;
+    min-width: 0;
+}
+
+
+/* Shared top header */
+.gv-admin-topbar {
+    min-height: 74px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 24px;
+
+    background:
+        rgba(255,255,255,.92);
+
+    border-bottom:
+        1px solid var(--gv-border-soft);
+
+    box-shadow:
+        0 4px 20px rgba(2,20,8,.045);
+
+    backdrop-filter: blur(12px);
+}
+
+.gv-admin-topbar-spacer {
+    flex: 1;
+}
+
+.gv-admin-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 9px 15px;
+
+    border:
+        1px solid var(--gv-border);
+
+    border-radius: 11px;
+
+    background: #fff;
+    color: var(--gv-primary-dark);
+
+    font: inherit;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        border-color var(--gv-transition),
+        background var(--gv-transition),
+        transform var(--gv-transition);
+}
+
+.gv-admin-logout:hover {
+    border-color: var(--gv-gold);
+    background: #fffdf8;
+    transform: translateY(-1px);
+}
+
+
+
+
+/* Mobile */
+@media (max-width: 900px) {
+
+    .gv-admin-sidebar {
+        position: relative;
+        inset: auto;
+
+        width: 100%;
+
+        padding: 14px;
+        border-left: 0;
+        border-bottom: 1px solid rgba(200,169,107,.14);
+
+        box-shadow: 0 8px 25px rgba(2,20,8,.07);
+    }
+
+    .gv-admin-sidebar-nav {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 0;
+    }
+
+    .gv-admin-topbar {
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 540px) {
+
+    .gv-admin-sidebar-nav {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   END UNIFIED ADMIN SIDEBAR
+   ============================================================ */
+
+/* ============================================================
+   UNIFIED SIDEBAR — PAGE CONTENT OFFSET
+   ============================================================ */
+
+body.gv-dashboard {
+    padding-inline-end: 250px !important;
+}
+
+body.gv-dashboard .topbar {
+    margin-inline-end: -250px;
+}
+
+body:has(.rv-layout) {
+    padding-inline-end: 250px !important;
+}
+
+body:has(.rv-layout) .rv-sidebar {
+    /* Legacy reservation sidebar remains hidden visually;
+       unified sidebar is now the only admin navigation. */
+    display: none !important;
+}
+
+body:has(.rv-layout) .rv-main {
+    padding-inline: 30px !important;
+}
+
+@media (max-width: 900px) {
+
+    body.gv-dashboard,
+    body:has(.rv-layout) {
+        padding-inline-end: 0 !important;
+    }
+
+    body.gv-dashboard .topbar {
+        margin-inline-end: 0;
+    }
+}
+
+
+/* ============================================================
+   UNIFIED ADMIN NAV — FINAL VISIBILITY FIX
+   ============================================================ */
+
+.gv-admin-sidebar {
+    display: flex !important;
+}
+
+.gv-admin-topbar {
+    display: flex !important;
+}
+
+/* All desktop admin pages reserve the sidebar width. */
+.gv-admin-shell-content {
+    margin-inline-end: 250px !important;
+    min-width: 0;
+}
+
+/* Dashboard has its own body class. */
+body.gv-dashboard {
+    padding-inline-end: 0 !important;
+}
+
+body.gv-dashboard .gv-dashboard-content,
+body.gv-dashboard main {
+    margin-inline-end: 0;
+}
+
+/* Reservations has its old layout; only its old sidebar is suppressed. */
+body:has(.rv-layout) {
+    padding-inline-end: 0 !important;
+}
+
+body:has(.rv-layout) .rv-sidebar {
+    display: none !important;
+}
+
+body:has(.rv-layout) .rv-main {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Topbar spans the content area, while logout stays at visual left. */
+.gv-admin-topbar {
+    min-height: 74px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+
+    .gv-admin-shell-content {
+        margin-inline-end: 0 !important;
+    }
+
+    .gv-admin-sidebar {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+    }
+}
+
+
+/* ============================================================
+   ADMIN LAYOUT — FINAL GEOMETRY
+   ============================================================ */
+
+/* One shared fixed sidebar for all admin pages */
+.gv-admin-sidebar {
+    position: fixed !important;
+    inset-block: 0 !important;
+    inset-inline-end: 0 !important;
+    width: 250px !important;
+    z-index: 900 !important;
+}
+
+/* One shared content column */
+.gv-admin-shell-content {
+    margin-inline-end: 250px !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+/* One shared topbar */
+.gv-admin-topbar {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 74px !important;
+    box-sizing: border-box !important;
+}
+
+/* Dashboard */
+body.gv-dashboard {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.gv-dashboard main.container {
+    max-width: 1500px !important;
+    margin-inline: auto !important;
+}
+
+/* Reservations: legacy grid is no longer the page shell */
+body:has(.rv-layout) {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body:has(.rv-layout) .rv-main {
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 28px 30px !important;
+}
+
+body:has(.rv-layout) .rv-layout {
+    display: block !important;
+    min-height: 0 !important;
+}
+
+/* The old reservation sidebar is no longer used. */
+body:has(.rv-layout) .rv-sidebar {
+    display: none !important;
+}
+
+/* Desktop content width */
+@media (min-width: 901px) {
+
+    .gv-admin-shell-content {
+        min-height: 100vh !important;
+    }
+
+    body.gv-dashboard .container {
+        padding-inline: 30px !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+
+    .gv-admin-sidebar {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 0 !important;
+    }
+
+    body:has(.rv-layout) .rv-main {
+        padding: 20px 16px !important;
+    }
+}
+
+/* ============================================================
+   END ADMIN LAYOUT — FINAL GEOMETRY
+   ============================================================ */
+
+/* ============================================================
+   GREEN VITA — SIDEBAR GEOMETRY / FINAL FIX
+   ============================================================ */
+
+/* Desktop sidebar: always vertical, fixed, right side */
+@media (min-width: 761px) {
+
+    .gv-admin-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        left: auto !important;
+
+        width: 250px !important;
+        height: 100vh !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        box-sizing: border-box !important;
+        padding: 18px 14px !important;
+
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        z-index: 9990 !important;
+    }
+
+    .gv-admin-sidebar-brand {
+        width: 100% !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 10px !important;
+
+        padding: 4px 6px 16px !important;
+        margin: 0 0 15px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-sidebar-brand img {
+        width: 40px !important;
+        height: 40px !important;
+
+        min-width: 40px !important;
+        min-height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+
+        object-fit: contain !important;
+        border-radius: 10px !important;
+    }
+
+    .gv-admin-sidebar-brand strong {
+        font-size: .96rem !important;
+        line-height: 1.35 !important;
+    }
+
+    .gv-admin-sidebar-brand small {
+        font-size: .70rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        width: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        gap: 5px !important;
+    }
+
+    .gv-admin-sidebar-nav a {
+        width: 100% !important;
+        min-height: 42px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 9px !important;
+
+        padding: 9px 10px !important;
+
+        box-sizing: border-box !important;
+
+        border-radius: 11px !important;
+
+        font-size: .86rem !important;
+        line-height: 1.3 !important;
+        font-weight: 750 !important;
+    }
+
+    .gv-admin-sidebar-nav a span:first-child {
+        width: 22px !important;
+        min-width: 22px !important;
+        flex: 0 0 22px !important;
+
+        font-size: 1rem !important;
+        line-height: 1 !important;
+    }
+
+    .gv-admin-sidebar-nav a span:last-child {
+        min-width: 0 !important;
+        white-space: normal !important;
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        min-width: 0 !important;
+    }
+
+    .gv-admin-topbar {
+        min-height: 66px !important;
+
+        padding: 10px 20px !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-logout {
+        min-height: 38px !important;
+
+        padding: 8px 14px !important;
+
+        font-size: .84rem !important;
+        line-height: 1 !important;
+    }
+}
+
+
+/* Mobile: sidebar becomes a compact top navigation */
+@media (max-width: 760px) {
+
+    .gv-admin-sidebar {
+        position: relative !important;
+
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+
+        width: 100% !important;
+        height: auto !important;
+
+        display: block !important;
+
+        padding: 12px !important;
+
+        overflow: visible !important;
+    }
+
+    .gv-admin-sidebar-brand img {
+        width: 38px !important;
+        height: 38px !important;
+
+        min-width: 38px !important;
+        min-height: 38px !important;
+        max-width: 38px !important;
+        max-height: 38px !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    .gv-admin-sidebar-nav a {
+        min-height: 40px !important;
+        font-size: .82rem !important;
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 0 !important;
+    }
+}
+
+/* ============================================================
+   END SIDEBAR GEOMETRY / FINAL FIX
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — FINAL CONTENT / SIDEBAR ALIGNMENT
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /* All shared admin pages reserve the sidebar width */
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        margin-inline-start: 0 !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Visits / generic base pages */
+    .gv-admin-shell-content > main {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Reservations */
+    body:has(.rv-layout) .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    body:has(.rv-layout) .rv-layout {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    body:has(.rv-layout) .rv-main {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Smart Bio */
+    .gv-admin-smart-bio .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    .gv-admin-smart-bio .bio-page {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-shell-content,
+    body:has(.rv-layout) .gv-admin-shell-content,
+    .gv-admin-smart-bio .gv-admin-shell-content {
+        margin-inline-end: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ============================================================
+   END CONTENT / SIDEBAR ALIGNMENT
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — DASHBOARD VISUAL MASTER
+   Make all admin pages visually match Dashboard
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /* ---------- Sidebar ---------- */
+
+    .gv-admin-sidebar {
+        width: 250px !important;
+        height: 100vh !important;
+        box-sizing: border-box !important;
+
+        padding: 18px 14px !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #021408 0%,
+                #03200D 100%
+            ) !important;
+
+        border-left: 1px solid rgba(200,169,107,.16) !important;
+        border-right: 0 !important;
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+
+        box-shadow:
+            -10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-brand {
+        width: 220px !important;
+        height: 61px !important;
+        box-sizing: border-box !important;
+
+        padding: 4px 6px 16px !important;
+        margin: 0 0 15px !important;
+
+        border: 0 !important;
+        border-bottom:
+            1px solid rgba(232,216,183,.15) !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        width: 220px !important;
+        height: auto !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        border: 0 !important;
+    }
+
+    /* ---------- Shared Topbar ---------- */
+
+    .gv-admin-topbar {
+        width: 100% !important;
+        height: 66px !important;
+        min-height: 66px !important;
+
+        box-sizing: border-box !important;
+
+        padding: 10px 20px !important;
+
+        background:
+            var(--gv-sidebar) !important;
+
+        border: 0 !important;
+        border-bottom:
+            1px solid var(--gv-border-soft) !important;
+
+        box-shadow: none !important;
+
+        margin: 0 !important;
+    }
+
+    /*
+       Dashboard's topbar spans the whole viewport.
+       On pages using .gv-admin-shell-content, extend it
+       across the sidebar area so it has the same geometry.
+    */
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: calc(100% + 250px) !important;
+        margin-inline-end: -250px !important;
+    }
+
+    .gv-admin-logout {
+        height: 38px !important;
+        min-height: 38px !important;
+
+        padding: 8px 14px !important;
+
+        border:
+            1px solid rgba(2,47,18,.18) !important;
+
+        border-radius: 11px !important;
+
+        box-shadow:
+            0 7px 18px rgba(2,47,18,.10) !important;
+    }
+
+    /* ---------- Main content ---------- */
+
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content > main {
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ---------- Reservations ---------- */
+
+    body:has(.rv-layout) .rv-main {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+    }
+
+    /* ---------- Smart Bio ---------- */
+
+    .gv-admin-smart-bio .bio-page {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-topbar,
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        margin-inline-end: 0 !important;
+    }
+}
+
+/* ============================================================
+   END DASHBOARD VISUAL MASTER
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — DASHBOARD VISUAL MASTER
+   Make all admin pages visually match Dashboard
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /* ---------- Sidebar ---------- */
+
+    .gv-admin-sidebar {
+        width: 250px !important;
+        height: 100vh !important;
+        box-sizing: border-box !important;
+
+        padding: 18px 14px !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #021408 0%,
+                #03200D 100%
+            ) !important;
+
+        border-left: 1px solid rgba(200,169,107,.16) !important;
+        border-right: 0 !important;
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+
+        box-shadow:
+            -10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-brand {
+        width: 220px !important;
+        height: 61px !important;
+        box-sizing: border-box !important;
+
+        padding: 4px 6px 16px !important;
+        margin: 0 0 15px !important;
+
+        border: 0 !important;
+        border-bottom:
+            1px solid rgba(232,216,183,.15) !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        width: 220px !important;
+        height: auto !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        border: 0 !important;
+    }
+
+    /* ---------- Shared Topbar ---------- */
+
+    .gv-admin-topbar {
+        width: 100% !important;
+        height: 66px !important;
+        min-height: 66px !important;
+
+        box-sizing: border-box !important;
+
+        padding: 10px 20px !important;
+
+        background:
+            var(--gv-sidebar) !important;
+
+        border: 0 !important;
+        border-bottom:
+            1px solid var(--gv-border-soft) !important;
+
+        box-shadow: none !important;
+
+        margin: 0 !important;
+    }
+
+    /*
+       Dashboard's topbar spans the whole viewport.
+       On pages using .gv-admin-shell-content, extend it
+       across the sidebar area so it has the same geometry.
+    */
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: calc(100% + 250px) !important;
+        margin-inline-end: -250px !important;
+    }
+
+    .gv-admin-logout {
+        height: 38px !important;
+        min-height: 38px !important;
+
+        padding: 8px 14px !important;
+
+        border:
+            1px solid rgba(2,47,18,.18) !important;
+
+        border-radius: 11px !important;
+
+        box-shadow:
+            0 7px 18px rgba(2,47,18,.10) !important;
+    }
+
+    /* ---------- Main content ---------- */
+
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content > main {
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ---------- Reservations ---------- */
+
+    body:has(.rv-layout) .rv-main {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+    }
+
+    /* ---------- Smart Bio ---------- */
+
+    .gv-admin-smart-bio .bio-page {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-topbar,
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        margin-inline-end: 0 !important;
+    }
+}
+
+/* ============================================================
+   END DASHBOARD VISUAL MASTER
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — DASHBOARD MASTER VISUAL SYNC
+   Exact shared chrome from Dashboard
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /* =========================
+       SIDEBAR — EXACT DASHBOARD
+       ========================= */
+
+    .gv-admin-sidebar {
+        width: 250px !important;
+        height: 100vh !important;
+
+        padding: 18px 14px !important;
+        box-sizing: border-box !important;
+
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+
+        border-right:
+            1px solid rgba(200,169,107,.16) !important;
+
+        border-left:
+            1px solid rgba(255,255,255,.08) !important;
+
+        box-shadow:
+            -8px 0 30px rgba(0,45,32,.10) !important;
+    }
+
+    .gv-admin-sidebar-brand {
+        width: 220px !important;
+        height: 61px !important;
+
+        padding: 4px 6px 16px !important;
+        margin: 0 0 15px !important;
+
+        border-top: 0 !important;
+        border-right: 0 !important;
+        border-left: 0 !important;
+
+        border-bottom:
+            1px solid rgba(232,216,183,.15) !important;
+
+        box-shadow:
+            10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        width: 220px !important;
+        height: 237px !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        border: 0 !important;
+
+        box-shadow:
+            10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-nav a {
+        min-height: 42px !important;
+
+        padding: 9px 10px !important;
+
+        border-radius: 11px !important;
+
+        border:
+            1px solid transparent !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-sidebar-nav a.active {
+        background: transparent !important;
+
+        border:
+            1px solid rgba(139,197,61,.13) !important;
+
+        box-shadow:
+            inset 3px 0 0 #8BC53D,
+            0 5px 18px rgba(0,0,0,.14) !important;
+    }
+
+    .gv-admin-sidebar-nav a:last-child {
+        margin-top: 7px !important;
+
+        background:
+            rgba(200,169,107,.055) !important;
+
+        border:
+            1px solid rgba(200,169,107,.16) !important;
+
+        box-shadow: none !important;
+    }
+
+    /* =========================
+       TOPBAR — EXACT DASHBOARD
+       ========================= */
+
+    .gv-admin-topbar {
+        height: 66px !important;
+        min-height: 66px !important;
+
+        padding: 10px 20px !important;
+
+        background:
+            rgba(255,255,255,.90) !important;
+
+        border-top: 0 !important;
+        border-right: 0 !important;
+        border-left: 0 !important;
+
+        border-bottom:
+            1px solid #EAF0E6 !important;
+
+        box-shadow:
+            0 4px 20px rgba(2,20,8,.043) !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: calc(100% + 250px) !important;
+        margin-inline-end: -250px !important;
+    }
+
+    .gv-admin-logout {
+        height: 38px !important;
+        min-height: 38px !important;
+
+        padding: 8px 14px !important;
+
+        border:
+            1px solid rgba(2,47,18,.18) !important;
+
+        border-radius: 11px !important;
+
+        box-shadow:
+            0 7px 18px rgba(2,47,18,.10) !important;
+    }
+
+    /* =========================
+       SHARED PAGE SURFACE
+       ========================= */
+
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-topbar,
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        margin-inline-end: 0 !important;
+    }
+}
+
+/* ============================================================
+   END DASHBOARD MASTER VISUAL SYNC
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — DASHBOARD MASTER CHROME
+   Exact shared visual system for ALL admin pages
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /* ================= SIDEBAR ================= */
+
+    .gv-admin-sidebar {
+        position: fixed !important;
+
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: auto !important;
+
+        width: 250px !important;
+        height: 100vh !important;
+
+        padding: 18px 14px !important;
+        box-sizing: border-box !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #021408 0%,
+                #03200D 100%
+            ) !important;
+
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+
+        border-right:
+            1px solid rgba(200,169,107,.16) !important;
+
+        border-left:
+            1px solid rgba(255,255,255,.08) !important;
+
+        box-shadow:
+            -8px 0 30px rgba(0,45,32,.10) !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* ================= BRAND ================= */
+
+    .gv-admin-sidebar-brand {
+        width: 220px !important;
+        height: 61px !important;
+
+        padding: 4px 6px 16px !important;
+        margin: 0 0 15px !important;
+
+        box-sizing: border-box !important;
+
+        border-top: 0 !important;
+        border-right: 0 !important;
+        border-left: 0 !important;
+
+        border-bottom:
+            1px solid rgba(232,216,183,.15) !important;
+
+        box-shadow:
+            10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-brand img {
+        width: 40px !important;
+        height: 40px !important;
+
+        min-width: 40px !important;
+        min-height: 40px !important;
+        max-width: 40px !important;
+        max-height: 40px !important;
+
+        object-fit: contain !important;
+        border-radius: 10px !important;
+    }
+
+    /* ================= NAV ================= */
+
+    .gv-admin-sidebar-nav {
+        width: 220px !important;
+        height: 237px !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+
+        border: 0 !important;
+
+        box-shadow:
+            10px 0 35px rgba(2,20,8,.08) !important;
+    }
+
+    .gv-admin-sidebar-nav a {
+        width: 100% !important;
+        min-height: 42px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 9px !important;
+        padding: 9px 10px !important;
+
+        box-sizing: border-box !important;
+
+        border-radius: 11px !important;
+
+        border:
+            1px solid transparent !important;
+    }
+
+    .gv-admin-sidebar-nav a.active {
+        background: transparent !important;
+
+        border:
+            1px solid rgba(139,197,61,.13) !important;
+
+        box-shadow:
+            inset 3px 0 0 #8BC53D,
+            0 5px 18px rgba(0,0,0,.14) !important;
+    }
+
+    .gv-admin-sidebar-nav a:last-child {
+        margin-top: 7px !important;
+
+        background:
+            rgba(200,169,107,.055) !important;
+
+        border:
+            1px solid rgba(200,169,107,.16) !important;
+
+        box-shadow: none !important;
+    }
+
+    /* ================= TOPBAR ================= */
+
+    .gv-admin-topbar {
+        height: 66px !important;
+        min-height: 66px !important;
+
+        padding: 10px 20px !important;
+
+        box-sizing: border-box !important;
+
+        background:
+            rgba(255,255,255,.90) !important;
+
+        border-top: 0 !important;
+        border-right: 0 !important;
+        border-left: 0 !important;
+
+        border-bottom:
+            1px solid #EAF0E6 !important;
+
+        box-shadow:
+            0 4px 20px rgba(2,20,8,.043) !important;
+
+        margin: 0 !important;
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 250px !important;
+        margin-inline-start: 0 !important;
+
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: calc(100% + 250px) !important;
+        margin-inline-end: -250px !important;
+    }
+
+    /* ================= LOGOUT ================= */
+
+    .gv-admin-logout {
+        height: 38px !important;
+        min-height: 38px !important;
+
+        padding: 8px 14px !important;
+
+        border:
+            1px solid rgba(2,47,18,.18) !important;
+
+        border-radius: 11px !important;
+
+        box-shadow:
+            0 7px 18px rgba(89,136,35,.18) !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-sidebar {
+        position: relative !important;
+
+        width: 100% !important;
+        height: auto !important;
+
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+    }
+
+    .gv-admin-shell-content {
+        margin-inline-end: 0 !important;
+        width: 100% !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        margin-inline-end: 0 !important;
+    }
+}
+
+/* ============================================================
+   END DASHBOARD MASTER CHROME
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — EXACT DASHBOARD SIDEBAR MASTER
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    .gv-admin-sidebar {
+        line-height: normal !important;
+    }
+
+    .gv-admin-sidebar-brand {
+        line-height: normal !important;
+
+        border-right:
+            1px solid rgba(200,169,107,.16) !important;
+    }
+
+    .gv-admin-sidebar-nav {
+        line-height: normal !important;
+
+        border-right:
+            1px solid rgba(200,169,107,.16) !important;
+    }
+
+    .gv-admin-sidebar-nav a {
+        width: 219px !important;
+
+        color:
+            rgba(255,255,255,.72) !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /* Exact Dashboard active-link treatment */
+    .gv-admin-sidebar-nav a.active {
+        width: 219px !important;
+
+        color:
+            #FFFFFF !important;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(139,197,61,.20),
+                rgba(139,197,61,.055)
+            ) !important;
+
+        border:
+            1px solid rgba(139,197,61,.13) !important;
+
+        box-shadow:
+            inset 3px 0 0 rgb(139,197,61),
+            0 5px 18px rgba(0,0,0,.14) !important;
+    }
+
+    /*
+       Do not inherit active styling.
+       Each page activates its own current menu item.
+    */
+    .gv-admin-sidebar-nav a:not(.active) {
+        background: transparent !important;
+
+        border:
+            1px solid transparent !important;
+
+        box-shadow: none !important;
+
+        color:
+            rgba(255,255,255,.72) !important;
+    }
+
+    .gv-admin-sidebar-nav a:last-child {
+        width: 219px !important;
+
+        background:
+            rgba(200,169,107,.055) !important;
+
+        border:
+            1px solid rgba(200,169,107,.16) !important;
+
+        box-shadow: none !important;
+    }
+}
+
+/* ============================================================
+   END EXACT DASHBOARD SIDEBAR MASTER
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — RTL SIDEBAR CONTENT ALIGNMENT
+   Reserve the RIGHT fixed sidebar correctly.
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    /*
+       RTL:
+       inline-start = RIGHT
+       inline-end   = LEFT
+
+       Sidebar is fixed on the RIGHT.
+       Therefore content must reserve 250px on inline-start.
+    */
+
+    .gv-admin-shell-content {
+        margin-inline-start: 250px !important;
+        margin-inline-end: 0 !important;
+
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content > main {
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /*
+       The topbar should visually span the entire viewport,
+       exactly like Dashboard.
+    */
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100vw !important;
+        max-width: none !important;
+
+        margin-inline-start: 0 !important;
+        margin-inline-end: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /*
+       Visits
+       Use the same inner spacing language as Dashboard.
+    */
+    .gv-admin-shell-content > main {
+        padding: 28px 30px 36px !important;
+    }
+
+    /*
+       Reservations
+       Keep its internal controls but prevent overflow
+       beneath the fixed sidebar.
+    */
+    body:has(.rv-layout) .gv-admin-shell-content {
+        margin-inline-start: 250px !important;
+        margin-inline-end: 0 !important;
+    }
+
+    body:has(.rv-layout) .rv-main {
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    /*
+       Smart Bio
+    */
+    .gv-admin-smart-bio .gv-admin-shell-content {
+        margin-inline-start: 250px !important;
+        margin-inline-end: 0 !important;
+    }
+
+    .gv-admin-smart-bio .bio-page {
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-shell-content,
+    body:has(.rv-layout) .gv-admin-shell-content,
+    .gv-admin-smart-bio .gv-admin-shell-content {
+
+        margin-inline-start: 0 !important;
+        margin-inline-end: 0 !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .gv-admin-shell-content > main {
+        padding: 18px 14px !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+    }
+}
+
+/* ============================================================
+   END RTL SIDEBAR CONTENT ALIGNMENT
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — FINAL SHELL GEOMETRY
+   Fixed right sidebar + content occupying remaining viewport
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    .gv-admin-shell-content {
+        position: relative !important;
+
+        /* Sidebar occupies the right 250px */
+        width: calc(100vw - 250px) !important;
+        max-width: calc(100vw - 250px) !important;
+
+        /* Content starts at the left edge */
+        margin: 0 !important;
+
+        box-sizing: border-box !important;
+
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    .gv-admin-shell-content > main {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box !important;
+
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    /*
+       Topbar spans the whole viewport,
+       including the sidebar area.
+    */
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100vw !important;
+        max-width: 100vw !important;
+
+        margin: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    /*
+       Main page content stays inside the 1105px content area.
+    */
+    .gv-admin-shell-content > main {
+        padding: 28px 30px 36px !important;
+    }
+}
+
+@media (max-width: 760px) {
+
+    .gv-admin-shell-content {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin: 0 !important;
+    }
+
+    .gv-admin-shell-content > main {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin: 0 !important;
+
+        padding: 18px 14px !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ============================================================
+   END FINAL SHELL GEOMETRY
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — RTL SHELL LEFT ANCHOR
+   Keep content shell physically anchored to the left.
+   ============================================================ */
+
+@media (min-width: 761px) {
+
+    .gv-admin-shell-content {
+        width: calc(100vw - 250px) !important;
+        max-width: calc(100vw - 250px) !important;
+
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+
+        /* Physical margins are intentional here because the page is RTL. */
+        margin-left: 0 !important;
+        margin-right: auto !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content > main {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .gv-admin-shell-content .gv-admin-topbar {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* ============================================================
+   END RTL SHELL LEFT ANCHOR
+   ============================================================ */
+
+
+/* ============================================================
+   GREEN VITA — UNSCHEDULED VISITS SIDEBAR BADGE
+   ============================================================ */
+
+.gv-admin-sidebar-nav a[href="/visits"] {
+    position: relative !important;
+}
+
+.gv-unscheduled-visits-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 23px !important;
+    height: 23px !important;
+
+    margin-inline-start: auto !important;
+    padding: 0 6px !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 999px !important;
+
+    background:
+        #C94A4A !important;
+
+    border:
+        1px solid rgba(255,255,255,.22) !important;
+
+    color:
+        #FFFFFF !important;
+
+    font-size: .70rem !important;
+    line-height: 1 !important;
+    font-weight: 900 !important;
+
+    box-shadow:
+        0 4px 12px rgba(201,74,74,.24) !important;
+
+    flex: 0 0 auto !important;
+}
+
+.gv-unscheduled-visits-badge[hidden] {
+    display: none !important;
+}
+
+/* Active visits page */
+.gv-admin-sidebar-nav a.active .gv-unscheduled-visits-badge {
+    background:
+        #C94A4A !important;
+
+    color:
+        #FFFFFF !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+    .gv-unscheduled-visits-badge {
+        min-width: 22px !important;
+        height: 22px !important;
+        font-size: .68rem !important;
+    }
+}
+
+/* ============================================================
+   END UNSCHEDULED VISITS SIDEBAR BADGE
+   ============================================================ */
+
+
+/* ============================================================
+   UNSCHEDULED VISITS BADGE — CLEAR PERSIAN DISPLAY
+   ============================================================ */
+
+.gv-admin-sidebar-nav a[href="/visits"] .gv-unscheduled-visits-badge {
+    min-width: 30px !important;
+    height: 30px !important;
+
+    padding: 0 8px !important;
+    margin-inline-start: auto !important;
+
+    border-radius: 999px !important;
+
+    background:
+        #C94A4A !important;
+
+    border:
+        2px solid rgba(255,255,255,.88) !important;
+
+    color:
+        #FFFFFF !important;
+
+    font-family:
+        "Vazirmatn",
+        "Vazir",
+        Tahoma,
+        Arial,
+        sans-serif !important;
+
+    font-size: .82rem !important;
+    font-weight: 900 !important;
+
+    line-height: 1 !important;
+    text-align: center !important;
+
+    box-shadow:
+        0 4px 12px rgba(201,74,74,.30) !important;
+
+    text-shadow:
+        0 1px 1px rgba(0,0,0,.12) !important;
+}
+
+.gv-admin-sidebar-nav a[href="/visits"] .gv-unscheduled-visits-badge[hidden] {
+    display: none !important;
+}
+
+@media (max-width: 760px) {
+    .gv-admin-sidebar-nav a[href="/visits"] .gv-unscheduled-visits-badge {
+        min-width: 28px !important;
+        height: 28px !important;
+        font-size: .78rem !important;
+    }
+}
+
+/* ============================================================
+   END CLEAR PERSIAN BADGE
+   ============================================================ */
+
+/* =========================================================
+   GREEN VITA BOOKING STEPPER — CONNECTOR LINE FIX
+   Only restores the connector visibility.
+   No dimensions / spacing / circle sizing changed.
+   ========================================================= */
+
+.stepper .st::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 15px !important;
+    right: 50% !important;
+    width: 100% !important;
+    height: 2px !important;
+    background: var(--line) !important;
+    z-index: 1 !important;
+}
+
+.stepper .st:first-child::before {
+    display: none !important;
+}
+
+.stepper .st.active::before,
+.stepper .st.done::before {
+    background: var(--gold) !important;
+}
+
+.stepper .st .circle {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+
+/* =========================================================
+   BOOKING STEPPER — FINAL CONNECTOR
+   Draw one stable line between the 4 step circles.
+   Does not alter step sizes, spacing, circles or labels.
+   ========================================================= */
+
+.stepper {
+    position: relative !important;
+}
+
+.stepper::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 15px !important;
+    left: 12.5% !important;
+    right: 12.5% !important;
+    height: 2px !important;
+    background: var(--line) !important;
+    display: block !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.stepper .st::before {
+    display: none !important;
+}
+
+.stepper .st .circle {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+
+/* =========================================================
+   BOOKING STEPPER — PROGRESS LINE
+   Gold completed segments
+   ========================================================= */
+
+.stepper::before {
+    background: var(--line) !important;
+}
+
+/* Stage 1 active: no completed connector yet */
+.stepper:has(.st[data-step="1"].active)::before {
+    background: linear-gradient(
+        to left,
+        var(--line) 0%,
+        var(--line) 100%
+    ) !important;
+}
+
+/* Stage 2 active: 1 → 2 completed */
+.stepper:has(.st[data-step="2"].active)::before {
+    background: linear-gradient(
+        to left,
+        var(--gold) 0%,
+        var(--gold) 33.333%,
+        var(--line) 33.333%,
+        var(--line) 100%
+    ) !important;
+}
+
+/* Stage 3 active: 1 → 2 → 3 completed */
+.stepper:has(.st[data-step="3"].active)::before {
+    background: linear-gradient(
+        to left,
+        var(--gold) 0%,
+        var(--gold) 66.666%,
+        var(--line) 66.666%,
+        var(--line) 100%
+    ) !important;
+}
+
+/* Stage 4 active: all connectors completed */
+.stepper:has(.st[data-step="4"].active)::before {
+    background: var(--gold) !important;
+}
+

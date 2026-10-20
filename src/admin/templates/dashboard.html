@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
 
-        
-    
-    
+
+
+
     <link rel="manifest" href="/static/site.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,15 +19,39 @@
     <link rel="stylesheet" href="/static/css/admin.css">
     <link rel="stylesheet" href="/static/css/dashboard-redesign.css">
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
     <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
 <!-- GV_PWA_INSTALL_STYLE_V1 -->
 <style>
-.gv-dashboard-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+
+.gv-push-btn {
+    border: 1px solid rgba(200, 169, 107, .55);
+    border-radius: 14px;
+    padding: 12px 18px;
+    background: #022F12;
+    color: #E8D8B7;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(2, 20, 8, .16);
+    transition: .2s ease;
+}
+
+.gv-push-btn:hover {
+    background: #021408;
+    border-color: #C8A96B;
+    transform: translateY(-1px);
+}
+
+.gv-push-btn:disabled {
+    opacity: .65;
+    cursor: default;
+    transform: none;
+}
+
+.gv-push-btn[hidden] {
+    display: none !important;
 }
 
 .gv-install-btn {
@@ -58,6 +82,7 @@
     }
 
     .gv-dashboard-actions .primary-link,
+    .gv-push-btn,
     .gv-install-btn {
         width: 100%;
         box-sizing: border-box;
@@ -65,873 +90,1275 @@
     }
 }
 </style>
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
+    
+    
+    
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<style id="GV_DASHBOARD_COMMAND_CENTER_CSS">
+/* =========================================================
+   GREEN VITA DAILY COMMAND CENTER
+   ========================================================= */
+
+.gv-dashboard .gv-admin-topbar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 66px;
+    box-sizing: border-box;
+    z-index: 30;
+}
+
+.gv-dashboard .gv-command-main {
+    max-width: 1380px;
+    margin: 28px 16px 50px;
+    padding: 0 14px 40px;
+    box-sizing: border-box;
+}
+
+.gv-command-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 28px 30px;
+    margin-bottom: 18px;
+    background: #fff;
+    border: 1px solid rgba(139,197,61,.18);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(2,20,8,.07);
+}
+
+.gv-command-hero h1 {
+    margin: 0 0 7px;
+    font-size: 1.7rem;
+}
+
+.gv-command-hero p {
+    margin: 0;
+    opacity: .68;
+}
+
+.gv-command-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.gv-command-btn {
+    appearance: none;
+    border: 1px solid rgba(2,47,18,.14);
+    background: #fff;
+    color: #021408;
+    border-radius: 12px;
+    padding: 10px 15px;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.gv-command-btn.primary {
+    background: #8BC53D;
+    color: #021408;
+    border-color: #8BC53D;
+}
+
+.gv-command-btn:hover {
+    transform: translateY(-1px);
+}
+
+.gv-command-alert {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 15px 18px;
+    margin-bottom: 18px;
+    border-radius: 16px;
+    background: #fff8ed;
+    border: 1px solid rgba(200,169,107,.35);
+    color: #5d481f;
+    box-shadow: 0 8px 22px rgba(2,20,8,.05);
+}
+
+.gv-command-alert.show {
+    display: flex;
+}
+
+.gv-command-alert strong {
+    font-size: 1rem;
+}
+
+.gv-command-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.gv-command-stat {
+    background: #fff;
+    border: 1px solid #DCE6D7;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(2,20,8,.05);
+}
+
+.gv-command-stat .label {
+    display: block;
+    font-size: .84rem;
+    opacity: .65;
+    margin-bottom: 8px;
+}
+
+.gv-command-stat strong {
+    font-size: 1.9rem;
+    line-height: 1;
+}
+
+.gv-command-stat small {
+    display: block;
+    margin-top: 8px;
+    opacity: .58;
+}
+
+.gv-command-panel {
+    background: #fff;
+    border: 1px solid #DCE6D7;
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(2,20,8,.055);
+}
+
+.gv-command-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.gv-command-panel-head h2 {
+    margin: 0;
+    font-size: 1.12rem;
+}
+
+.gv-command-panel-head p {
+    margin: 5px 0 0;
+    opacity: .63;
+    font-size: .86rem;
+}
+
+.gv-command-today {
+    border: 1px solid rgba(139,197,61,.26);
+    background: linear-gradient(
+        135deg,
+        rgba(139,197,61,.10),
+        rgba(200,169,107,.07)
+    );
+}
+
+.gv-day-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gv-day-title .day-number {
+    min-width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #021408;
+    color: #fff;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.gv-events-list {
+    display: grid;
+    gap: 10px;
+}
+
+.gv-event-card {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 15px;
+    background: #fff;
+    border: 1px solid #E5EBE1;
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.gv-event-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(139,197,61,.45);
+    box-shadow: 0 8px 24px rgba(2,20,8,.07);
+}
+
+.gv-event-time {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #022F12;
+}
+
+.gv-event-main strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.gv-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    font-size: .78rem;
+    opacity: .68;
+}
+
+.gv-event-status {
+    justify-self: end;
+    white-space: nowrap;
+    padding: 6px 9px;
+    border-radius: 99px;
+    background: #F7FAF2;
+    font-size: .76rem;
+    font-weight: 800;
+}
+
+.gv-week-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.gv-week-toolbar-title {
+    font-weight: 900;
+}
+
+.gv-week-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.gv-week-btn {
+    border: 1px solid #DCE6D7;
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px 11px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.gv-week-btn:hover {
+    background: #F7FAF2;
+}
+
+.gv-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.gv-week-day {
+    min-height: 138px;
+    padding: 12px;
+    background: #F7FAF2;
+    border: 1px solid #E4ECDD;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: .16s ease;
+}
+
+.gv-week-day:hover {
+    transform: translateY(-1px);
+    border-color: rgba(139,197,61,.45);
+}
+
+.gv-week-day.today {
+    border-color: #8BC53D;
+    box-shadow: inset 0 0 0 1px rgba(139,197,61,.22);
+}
+
+.gv-week-day.selected {
+    background: #E4F0CC;
+    border-color: #8BC53D;
+}
+
+.gv-week-day-name {
+    font-size: .76rem;
+    opacity: .65;
+    margin-bottom: 4px;
+}
+
+.gv-week-day-date {
+    font-weight: 900;
+    margin-bottom: 9px;
+}
+
+.gv-week-count {
+    display: inline-flex;
+    min-width: 26px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 7px;
+    border-radius: 99px;
+    background: #021408;
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 900;
+}
+
+.gv-week-names {
+    display: grid;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.gv-week-event-mini {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: .72rem;
+    opacity: .72;
+}
+
+.gv-command-overview {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.gv-command-overview-card {
+    padding: 16px;
+    border-radius: 15px;
+    background: #F7FAF2;
+    border: 1px solid #E4ECDD;
+}
+
+.gv-command-overview-card strong {
+    display: block;
+    font-size: 1.35rem;
+    margin-top: 5px;
+}
+
+.gv-command-empty {
+    padding: 22px;
+    text-align: center;
+    opacity: .55;
+    border: 1px dashed #D8E1D4;
+    border-radius: 15px;
+}
+
+@media (min-width: 761px) {
+    .gv-dashboard .gv-admin-topbar {
+        width: calc(100vw - 250px);
+        margin-right: 250px;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 760px) {
+    .gv-dashboard .gv-admin-topbar {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        min-height: 58px !important;
+        display: flex !important;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .gv-dashboard .gv-admin-sidebar {
+        display: none;
+    }
+
+    .gv-dashboard .gv-command-main {
+        margin: 14px 10px 35px;
+        padding: 0 2px 25px;
+    }
+
+    .gv-command-hero {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .gv-command-hero h1 {
+        font-size: 1.35rem;
+    }
+
+    .gv-command-actions {
+        width: 100%;
+    }
+
+    .gv-command-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .gv-command-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .gv-command-panel {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .gv-event-card {
+        grid-template-columns: 62px minmax(0, 1fr);
+    }
+
+    .gv-event-status {
+        display: none;
+    }
+
+    .gv-week-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 5px;
+        scroll-snap-type: x mandatory;
+    }
+
+    .gv-week-day {
+        flex: 0 0 116px;
+        scroll-snap-align: start;
+        min-height: 128px;
+    }
+
+    .gv-command-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .gv-command-alert {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 430px) {
+    .gv-command-summary {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .gv-command-stat {
+        padding: 14px;
+    }
+
+    .gv-command-stat strong {
+        font-size: 1.55rem;
+    }
+
+    .gv-command-hero {
+        margin-bottom: 12px;
+    }
+
+    .gv-week-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+</style><style id="GV_DASHBOARD_WEEKLY_HIDE_TOOLBAR_ONLY">
+/* فقط در داشبورد؛ تقویم اصلی /reservations دست‌نخورده است */
+#gv-dashboard-weekly-real > .rv-toolbar {
+    display: none !important;
+}
+</style>
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
 </head>
-<body class="gv-dashboard">
-<header class="topbar">
-    <div class="brand">
-        <img src="/static/logo.png" alt="Green Vita">
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+
+
+
+
+<main class="container gv-command-main">
+
+    <section class="gv-command-hero">
+
         <div>
-            <strong>Green Vita</strong>
-            <span>پنل مدیریت</span>
-        </div>
-    </div>
-    <form method="post" action="/logout">
-        <button class="logout">خروج</button>
-    </form>
-</header>
-
-<!-- GV_ADMIN_SIDEBAR_V1 -->
-<aside class="gv-sidebar">
-    <div class="gv-sidebar-brand">
-        <img src="/static/logo.png" alt="Green Vita">
-        <div>
-            <strong>Green Vita</strong>
-            <small>پنل مدیریت</small>
-        </div>
-    </div>
-
-    <nav class="gv-sidebar-nav">
-        <a href="/dashboard/" class="active">🏠 داشبورد</a>
-        <a href="/visits" class="gv-visits-nav-link">
-    📅 درخواست‌های ویزیت
-    <span id="gv-pending-visits-badge" class="gv-pending-badge" hidden>0</span>
-</a>
-        <a href="/calendar">🗓 تقویم و زمان‌بندی ویزیت‌ها</a>
-        <a href="/contactus/">🔗 Smart Bio</a>
-    </nav>
-
-    <form method="post" action="/logout" class="gv-sidebar-logout">
-        <button type="submit">↪ خروج</button>
-    </form>
-</aside>
-<!-- /GV_ADMIN_SIDEBAR_V1 -->
-
-<main class="container">
-    <section class="hero">
-        <div>
+            <span class="gv-eyebrow">مرکز فرمان روزانه</span>
             <h1>سلام 👋</h1>
-            <p>مدیریت هوشمند کلینیک گیاهپزشکی گرین ویتا</p>
+            <p id="gv-command-today-label">
+                وضعیت امروز در حال بارگذاری است…
+            </p>
         </div>
-        <div class="gv-dashboard-actions">
-            <a class="primary-link" href="/reservations">مدیریت رزروها ←</a>
-            <button type="button" id="gv-enable-push" class="gv-push-btn" hidden>🔔 فعال‌سازی اعلان‌های پنل</button>
-    <button type="button" id="gv-install-app" class="gv-install-btn" hidden>
-                📱 افزودن پنل به صفحه اصلی
-            </button>
+
+        <div class="gv-command-actions">
+            <a class="gv-command-btn primary" href="/reservations">
+                🗓 تقویم رزروها
+            </a>
+
+            <button
+                type="button"
+                id="gv-enable-push"
+                class="gv-push-btn"
+                hidden
+            >🔔 فعال‌سازی اعلان‌های پنل</button>
+
+            <button
+                type="button"
+                id="gv-install-app"
+                class="gv-install-btn"
+                hidden
+            >📱 افزودن پنل به صفحه اصلی</button>
+
         </div>
+
     </section>
 
-    <section class="gv-dashboard-calendar-card" id="dashboard-calendar">
 
-        <div class="gv-dashboard-calendar-head">
-            <div>
-                <h2>مرکز مدیریت رزروها</h2>
-                <p>تمام رزروها و برنامه ویزیت‌ها را از یکجا مدیریت کنید.</p>
-            </div>
+    <section class="gv-command-summary">
 
-            <a href="/reservations" class="primary-link">
-                ورود به مدیریت رزروها ←
-            </a>
+        <div class="gv-command-stat">
+            <span class="label">📅 برنامه امروز</span>
+            <strong id="gv-command-today-count">۰</strong>
+            <small>ویزیت و رزرو</small>
         </div>
 
-        <div class="gv-dashboard-calendar-toolbar">
-            <button type="button" id="dashboard-calendar-prev">‹</button>
-
-            <strong id="dashboard-calendar-title">—</strong>
-
-            <button type="button" id="dashboard-calendar-next">›</button>
+        <div class="gv-command-stat">
+            <span class="label">🔔 درخواست‌های جدید</span>
+            <strong id="gv-command-new-count">۰</strong>
+            <small>بازنشده</small>
         </div>
 
-        <div class="gv-dashboard-weekdays">
-            <span>ش</span>
-            <span>ی</span>
-            <span>د</span>
-            <span>س</span>
-            <span>چ</span>
-            <span>پ</span>
-            <span>ج</span>
+        <div class="gv-command-stat">
+            <span class="label">✅ زمان‌بندی‌شده</span>
+            <strong id="gv-command-scheduled-count">۰</strong>
+            <small>در محدوده هفته</small>
         </div>
+
+    </section>
+
+            </section>
+
+        </section>
+
+<section id="daysGrid" class="rv-days"></section>
+
+        
+
+    </main>
+</div>
+
+    </div>
+
 
         <div
-            class="gv-dashboard-calendar-grid"
-            id="dashboard-calendar-grid"
+            id="gv-command-week-view"
+            hidden
+            style="width:100%;"
         >
-            <div class="gv-calendar-loading">
-                در حال بارگذاری...
-            </div>
+            
         </div>
-
-    </section>
-
-
-
-    <section class="smart-bio-analytics" id="smart-bio-analytics">
-
-        <div class="smart-bio-head">
-            <div>
-                <h2>📊 آمار Smart Bio</h2>
-                <p>آمار کلیک روی لینک‌های ارتباطی گرین ویتا</p>
-            </div>
-
-            <a href="/" target="_blank" rel="noopener" class="primary-link">
-                مشاهده صفحه عمومی ←
-            </a>
-        </div>
-
-
-        <div class="smart-bio-periods">
-
-            <div class="smart-bio-period">
-                <span>۲۴ ساعت اخیر</span>
-                <strong>{{ smart_bio.last_24h }}</strong>
-            </div>
-
-            <div class="smart-bio-period">
-                <span>۷ روز اخیر</span>
-                <strong>{{ smart_bio.last_7d }}</strong>
-            </div>
-
-        </div>
-
-        <div class="smart-bio-total">
-            <span>کل کلیک‌ها</span>
-            <strong>{{ smart_bio.total }}</strong>
-        </div>
-
-        {% if smart_bio.top_channel %}
-        <div class="smart-bio-top-channel">
-            <span>🏆 پربازده‌ترین کانال</span>
-
-            <strong>
-                {% if smart_bio.top_channel.channel == "telegram" %}
-                    ✈️ تلگرام
-                {% elif smart_bio.top_channel.channel == "instagram" %}
-                    ◎ اینستاگرام
-                {% elif smart_bio.top_channel.channel == "whatsapp" %}
-                    ◉ واتساپ
-                {% elif smart_bio.top_channel.channel == "bale" %}
-                    ➤ بله
-                {% else %}
-                    {{ smart_bio.top_channel.channel }}
-                {% endif %}
-            </strong>
-
-            <small>
-                {{ smart_bio.top_channel.count }}
-                کلیک ·
-                {{ smart_bio.top_channel.percentage }}٪
-            </small>
-        </div>
-        {% endif %}
-
-        <div class="smart-bio-channel-stats">
-
-            <h3>عملکرد کانال‌ها</h3>
-
-            {% for item in smart_bio.channel_stats %}
-
-            <div class="smart-bio-channel-stat">
-
-                <div class="smart-bio-channel-stat-head">
-
-                    <span>
-                        {% if item.channel == "telegram" %}
-                            ✈️ تلگرام
-                        {% elif item.channel == "instagram" %}
-                            ◎ اینستاگرام
-                        {% elif item.channel == "whatsapp" %}
-                            ◉ واتساپ
-                        {% elif item.channel == "bale" %}
-                            ➤ بله
-                        {% else %}
-                            {{ item.channel }}
-                        {% endif %}
-                    </span>
-
-                    <strong>
-                        {{ item.count }}
-                        <small>({{ item.percentage }}٪)</small>
-                    </strong>
-
-                </div>
-
-                <div class="smart-bio-progress">
-                    <span style="width: {{ item.percentage }}%;"></span>
-                </div>
-
-            </div>
-
-            {% endfor %}
-
-        </div>
-
-        <div class="smart-bio-channels">
-
-            <div class="smart-bio-channel">
-                <span class="smart-bio-channel-icon">✈️</span>
-                <div>
-                    <strong>تلگرام</strong>
-                    <small>/go/telegram</small>
-                </div>
-                <b>{{ smart_bio.channels.get("telegram", 0) }}</b>
-            </div>
-
-            <div class="smart-bio-channel">
-                <span class="smart-bio-channel-icon">◎</span>
-                <div>
-                    <strong>اینستاگرام</strong>
-                    <small>/go/instagram</small>
-                </div>
-                <b>{{ smart_bio.channels.get("instagram", 0) }}</b>
-            </div>
-
-            <div class="smart-bio-channel">
-                <span class="smart-bio-channel-icon">◉</span>
-                <div>
-                    <strong>واتساپ</strong>
-                    <small>/go/whatsapp</small>
-                </div>
-                <b>{{ smart_bio.channels.get("whatsapp", 0) }}</b>
-            </div>
-
-            <div class="smart-bio-channel">
-                <span class="smart-bio-channel-icon">➤</span>
-                <div>
-                    <strong>پیام‌رسان بله</strong>
-                    <small>/go/bale</small>
-                </div>
-                <b>{{ smart_bio.channels.get("bale", 0) }}</b>
-            </div>
-
-        </div>
-
-        {% if smart_bio.recent %}
-        <div class="smart-bio-recent">
-
-            <h3>آخرین کلیک‌ها</h3>
-
-            <div class="smart-bio-recent-list">
-
-                {% for click in smart_bio.recent %}
-                <div class="smart-bio-recent-row">
-
-                    <span class="smart-bio-recent-channel">
-                        {% if click.channel == "telegram" %}
-                            ✈️ تلگرام
-                        {% elif click.channel == "instagram" %}
-                            ◎ اینستاگرام
-                        {% elif click.channel == "whatsapp" %}
-                            ◉ واتساپ
-                        {% elif click.channel == "bale" %}
-                            ➤ بله
-                        {% else %}
-                            {{ click.channel }}
-                        {% endif %}
-                    </span>
-
-                    <span class="smart-bio-recent-path">
-                        {{ click.source_path or "—" }}
-                    </span>
-
-                    <time datetime="{{ click.created_at.isoformat() }}">
-                        {{ click.created_at.strftime("%Y-%m-%d %H:%M") if click.created_at else "—" }}
-                    </time>
-
-                </div>
-                {% endfor %}
-
-            </div>
-
-        </div>
-        {% else %}
-        <div class="smart-bio-empty">
-            هنوز کلیکی ثبت نشده است.
-        </div>
-        {% endif %}
 
     </section>
 
     
-<!-- GV_ADMIN_OVERVIEW_V1 -->
-<section class="gv-admin-overview" id="gv-admin-overview">
 
-    <div class="gv-overview-head">
-        <div>
-            <span class="gv-eyebrow">مرکز کنترل کلینیک</span>
-            <h2>داشبورد مدیریتی</h2>
-            <p>وضعیت امروز، درخواست‌های ویزیت و فعالیت کلینیک در یک نگاه</p>
-        </div>
+    <section class="gv-command-panel">
 
-        <button
-            type="button"
-            class="gv-overview-refresh"
-            id="gv-overview-refresh"
-        >
-            ↻ بروزرسانی
-        </button>
-    </div>
-
-    <div class="gv-overview-grid">
-
-        <div class="gv-overview-card gv-card-primary">
-            <div class="gv-card-icon">📞</div>
+        <div class="gv-command-panel-head">
             <div>
-                <span>درخواست‌های در انتظار</span>
-                <strong id="gv-overview-pending">—</strong>
+                <h2>📌 نمای کلی کارها</h2>
+                <p>خلاصه‌ای برای تصمیم‌گیری سریع</p>
             </div>
-            <a href="/visits">مشاهده ←</a>
         </div>
 
-        <div class="gv-overview-card">
-            <div class="gv-card-icon">📅</div>
-            <div>
-                <span>برنامه امروز</span>
-                <strong id="gv-overview-today">—</strong>
+        <div class="gv-command-overview">
+
+            <div class="gv-command-overview-card">
+                <span>امروز</span>
+                <strong id="gv-command-overview-today">۰</strong>
             </div>
-            <a href="/calendar">تقویم ←</a>
-        </div>
 
-        <div class="gv-overview-card">
-            <div class="gv-card-icon">✅</div>
-            <div>
-                <span>ویزیت‌های زمان‌بندی‌شده</span>
-                <strong id="gv-overview-scheduled">—</strong>
+            <div class="gv-command-overview-card">
+                <span>درخواست‌های جدید</span>
+                <strong id="gv-command-overview-new">۰</strong>
             </div>
-            <a href="/reservations">رزروها ←</a>
-        </div>
 
-        <div class="gv-overview-card">
-            <div class="gv-card-icon">🔗</div>
-            <div>
-                <span>کلیک‌های Smart Bio در ۷ روز</span>
-                <strong id="gv-overview-smartbio">—</strong>
+            <div class="gv-command-overview-card">
+                <strong id="gv-command-overview-week">۰</strong>
             </div>
-            <a href="/contactus/">Smart Bio ←</a>
+
         </div>
 
-    </div>
-
-    <div class="gv-overview-bottom">
-
-        <div class="gv-overview-mini">
-            <span>👥 کاربران</span>
-            <strong id="gv-total-users">—</strong>
-        </div>
-
-        <div class="gv-overview-mini">
-            <span>🌱 پرونده گیاه</span>
-            <strong id="gv-total-plants">—</strong>
-        </div>
-
-        <div class="gv-overview-mini">
-            <span>🩺 تشخیص‌ها</span>
-            <strong id="gv-total-diagnoses">—</strong>
-        </div>
-
-        <div class="gv-overview-mini">
-            <span>🔍 شناسایی‌ها</span>
-            <strong id="gv-total-identifications">—</strong>
-        </div>
-
-        <div class="gv-overview-mini">
-            <span>📞 کل درخواست ویزیت</span>
-            <strong id="gv-total-visits">—</strong>
-        </div>
-
-    </div>
-
-</section>
-<!-- /GV_ADMIN_OVERVIEW_V1 -->
-
-<section class="stats">
-        <div class="stat-card"><span>👥 کاربران</span><strong>{{ stats.users }}</strong></div>
-        <div class="stat-card"><span>🌱 پرونده گیاه</span><strong>{{ stats.plants }}</strong></div>
-        <div class="stat-card"><span>🩺 تشخیص‌ها</span><strong>{{ stats.diagnoses }}</strong></div>
-        <div class="stat-card"><span>🔍 شناسایی‌ها</span><strong>{{ stats.identifications }}</strong></div>
-        <div class="stat-card highlight"><span>📞 درخواست ویزیت</span><strong>{{ stats.visits }}</strong></div>
     </section>
+
 </main>
 
-
-<script>
-/* GV_ADMIN_OVERVIEW_JS_V1 */
+<script id="GV_DASHBOARD_COMMAND_CENTER_V1">
 (function () {
     "use strict";
 
     const $ = (id) => document.getElementById(id);
 
-    async function loadOverview() {
-        const refresh = $("gv-overview-refresh");
+    let weekStart = null;
+    let state = {
+        days: [],
+        selectedDate: null,
+        today: null,
+    };
 
-        if (refresh) {
-            refresh.disabled = true;
-            refresh.textContent = "در حال بروزرسانی…";
+    const faWeekdays = [
+        "شنبه",
+        "یکشنبه",
+        "دوشنبه",
+        "سه‌شنبه",
+        "چهارشنبه",
+        "پنجشنبه",
+        "جمعه",
+    ];
+
+    function pad(value) {
+        return String(value).padStart(2, "0");
+    }
+
+    function isoDate(date) {
+        return [
+            date.getFullYear(),
+            pad(date.getMonth() + 1),
+            pad(date.getDate()),
+        ].join("-");
+    }
+
+    function parseDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        return new Date(year, month - 1, day);
+    }
+
+    function startOfPersianWeek(date) {
+        const d = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+        );
+
+        // JS: Sunday=0 ... Saturday=6
+        const daysSinceSaturday = (d.getDay() + 1) % 7;
+
+        d.setDate(d.getDate() - daysSinceSaturday);
+        return d;
+    }
+
+    function addDays(date, amount) {
+        const d = new Date(date);
+        d.setDate(d.getDate() + amount);
+        return d;
+    }
+
+    function formatPersianDate(value, options) {
+        const date = parseDate(value);
+        const parts = new Intl.DateTimeFormat(
+            "fa-IR-u-ca-persian",
+            options || {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            }
+        ).formatToParts(date);
+
+        const get = (type) =>
+            parts.find(part => part.type === type)?.value?.trim() || "";
+
+        const weekday = get("weekday");
+        const day = get("day");
+        const month = get("month");
+        const year = get("year");
+
+        return `${weekday}، ${day} ${month} ${year}`;
+    }
+
+    function formatShortPersianDate(value) {
+        return new Intl.DateTimeFormat(
+            "fa-IR-u-ca-persian",
+            {
+                month: "long",
+                day: "numeric",
+            }
+        ).format(parseDate(value));
+    }
+
+    function formatTime(value) {
+        const date = new Date(value);
+        return [
+            pad(date.getHours()),
+            pad(date.getMinutes()),
+        ].join(":");
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function eventHref(event) {
+        if (event.type === "booking") {
+            return "/reservations?booking_id=" +
+                encodeURIComponent(event.id);
         }
 
-        try {
-            const response = await fetch("/api/overview", {
+        if (
+            event.type === "visit" &&
+            event.diagnosis_id
+        ) {
+            return "/visits/" +
+                encodeURIComponent(event.diagnosis_id);
+        }
+
+        if (event.type === "visit") {
+            return "/visits";
+        }
+
+        return "/visits";
+    }
+
+    function eventLabel(event) {
+        if (event.type === "booking") {
+            return "🌐 رزرو سایت";
+        }
+
+        return event.source_label || "🩺 ویزیت";
+    }
+
+    function statusLabel(status) {
+        const labels = {
+            pending: "در انتظار",
+            reviewing: "در حال بررسی",
+            scheduled: "زمان‌بندی‌شده",
+            confirmed: "تأییدشده",
+            in_progress: "در حال انجام",
+            completed: "انجام‌شده",
+            cancelled: "لغوشده",
+        };
+
+        return labels[status] || status || "—";
+    }
+
+    async function fetchWeek(startDate) {
+        const response = await fetch(
+            "/dashboard/api/reservations/overview" +
+            "?start_date=" +
+            encodeURIComponent(isoDate(startDate)) +
+            "&days=7",
+            {
                 credentials: "same-origin",
+                cache: "no-store",
                 headers: {
-                    "Accept": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("overview request failed");
+                    "Accept": "application/json",
+                },
             }
+        );
 
-            const data = await response.json();
+        if (!response.ok) {
+            throw new Error("dashboard_overview_failed");
+        }
 
-            $("gv-overview-pending").textContent =
-                data.visits.pending ?? 0;
+        return await response.json();
+    }
 
-            $("gv-overview-today").textContent =
-                data.today.total ?? 0;
+    async function fetchNewCount() {
+        const response = await fetch(
+            "/dashboard/api/unscheduled-visits-count",
+            {
+                credentials: "same-origin",
+                cache: "no-store",
+                headers: {
+                    "Accept": "application/json",
+                },
+            }
+        );
 
-            $("gv-overview-scheduled").textContent =
-                data.visits.scheduled ?? 0;
+        if (!response.ok) {
+            throw new Error("new_count_failed");
+        }
 
-            $("gv-overview-smartbio").textContent =
-                data.smart_bio.last_7d ?? 0;
+        const data = await response.json();
+        return Math.max(0, Number(data.count || 0));
+    }
 
-            $("gv-total-users").textContent =
-                data.totals.users ?? 0;
+    function renderHeader(data) {
+        const today = parseDate(data.today);
 
-            $("gv-total-plants").textContent =
-                data.totals.plants ?? 0;
+        $("gv-command-today-label").textContent =
+            formatPersianDate(data.today);
 
-            $("gv-total-diagnoses").textContent =
-                data.totals.diagnoses ?? 0;
+    }
 
-            $("gv-total-identifications").textContent =
-                data.totals.identifications ?? 0;
+    function renderToday(data) {
+        const todayKey = data.today;
 
-            $("gv-total-visits").textContent =
-                data.totals.visits ?? 0;
+        const day = state.days.find(
+            item => item.date === todayKey
+        ) || {
+            date: todayKey,
+            events: [],
+        };
+
+        const events = day.events || [];
+
+        $("gv-command-selected-title").textContent =
+            formatPersianDate(todayKey);
+
+        $("gv-command-today-count").textContent =
+            new Intl.NumberFormat("fa-IR").format(events.length);
+
+        const root = $("gv-command-today-events");
+
+        if (!events.length) {
+            root.innerHTML =
+                '<div class="gv-command-empty">' +
+                'امروز ویزیت یا رزروی ثبت نشده است.' +
+                '</div>';
+            return;
+        }
+
+        root.innerHTML = events.map(event => `
+            <a
+                class="gv-event-card"
+                href="${eventHref(event)}"
+            >
+                <div class="gv-event-time">
+                    ${escapeHtml(formatTime(event.start_at))}
+                </div>
+
+                <div class="gv-event-main">
+                    <strong>${escapeHtml(event.name)}</strong>
+
+                    <div class="gv-event-meta">
+                        <span>${escapeHtml(eventLabel(event))}</span>
+                        ${
+                            event.phone
+                                ? `<span>${escapeHtml(event.phone)}</span>`
+                                : ""
+                        }
+                        ${
+                            event.tracking_code
+                                ? `<span>${escapeHtml(event.tracking_code)}</span>`
+                                : ""
+                        }
+                    </div>
+                </div>
+
+                <div class="gv-event-status">
+                    ${escapeHtml(statusLabel(event.status))}
+                </div>
+            </a>
+        `).join("");
+    }
+
+    function renderWeek(data) {
+        const root = $("gv-command-week-grid");
+
+        state.days = data.days || [];
+
+        $("gv-command-week-title").textContent =
+            formatShortPersianDate(data.start_date) +
+            " تا " +
+            formatShortPersianDate(data.end_date);
+
+        let totalWeekEvents = 0;
+        let scheduledCount = 0;
+
+        root.innerHTML = state.days.map(day => {
+            const events = day.events || [];
+
+            totalWeekEvents += events.length;
+
+            scheduledCount += events.filter(event =>
+                [
+                    "scheduled",
+                    "confirmed",
+                    "in_progress",
+                ].includes(event.status)
+            ).length;
+
+            const selected =
+                day.date === state.selectedDate
+                    ? "selected"
+                    : "";
+
+            const today =
+                day.date === data.today
+                    ? "today"
+                    : "";
+
+            return `
+                <div
+                    class="gv-week-day ${today} ${selected}"
+                    data-week-date="${escapeHtml(day.date)}"
+                >
+                    <div class="gv-week-day-name">
+                        ${escapeHtml(
+                            formatPersianDate(day.date, {
+                                weekday: "long"
+                            })
+                        )}
+                    </div>
+
+                    <div class="gv-week-day-date">
+                        ${escapeHtml(formatShortPersianDate(day.date))}
+                    </div>
+
+                    <span class="gv-week-count">
+                        ${Number(events.length).toLocaleString("fa-IR")}
+                    </span>
+
+                    <div class="gv-week-names">
+                        ${
+                            events.slice(0, 3).map(event => `
+                                <div class="gv-week-event-mini">
+                                    ${escapeHtml(formatTime(event.start_at))}
+                                    ·
+                                    ${escapeHtml(event.name)}
+                                </div>
+                            `).join("")
+                        }
+
+                        ${
+                            events.length > 3
+                                ? `<div class="gv-week-event-mini">
+                                    + ${events.length - 3} مورد دیگر
+                                   </div>`
+                                : ""
+                        }
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        $("gv-command-week-count").textContent =
+            Number(totalWeekEvents).toLocaleString("fa-IR");
+
+        $("gv-command-scheduled-count").textContent =
+            Number(scheduledCount).toLocaleString("fa-IR");
+
+        root.querySelectorAll("[data-week-date]")
+            .forEach(node => {
+                node.addEventListener("click", () => {
+                    state.selectedDate =
+                        node.dataset.weekDate;
+
+                    renderWeek({
+                        ...data,
+                    });
+
+                        });
+            });
+    }
+
+    function renderSelectedDay() {
+        const day = state.days.find(
+            item => item.date === state.selectedDate
+        );
+
+        if (!day) return;
+
+        const root = $("gv-command-today-events");
+        const events = day.events || [];
+
+        $("gv-command-selected-title").textContent =
+            formatPersianDate(day.date);
+
+        if (day.date === state.today) {
+            $("gv-command-today-number").textContent =
+                new Intl.NumberFormat("fa-IR").format(
+                    parseDate(day.date).getDate()
+                );
+        } else {
+            $("gv-command-today-number").textContent =
+                new Intl.NumberFormat("fa-IR").format(
+                    parseDate(day.date).getDate()
+                );
+        }
+
+        $("gv-command-today-count").textContent =
+            Number(events.length).toLocaleString("fa-IR");
+
+        if (!events.length) {
+            root.innerHTML =
+                '<div class="gv-command-empty">' +
+                'برای این روز ویزیت یا رزروی ثبت نشده است.' +
+                '</div>';
+            return;
+        }
+
+        root.innerHTML = events.map(event => `
+            <a
+                class="gv-event-card"
+                href="${eventHref(event)}"
+            >
+                <div class="gv-event-time">
+                    ${escapeHtml(formatTime(event.start_at))}
+                </div>
+
+                <div class="gv-event-main">
+                    <strong>${escapeHtml(event.name)}</strong>
+
+                    <div class="gv-event-meta">
+                        <span>${escapeHtml(eventLabel(event))}</span>
+                        ${
+                            event.phone
+                                ? `<span>${escapeHtml(event.phone)}</span>`
+                                : ""
+                        }
+                        ${
+                            event.tracking_code
+                                ? `<span>${escapeHtml(event.tracking_code)}</span>`
+                                : ""
+                        }
+                    </div>
+                </div>
+
+                <div class="gv-event-status">
+                    ${escapeHtml(statusLabel(event.status))}
+                </div>
+            </a>
+        `).join("");
+    }
+
+    function renderOverview(data, newCount) {
+        const days = Array.isArray(data.days) ? data.days : [];
+
+        const todayKey = data.today;
+
+        const todayDay =
+            days.find(day => day.date === todayKey) || {
+                date: todayKey,
+                events: [],
+            };
+
+        const todayCount =
+            Array.isArray(todayDay.events)
+                ? todayDay.events.length
+                : 0;
+
+        const weekCount = days.reduce(
+            (sum, day) =>
+                sum + (
+                    Array.isArray(day.events)
+                        ? day.events.length
+                        : 0
+                ),
+            0
+        );
+
+        const scheduled = days.reduce(
+            (sum, day) =>
+                sum + (
+                    Array.isArray(day.events)
+                        ? day.events.filter(event =>
+                            [
+                                "scheduled",
+                                "confirmed",
+                                "in_progress",
+                            ].includes(event.status)
+                        ).length
+                        : 0
+                ),
+            0
+        );
+
+        const todayCountEl =
+            document.getElementById("gv-command-today-count");
+
+        const newCountEl =
+            document.getElementById("gv-command-new-count");
+
+        const scheduledCountEl =
+            document.getElementById("gv-command-scheduled-count");
+
+        const weekCountEl =
+            document.getElementById("gv-command-week-count");
+
+        const overviewTodayEl =
+            document.getElementById("gv-command-overview-today");
+
+        const overviewNewEl =
+            document.getElementById("gv-command-overview-new");
+
+        const overviewWeekEl =
+            document.getElementById("gv-command-overview-week");
+
+        if (todayCountEl) {
+            todayCountEl.textContent =
+                Number(todayCount).toLocaleString("fa-IR");
+        }
+
+        if (newCountEl) {
+            newCountEl.textContent =
+                Number(newCount).toLocaleString("fa-IR");
+        }
+
+        if (scheduledCountEl) {
+            scheduledCountEl.textContent =
+                Number(scheduled).toLocaleString("fa-IR");
+        }
+
+        if (weekCountEl) {
+            weekCountEl.textContent =
+                Number(weekCount).toLocaleString("fa-IR");
+        }
+
+        if (overviewTodayEl) {
+            overviewTodayEl.textContent =
+                Number(todayCount).toLocaleString("fa-IR");
+        }
+
+        if (overviewNewEl) {
+            overviewNewEl.textContent =
+                Number(newCount).toLocaleString("fa-IR");
+        }
+
+        if (overviewWeekEl) {
+            overviewWeekEl.textContent =
+                Number(weekCount).toLocaleString("fa-IR");
+        }
+    }
+
+    function renderAlert(newCount) {
+        const box = $("gv-command-alert");
+        const text = $("gv-command-alert-text");
+
+        if (newCount > 0) {
+            text.textContent =
+                "🔔 " +
+                Number(newCount).toLocaleString("fa-IR") +
+                " درخواست ویزیت جدید و بازنشده دارید.";
+
+            box.classList.add("show");
+        } else {
+            box.classList.remove("show");
+            text.textContent = "";
+        }
+    }
+
+    async function load() {
+        try {
+            weekStart = startOfPersianWeek(new Date());
+
+            const [data, newCount] = await Promise.all([
+                fetchWeek(weekStart),
+                fetchNewCount(),
+            ]);
+
+            state.today = data.today;
+            state.selectedDate = data.today;
+
+            renderHeader(data);
+            renderOverview(data, newCount);
+            renderAlert(newCount);
 
         } catch (error) {
-            console.error("Green Vita overview:", error);
-        } finally {
-            if (refresh) {
-                refresh.disabled = false;
-                refresh.textContent = "↻ بروزرسانی";
-            }
-        }
-    }
-
-    $("gv-overview-refresh")?.addEventListener(
-        "click",
-        loadOverview
-    );
-
-    loadOverview();
-
-    // خودکار هر 60 ثانیه
-    setInterval(loadOverview, 60000);
-})();
-</script>
-
-<script>
-/* GV_DASHBOARD_JALALI_CALENDAR_V1 */
-(function () {
-    "use strict";
-
-    const MONTHS = [
-        "فروردین", "اردیبهشت", "خرداد",
-        "تیر", "مرداد", "شهریور",
-        "مهر", "آبان", "آذر",
-        "دی", "بهمن", "اسفند"
-    ];
-
-    function g2j(gy, gm, gd) {
-        const gdm = [
-            0,31,59,90,120,151,
-            181,212,243,273,304,334
-        ];
-
-        let gy2 = gm > 2 ? gy + 1 : gy;
-
-        let days =
-            355666 +
-            365 * gy +
-            Math.floor((gy2 + 3) / 4) -
-            Math.floor((gy2 + 99) / 100) +
-            Math.floor((gy2 + 399) / 400) +
-            gd +
-            gdm[gm - 1];
-
-        let jy =
-            -1595 +
-            33 * Math.floor(days / 12053);
-
-        days %= 12053;
-
-        jy +=
-            4 * Math.floor(days / 1461);
-
-        days %= 1461;
-
-        if (days > 365) {
-            jy +=
-                Math.floor((days - 1) / 365);
-
-            days =
-                (days - 1) % 365;
-        }
-
-        const jm =
-            days < 186
-                ? 1 + Math.floor(days / 31)
-                : 7 + Math.floor((days - 186) / 30);
-
-        const jd =
-            1 +
-            (
-                days < 186
-                    ? days % 31
-                    : (days - 186) % 30
+            console.error(
+                "Green Vita command center:",
+                error
             );
 
-        return [jy, jm, jd];
+            $("gv-command-today-events").innerHTML =
+                '<div class="gv-command-empty">' +
+                'خطا در دریافت برنامه امروز.' +
+                '</div>';
+        }
     }
 
-    function j2g(jy, jm, jd) {
-        jy += 1595;
-
-        let days =
-            -355668 +
-            365 * jy +
-            Math.floor(jy / 33) * 8 +
-            Math.floor(((jy % 33) + 3) / 4) +
-            jd;
-
-        if (jm < 7) {
-            days += (jm - 1) * 31;
-        } else {
-            days += (jm - 7) * 30 + 186;
+    async function moveWeek(offset) {
+        if (!weekStart) {
+            weekStart = startOfPersianWeek(new Date());
         }
 
-        let gy =
-            400 * Math.floor(days / 146097);
-
-        days %= 146097;
-
-        if (days > 36524) {
-            gy +=
-                100 * Math.floor(--days / 36524);
-
-            days %= 36524;
-
-            if (days >= 365) {
-                days++;
-            }
-        }
-
-        gy +=
-            4 * Math.floor(days / 1461);
-
-        days %= 1461;
-
-        if (days > 365) {
-            gy +=
-                Math.floor((days - 1) / 365);
-
-            days =
-                (days - 1) % 365;
-        }
-
-        let gd = days + 1;
-
-        const sal = [
-            0,
-            31,
-            ((gy % 4 === 0 && gy % 100 !== 0) ||
-             gy % 400 === 0) ? 29 : 28,
-            31,30,31,30,31,31,30,31,30,31
-        ];
-
-        let gm = 1;
-
-        while (gm <= 12 && gd > sal[gm]) {
-            gd -= sal[gm];
-            gm++;
-        }
-
-        return [gy, gm, gd];
-    }
-
-    function monthLength(jy, jm) {
-        if (jm <= 6) return 31;
-        if (jm <= 11) return 30;
-
-        const [gy, gm, gd] =
-            j2g(jy, 12, 1);
-
-        const d =
-            new Date(
-                gy,
-                gm - 1,
-                gd + 30
-            );
-
-        const [ny, nm] =
-            g2j(
-                d.getFullYear(),
-                d.getMonth() + 1,
-                d.getDate()
-            );
-
-        return ny === jy && nm === 12 ? 30 : 29;
-    }
-
-    function weekday(jy, jm, jd) {
-        const [gy, gm, gd] =
-            j2g(jy, jm, jd);
-
-        return (
-            new Date(
-                gy,
-                gm - 1,
-                gd
-            ).getDay() + 1
-        ) % 7;
-    }
-
-    function nowJalali() {
-        const d = new Date();
-
-        return g2j(
-            d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate()
-        );
-    }
-
-    function pnum(value) {
-        return String(value).replace(
-            /\d/g,
-            d => "۰۱۲۳۴۵۶۷۸۹"[d]
-        );
-    }
-
-    function addMonth(state, delta) {
-        let [jy, jm] = state;
-
-        jm += delta;
-
-        if (jm > 12) {
-            jm = 1;
-            jy++;
-        }
-
-        if (jm < 1) {
-            jm = 12;
-            jy--;
-        }
-
-        return [jy, jm];
-    }
-
-    let today = nowJalali();
-
-    let state = [
-        today[0],
-        today[1]
-    ];
-
-    const title =
-        document.getElementById(
-            "dashboard-calendar-title"
+        weekStart = addDays(
+            weekStart,
+            offset * 7
         );
 
-    const grid =
-        document.getElementById(
-            "dashboard-calendar-grid"
-        );
+        try {
+            const [data, newCount] = await Promise.all([
+                fetchWeek(weekStart),
+                fetchNewCount(),
+            ]);
 
-    function render() {
-        title.textContent =
-            `${MONTHS[state[1] - 1]} ${pnum(state[0])}`;
-
-        grid.innerHTML = "";
-
-        const first =
-            weekday(
-                state[0],
-                state[1],
-                1
-            );
-
-        for (let i = 0; i < first; i++) {
-            const empty =
-                document.createElement("span");
-
-            empty.className =
-                "gv-dashboard-calendar-empty";
-
-            grid.appendChild(empty);
-        }
-
-        const length =
-            monthLength(
-                state[0],
-                state[1]
-            );
-
-        for (let day = 1; day <= length; day++) {
-            const button =
-                document.createElement("a");
-
-            const gregorian =
-                j2g(
-                    state[0],
-                    state[1],
-                    day
-                );
-
-            button.href =
-                `/calendar?date=${gregorian[0]}-${String(gregorian[1]).padStart(2, "0")}-${String(gregorian[2]).padStart(2, "0")}`;
-
-            button.className =
-                "gv-dashboard-calendar-day";
+            state.today = data.today;
 
             if (
-                today[0] === state[0] &&
-                today[1] === state[1] &&
-                today[2] === day
+                !state.selectedDate ||
+                !data.days.some(
+                    day => day.date === state.selectedDate
+                )
             ) {
-                button.classList.add("is-today");
+                state.selectedDate = data.start_date;
             }
 
-            button.textContent =
-                pnum(day);
+            renderHeader(data);
+            renderOverview(data, newCount);
+            renderAlert(newCount);
 
-            grid.appendChild(button);
-        }
-    }
-
-    document
-        .getElementById(
-            "dashboard-calendar-prev"
-        )
-        .addEventListener(
-            "click",
-            () => {
-                state =
-                    addMonth(
-                        state,
-                        -1
-                    );
-
-                render();
-            }
-        );
-
-    document
-        .getElementById(
-            "dashboard-calendar-next"
-        )
-        .addEventListener(
-            "click",
-            () => {
-                state =
-                    addMonth(
-                        state,
-                        1
-                    );
-
-                render();
-            }
-        );
-
-    render();
-
-})();
-</script>
-
-
-<style>
-.gv-visits-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.gv-pending-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 22px;
-    height: 22px;
-    padding: 0 6px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 800;
-    line-height: 1;
-    background: #dc2626;
-    color: #fff;
-    box-sizing: border-box;
-}
-
-.gv-pending-badge[hidden] {
-    display: none !important;
-}
-</style>
-
-<script>
-(function () {
-    const badge = document.getElementById("gv-pending-visits-badge");
-
-    if (!badge) {
-        return;
-    }
-
-    async function updatePendingVisitsBadge() {
-        try {
-            const response = await fetch("/dashboard/api/badge-count", {
-                credentials: "same-origin",
-                cache: "no-store"
-            });
-
-            if (!response.ok) {
-                return;
-            }
-
-            const data = await response.json();
-            const count = Number(data.count || 0);
-
-            if ("setAppBadge" in navigator) {
-                if (count > 0) {
-                    await navigator.setAppBadge(count);
-                } else if ("clearAppBadge" in navigator) {
-                    await navigator.clearAppBadge();
-                }
-            }
-
-            if (count > 0) {
-                badge.textContent = count > 99 ? "99+" : String(count);
-                badge.hidden = false;
-            } else {
-                badge.textContent = "0";
-                badge.hidden = true;
-            }
         } catch (error) {
-            console.warn("Pending visits badge update failed:", error);
+            console.error(
+                "Green Vita week navigation:",
+                error
+            );
         }
     }
 
-    updatePendingVisitsBadge();
-    setInterval(updatePendingVisitsBadge, 15000);
+    $("gv-command-week-prev")
+        ?.addEventListener(
+            "click",
+            () => moveWeek(-1)
+        );
+
+    $("gv-command-week-next")
+        ?.addEventListener(
+            "click",
+            () => moveWeek(1)
+        );
+
+    $("gv-command-week-today")
+        ?.addEventListener(
+            "click",
+            () => {
+                weekStart =
+                    startOfPersianWeek(new Date());
+
+                state.selectedDate = null;
+
+                moveWeek(0);
+            }
+        );
+
+    load();
+
+    setInterval(load, 30000);
+
 })();
 </script>
-
-
-
-
-
 
 <script>
 if ("serviceWorker" in navigator) {
@@ -1018,36 +1445,6 @@ if ("serviceWorker" in navigator) {
 </script>
 
 
-<script id="GV_BADGE_SYNC_V1">
-(function () {
-  if (!("setAppBadge" in navigator)) return;
-
-  async function syncBadge() {
-    try {
-      const r = await fetch("/dashboard/api/badge-count", {
-        cache: "no-store",
-        credentials: "same-origin"
-      });
-
-      if (!r.ok) return;
-
-      const data = await r.json();
-      const count = Number(data.count || 0);
-
-      if (count > 0) {
-        await navigator.setAppBadge(count);
-      } else if ("clearAppBadge" in navigator) {
-        await navigator.clearAppBadge();
-      }
-    } catch (e) {
-      console.warn("Badge sync failed:", e);
-    }
-  }
-
-  syncBadge();
-  setInterval(syncBadge, 10000);
-})();
-</script>
 
 <script id="GV_PWA_PUSH_CLIENT_V1">
 (function () {
@@ -1162,7 +1559,5 @@ if ("serviceWorker" in navigator) {
     }
   };
 })();
-</script>
-
-</body>
+</script></body>
 </html>

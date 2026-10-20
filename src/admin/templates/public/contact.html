@@ -1,284 +1,122 @@
 {% extends "public/base.html" %}
 
-{% block title %}تماس با ما | Green Vita{% endblock %}
+{% block title %}تماس با کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+
+{% block meta_description %}راه‌های ارتباط با کلینیک گیاه پزشکی گرین ویتا؛ ارتباط از طریق تلگرام، اینستاگرام، واتساپ و پیام‌رسان بله، دریافت راهنمایی و رزرو ویزیت.{% endblock %}
+
+{% block og_title %}تماس با کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+{% block og_description %}راه‌های ارتباط با گرین ویتا برای دریافت راهنمایی، ارسال عکس گیاه و استفاده از خدمات تخصصی گیاه پزشکی.{% endblock %}
+{% block twitter_title %}تماس با کلینیک گیاه پزشکی گرین ویتا | Green Vita{% endblock %}
+{% block twitter_description %}راه‌های ارتباط با گرین ویتا از طریق تلگرام، اینستاگرام، واتساپ و بله.{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://greenvitaclinic.ir/contact/#webpage",
+  "url": "https://greenvitaclinic.ir/contact/",
+  "name": "تماس با کلینیک گیاه پزشکی گرین ویتا",
+  "description": "راه‌های ارتباط با کلینیک گیاه پزشکی گرین ویتا.",
+  "inLanguage": "fa-IR",
+  "about": {
+    "@id": "https://greenvitaclinic.ir/#business"
+  }
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/public-pages.css?v=20261012-contact-logo85">
+{% endblock %}
 
 {% block content %}
-
-<section class="page">
+<section class="gv-inner-page">
     <div class="container">
 
-        <div class="page-card contact-page">
+        <div class="gv-inner-card gv-contact-main" style="max-width:920px;margin:0 auto;">
 
-            <div style="text-align:center;margin-bottom:28px;">
-                <div
-                    style="
-                        width:110px;
-                        height:110px;
-                        margin:0 auto 18px;
-                        border-radius:28px;
-                        display:grid;
-                        place-items:center;
-                        background:#fff;
-                        padding:14px;
-                        box-shadow:0 14px 35px rgba(35,79,47,.12);
-                        border:1px solid rgba(47,107,63,.08);
-                    "
-                >
-                    <img
-                        src="/static/logo.png"
-                        alt="Green Vita"
-                        style="width:100%;height:100%;object-fit:contain;"
-                    >
+            <div class="gv-contact-brand">
+                <div class="gv-contact-logo">
+                    <img src="/static/logo-v4.webp" alt="Green Vita">
                 </div>
 
-                <span class="eyebrow">
-                    🌱 ارتباط با Green Vita
-                </span>
+                <span class="gv-inner-eyebrow">CONTACT GREEN VITA</span>
 
-                <h1 style="margin-bottom:10px;">
-                    Green Vita
-                </h1>
+                <h1>راه‌های ارتباط با گرین ویتا</h1>
 
-                <p style="
-                    font-size:21px;
-                    font-weight:800;
-                    color:#234f2f;
-                    margin:0 0 8px;
-                ">
-                    کلینیک گیاه پزشکی گرین ویتا
-                </p>
-
-                <p style="margin:0;">
-                    تشخیص، درمان و نگهداری تخصصی گیاهان آپارتمانی
+                <p>
+                    برای دریافت راهنمایی، ارسال عکس گیاه یا استفاده از خدمات تخصصی
+                    از یکی از مسیرهای ارتباطی زیر استفاده کنید.
                 </p>
             </div>
 
+            <div class="gv-contact-grid">
 
-            <div
-                style="
-                    display:grid;
-                    grid-template-columns:repeat(2,minmax(0,1fr));
-                    gap:16px;
-                    margin-top:30px;
-                "
-                class="contact-links"
-            >
-
-                <a
-                    href="/go/telegram"
-                    style="
-                        display:flex;
-                        align-items:center;
-                        gap:16px;
-                        padding:20px;
-                        border-radius:20px;
-                        background:#eef5ef;
-                        border:1px solid rgba(47,107,63,.1);
-                        transition:.2s;
-                    "
-                >
-                    <span style="width:52px;height:52px;flex:none;border-radius:16px;display:grid;place-items:center;background:#2f6b3f;padding:12px;"><img src="/static/icons/telegram.svg" alt="تلگرام" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);"></span>
-
+                <a href="/go/telegram" class="gv-contact-card">
+                    <span class="gv-contact-icon" style="display: flex !important; align-items: center !important; justify-content: center !important; box-sizing: border-box !important; width: 52px !important; height: 52px !important; min-width: 52px !important; min-height: 52px !important; flex: 0 0 52px !important; padding: 10px !important; margin: 0 !important; overflow: hidden !important; position: relative !important; line-height: 0 !important">
+                        <img src="/static/icons/telegram.svg" alt="تلگرام" style="display: block !important; box-sizing: border-box !important; width: 30px !important; height: 30px !important; min-width: 0 !important; max-width: 30px !important; max-height: 30px !important; object-fit: contain !important; object-position: center !important; flex: 0 0 30px !important; margin: 0 !important; padding: 0 !important; transform: none !important; position: static !important">
+                    </span>
                     <span>
-                        <strong
-                            style="
-                                display:block;
-                                color:#234f2f;
-                                margin-bottom:5px;
-                                font-size:17px;
-                            "
-                        >
-                            تلگرام
-                        </strong>
-
-                        <span style="color:#667268;font-size:14px;">
-                            دستیار هوشمند کلینیک گیاه پزشکی گرین ویتا
-                        </span>
+                        <strong>تلگرام</strong>
+                        <span>دستیار هوشمند کلینیک گیاه پزشکی گرین ویتا</span>
                     </span>
-
-                    <span style="margin-right:auto;color:#2f6b3f;font-size:20px;">
-                        ←
-                    </span>
+                    <span class="gv-contact-arrow">←</span>
                 </a>
 
-
-                <a
-                    href="/go/instagram"
-                    style="
-                        display:flex;
-                        align-items:center;
-                        gap:16px;
-                        padding:20px;
-                        border-radius:20px;
-                        background:#eef5ef;
-                        border:1px solid rgba(47,107,63,.1);
-                        transition:.2s;
-                    "
-                >
-                    <span style="width:52px;height:52px;flex:none;border-radius:16px;display:grid;place-items:center;background:#2f6b3f;padding:12px;"><img src="/static/icons/instagram.svg" alt="اینستاگرام" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);"></span>
-
+                <a href="/go/instagram" class="gv-contact-card">
+                    <span class="gv-contact-icon" style="display: flex !important; align-items: center !important; justify-content: center !important; box-sizing: border-box !important; width: 52px !important; height: 52px !important; min-width: 52px !important; min-height: 52px !important; flex: 0 0 52px !important; padding: 10px !important; margin: 0 !important; overflow: hidden !important; position: relative !important; line-height: 0 !important">
+                        <img src="/static/icons/instagram.svg" alt="اینستاگرام" style="display: block !important; box-sizing: border-box !important; width: 30px !important; height: 30px !important; min-width: 0 !important; max-width: 30px !important; max-height: 30px !important; object-fit: contain !important; object-position: center !important; flex: 0 0 30px !important; margin: 0 !important; padding: 0 !important; transform: none !important; position: static !important">
+                    </span>
                     <span>
-                        <strong
-                            style="
-                                display:block;
-                                color:#234f2f;
-                                margin-bottom:5px;
-                                font-size:17px;
-                            "
-                        >
-                            اینستاگرام
-                        </strong>
-
-                        <span style="color:#667268;font-size:14px;">
-                            آموزش و محتوای گیاه پزشکی
-                        </span>
+                        <strong>اینستاگرام</strong>
+                        <span>آموزش و محتوای گیاه پزشکی</span>
                     </span>
-
-                    <span style="margin-right:auto;color:#2f6b3f;font-size:20px;">
-                        ←
-                    </span>
+                    <span class="gv-contact-arrow">←</span>
                 </a>
 
-
-                <a
-                    href="/go/whatsapp"
-                    style="
-                        display:flex;
-                        align-items:center;
-                        gap:16px;
-                        padding:20px;
-                        border-radius:20px;
-                        background:#eef5ef;
-                        border:1px solid rgba(47,107,63,.1);
-                        transition:.2s;
-                    "
-                >
-                    <span style="width:52px;height:52px;flex:none;border-radius:16px;display:grid;place-items:center;background:#2f6b3f;padding:12px;"><img src="/static/icons/whatsapp.svg" alt="واتساپ" style="width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1);"></span>
-
+                <a href="/go/whatsapp" class="gv-contact-card">
+                    <span class="gv-contact-icon" style="display: flex !important; align-items: center !important; justify-content: center !important; box-sizing: border-box !important; width: 52px !important; height: 52px !important; min-width: 52px !important; min-height: 52px !important; flex: 0 0 52px !important; padding: 10px !important; margin: 0 !important; overflow: hidden !important; position: relative !important; line-height: 0 !important">
+                        <img src="/static/icons/whatsapp.svg" alt="واتساپ" style="display: block !important; box-sizing: border-box !important; width: 30px !important; height: 30px !important; min-width: 0 !important; max-width: 30px !important; max-height: 30px !important; object-fit: contain !important; object-position: center !important; flex: 0 0 30px !important; margin: 0 !important; padding: 0 !important; transform: none !important; position: static !important">
+                    </span>
                     <span>
-                        <strong
-                            style="
-                                display:block;
-                                color:#234f2f;
-                                margin-bottom:5px;
-                                font-size:17px;
-                            "
-                        >
-                            واتساپ
-                        </strong>
-
-                        <span style="color:#667268;font-size:14px;">
-                            ارسال عکس و مشاوره رایگان
-                        </span>
+                        <strong>واتساپ</strong>
+                        <span>ارسال عکس و مشاوره رایگان</span>
                     </span>
-
-                    <span style="margin-right:auto;color:#2f6b3f;font-size:20px;">
-                        ←
-                    </span>
+                    <span class="gv-contact-arrow">←</span>
                 </a>
 
-
-                <a
-                    href="/go/bale"
-                    style="
-                        display:flex;
-                        align-items:center;
-                        gap:16px;
-                        padding:20px;
-                        border-radius:20px;
-                        background:#eef5ef;
-                        border:1px solid rgba(47,107,63,.1);
-                        transition:.2s;
-                    "
-                >
-                    <span style="width:52px;height:52px;flex:none;border-radius:16px;display:grid;place-items:center;background:#2f6b3f;padding:10px;"><img src="/static/icons/bale.png?v=4" alt="پیام‌رسان بله" style="width:100%;height:100%;object-fit:contain;"></span>
-
+                <a href="/go/bale" class="gv-contact-card">
+                    <span class="gv-contact-icon" style="display: flex !important; align-items: center !important; justify-content: center !important; box-sizing: border-box !important; width: 52px !important; height: 52px !important; min-width: 52px !important; min-height: 52px !important; flex: 0 0 52px !important; padding: 10px !important; margin: 0 !important; overflow: hidden !important; position: relative !important; line-height: 0 !important">
+                        <img src="/static/icons/bale.png?v=4" alt="پیام‌رسان بله" style="display: block !important; box-sizing: border-box !important; width: 30px !important; height: 30px !important; min-width: 0 !important; max-width: 30px !important; max-height: 30px !important; object-fit: contain !important; object-position: center !important; flex: 0 0 30px !important; margin: 0 !important; padding: 0 !important; transform: none !important; position: static !important">
+                    </span>
                     <span>
-                        <strong
-                            style="
-                                display:block;
-                                color:#234f2f;
-                                margin-bottom:5px;
-                                font-size:17px;
-                            "
-                        >
-                            پیام‌رسان بله
-                        </strong>
-
-                        <span style="color:#667268;font-size:14px;">
-                            آموزش و محتوای گیاه پزشکی
-                        </span>
+                        <strong>پیام‌رسان بله</strong>
+                        <span>آموزش و محتوای گیاه پزشکی</span>
                     </span>
-
-                    <span style="margin-right:auto;color:#2f6b3f;font-size:20px;">
-                        ←
-                    </span>
+                    <span class="gv-contact-arrow">←</span>
                 </a>
 
             </div>
 
-
-            <div
-                style="
-                    margin-top:28px;
-                    padding:24px;
-                    text-align:center;
-                    border-radius:22px;
-                    background:linear-gradient(135deg,#234f2f,#2f6b3f);
-                    color:white;
-                    box-shadow:0 15px 35px rgba(35,79,47,.16);
-                "
-            >
-                <div style="font-size:28px;margin-bottom:8px;">
-                    <img src="/static/logo.png" alt="" style="width:42px;height:42px;object-fit:contain;margin:auto;">
+            <div class="gv-emergency">
+                <div class="gv-emergency-mark">
+                    <img src="/static/logo-v4.webp" alt="">
                 </div>
 
-                <strong style="
-                    display:block;
-                    font-size:23px;
-                    margin-bottom:7px;
-                ">
-                    اورژانس گیاهان آپارتمانی
-                </strong>
-
-                <span style="
-                    opacity:.84;
-                    font-size:14px;
-                ">
+                <strong>اورژانس گیاهان آپارتمانی</strong>
+                <span>
                     برای دریافت راهنمایی و خدمات تخصصی با ما در ارتباط باشید.
                 </span>
             </div>
 
-
-            <div
-                style="
-                    display:flex;
-                    justify-content:center;
-                    gap:12px;
-                    flex-wrap:wrap;
-                    margin-top:30px;
-                "
-            >
-                <a href="/booking/" class="btn btn-primary">
-                    رزرو آنلاین
-                </a>
-
-                <a href="/booking/track/" class="btn btn-secondary">
-                    پیگیری رزرو
-                </a>
+            <div class="gv-inner-actions" style="justify-content:center;">
+                <a href="/booking/" class="gv-inner-primary gv-booking-live-cta">رزرو آنلاین</a>
+                <a href="/booking/track/" class="gv-inner-secondary">پیگیری رزرو</a>
             </div>
 
         </div>
 
     </div>
 </section>
-
-<style>
-@media (max-width: 700px) {
-    .contact-links {
-        grid-template-columns:1fr !important;
-    }
-}
-</style>
-
 {% endblock %}

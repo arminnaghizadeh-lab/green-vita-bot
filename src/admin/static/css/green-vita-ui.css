@@ -3501,9 +3501,9 @@ html body .site-header .menu a.cta {
 /* FINAL — FLOATING CONTACT POSITION */
 .gv-contact-float-wrap{
   position:fixed !important;
-  left:26px !important;
+  left:36px !important;
   right:auto !important;
-  bottom:26px !important;
+  bottom:36px !important;
   top:auto !important;
   width:58px !important;
   height:58px !important;
@@ -3538,9 +3538,9 @@ html body .site-header .menu a.cta {
 
 @media (max-width:620px){
   .gv-contact-float-wrap{
-    left:16px !important;
+    left:28px !important;
     right:auto !important;
-    bottom:16px !important;
+    bottom:28px !important;
     width:54px !important;
     height:54px !important;
   }
@@ -5257,3 +5257,303 @@ body:has(input[placeholder*="GV-ABC12345"]) .gv-track-brand * {
   width: 100%;
 }
 
+
+
+/* =========================================================
+   TESTIMONIALS — EQUAL HEIGHT CARDS
+   ========================================================= */
+
+.gv-testimonials-grid {
+  display: grid !important;
+  align-items: stretch !important;
+}
+
+.gv-testimonial-card {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.gv-testimonial-card p {
+  flex: 1 1 auto !important;
+  margin-bottom: 22px !important;
+}
+
+.gv-testimonial-card strong {
+  display: block !important;
+  margin-top: auto !important;
+  transform: none !important;
+}
+
+
+
+/* =========================================================
+   TESTIMONIALS — MORE REVIEWS CONTROL
+   ========================================================= */
+
+.gv-extra-review {
+  display: none !important;
+}
+
+.gv-extra-review.show {
+  display: flex !important;
+  animation: gvMoreReviewIn .4s ease both;
+}
+
+.gv-more-reviews-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.gv-more-reviews-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.gv-more-reviews-indicator span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(2,47,18,.18);
+  transition: all .25s ease;
+}
+
+.gv-more-reviews-indicator span.active {
+  width: 22px;
+  border-radius: 999px;
+  background: #8BC53D;
+}
+
+.gv-more-reviews-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 110px;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid rgba(2,47,18,.12);
+  border-radius: 999px;
+  background: #fff;
+  color: #022F12;
+  box-shadow: 0 8px 24px rgba(2,47,18,.08);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.gv-more-reviews-btn b {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes gvMoreReviewIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* TESTIMONIALS — MORE CONTROL FIX */
+
+.gv-extra-review {
+    display: none !important;
+}
+
+.gv-extra-review.show {
+    display: flex !important;
+    animation: gvReviewReveal .45s ease both;
+    animation-delay: var(--review-delay, 0ms);
+}
+
+.gv-more-reviews-block {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-top: 28px !important;
+}
+
+.gv-more-reviews-indicator {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+}
+
+.gv-more-reviews-indicator span {
+    display: block !important;
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background: rgba(2,47,18,.18) !important;
+    transition: all .25s ease !important;
+}
+
+.gv-more-reviews-indicator span.active {
+    width: 22px !important;
+    border-radius: 999px !important;
+    background: #8BC53D !important;
+}
+
+.gv-more-reviews-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    min-width: 110px !important;
+    height: 40px !important;
+    padding: 0 18px !important;
+    border: 1px solid rgba(2,47,18,.12) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #022F12 !important;
+    box-shadow: 0 8px 24px rgba(2,47,18,.08) !important;
+    font-family: inherit !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+}
+
+.gv-more-reviews-btn b {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+@keyframes gvReviewReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* =========================================================
+   TESTIMONIALS — NO-JS OPEN/CLOSE
+   ========================================================= */
+
+.gv-home-testimonials .gv-extra-review {
+    display: none !important;
+}
+
+.gv-home-testimonials.gv-reviews-open .gv-extra-review {
+    display: flex !important;
+    animation: gvReviewReveal .42s ease both;
+}
+
+.gv-home-testimonials.gv-reviews-open
+.gv-more-reviews-indicator span:first-child {
+    width: 7px !important;
+    background: rgba(2,47,18,.18) !important;
+}
+
+.gv-home-testimonials.gv-reviews-open
+.gv-more-reviews-indicator span:last-child {
+    width: 22px !important;
+    background: #8BC53D !important;
+}
+
+.gv-home-testimonials.gv-reviews-open
+.gv-more-reviews-btn b {
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
+@keyframes gvReviewReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+/* ===== FINAL CHAT AVATAR ===== */
+.gv-chat-avatar {
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+  background-color: #fff !important;
+}
+
+.gv-chat-avatar img {
+  width: 90% !important;
+  height: 90% !important;
+  max-width: 90% !important;
+  max-height: 90% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* cache marker */
+/* chat-avatar-final-20260926 */
+
+
+/* ===== SEO HOME H1 ===== */
+.gv-services-heading .gv-seo-main-title {
+  margin: 0 0 12px !important;
+  color: inherit !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  font-size: clamp(24px, 3vw, 36px) !important;
+}
+
+/* GV-SERVICE-HEADING-DYNAMIC-FINAL-START */
+@keyframes gvServiceHintGreenFlowFinal {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+html body p.gv-services-select-hint {
+  color: #022F12 !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(
+    100deg,
+    #022F12 0%,
+    #064D2A 30%,
+    #176D3B 50%,
+    #064D2A 70%,
+    #022F12 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-position: 0% 50%;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gvServiceHintGreenFlowFinal 5s ease-in-out infinite !important;
+  transition: filter .3s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body p.gv-services-select-hint {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+}
+/* GV-SERVICE-HEADING-DYNAMIC-FINAL-END */

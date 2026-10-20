@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   AnimatePresence,
@@ -12,17 +12,37 @@ const VIDEO =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
 
 function StaggeredFade({ text }: { text: string }) {
-  const ref = useRef<HTMLHeadingElement>(null);
+  const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
+  const isRTL = /[\u0600-\u06FF]/.test(text);
+
+  if (isRTL) {
+    return (
+      <motion.span
+        ref={ref}
+        dir="rtl"
+        initial={{ opacity: 0, y: 18 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="block font-vazir"
+      >
+        {text}
+      </motion.span>
+    );
+  }
 
   return (
-    <span ref={ref} className="block">
+    <span ref={ref} dir="ltr" className="block font-garamond">
       {text.split("").map((char, i) => (
         <motion.span
           key={`${text}-${i}`}
           initial={{ opacity: 0, y: 18 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.45, delay: i * 0.07, ease: "easeOut" }}
+          transition={{
+            duration: 0.45,
+            delay: i * 0.07,
+            ease: "easeOut"
+          }}
           className="inline-block"
         >
           {char === " " ? "\u00A0" : char}
@@ -34,6 +54,50 @@ function StaggeredFade({ text }: { text: string }) {
 
 function App() {
   const [open, setOpen] = useState(false);
+  const [showVideoPlayButton, setShowVideoPlayButton] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.preload = "auto";
+
+    const tryPlay = () => {
+      if (document.visibilityState !== "visible") return;
+      if (!video.paused && !video.ended) return;
+
+      const result = video.play();
+      if (result && typeof result.catch === "function") {
+        result.then(() => setShowVideoPlayButton(false)).catch(() => setShowVideoPlayButton(true));
+      }
+    };
+
+    video.addEventListener("loadeddata", tryPlay);
+    video.addEventListener("canplay", tryPlay);
+    window.addEventListener("pageshow", tryPlay);
+    document.addEventListener("visibilitychange", tryPlay);
+
+    const fallbackTimer = window.setTimeout(() => {
+      if (document.visibilityState === "visible" && video.paused) {
+        setShowVideoPlayButton(true);
+      }
+    }, 5000);
+
+    if (video.readyState >= 2) tryPlay();
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      video.removeEventListener("loadeddata", tryPlay);
+      video.removeEventListener("canplay", tryPlay);
+      window.removeEventListener("pageshow", tryPlay);
+      document.removeEventListener("visibilitychange", tryPlay);
+    };
+  }, []);
 
   const links = [
     ["خدمات", "#services"],
@@ -45,10 +109,14 @@ function App() {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#010101]">
       <video
+        ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
+        preload="auto"
+        onError={() => setShowVideoPlayButton(true)}
+        onPlay={() => setShowVideoPlayButton(false)}
         className="absolute inset-0 h-full w-full object-cover object-center"
       >
         <source src={VIDEO} type="video/mp4" />
@@ -56,6 +124,24 @@ function App() {
 
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/25 to-black/70" />
+
+      {showVideoPlayButton && (
+        <button
+          type="button"
+          aria-label="پخش ویدیو"
+          onClick={() => {
+            const video = videoRef.current;
+            if (!video) return;
+            video.muted = true;
+            video.play()
+              .then(() => setShowVideoPlayButton(false))
+              .catch(() => setShowVideoPlayButton(true));
+          }}
+          className="absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/40 bg-black/70 px-6 py-4 text-sm font-medium text-white shadow-lg backdrop-blur-sm"
+        >
+          ▶ پخش ویدیو
+        </button>
+      )}
 
       <nav className="relative z-30 flex items-center justify-between px-5 py-5 sm:px-8 md:px-12 md:justify-center">
         <a
@@ -113,7 +199,7 @@ function App() {
       </AnimatePresence>
 
       <div className="relative z-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-5 pb-16 pt-12 text-center sm:px-8 sm:pt-16 md:pt-24">
-        <h1 className="font-garamond mb-6 text-5xl font-normal leading-[1.08] tracking-tight text-white sm:mb-8 sm:text-6xl md:text-8xl lg:text-9xl">
+        <h1 className="mb-6 text-5xl font-normal leading-[1.08] tracking-tight text-white sm:mb-8 sm:text-6xl md:text-8xl lg:text-9xl">
           <StaggeredFade text="GREEN VITA" />
           <StaggeredFade text="زبان گیاهت را بفهم" />
         </h1>
@@ -141,12 +227,7 @@ function App() {
             <ArrowUpLeft size={18} />
           </a>
 
-          <a
-            href="/booking/track/"
-            className="liquid-glass inline-flex min-h-12 items-center justify-center rounded-full px-8 py-3.5 text-sm font-light tracking-[.04em] text-white sm:px-10"
-          >
-            پیگیری رزرو
-          </a>
+          
         </motion.div>
       </div>
     </section>

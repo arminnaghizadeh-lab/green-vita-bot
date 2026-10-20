@@ -6,7 +6,10 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.admin.auth import require_authentication
-from src.admin.services.badge import get_admin_badge_count
+from src.admin.services.badge import (
+    get_admin_badge_count,
+    get_unscheduled_visit_count,
+)
 from src.admin.dependencies import get_session
 from src.core.config import Settings, get_settings
 from src.db.models import (
@@ -18,6 +21,7 @@ from src.db.models import (
 )
 from src.db.models.booking import (
     Booking,
+    BookingSlotAssignment,
     BookingStatus,
     BookingTimeSlot,
 )
@@ -46,10 +50,28 @@ async def admin_badge_count(
     }
 
 
+
+@router.get("/api/unscheduled-visits-count", include_in_schema=False)
+async def admin_unscheduled_visits_count(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+
+    count = await get_unscheduled_visit_count(session)
+
+    return {
+        "count": count,
+    }
+
+
 @router.get("/api/reservations/overview", include_in_schema=False)
 async def reservations_overview(
     request: Request,
     start_date: str | None = None,
+    booking_id: int | None = None,
     days: int = 7,
     session: AsyncSession = Depends(get_session),
 ):
@@ -63,7 +85,31 @@ async def reservations_overview(
     tehran = ZoneInfo("Asia/Tehran")
     today = datetime.now(tehran).date()
 
-    if start_date:
+    # When the page was opened from a specific website booking,
+    # resolve the exact booked date from the database.
+    if booking_id is not None:
+        booking_row = (
+            await session.execute(
+                select(BookingTimeSlot.starts_at)
+                .join(
+                    Booking,
+                    Booking.time_slot_id == BookingTimeSlot.id,
+                )
+                .where(Booking.id == booking_id)
+            )
+        ).scalar_one_or_none()
+
+        if booking_row is not None:
+            if booking_row.tzinfo is None:
+                booking_local = booking_row.replace(tzinfo=tehran)
+            else:
+                booking_local = booking_row.astimezone(tehran)
+
+            start_day = booking_local.date()
+        else:
+            start_day = today
+
+    elif start_date:
         try:
             start_day = datetime.strptime(start_date, "%Y-%m-%d").date()
         except ValueError:
@@ -113,6 +159,34 @@ async def reservations_overview(
             .order_by(BookingTimeSlot.starts_at)
         )
     ).all()
+
+
+    # Slotهایی که واقعاً توسط مشتری رزرو شده‌اند.
+    # BUFFERها عمداً رزرو شده محسوب نمی‌شوند.
+    reserved_slot_rows = (
+        await session.execute(
+            select(BookingSlotAssignment.time_slot_id)
+            .join(
+                Booking,
+                BookingSlotAssignment.booking_id == Booking.id,
+            )
+            .join(
+                BookingTimeSlot,
+                BookingSlotAssignment.time_slot_id == BookingTimeSlot.id,
+            )
+            .where(
+                Booking.status.in_(active_booking_statuses),
+                BookingSlotAssignment.kind == "RESERVED",
+                BookingTimeSlot.starts_at < end_dt,
+                BookingTimeSlot.ends_at > start_dt,
+            )
+        )
+    ).all()
+
+    reserved_slot_ids = {
+        row[0]
+        for row in reserved_slot_rows
+    }
 
     appointment_rows = (
         await session.execute(
@@ -274,6 +348,7 @@ async def reservations_overview(
                 "end_at": slot.ends_at.isoformat(),
                 "enabled": bool(slot.is_enabled),
                 "available": bool(slot.is_available),
+                "reserved": slot.id in reserved_slot_ids,
             }
         )
 

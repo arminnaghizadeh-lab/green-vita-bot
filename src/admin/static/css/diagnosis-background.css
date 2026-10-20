@@ -1,0 +1,98 @@
+/* GV_DIAGNOSIS_BACKGROUND_IMAGE_V1 */
+.gv-dx-page {
+  background-color: #f7faf4;
+  background-image:
+    linear-gradient(rgba(247,250,244,.52), rgba(247,250,244,.68)),
+    url("/static/images/diagnosis.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* GV_DX_PANEL_TRANSPARENCY_V1 */
+.gv-dx-panel {
+  background: rgba(255, 255, 253, 0.40);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* GV_DX_GLOSSY_GLASS_V1 */
+.gv-dx-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: rgba(255, 255, 253, .40);
+  border: 1px solid rgba(255, 255, 255, .88);
+  border-radius: 26px;
+  -webkit-backdrop-filter: blur(10px) saturate(135%);
+  backdrop-filter: blur(10px) saturate(135%);
+  box-shadow:
+    0 18px 48px rgba(26, 58, 35, .13),
+    inset 0 1px 0 rgba(255, 255, 255, .95),
+    inset 0 -1px 0 rgba(190, 211, 177, .30);
+}
+
+.gv-dx-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, .48) 0%,
+    rgba(255, 255, 255, .18) 19%,
+    transparent 43%,
+    rgba(255, 255, 255, .10) 72%,
+    transparent 100%
+  );
+}
+
+.gv-dx-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* GV_DX_MOBILE_BG_SHIFT_FINAL */
+
+
+/* GV_DX_MOBILE_BG_FINAL_85 */
+@media (max-width: 600px) {
+  .gv-dx-page {
+    background-position: 85% center !important;
+    background-size: cover !important;
+  }
+}
+
+/* GV-DX-VIEWPORT-BACKGROUND-FINAL */
+body:has(main.gv-dx-page) {
+  isolation: isolate !important;
+  background: transparent !important;
+}
+
+body:has(main.gv-dx-page)::before {
+  content: "";
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #f7faf4;
+  background-image:
+    linear-gradient(rgba(247,250,244,.52), rgba(247,250,244,.68)),
+    url("/static/images/diagnosis.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+main.gv-dx-page {
+  background: transparent !important;
+}
+
+@media (max-width: 600px) {
+  body:has(main.gv-dx-page)::before {
+    background-position: 85% center;
+  }
+}

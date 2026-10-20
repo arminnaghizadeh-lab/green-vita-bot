@@ -1179,3 +1179,3301 @@ html body:has(#root) .site-header .menu .cta {
     border-color: rgba(139, 197, 61, .4) !important;
 }
 
+
+/* CUSTOMER STATS — SINGLE PREMIUM DIV */
+
+.gv-customer-trust {
+    position: relative;
+    z-index: 30;
+    padding: 34px 0;
+    background: var(--gv-color-bg);
+}
+
+.gv-customer-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: hidden;
+    border: 1px solid var(--gv-color-border);
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 14px 38px rgba(2,20,8,.07);
+}
+
+.gv-customer-stat {
+    position: relative;
+    padding: 28px 20px;
+    text-align: center;
+}
+
+.gv-customer-stat + .gv-customer-stat::before {
+    content: "";
+    position: absolute;
+    top: 22px;
+    bottom: 22px;
+    right: 0;
+    width: 1px;
+    background: var(--gv-color-border);
+}
+
+.gv-customer-stat strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gv-color-primary-dark);
+    font-size: clamp(21px, 2vw, 28px);
+    font-weight: 700;
+}
+
+.gv-customer-stat span {
+    color: var(--gv-color-text-muted);
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+    .gv-customer-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gv-customer-stat:nth-child(3)::before {
+        display: none;
+    }
+
+    .gv-customer-stat:nth-child(3),
+    .gv-customer-stat:nth-child(4) {
+        border-top: 1px solid var(--gv-color-border);
+    }
+}
+
+@media (max-width: 480px) {
+    .gv-customer-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gv-customer-stat {
+        padding: 24px 10px;
+    }
+
+    .gv-customer-stat strong {
+        font-size: 20px;
+    }
+
+    .gv-customer-stat span {
+        font-size: 12px;
+    }
+}
+
+
+
+/* =========================================================
+   CUSTOMER STATS — FINAL CONSOLE-APPROVED VERSION
+   ========================================================= */
+
+.gv-customer-trust {
+    position: relative;
+    z-index: 50;
+    width: 100%;
+    padding: 32px 0;
+    background: #F7FAF2;
+}
+
+.gv-customer-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: hidden;
+    border: 1px solid #DCE6D7;
+    border-radius: 22px;
+    background: #FFFFFF;
+    box-shadow: 0 14px 38px rgba(2,20,8,.07);
+}
+
+.gv-customer-stat {
+    position: relative;
+    padding: 28px 20px;
+    text-align: center;
+    font-family: "Vazir", Tahoma, Arial, sans-serif;
+}
+
+.gv-customer-stat + .gv-customer-stat {
+    border-right: 1px solid #DCE6D7;
+}
+
+.gv-customer-stat strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #022F12;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.gv-customer-stat:last-child strong {
+    font-size: 22px;
+}
+
+.gv-customer-stat span {
+    color: #7C8B82;
+    font-size: 13px;
+}
+
+@media (max-width: 700px) {
+    .gv-customer-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gv-customer-stat:nth-child(3),
+    .gv-customer-stat:nth-child(4) {
+        border-top: 1px solid #DCE6D7;
+    }
+
+    .gv-customer-stat:nth-child(3) {
+        border-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .gv-customer-stat {
+        padding: 24px 10px;
+    }
+
+    .gv-customer-stat strong {
+        font-size: 20px;
+    }
+
+    .gv-customer-stat:last-child strong {
+        font-size: 18px;
+    }
+
+    .gv-customer-stat span {
+        font-size: 12px;
+    }
+}
+
+/* =========================================================
+   CUSTOMER STATS — CONSOLE APPROVED FINAL
+   ========================================================= */
+
+html body .gv-customer-trust {
+    position: relative !important;
+    z-index: 5000 !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    padding: 32px 0 !important;
+    margin-top: 0 !important;
+    background: #F7FAF2 !important;
+}
+
+html body .gv-customer-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    border: 1px solid #DCE6D7 !important;
+    border-radius: 22px !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 14px 38px rgba(2,20,8,.07) !important;
+}
+
+html body .gv-customer-stat {
+    position: relative !important;
+    display: block !important;
+    padding: 28px 20px !important;
+    text-align: center !important;
+    font-family: "Vazir", Tahoma, Arial, sans-serif !important;
+    border: 0 !important;
+}
+
+html body .gv-customer-stat + .gv-customer-stat {
+    border-right: 1px solid #DCE6D7 !important;
+}
+
+html body .gv-customer-stat strong {
+    display: block !important;
+    margin: 0 0 6px !important;
+    color: #022F12 !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
+}
+
+html body .gv-customer-stat:last-child strong {
+    font-size: 22px !important;
+}
+
+html body .gv-customer-stat span {
+    display: block !important;
+    color: #7C8B82 !important;
+    font-size: 13px !important;
+}
+
+@media (max-width: 700px) {
+    html body .gv-customer-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    html body .gv-customer-stat:nth-child(3),
+    html body .gv-customer-stat:nth-child(4) {
+        border-top: 1px solid #DCE6D7 !important;
+    }
+
+    html body .gv-customer-stat:nth-child(3) {
+        border-right: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    html body .gv-customer-stat {
+        padding: 24px 10px !important;
+    }
+
+    html body .gv-customer-stat strong {
+        font-size: 20px !important;
+    }
+
+    html body .gv-customer-stat:last-child strong {
+        font-size: 18px !important;
+    }
+
+    html body .gv-customer-stat span {
+        font-size: 12px !important;
+    }
+}
+
+/* Customer stats directly under Services */
+html body .gv-customer-trust {
+    margin-top: -110px !important;
+    padding-top: 0 !important;
+}
+
+
+/* =========================================================
+   SERVICES — REMOVE ARTIFICIAL EXTRA HEIGHT
+   ========================================================= */
+
+html body .gv-home-stage .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-bottom: 6px !important;
+}
+
+
+/* FINAL — REMOVE SERVICES FORCED VIEWPORT HEIGHT */
+html body:has(#root) .gv-home-stage .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+    padding-bottom: 6px !important;
+}
+
+
+/* =========================================================
+   SERVICES CARDS — REMOVE ARTIFICIAL HEIGHT
+   ========================================================= */
+
+html body:has(#root) .gv-home-services .services {
+    align-items: start !important;
+    grid-auto-rows: auto !important;
+}
+
+html body:has(#root) .gv-home-services .service p {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+
+
+/* =========================================================
+   FINAL — NORMAL FLOW AFTER HERO
+   ========================================================= */
+
+html body:has(#root) .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+html body:has(#root) .gv-home-stage {
+    overflow: visible !important;
+}
+
+
+
+/* =========================================================
+   FINAL PUBLIC HOME STRUCTURE
+   Hero/Services = special scroll scene
+   Stats + FAQ    = normal document flow
+   ========================================================= */
+
+/* Services is the ONLY content inside the Hero stage */
+html body:has(#root) .gv-home-stage {
+    overflow: visible !important;
+}
+
+html body:has(#root) .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* Stats is independent from Hero/Services */
+html body .gv-customer-trust {
+    position: relative !important;
+    z-index: 10 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 48px 0 !important;
+    transform: none !important;
+    background: #F7FAF2 !important;
+}
+
+/* FAQ is independent from Hero/Services/Stats */
+html body .gv-home-faq {
+    position: relative !important;
+    z-index: 10 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    transform: none !important;
+    background: #F7FAF2 !important;
+}
+
+
+/* =========================================================
+   CLEAN HOME FLOW — FINAL
+   ========================================================= */
+
+html body:has(#root) .gv-home-stage {
+    min-height: 0 !important;
+    overflow: visible !important;
+}
+
+html body:has(#root) .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+html body .gv-customer-trust {
+    position: relative !important;
+    z-index: 20 !important;
+    width: 100% !important;
+    margin: 100px 0 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    transform: none !important;
+}
+
+html body .gv-home-faq {
+    position: relative !important;
+    z-index: 20 !important;
+    width: 100% !important;
+    margin: 50px 0 0 !important;
+    padding-top: 70px !important;
+    padding-bottom: 30px !important;
+    transform: none !important;
+}
+
+html body .gv-home-trust {
+    position: relative !important;
+    z-index: 20 !important;
+    margin-top: 30px !important;
+}
+
+
+/* =========================================================
+   STATS — NORMAL DOCUMENT FLOW
+   ========================================================= */
+
+html body .gv-customer-trust {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 100px !important;
+    margin-bottom: 0 !important;
+    z-index: auto !important;
+}
+
+
+
+/* =========================================================
+   ONE CONTINUOUS PAGE AFTER HERO
+   ========================================================= */
+
+html body .gv-customer-trust,
+html body .gv-home-faq,
+html body .gv-home-trust,
+html body .gv-final-cta,
+html body .gv-blog-strip {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    transform: none !important;
+    float: none !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    z-index: auto !important;
+}
+
+/* Stats: separate section, but part of normal flow */
+html body .gv-customer-trust {
+    margin-top: 100px !important;
+    margin-bottom: 0 !important;
+}
+
+/* FAQ: separate section, same document flow */
+html body .gv-home-faq {
+    margin-top: 50px !important;
+}
+
+/* Feature / trust section */
+html body .gv-home-trust {
+    margin-top: 30px !important;
+}
+
+/* No artificial viewport height after Hero */
+html body:has(#root) .gv-home-stage {
+    min-height: 0 !important;
+}
+
+html body:has(#root) .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+/* The content following Hero must never become a scroll scene */
+html body:has(#root) .gv-customer-trust,
+html body:has(#root) .gv-home-faq,
+html body:has(#root) .gv-home-trust,
+html body:has(#root) .gv-final-cta,
+html body:has(#root) .gv-blog-strip {
+    overflow: visible !important;
+}
+
+
+
+/* =========================================================
+   REAL SINGLE FLOW AFTER HERO
+   ========================================================= */
+
+html body:has(#root) .gv-home-content {
+    display: flow-root !important;
+    width: 100% !important;
+}
+
+html body:has(#root) .gv-home-content > section {
+    position: relative !important;
+    float: none !important;
+    transform: none !important;
+}
+
+html body:has(#root) .gv-home-stage {
+    min-height: 0 !important;
+    overflow: visible !important;
+}
+
+html body:has(#root) .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+html body:has(#root) .gv-customer-trust {
+    transform: none !important;
+}
+
+html body:has(#root) .gv-home-faq {
+    transform: none !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — REAL HOME ARCHITECTURE
+   HERO = SPECIAL
+   EVERYTHING ELSE = ONE NORMAL FLOW
+   ========================================================= */
+
+html body:has(#root) .gv-home-stage {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+html body:has(#root) .gv-home-content {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    z-index: 1 !important;
+}
+
+/* Every non-Hero section follows normal document flow */
+html body:has(#root) .gv-home-content > section {
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Services is the first item of the unified content flow */
+html body:has(#root) .gv-home-content .gv-home-services {
+    position: relative !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+}
+
+/* Stats */
+html body:has(#root) .gv-home-content .gv-customer-trust {
+    position: relative !important;
+    margin-top: 100px !important;
+    transform: none !important;
+}
+
+/* FAQ */
+html body:has(#root) .gv-home-content .gv-home-faq {
+    position: relative !important;
+    margin-top: 50px !important;
+    transform: none !important;
+}
+
+/* Trust / feature cards */
+html body:has(#root) .gv-home-content .gv-home-trust {
+    position: relative !important;
+    margin-top: 30px !important;
+    transform: none !important;
+}
+
+/* CTA + Blog remain ordinary flow */
+html body:has(#root) .gv-home-content .gv-final-cta,
+html body:has(#root) .gv-home-content .gv-blog-strip {
+    position: relative !important;
+    transform: none !important;
+}
+
+/* Hero itself has no document-flow height beyond its Stage */
+html body:has(#root) .gv-home-stage .gv-home-hero {
+    width: 100% !important;
+    height: 100vh !important;
+    margin: 0 !important;
+}
+
+
+/* =========================================================
+   CLEAN FINAL ARCHITECTURE
+   Hero = special
+   Everything else = one native page flow
+   ========================================================= */
+
+html body .gv-home-stage {
+    position: relative !important;
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+html body .gv-home-content {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+html body .gv-home-content > section {
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+html body .gv-home-content .gv-home-services {
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+html body .gv-home-content .gv-customer-trust,
+html body .gv-home-content .gv-home-faq,
+html body .gv-home-content .gv-home-trust,
+html body .gv-home-content .gv-final-cta,
+html body .gv-home-content .gv-blog-strip {
+    position: relative !important;
+    float: none !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — FINAL UI POLISH
+   Services / Stats / FAQ ONLY
+   NO HERO / SCROLL LOGIC CHANGES
+   ========================================================= */
+
+/* ---------------- SERVICES ---------------- */
+
+html body:has(#root) .gv-home-services {
+    background:
+        radial-gradient(
+            circle at 12% 0%,
+            rgba(139,197,61,.08),
+            transparent 30%
+        ),
+        #F7FAF2 !important;
+
+    padding-top: 72px !important;
+    padding-bottom: 6px !important;
+}
+
+html body:has(#root) .gv-services-heading {
+    max-width: 900px !important;
+    margin: 0 auto 38px !important;
+    text-align: center !important;
+}
+
+html body:has(#root) .gv-services-eyebrow {
+    color: #C6A15B !important;
+}
+
+html body:has(#root) .gv-home-services .section-head h2 {
+    color: #022F12 !important;
+    font-size: clamp(32px,4vw,48px) !important;
+    line-height: 1.2 !important;
+}
+
+html body:has(#root) .gv-home-services .section-head p {
+    color: #66756C !important;
+    font-size: 15px !important;
+    line-height: 2 !important;
+}
+
+/* Service cards */
+html body:has(#root) .gv-home-services .service:hover {
+    transform: translateY(-5px) !important;
+    border-color: rgba(198,161,91,.38) !important;
+
+    box-shadow:
+        0 22px 45px rgba(2,20,8,.10),
+        inset 0 1px 0 rgba(255,255,255,.90) !important;
+}
+
+html body:has(#root) .gv-home-services .service-image {
+    background: #022F12 !important;
+}
+
+html body:has(#root) .gv-home-services .service-image img {
+    transition: transform .6s ease, filter .6s ease !important;
+}
+
+html body:has(#root) .gv-home-services .service:hover .service-image img {
+    transform: scale(1.045) !important;
+    filter: saturate(1.05) contrast(1.02) !important;
+}
+
+html body:has(#root) .gv-home-services .service-icon {
+    border-color: rgba(198,161,91,.42) !important;
+    background:
+        linear-gradient(145deg,#021408,#022F12) !important;
+    box-shadow:
+        0 12px 28px rgba(2,20,8,.18),
+        0 0 0 5px rgba(139,197,61,.035) !important;
+}
+
+html body:has(#root) .gv-home-services .service h3 {
+    color: #022F12 !important;
+    font-size: 19px !important;
+}
+
+html body:has(#root) .gv-home-services .service p {
+    min-height: 54px !important;
+    color: #66756C !important;
+    line-height: 1.95 !important;
+}
+
+html body:has(#root) .gv-home-services .service-price {
+    color: #B28D4D !important;
+    font-size: 13px !important;
+}
+
+html body:has(#root) .gv-home-services .service .btn {
+    min-height: 46px !important;
+    border-radius: 999px !important;
+}
+
+
+/* ---------------- STATS ---------------- */
+
+html body .gv-customer-trust {
+    background: #F7FAF2 !important;
+    margin-top: 100px !important;
+    padding: 0 !important;
+    transform: none !important;
+}
+
+html body .gv-customer-stats {
+    display: grid !important;
+    grid-template-columns: repeat(4,minmax(0,1fr)) !important;
+    align-items: stretch !important;
+
+    overflow: hidden !important;
+
+    border: 1px solid #DCE6D7 !important;
+    border-radius: 24px !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.98),
+            rgba(255,255,255,.90)
+        ) !important;
+
+    box-shadow:
+        0 18px 48px rgba(2,20,8,.075),
+        inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+
+html body .gv-customer-stat {
+    min-width: 0 !important;
+    min-height: 112px !important;
+    padding: 25px 18px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    border: 0 !important;
+    border-right: 1px solid #DCE6D7 !important;
+
+    background: transparent !important;
+}
+
+html body .gv-customer-stat:first-child {
+    border-right: 0 !important;
+}
+
+html body .gv-customer-stat strong {
+    margin: 0 0 7px !important;
+    color: #022F12 !important;
+    font-size: 27px !important;
+    line-height: 1 !important;
+    font-weight: 700 !important;
+}
+
+html body .gv-customer-stat:last-child strong {
+    font-size: 22px !important;
+}
+
+html body .gv-customer-stat span {
+    color: #7C8B82 !important;
+    font-size: 13px !important;
+    line-height: 1.7 !important;
+}
+
+
+/* ---------------- FAQ ---------------- */
+
+html body .gv-home-faq {
+    margin-top: 50px !important;
+    padding: 70px 0 70px !important;
+
+    background:
+        radial-gradient(
+            circle at 88% 10%,
+            rgba(139,197,61,.075),
+            transparent 30%
+        ),
+        #F7FAF2 !important;
+}
+
+html body .gv-faq-head {
+    max-width: 760px !important;
+    margin: 0 auto 34px !important;
+}
+
+html body .gv-faq-head h2 {
+    color: #022F12 !important;
+    font-size: clamp(40px,5vw,56px) !important;
+}
+
+html body .gv-faq-head p {
+    color: #66756C !important;
+}
+
+html body .gv-faq-list {
+    max-width: 900px !important;
+    gap: 12px !important;
+}
+
+html body .gv-faq-item {
+    border: 1px solid #DCE6D7 !important;
+    border-radius: 20px !important;
+    background: rgba(255,255,255,.94) !important;
+
+    box-shadow:
+        0 10px 30px rgba(2,20,8,.045),
+        inset 0 1px 0 rgba(255,255,255,.75) !important;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease !important;
+}
+
+html body .gv-faq-item:hover {
+    border-color: rgba(198,161,91,.35) !important;
+    box-shadow:
+        0 16px 36px rgba(2,20,8,.07),
+        inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+
+html body .gv-faq-item summary {
+    min-height: 68px !important;
+    padding: 16px 22px !important;
+    color: #022F12 !important;
+    font-family: "Vazir",Tahoma,Arial,sans-serif !important;
+}
+
+html body .gv-faq-item summary b {
+    width: 36px !important;
+    height: 36px !important;
+    flex: 0 0 36px !important;
+
+    background: #E4F0CC !important;
+    color: #022F12 !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.7) !important;
+}
+
+html body .gv-faq-item[open] summary b {
+    background: #8BC53D !important;
+}
+
+html body .gv-faq-answer {
+    color: #66756C !important;
+    line-height: 2.05 !important;
+}
+
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 900px) {
+    html body .gv-customer-stats {
+        grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    }
+
+    html body .gv-customer-stat:nth-child(3),
+    html body .gv-customer-stat:nth-child(4) {
+        border-top: 1px solid #DCE6D7 !important;
+    }
+}
+
+@media (max-width: 640px) {
+    html body:has(#root) .gv-home-services {
+        padding-top: 56px !important;
+    }
+
+    html body .gv-customer-trust {
+        margin-top: 70px !important;
+    }
+
+    html body .gv-customer-stat {
+        min-height: 100px !important;
+        padding: 22px 10px !important;
+    }
+
+    html body .gv-customer-stat strong {
+        font-size: 21px !important;
+    }
+
+    html body .gv-customer-stat:last-child strong {
+        font-size: 18px !important;
+    }
+
+    html body .gv-home-faq {
+        margin-top: 36px !important;
+        padding: 56px 0 56px !important;
+    }
+
+    html body .gv-faq-item summary {
+        padding: 14px 16px !important;
+        font-size: 14px !important;
+    }
+
+    html body .gv-faq-answer {
+        padding: 0 16px 20px !important;
+        font-size: 13px !important;
+    }
+}
+
+
+
+/* =========================================================
+   FINAL HERO OVERLAY ARCHITECTURE
+   ========================================================= */
+
+/*
+ * Stage occupies ZERO layout height.
+ * Content starts at the very top of the page.
+ */
+html body:has(#root) .gv-home-stage {
+    position: relative !important;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+/*
+ * ALL non-Hero content is one normal document flow.
+ */
+html body:has(#root) .gv-home-content {
+    position: relative !important;
+    display: block !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    overflow: visible !important;
+    z-index: 1 !important;
+}
+
+/*
+ * Hero is the ONLY overlay.
+ */
+html body:has(#root) .gv-home-hero {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    z-index: 9000 !important;
+    margin: 0 !important;
+    transform: translate3d(0,0,0);
+}
+
+/*
+ * Every section after Hero stays in ordinary flow.
+ */
+html body:has(#root) .gv-home-content > section {
+    position: relative !important;
+    float: none !important;
+    clear: both !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/*
+ * Keep approved spacing.
+ */
+html body:has(#root) .gv-customer-trust {
+    margin-top: 100px !important;
+    transform: none !important;
+}
+
+html body:has(#root) .gv-home-faq {
+    transform: none !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — SERVICE CARDS
+   Single clean implementation
+   ========================================================= */
+
+/* Equal-height service cards */
+html body:has(#root) .gv-home-services .services {
+    align-items: stretch !important;
+}
+
+/* Service image stays full width */
+html body:has(#root) .gv-home-services .service-image {
+    width: 100% !important;
+    flex-shrink: 0 !important;
+}
+
+/* Center icon */
+html body:has(#root) .gv-home-services .service-icon {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    flex-shrink: 0 !important;
+}
+
+/* Content alignment */
+html body:has(#root) .gv-home-services .service h3,
+html body:has(#root) .gv-home-services .service p,
+html body:has(#root) .gv-home-services .service-price {
+    width: calc(100% - 40px) !important;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+    text-align: center !important;
+}
+
+html body:has(#root) .gv-home-services .service p {
+    min-height: 0 !important;
+    height: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+}
+
+/*
+ * Push price toward the button.
+ * The old margin-bottom:auto was the source of the huge gap.
+ */
+html body:has(#root) .gv-home-services .service-price {
+    margin-top: auto !important;
+    margin-bottom: 8px !important;
+    padding-top: 0 !important;
+}
+
+/* Unified button for all four cards */
+/* Keep button shape on interaction */
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:hover,
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:focus,
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:active {
+    left: 5% !important;
+    right: auto !important;
+    bottom: 0 !important;
+
+    width: 90% !important;
+    max-width: 90% !important;
+    min-width: 90% !important;
+
+    margin: 0 !important;
+
+    border-radius: 14px 14px 0 0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Mobile — exact approved 350px cards */
+@media (max-width: 640px) {
+    html body:has(#root) .gv-home-services .service-price {
+        margin-top: auto !important;
+        margin-bottom: 8px !important;
+    }
+
+    }
+
+
+
+/* =========================================================
+   FAQ — PERFECTLY CENTERED + / −
+   ========================================================= */
+
+html body .gv-home-faq .gv-faq-item summary b {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    font-family: Arial, sans-serif !important;
+    font-size: 23px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+}
+
+
+/* =========================================================
+   FAQ HEADING — CENTERED
+   ========================================================= */
+
+html body .gv-home-faq .gv-faq-head {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+html body .gv-home-faq .gv-faq-head > span,
+html body .gv-home-faq .gv-faq-head > h2,
+html body .gv-home-faq .gv-faq-head > p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+
+/* =========================================================
+   FINAL — SERVICE CARD BUTTONS
+   90% width / centered / bottom aligned / flat bottom
+   ========================================================= */
+
+/* همه حالت‌ها دقیقاً همان فرم را حفظ کنند */
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:hover,
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:focus,
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary:active {
+    width: 90% !important;
+    max-width: 90% !important;
+    min-width: 90% !important;
+
+    margin-right: 5% !important;
+    margin-left: 5% !important;
+
+    border-radius: 14px 14px 0 0 !important;
+    transform: none !important;
+}
+
+/* موبایل عمودی و افقی */
+@media (max-width: 640px) {
+    }
+
+
+/* FINAL — کارت اول دقیقاً هم‌شکل سایر کارت‌ها */
+html body:has(#root) .gv-home-services .services > .service:first-child .btn.btn-primary:hover,
+html body:has(#root) .gv-home-services .services > .service:first-child .btn.btn-primary:focus,
+html body:has(#root) .gv-home-services .services > .service:first-child .btn.btn-primary:active {
+    width: 90% !important;
+    max-width: 90% !important;
+    min-width: 90% !important;
+    margin-right: 5% !important;
+    margin-left: 5% !important;
+    border-radius: 14px 14px 0 0 !important;
+    transform: none !important;
+}
+
+/* =========================================================
+   FINAL — MOBILE SERVICE CARDS 350PX
+   ========================================================= */
+
+@media (max-width: 640px) {
+    html body:has(#root) .gv-home-services .services > .service .service-price {
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+    }
+
+    }
+
+
+/* =========================================================
+   FINAL — MOBILE SERVICE BUTTONS 2–4
+   Buttons flush to the bottom edge of the cards
+   ========================================================= */
+
+@media (max-width: 640px) {
+    html body:has(#root)
+    .gv-home-services
+    .services > .service:nth-child(n+2) {
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    html body:has(#root)
+    .gv-home-services
+    .services > .service:nth-child(n+2)
+    .btn.btn-primary {
+        position: absolute !important;
+        left: 5% !important;
+        right: auto !important;
+        bottom: 0 !important;
+
+        width: 90% !important;
+        max-width: 90% !important;
+        min-width: 90% !important;
+
+        height: 52px !important;
+        min-height: 52px !important;
+
+        margin: 0 !important;
+        padding: 0 20px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 14px 14px 0 0 !important;
+        transform: none !important;
+    }
+}
+
+
+
+
+
+/* HOME SERVICE CARDS — FINAL CLEAN RULE */
+html body:has(#root) .gv-home-services .service{
+  padding-bottom:0 !important;
+}
+
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary{
+  position:relative !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+
+  width:90% !important;
+  height:52px !important;
+  min-height:52px !important;
+
+  margin-top:auto !important;
+  margin-right:5% !important;
+  margin-bottom:0 !important;
+  margin-left:5% !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  box-sizing:border-box !important;
+  border-radius:14px 14px 0 0 !important;
+  transform:none !important;
+}
+
+
+/* FINAL — First service image: 220x220 centered */
+.gv-home-services .services > .service:first-child .service-image{
+  width:220px !important;
+  height:220px !important;
+  min-width:220px !important;
+  max-width:220px !important;
+  min-height:220px !important;
+  max-height:220px !important;
+
+  margin-left:auto !important;
+  margin-right:auto !important;
+  align-self:center !important;
+
+  position:static !important;
+  transform:translateX(-12.45px) !important;
+
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+
+.gv-home-services .services > .service:first-child .service-image img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+}
+
+/* FINAL — Fourth service card button */
+.gv-home-services .services > .service:last-child{
+  display:flex !important;
+  flex-direction:column !important;
+  padding-bottom:0 !important;
+}
+
+.gv-home-services .services > .service:last-child .btn.btn-primary{
+  position:relative !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+
+  margin-top:auto !important;
+  margin-bottom:0 !important;
+}
+
+
+
+/* FINAL — service cards radius */
+.gv-home-services .services > .service{
+  border-radius:20px !important;
+  overflow:hidden !important;
+}
+
+
+
+/* FINAL — service green real box */
+html body:has(#root) .gv-home-services .services > .service{
+  position:relative !important;
+  background:#FFFFFF !important;
+  border-radius:20px !important;
+  overflow:hidden !important;
+}
+
+html body:has(#root) .gv-home-services .services > .service > .gv-service-green-real-box{
+  position:absolute !important;
+  left:26px !important;
+  right:26px !important;
+  bottom:0 !important;
+  height:50px !important;
+  background-color:#9EEB47 !important;
+  border-radius:20px 20px 0 0 !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+
+html body:has(#root) .gv-home-services .services > .service .btn.btn-primary{
+  position:relative !important;
+  z-index:2 !important;
+}
+
+/* FINAL — solid green service base */
+html body:has(#root) .gv-home-services .services > .service{
+  position:relative !important;
+  background:#FFFFFF !important;
+  border-radius:20px !important;
+  overflow:hidden !important;
+}
+
+html body:has(#root) .gv-home-services .services > .service > .gv-service-green-real-box{
+  position:absolute !important;
+  left:26px !important;
+  right:26px !important;
+  bottom:0 !important;
+  height:50px !important;
+  background:#9EEB47 !important;
+  border-radius:20px 20px 0 0 !important;
+  z-index:1 !important;
+  display:block !important;
+  pointer-events:none !important;
+}
+
+
+/* FINAL — service price two lines */
+.gv-home-services .service-price{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:4px !important;
+}
+
+.gv-home-services .service-price-label{
+  display:block !important;
+}
+
+.gv-home-services .service-price-amount{
+  display:block !important;
+  white-space:nowrap !important;
+}
+
+
+
+
+
+/* =========================================================
+   GV-FINAL-ALL-SERVICE-CARDS-STANDARD
+   CARD 1 RESPONSIVE BEHAVIOR -> ALL 4 CARDS
+   ========================================================= */
+
+/* ---------- SAME CARD STRUCTURE ---------- */
+
+html body:has(#root)
+.gv-home-services
+.services
+> .service {
+    box-sizing: border-box !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    transform: none !important;
+}
+
+/* ---------- SAME IMAGE FRAME ---------- */
+
+html body:has(#root)
+.gv-home-services
+.services
+> .service .service-image,
+html body:has(#root)
+.gv-home-services
+.services
+> .service:first-child .service-image {
+    box-sizing: border-box !important;
+
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+
+    flex: 0 0 180px !important;
+
+    margin: 0 0 18px 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+
+    align-self: stretch !important;
+
+    transform: none !important;
+}
+
+/* ---------- SAME IMAGE BEHAVIOR ---------- */
+
+html body:has(#root)
+.gv-home-services
+.services
+> .service .service-image img,
+html body:has(#root)
+.gv-home-services
+.services
+> .service:first-child .service-image img {
+    display: block !important;
+
+    box-sizing: border-box !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    object-fit: cover !important;
+    object-position: 50% 50% !important;
+}
+
+/* ---------- SAME BUTTON BEHAVIOR ---------- */
+
+html body:has(#root)
+.gv-home-services
+.services
+> .service .btn {
+    box-sizing: border-box !important;
+
+    width: 90% !important;
+    min-width: 0 !important;
+    max-width: 90% !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    flex-shrink: 0 !important;
+}
+
+/* ---------- RESPONSIVE: TABLET ---------- */
+
+@media (max-width: 1024px) {
+
+    html body:has(#root)
+    .gv-home-services
+    .services
+    > .service .service-image {
+        height: 180px !important;
+        min-height: 180px !important;
+        max-height: 180px !important;
+
+        flex-basis: 180px !important;
+    }
+}
+
+/* ---------- RESPONSIVE: MOBILE ---------- */
+
+@media (max-width: 767px) {
+
+    html body:has(#root)
+    .gv-home-services
+    .services
+    > .service .service-image {
+        height: 180px !important;
+        min-height: 180px !important;
+        max-height: 180px !important;
+
+        flex-basis: 180px !important;
+    }
+}
+
+/* ---------- RESPONSIVE: SMALL MOBILE ---------- */
+
+@media (max-width: 480px) {
+
+    html body:has(#root)
+    .gv-home-services
+    .services
+    > .service .service-image {
+        height: 160px !important;
+        min-height: 160px !important;
+        max-height: 160px !important;
+
+        flex-basis: 160px !important;
+    }
+}
+
+/* ---------- CARD 1 ONLY: PHOTO FRAMING ---------- */
+
+html body:has(#root)
+.gv-home-services
+.services
+> .service:first-child
+.service-image img {
+    object-position: 50% 35% !important;
+}
+
+/* =========================================================
+   END
+   ========================================================= */
+
+/* GV-FINAL-CARD-MASTER-START */
+
+/* ================================
+   CARD 1 = MASTER PATTERN
+   ================================ */
+
+html body .gv-home-services .services > .service {
+    box-sizing: border-box !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    margin: 0 !important;
+    transform: none !important;
+}
+
+/* همه تصاویر مثل کارت ۱ */
+
+html body .gv-home-services .services > .service .service-image {
+    box-sizing: border-box !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+
+    flex: 0 0 180px !important;
+
+    margin: 0 0 18px 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+    align-self: stretch !important;
+}
+
+html body .gv-home-services .services > .service .service-image img {
+    display: block !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    object-fit: cover !important;
+    object-position: 50% 50% !important;
+
+    box-sizing: border-box !important;
+}
+
+/* تصویر اول، موقعیت تأییدشده */
+
+html body .gv-home-services .services > .service:first-child .service-image img {
+    object-position: 50% 35% !important;
+}
+
+/* دکمه‌ها مثل کارت ۱ */
+
+html body .gv-home-services .services > .service .btn {
+    width: 90% !important;
+    min-width: 0 !important;
+    max-width: 90% !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+}
+
+/* GV-FINAL-CARD-MASTER-END */
+
+/* GV-FINAL-HERO-DINGDING-START */
+
+@keyframes gvHeroDingDing {
+    0%   { transform: translateY(0); }
+    18%  { transform: translateY(-20px); }
+    36%  { transform: translateY(0); }
+    50%  { transform: translateY(0); }
+    66%  { transform: translateY(-15px); }
+    84%  { transform: translateY(0); }
+    100% { transform: translateY(0); }
+}
+
+/*
+ * Same Hero selector that was successfully tested in Console.
+ * Runs once, 1 second after load.
+ */
+
+html body section.relative.min-h-screen.overflow-hidden {
+    animation:
+        gvHeroDingDing
+        1500ms
+        ease-in-out
+        1000ms
+        1
+        both !important;
+
+    will-change: transform;
+}
+
+/* احترام به تنظیمات کاهش حرکت سیستم */
+@media (prefers-reduced-motion: reduce) {
+    html body section.relative.min-h-screen.overflow-hidden {
+        animation: none !important;
+    }
+}
+
+/* GV-FINAL-HERO-DINGDING-END */
+
+
+/* =========================================================
+   FINAL — CONTENT TEXT ALIGNMENT
+   ========================================================= */
+
+/* Service cards */
+.gv-home-services .service p{
+    text-align:justify !important;
+}
+
+/* Visit process */
+.gv-visit-process-head p,
+.gv-visit-step p{
+    text-align:justify !important;
+}
+
+/* Real treatment cases */
+.gv-treatment-cases-head p,
+.gv-treatment-case p{
+    text-align:justify !important;
+}
+
+/* Why Green Vita / approach */
+.gv-home-trust p,
+.gv-trust-head p,
+.gv-trust-item p{
+    text-align:justify !important;
+}
+
+/* Bot promo */
+.gv-bot-promo-copy > p,
+.gv-bot-copy-text,
+.gv-bot-trust,
+.gv-chat-text{
+    text-align:justify !important;
+}
+
+/* Testimonials */
+.gv-testimonial-card p{
+    text-align:justify !important;
+}
+
+/* FAQ */
+.gv-faq-answer,
+.gv-faq-answer p{
+    text-align:justify !important;
+}
+
+/* Final CTA */
+.gv-final-cta-inner p{
+    text-align:justify !important;
+}
+
+/* Keep actual controls / labels centered */
+.gv-home-services .service .service-price,
+.gv-home-services .service .service-price *,
+.gv-bot-actions,
+.gv-bot-actions *,
+.gv-more-reviews-btn,
+.gv-final-cta .btn,
+.gv-faq-item summary{
+    text-align:center !important;
+}
+
+/* FINAL — Hero stage background */
+.gv-home-stage {
+  background: #010101 !important;
+}
+
+/* FINAL — prevent white flash behind Hero during Ding-Ding */
+html,
+body {
+  background-color: #010101 !important;
+}
+
+/* GREEN VITA HERO — TIMES NEW ROMAN */
+#root .font-garamond {
+  font-family: "Times New Roman", Times, serif !important;
+  font-style: normal !important;
+}
+
+
+
+/* GREEN VITA HERO — LEAF 1 SIZE FINAL */
+#root .font-garamond {
+  font-size: 1.35em !important;
+}
+
+/* GREEN VITA HERO — MOBILE SIZE FINAL */
+@media (max-width: 768px) {
+  #root .font-garamond {
+    font-size: 1.55em !important;
+  }
+}
+}
+
+/* GREEN VITA HERO — LEAF 1 NO BOLD */
+#root h1 .font-garamond,
+#root h1 .font-garamond * {
+  font-family: "GV Broela", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+/* ===== GREEN VITA HEADER — BROELA FINAL ===== */
+@font-face {
+  font-family: "GV-Broela";
+  src: url("/static/fonts/Broela.otf?v=20261006") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.gv-header-brand-broela,
+.gv-header-brand-broela *,
+header .gv-header-brand-broela,
+header .gv-header-brand-broela * {
+  font-family: "GV-Broela", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: 0 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+
+/* GV SERVICE CARDS — IMAGE TITLE + CLICK REVEAL FINAL */
+
+.gv-home-services .service.gv-service-interactive {
+  position: relative !important;
+  height: 330px !important;
+  min-height: 330px !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  cursor: pointer !important;
+  border-radius: 26px !important;
+  background: #fff !important;
+  box-shadow: 0 12px 35px rgba(2, 47, 18, .08) !important;
+  transition: box-shadow .35s ease, transform .35s ease !important;
+}
+
+.gv-home-services .service.gv-service-interactive:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 18px 42px rgba(2, 47, 18, .14) !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-media-source {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+  transition: transform .62s cubic-bezier(.22,.61,.36,1) !important;
+}
+
+.gv-home-services .service.gv-service-interactive > img,
+.gv-home-services .service.gv-service-interactive .gv-service-media-source img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  margin: 0 !important;
+}
+
+.gv-home-services .service.gv-service-interactive::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 58% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    to top,
+    rgba(2, 47, 18, .96) 0%,
+    rgba(2, 47, 18, .78) 32%,
+    rgba(2, 47, 18, .30) 68%,
+    rgba(2, 47, 18, 0) 100%
+  ) !important;
+  transition: opacity .4s ease !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-title-overlay {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 4 !important;
+  padding: 72px 22px 22px !important;
+  color: #fff !important;
+  text-align: right !important;
+  font-size: clamp(1.1rem, 1.8vw, 1.45rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  transition: opacity .3s ease, transform .45s ease !important;
+  pointer-events: none !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-description-overlay {
+  position: absolute !important;
+  inset: auto 0 0 0 !important;
+  z-index: 5 !important;
+  min-height: 72% !important;
+  max-height: 100% !important;
+  padding: 30px 24px 24px !important;
+  overflow-y: auto !important;
+  direction: rtl !important;
+  text-align: right !important;
+  background: linear-gradient(
+    180deg,
+    #f8fbf3 0%,
+    #ffffff 24%,
+    #ffffff 100%
+  ) !important;
+  color: #17351f !important;
+  opacity: 0 !important;
+  transform: translateY(105%) !important;
+  transition:
+    transform .62s cubic-bezier(.22,.61,.36,1),
+    opacity .35s ease !important;
+  pointer-events: none !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-description-overlay h3 {
+  margin: 0 0 12px !important;
+  color: #022f12 !important;
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-description-overlay p {
+  margin: 0 0 10px !important;
+  color: #43564a !important;
+  font-size: .96rem !important;
+  line-height: 1.9 !important;
+}
+
+.gv-home-services .service.gv-service-interactive.gv-service-open .gv-service-media-source,
+.gv-home-services .service.gv-service-interactive.gv-service-open > img {
+  transform: translateX(-106%) !important;
+}
+
+.gv-home-services .service.gv-service-interactive.gv-service-open::before {
+  opacity: 0 !important;
+}
+
+.gv-home-services .service.gv-service-interactive.gv-service-open .gv-service-title-overlay {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+}
+
+.gv-home-services .service.gv-service-interactive.gv-service-open .gv-service-description-overlay {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.gv-home-services .service.gv-service-interactive .gv-service-source-hidden {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .gv-home-services .service.gv-service-interactive {
+    height: 300px !important;
+    min-height: 300px !important;
+    border-radius: 22px !important;
+  }
+
+  .gv-home-services .service.gv-service-interactive .gv-service-title-overlay {
+    padding: 58px 18px 18px !important;
+    font-size: 1.12rem !important;
+  }
+
+  .gv-home-services .service.gv-service-interactive .gv-service-description-overlay {
+    min-height: 76% !important;
+    padding: 24px 20px 20px !important;
+  }
+
+  .gv-home-services .service.gv-service-interactive .gv-service-description-overlay p {
+    font-size: .9rem !important;
+    line-height: 1.85 !important;
+  }
+}
+
+
+/* GV SERVICE PREVIEW V2 */
+
+.gv-service-preview-section {
+  width: 100% !important;
+  max-width: 1280px !important;
+  margin: 34px auto 50px !important;
+  padding: 0 20px !important;
+}
+
+.gv-service-preview-head {
+  text-align: center !important;
+  margin-bottom: 22px !important;
+}
+
+.gv-service-preview-head > span {
+  display: inline-block !important;
+  margin-bottom: 8px !important;
+  padding: 6px 12px !important;
+  border-radius: 999px !important;
+  background: #e4f0cc !important;
+  color: #315d24 !important;
+  font-size: .75rem !important;
+  font-weight: 700 !important;
+}
+
+.gv-service-preview-head h2 {
+  margin: 0 !important;
+  color: #022f12 !important;
+  font-size: clamp(1.35rem, 2.2vw, 2rem) !important;
+  line-height: 1.4 !important;
+}
+
+.gv-service-preview-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+}
+
+.gv-preview-card {
+  position: relative !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  overflow: hidden !important;
+  border-radius: 26px !important;
+  background: #fff !important;
+  box-shadow: 0 12px 34px rgba(2,47,18,.10) !important;
+  cursor: pointer !important;
+  isolation: isolate !important;
+  outline: none !important;
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease !important;
+}
+
+.gv-preview-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 20px 42px rgba(2,47,18,.15) !important;
+}
+
+/* PHOTO */
+.gv-preview-image {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  overflow: hidden !important;
+  transition:
+    transform .68s cubic-bezier(.22,.61,.36,1) !important;
+}
+
+.gv-preview-image img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+}
+
+.gv-preview-gradient {
+  position: absolute !important;
+  inset: auto 0 0 0 !important;
+  height: 66% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    to top,
+    rgba(2,47,18,.98) 0%,
+    rgba(2,47,18,.82) 30%,
+    rgba(2,47,18,.42) 65%,
+    rgba(2,47,18,0) 100%
+  ) !important;
+}
+
+.gv-preview-title {
+  position: absolute !important;
+  right: 20px !important;
+  left: 20px !important;
+  bottom: 20px !important;
+  z-index: 3 !important;
+  color: #fff !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  text-align: right !important;
+  transition:
+    opacity .3s ease,
+    transform .45s ease !important;
+}
+
+/* CONTENT */
+.gv-preview-content {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 4 !important;
+  overflow-y: auto !important;
+  direction: rtl !important;
+  background:
+    linear-gradient(
+      180deg,
+      #f4f9ee 0%,
+      #ffffff 26%,
+      #ffffff 100%
+    ) !important;
+
+  opacity: 0 !important;
+  transform: translateY(105%) !important;
+  pointer-events: none !important;
+
+  transition:
+    transform .68s cubic-bezier(.22,.61,.36,1),
+    opacity .35s ease !important;
+}
+
+.gv-preview-content-inner {
+  padding: 28px 24px 24px !important;
+  text-align: right !important;
+}
+
+.gv-preview-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin-bottom: 12px !important;
+  border-radius: 14px !important;
+  background: #e4f0cc !important;
+  font-size: 1.3rem !important;
+}
+
+.gv-preview-content h3 {
+  margin: 0 0 10px !important;
+  color: #022f12 !important;
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  line-height: 1.4 !important;
+}
+
+.gv-preview-content p {
+  margin: 0 0 16px !important;
+  color: #4a5b4f !important;
+  font-size: .93rem !important;
+  line-height: 1.9 !important;
+}
+
+.gv-preview-price {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin: 14px 0 18px !important;
+  color: #48614e !important;
+  font-size: .84rem !important;
+}
+
+.gv-preview-price strong {
+  color: #022f12 !important;
+  font-size: .95rem !important;
+}
+
+.gv-preview-book {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 20px !important;
+  border-radius: 13px !important;
+  background: #022f12 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: .9rem !important;
+  font-weight: 700 !important;
+  transition:
+    transform .2s ease,
+    background .2s ease !important;
+}
+
+.gv-preview-book:hover {
+  background: #315d24 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* OPEN STATE */
+.gv-preview-card.is-open .gv-preview-image {
+  transform: translateX(-105%) !important;
+}
+
+.gv-preview-card.is-open .gv-preview-title {
+  opacity: 0 !important;
+  transform: translateY(16px) !important;
+}
+
+.gv-preview-card.is-open .gv-preview-content {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .gv-service-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .gv-service-preview-section {
+    padding: 0 14px !important;
+    margin-top: 26px !important;
+  }
+
+  .gv-service-preview-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .gv-preview-card {
+    height: 315px !important;
+    min-height: 315px !important;
+    border-radius: 22px !important;
+  }
+
+  .gv-preview-title {
+    right: 17px !important;
+    left: 17px !important;
+    bottom: 17px !important;
+    font-size: 1.12rem !important;
+  }
+
+  .gv-preview-content-inner {
+    padding: 22px 19px 20px !important;
+  }
+
+  .gv-preview-content p {
+    font-size: .9rem !important;
+  }
+}
+
+
+
+/* =========================================================
+   GV SERVICE PREVIEW V3 — INTERACTIVE FINAL
+   Original service cards remain untouched.
+   ========================================================= */
+
+#gv-service-preview-v2 .gv-preview-card {
+  position: relative !important;
+  display: block !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border-radius: 26px !important;
+  cursor: pointer !important;
+  isolation: isolate !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 10 !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  transition:
+    transform .72s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease !important;
+  will-change: transform !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image img {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+}
+
+#gv-service-preview-v2 .gv-preview-gradient {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 68% !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    to top,
+    rgba(2,47,18,.97) 0%,
+    rgba(2,47,18,.78) 34%,
+    rgba(2,47,18,.34) 68%,
+    rgba(2,47,18,0) 100%
+  ) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-title {
+  position: absolute !important;
+  right: 22px !important;
+  left: 22px !important;
+  bottom: 20px !important;
+  z-index: 4 !important;
+  color: #fff !important;
+  font-size: 1.32rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition:
+    opacity .25s ease,
+    transform .4s ease !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 20 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(100%) !important;
+  direction: rtl !important;
+  background: linear-gradient(
+    180deg,
+    #f1f7e9 0%,
+    #ffffff 24%,
+    #ffffff 100%
+  ) !important;
+  transition:
+    transform .72s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease,
+    visibility 0s linear .72s !important;
+  will-change: transform !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content-inner {
+  padding: 28px 24px 24px !important;
+  text-align: right !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content h3 {
+  margin: 0 0 12px !important;
+  color: #022f12 !important;
+  font-size: 1.22rem !important;
+  font-weight: 800 !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content p {
+  margin: 0 0 16px !important;
+  color: #46574b !important;
+  font-size: .94rem !important;
+  line-height: 1.9 !important;
+}
+
+#gv-service-preview-v2 .gv-preview-price {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin: 12px 0 18px !important;
+}
+
+#gv-service-preview-v2 .gv-preview-book {
+  position: relative !important;
+  z-index: 30 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 20px !important;
+  border-radius: 13px !important;
+  background: #022f12 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+}
+
+/* ===== OPEN ===== */
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-image {
+  transform: translateX(-105%) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-title {
+  opacity: 0 !important;
+  transform: translateY(18px) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-content {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+  transition:
+    transform .72s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease,
+    visibility 0s !important;
+}
+
+@media (max-width: 900px) {
+  #gv-service-preview-v2 .gv-preview-card {
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-preview-card {
+    height: 310px !important;
+    min-height: 310px !important;
+    border-radius: 22px !important;
+  }
+
+  #gv-service-preview-v2 .gv-preview-title {
+    right: 17px !important;
+    left: 17px !important;
+    bottom: 17px !important;
+    font-size: 1.12rem !important;
+  }
+
+  #gv-service-preview-v2 .gv-preview-content-inner {
+    padding: 22px 18px 20px !important;
+  }
+}
+
+
+/* =========================================================
+   GV SERVICE PREVIEW — OUTSIDE CLICK BACKDROP
+   ========================================================= */
+
+#gv-service-preview-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9998 !important;
+  display: none !important;
+  background: transparent !important;
+  cursor: default !important;
+}
+
+#gv-service-preview-backdrop.is-visible {
+  display: block !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open {
+  z-index: 10000 !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card {
+  position: relative !important;
+}
+
+
+
+/* GV SERVICE PREVIEW CLICK CLEAN FINAL */
+
+#gv-service-preview-v2 {
+  position: relative !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card {
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open {
+  z-index: 100 !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content {
+  pointer-events: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-content {
+  pointer-events: auto !important;
+}
+
+
+/* GV SERVICE CARD INTERACTION V1 */
+
+#gv-service-preview-v2 .gv-preview-card {
+  position: relative !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image {
+  transform: translateX(0) !important;
+  opacity: 1 !important;
+  transition:
+    transform .65s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content {
+  transform: translateY(105%) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition:
+    transform .65s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease,
+    visibility 0s linear .65s !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-image {
+  transform: translateX(-105%) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-title {
+  opacity: 0 !important;
+  transform: translateY(16px) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-content {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition:
+    transform .65s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease,
+    visibility 0s !important;
+}
+
+#gv-service-preview-v2 .gv-preview-book {
+  position: relative !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
+}
+
+
+/* GV SERVICE PREVIEW CLICK CIRCLE */
+
+#gv-service-preview-v2 .gv-preview-click-circle {
+  position: absolute !important;
+  left: 18px !important;
+  bottom: 18px !important;
+  z-index: 7 !important;
+
+  width: 34px !important;
+  height: 34px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border: 1px solid rgba(255,255,255,.78) !important;
+  border-radius: 50% !important;
+
+  background: rgba(2,47,18,.18) !important;
+  box-shadow: 0 3px 14px rgba(0,0,0,.18) !important;
+
+  pointer-events: none !important;
+
+  animation:
+    gvClickCirclePulse 2.8s ease-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border: 1px solid rgba(255,255,255,.45) !important;
+  border-radius: 50% !important;
+  animation: gvClickCircleRipple 2.8s ease-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  animation-delay: 1.4s !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle span {
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.95) !important;
+  box-shadow: 0 0 8px rgba(255,255,255,.28) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle::after {
+  animation: none !important;
+}
+
+@keyframes gvClickCirclePulse {
+  0%, 65%, 100% {
+    transform: scale(1);
+    opacity: .82;
+  }
+  72% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: .82;
+  }
+}
+
+@keyframes gvClickCircleRipple {
+  0% {
+    transform: scale(.72);
+    opacity: .65;
+  }
+  55%, 100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-preview-click-circle {
+    left: 15px !important;
+    bottom: 15px !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* GV PREVIEW BOOK BUTTON — PHOSPHOR GREEN */
+#gv-service-preview-v2 .gv-preview-book {
+  background: #B8FF3D !important;
+  color: #022F12 !important;
+  border: 1px solid rgba(2,47,18,.08) !important;
+  box-shadow: 0 8px 22px rgba(104,255,0,.18) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-book:hover {
+  background: #C8FF67 !important;
+  color: #022F12 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(104,255,0,.24) !important;
+}
+
+/* GV PREVIEW CLICK CIRCLE — SOFT GLASS */
+#gv-service-preview-v2 .gv-preview-click-circle {
+  width: 34px !important;
+  height: 34px !important;
+
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.38) !important;
+
+  backdrop-filter: blur(4px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(4px) saturate(120%) !important;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.22),
+    inset 0 -1px 2px rgba(0,0,0,.08),
+    0 3px 12px rgba(0,0,0,.10) !important;
+
+  animation:
+    gvGlassCircleBreath 4.8s ease-in-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  border-color: rgba(255,255,255,.28) !important;
+  border-width: 1px !important;
+  animation: gvGlassRipple 4.8s ease-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  animation-delay: 2.4s !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle span {
+  width: 4px !important;
+  height: 4px !important;
+  background: rgba(255,255,255,.72) !important;
+  box-shadow: 0 0 5px rgba(255,255,255,.14) !important;
+}
+
+@keyframes gvGlassCircleBreath {
+  0%, 100% {
+    transform: scale(1);
+    opacity: .68;
+  }
+
+  50% {
+    transform: scale(1.025);
+    opacity: .82;
+  }
+}
+
+@keyframes gvGlassRipple {
+  0% {
+    transform: scale(.82);
+    opacity: .32;
+  }
+
+  55% {
+    opacity: .07;
+  }
+
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-preview-click-circle {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}
+
+/* GV PREVIEW CLICK CIRCLE — VISIBLE SOFT PULSE */
+#gv-service-preview-v2 .gv-preview-click-circle {
+  background: rgba(255,255,255,.14) !important;
+  border: 1px solid rgba(255,255,255,.58) !important;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.30),
+    0 2px 14px rgba(0,0,0,.14) !important;
+
+  animation: gvGlassBreathVisible 3s ease-in-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  border: 1.2px solid rgba(255,255,255,.58) !important;
+  animation: gvGlassRippleVisible 3s ease-out infinite !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle::after {
+  animation-delay: 1.5s !important;
+}
+
+#gv-service-preview-v2 .gv-preview-click-circle span {
+  width: 5px !important;
+  height: 5px !important;
+  background: rgba(255,255,255,.90) !important;
+  box-shadow:
+    0 0 7px rgba(255,255,255,.45) !important;
+}
+
+@keyframes gvGlassBreathVisible {
+  0%, 100% {
+    transform: scale(1);
+    opacity: .78;
+  }
+
+  45% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  65% {
+    transform: scale(1);
+    opacity: .82;
+  }
+}
+
+@keyframes gvGlassRippleVisible {
+  0% {
+    transform: scale(.75);
+    opacity: .72;
+  }
+
+  45% {
+    opacity: .38;
+  }
+
+  100% {
+    transform: scale(2.05);
+    opacity: 0;
+  }
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-card.is-open .gv-preview-click-circle::after {
+  animation: none !important;
+}
+
+/* GV PREVIEW DESCRIPTION — NO SCROLLBAR */
+#gv-service-preview-v2 .gv-preview-content {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+
+/* GV SERVICES MAIN HEADING */
+.gv-services-main-heading {
+  width: min(900px, calc(100% - 32px)) !important;
+  margin: 0 auto 28px !important;
+  padding: 18px 16px 0 !important;
+  text-align: center !important;
+  direction: rtl !important;
+}
+
+.gv-services-main-heading .gv-services-main-eyebrow {
+  display: block !important;
+  margin-bottom: 8px !important;
+  direction: ltr !important;
+  color: #315d24 !important;
+  font-size: .78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+
+.gv-services-main-heading h1 {
+  margin: 0 0 10px !important;
+  color: #022f12 !important;
+  font-size: clamp(1.65rem, 3vw, 2.45rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.gv-services-main-heading p {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  color: #5a685e !important;
+  font-size: clamp(.9rem, 1.25vw, 1.02rem) !important;
+  line-height: 1.95 !important;
+}
+
+@media (max-width: 600px) {
+  .gv-services-main-heading {
+    width: calc(100% - 20px) !important;
+    margin-bottom: 22px !important;
+    padding-top: 10px !important;
+  }
+
+  .gv-services-main-heading h1 {
+    font-size: 1.48rem !important;
+  }
+
+  .gv-services-main-heading p {
+    font-size: .88rem !important;
+    line-height: 1.85 !important;
+  }
+}
+
+
+/* GV SERVICES MAIN HEADING */
+.gv-services-main-heading {
+  width: min(900px, calc(100% - 32px)) !important;
+  margin: 0 auto 28px !important;
+  padding: 18px 16px 0 !important;
+  text-align: center !important;
+  direction: rtl !important;
+}
+
+.gv-services-main-heading .gv-services-main-eyebrow {
+  display: block !important;
+  margin-bottom: 8px !important;
+  direction: ltr !important;
+  color: #315d24 !important;
+  font-size: .78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+
+.gv-services-main-heading h1 {
+  margin: 0 0 10px !important;
+  color: #022f12 !important;
+  font-size: clamp(1.65rem, 3vw, 2.45rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+
+.gv-services-main-heading p {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  color: #5a685e !important;
+  font-size: clamp(.9rem, 1.25vw, 1.02rem) !important;
+  line-height: 1.95 !important;
+}
+
+@media (max-width: 600px) {
+  .gv-services-main-heading {
+    width: calc(100% - 20px) !important;
+    margin-bottom: 22px !important;
+    padding-top: 10px !important;
+  }
+
+  .gv-services-main-heading h1 {
+    font-size: 1.48rem !important;
+  }
+
+  .gv-services-main-heading p {
+    font-size: .88rem !important;
+    line-height: 1.85 !important;
+  }
+}
+
+/* GV SERVICES HEADING — SINGLE LINE DESKTOP */
+@media (min-width: 901px) {
+  .gv-services-main-heading p {
+    max-width: none !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .gv-services-main-heading p {
+    white-space: normal !important;
+  }
+}
+
+/* GV HERO — FONT ONLY */
+#root .font-garamond,
+#root .font-garamond * {
+  font-family: "GV Broela", sans-serif !important;
+}
+
+/* GV SERVICES SELECT HINT */
+.gv-services-select-hint {
+  margin-top: 10px !important;
+  color: #315d24 !important;
+  font-size: .88rem !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 600px) {
+  .gv-services-select-hint {
+    margin-top: 8px !important;
+    font-size: .82rem !important;
+  }
+}
+
+/* GV SERVICES SELECT HINT — SOFT WAVE */
+.gv-services-select-hint {
+  display: inline-block !important;
+  color: transparent !important;
+  background: linear-gradient(
+    110deg,
+    #315d24 0%,
+    #315d24 38%,
+    #8bc53d 50%,
+    #315d24 62%,
+    #315d24 100%
+  ) !important;
+  background-size: 220% auto !important;
+  background-position: 120% center !important;
+  background-repeat: no-repeat !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+
+  animation: gvSelectHintWave 3.2s ease-in-out infinite !important;
+}
+
+@keyframes gvSelectHintWave {
+  0% {
+    background-position: 120% center;
+  }
+
+  55% {
+    background-position: -20% center;
+  }
+
+  100% {
+    background-position: -20% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-services-select-hint {
+    animation: none !important;
+    background-position: center !important;
+  }
+}
+
+/* GV SERVICES SELECT HINT — STRONGER WAVE */
+.gv-services-select-hint {
+  color: transparent !important;
+  background: linear-gradient(
+    110deg,
+    #315d24 0%,
+    #315d24 30%,
+    #8bc53d 42%,
+    #d8ff8a 50%,
+    #8bc53d 58%,
+    #315d24 70%,
+    #315d24 100%
+  ) !important;
+  background-size: 280% 100% !important;
+  background-position: 135% center !important;
+  background-repeat: no-repeat !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+
+  animation: gvSelectHintWaveStrong 2.5s ease-in-out infinite !important;
+}
+
+@keyframes gvSelectHintWaveStrong {
+  0% {
+    background-position: 135% center;
+  }
+
+  38% {
+    background-position: 55% center;
+  }
+
+  58% {
+    background-position: -35% center;
+  }
+
+  100% {
+    background-position: -35% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-services-select-hint {
+    animation: none !important;
+    background-position: center !important;
+  }
+}
+
+/* GV SERVICES SELECT HINT — VERY VISIBLE WAVE */
+.gv-services-select-hint {
+  position: relative !important;
+  display: inline-block !important;
+
+  color: #315d24 !important;
+
+  background: linear-gradient(
+    105deg,
+    #315d24 0%,
+    #315d24 24%,
+    #8bc53d 34%,
+    #efffc2 44%,
+    #ffffff 50%,
+    #efffc2 56%,
+    #8bc53d 66%,
+    #315d24 76%,
+    #315d24 100%
+  ) !important;
+
+  background-size: 360% 100% !important;
+  background-position: 150% center !important;
+  background-repeat: no-repeat !important;
+
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+
+  animation:
+    gvSelectHintVeryVisible 2s ease-in-out infinite,
+    gvSelectHintGlow 2s ease-in-out infinite !important;
+}
+
+@keyframes gvSelectHintVeryVisible {
+  0% {
+    background-position: 150% center;
+  }
+
+  35% {
+    background-position: 65% center;
+  }
+
+  52% {
+    background-position: -45% center;
+  }
+
+  100% {
+    background-position: -45% center;
+  }
+}
+
+@keyframes gvSelectHintGlow {
+  0%, 100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+
+  42% {
+    filter: brightness(1.18);
+    transform: scale(1.012);
+  }
+
+  55% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-services-select-hint {
+    animation: none !important;
+    color: #315d24 !important;
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+  }
+}
+
+/* GV SERVICES SELECT HINT — VISIBLE WAVE FINAL */
+.gv-services-select-hint {
+  display: inline-block !important;
+
+  color: #315d24 !important;
+  background: none !important;
+  background-image: none !important;
+
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #315d24 !important;
+
+  text-shadow: none !important;
+
+  animation: gvSelectHintVisibleWave 2.2s ease-in-out infinite !important;
+}
+
+@keyframes gvSelectHintVisibleWave {
+  0%, 100% {
+    opacity: .78;
+    transform: translateX(0);
+    text-shadow: none;
+  }
+
+  35% {
+    opacity: 1;
+    transform: translateX(2px);
+    text-shadow:
+      0 0 4px rgba(139,197,61,.28),
+      0 0 10px rgba(139,197,61,.18);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(0);
+    text-shadow:
+      0 0 6px rgba(139,197,61,.35),
+      0 0 14px rgba(139,197,61,.20);
+  }
+
+  65% {
+    opacity: .85;
+    transform: translateX(-2px);
+    text-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-services-select-hint {
+    animation: none !important;
+    color: #315d24 !important;
+    -webkit-text-fill-color: #315d24 !important;
+  }
+}
+
+/* GV SERVICES SELECT HINT — CONTINUOUS SOFT LIGHT SWEEP */
+.gv-services-select-hint {
+  display: inline-block !important;
+
+  /* متن ثابت؛ بدون حرکت */
+  transform: none !important;
+  opacity: 1 !important;
+  filter: none !important;
+  text-shadow: none !important;
+
+  /* پایه سبز تیره + موج سبز روشن */
+  background: linear-gradient(
+    105deg,
+    #315d24 0%,
+    #315d24 34%,
+    rgba(139,197,61,.18) 41%,
+    rgba(191,231,122,.65) 47%,
+    #d8f5a5 50%,
+    rgba(191,231,122,.65) 53%,
+    rgba(139,197,61,.18) 59%,
+    #315d24 66%,
+    #315d24 100%
+  ) !important;
+
+  background-size: 260% 100% !important;
+  background-position: 220% center !important;
+  background-repeat: no-repeat !important;
+
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  /* حرکت کاملاً پیوسته و بدون توقف */
+  animation: gvSelectHintContinuousSweep 3.8s linear infinite !important;
+}
+
+@keyframes gvSelectHintContinuousSweep {
+  from {
+    background-position: 220% center;
+  }
+
+  to {
+    background-position: -20% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gv-services-select-hint {
+    animation: none !important;
+    background: #315d24 !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: #315d24 !important;
+    color: #315d24 !important;
+  }
+}
+
+
+/* GV-HERO-VIDEO-OBJECT-POSITION-51 */
+@media (max-width: 768px) {
+  #root > section:first-child > video {
+    object-position: 51% 50% !important;
+  }
+}
+
+
+
+
+/* GV-HOME-FIXED-BACKGROUND-V1 — fixed global homepage background */
+html:has(#root),
+body:has(#root) {
+    background-color: transparent !important;
+}
+
+body:has(#root) {
+    background-image: url("/static/images/home1.jpeg") !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
+
+/* GV-HOME-JPG-MOBILE-FIT-FIX-20261018 */
+@media screen and (max-width: 768px) {
+  body:has(#root) {
+    background-image: url("/static/images/home1.jpeg") !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+  }
+}

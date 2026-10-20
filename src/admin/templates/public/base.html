@@ -18,9 +18,9 @@
     <title>{% block title %}Green Vita | کلینیک گیاه پزشکی{% endblock %}</title>
 
     <meta name="description"
-          content="کلینیک گیاه پزشکی گرین ویتا؛ تشخیص و درمان بیماری‌های گیاهان آپارتمانی، فضای باز و باغات، ویزیت حضوری و آنلاین و مشاوره تخصصی.">
+          content="{% block meta_description %}کلینیک گیاه پزشکی گرین ویتا؛ تشخیص و درمان بیماری‌ها و آفات گیاهان آپارتمانی، فضای باز و باغات، ویزیت حضوری و آنلاین و مشاوره تخصصی.{% endblock %}">
 
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
 
     <link rel="canonical" href="https://greenvitaclinic.ir{{ request.url.path }}">
 
@@ -29,37 +29,56 @@
     <meta property="og:site_name" content="Green Vita">
     <meta property="og:title" content="{% block og_title %}Green Vita | کلینیک گیاه پزشکی{% endblock %}">
     <meta property="og:description"
-          content="تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات؛ ویزیت حضوری و آنلاین توسط گرین ویتا.">
+          content="{% block og_description %}تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات؛ ویزیت حضوری و آنلاین توسط گرین ویتا.{% endblock %}">
     <meta property="og:url" content="https://greenvitaclinic.ir{{ request.url.path }}">
-    <meta property="og:image" content="https://greenvitaclinic.ir/static/images/hero.png">
+    
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Green Vita | کلینیک گیاه پزشکی">
+    <meta name="twitter:title" content="{% block twitter_title %}Green Vita | کلینیک گیاه پزشکی{% endblock %}">
     <meta name="twitter:description"
-          content="تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات.">
+          content="{% block twitter_description %}تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات توسط گرین ویتا.{% endblock %}">
 
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
     <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
-    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20260920-floating-contact2">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
+    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20261012-service-heading-dynamic-final2">
+    
+    
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": "Organization",
       "@id": "https://greenvitaclinic.ir/#business",
       "name": "کلینیک گیاه پزشکی گرین ویتا",
       "alternateName": "Green Vita",
       "url": "https://greenvitaclinic.ir/",
+      "logo": "https://greenvitaclinic.ir/static/icon-192.png",
+      "image": "https://greenvitaclinic.ir/static/images/hero.png",
       "description": "کلینیک تخصصی گیاه پزشکی برای تشخیص و درمان مشکلات گیاهان آپارتمانی، فضای باز و باغات.",
-      "image": "https://greenvitaclinic.ir/static/images/hero.png"
+      "telephone": "+989128111058",
+      "sameAs": [
+        "https://www.instagram.com/greenvita_clinic",
+        "https://t.me/GreenVita_AI_Bot",
+        "https://ble.ir/greenvita_ai_bot"
+      ]
     }
     </script>
 
+    {% block extra_head %}{% endblock %}
+
     {% block extra_css %}{% endblock %}
-    <link rel="stylesheet" href="/static/css/public-shared-header.css?v=20260918-cta-final">
+    <link rel="stylesheet" href="/static/css/public-shared-header.css?v=20261012-header-edge-shadow-final2">
+<link id="gv-booking-cta-motion-css" rel="stylesheet" href="/static/css/booking-cta-motion.css?v=20261020-neon-final1">
+
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
 </head>
 
 <body>
@@ -184,8 +203,19 @@
 </div>
 <footer class="site-footer">
     <div class="container footer-inner">
-        <strong>Green Vita · کلینیک گیاه پزشکی</strong>
-        <span>سلامت گیاه، با دانش و مراقبت تخصصی</span>
+        <div class="gv-footer-ticker">
+            <div class="gv-footer-ticker-track">
+                <div class="gv-footer-ticker-group">
+                    <span>کلینیک گیاه پزشکی گرین ویتا · مبتکر اولین ربات و دستیار هوشمند گیاه پزشکی در بله و تلگرام · سلامت گیاه با دانش و مراقبت تخصصی · Green Vita Clinic · بیش از ۷ سال تجربه تخصصی در زمینه ویزیت و درمان گیاهان آپارتمانی</span>
+                </div>
+                <div class="gv-footer-ticker-group" aria-hidden="true">
+                    <span>کلینیک گیاه پزشکی گرین ویتا · مبتکر اولین ربات و دستیار هوشمند گیاه پزشکی در بله و تلگرام · سلامت گیاه با دانش و مراقبت تخصصی · Green Vita Clinic · بیش از ۷ سال تجربه تخصصی در زمینه ویزیت و درمان گیاهان آپارتمانی</span>
+                </div>
+                <div class="gv-footer-ticker-group" aria-hidden="true">
+                    <span>کلینیک گیاه پزشکی گرین ویتا · مبتکر اولین ربات و دستیار هوشمند گیاه پزشکی در بله و تلگرام · سلامت گیاه با دانش و مراقبت تخصصی · Green Vita Clinic · بیش از ۷ سال تجربه تخصصی در زمینه ویزیت و درمان گیاهان آپارتمانی</span>
+                </div>
+            </div>
+        </div>        </div>
     </div>
 </footer>
 
@@ -225,5 +255,307 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script src="/static/js/gv-card-responsive.js?v=20260921-final3"></script>
+<script src="/static/js/gv-card1-image-layout.js?v=20260921-final-image1"></script>
+
+<script id="gv-footer-ticker-script">
+(function () {
+    function setupFooterTicker() {
+        const ticker = document.querySelector(".gv-footer-ticker");
+        const track = document.querySelector(".gv-footer-ticker-track");
+
+        if (!ticker || !track) return;
+
+        track.getAnimations().forEach(function (animation) {
+            animation.cancel();
+        });
+
+        requestAnimationFrame(function () {
+            const group = track.querySelector(".gv-footer-ticker-group");
+            if (!group) return;
+
+            const width = group.getBoundingClientRect().width;
+            if (!width) return;
+
+            const speed = 45;
+            const duration = Math.max(18, Math.round(width / speed));
+
+            track.animate(
+                [
+                    { transform: "translate3d(" + (-width) + "px,0,0)" },
+                    { transform: "translate3d(0,0,0)" }
+                ],
+                {
+                    duration: duration * 1000,
+                    iterations: Infinity,
+                    easing: "linear"
+                }
+            );
+        });
+    }
+
+    function initFooterTicker() {
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(setupFooterTicker);
+        } else {
+            setupFooterTicker();
+        }
+    }
+
+    window.addEventListener("load", initFooterTicker);
+
+    let resizeTimer;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(setupFooterTicker, 150);
+    });
+})();
+</script>
+
+{% block extra_js %}{% endblock %}
+<!-- GV-ONLINE-CLINIC-TEXT-COLOR-SYNC-START -->
+<script id="gv-online-clinic-text-color-sync">
+(() => {
+  const pairs = [
+    [
+      "GREEN VITA ASSISTANT",
+      "GREEN VITA · ONLINE PLANT CLINIC"
+    ],
+    [
+      "ربات گیاه پزشک گرین‌ویتا همیشه کنارت هست",
+      "مشکل گیاهت رو همین‌جا حل کن"
+    ],
+    [
+      "ربات گیاه پزشک گرین‌ویتا برای تشخیص اولیه مشکل گیاه، دریافت راهنمایی، بررسی عکس و ارتباط سریع با متخصص در دسترس توست.",
+      "عکس گیاهت را بارگذاری کن، نوع گیاه یا مشکلش را بررسی کن و نتیجه را مستقیماً در سایت ببین؛ بدون ورود به بات."
+    ]
+  ];
+
+  const normalize = value =>
+    String(value || "")
+      .normalize("NFC")
+      .replace(/[\u200c\u200e\u200f\u00a0]/g, "")
+      .toLocaleLowerCase()
+      .replace(/[^\p{L}\p{N}]/gu, "");
+
+  function findText(phrase) {
+    const wanted = normalize(phrase);
+    return [...document.querySelectorAll("body *")].filter(el => {
+      if (!el.getClientRects().length) return false;
+      if (normalize(el.textContent) !== wanted) return false;
+      return ![...el.children].some(
+        child => normalize(child.textContent) === wanted
+      );
+    });
+  }
+
+  function syncColors() {
+    const resolved = pairs.map(([sourceText, targetText]) => ({
+      source: findText(sourceText),
+      target: findText(targetText),
+      targetText
+    }));
+
+    if (resolved.some(pair => !pair.source.length || !pair.target.length)) {
+      return false;
+    }
+
+    resolved.forEach(pair => {
+      const color = getComputedStyle(pair.source[0]).color;
+      pair.target.forEach(el => {
+        el.style.setProperty("color", color, "important");
+      });
+    });
+
+    return true;
+  }
+
+  function init() {
+    if (syncColors()) return;
+
+    const observer = new MutationObserver(() => {
+      if (syncColors()) observer.disconnect();
+    });
+
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      characterData: true
+    });
+
+    setTimeout(() => observer.disconnect(), 10000);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- GV-ONLINE-CLINIC-TEXT-COLOR-SYNC-END -->
+
+<!-- GV-THREE-TEXTS-CENTER-FINAL-START -->
+<script id="gv-three-texts-center-final">
+(() => {
+  const phrases = [
+    "از پیدا کردن مشکل تا شروع مسیر درمان، قدم‌به‌قدم کنارت هستیم.",
+    "تشخیص درست، ویزیت متناسب و پیگیری برای اینکه مسیر درمان گیاهت روشن‌تر باشه.",
+    "هر گیاه داستان خودش را دارد؛ تشخیص درست، اولین قدم برای نجات آن است."
+  ];
+
+  const normalize = value => String(value || "")
+    .normalize("NFC")
+    .replace(/[يى]/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/[\u200c\u200e\u200f\u00a0ـ]/g, "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]/gu, "");
+
+  function applyAlignment() {
+    const missing = [];
+
+    phrases.forEach(phrase => {
+      const key = normalize(phrase);
+      const candidates = [
+        ...document.querySelectorAll(
+          "p,h1,h2,h3,h4,h5,h6,blockquote,div,li,span,strong,em"
+        )
+      ].filter(el =>
+        el.getClientRects().length > 0 &&
+        !el.closest("script,style,noscript,template") &&
+        normalize(el.textContent) === key
+      );
+
+      // Prefer the actual paragraph/heading rather than an inline child
+      // or a generic wrapper.
+      let targets = candidates.filter(el =>
+        el.matches("p,h1,h2,h3,h4,h5,h6,blockquote")
+      );
+
+      if (!targets.length) {
+        targets = candidates.filter(el => el.matches("div,li"));
+      }
+
+      if (!targets.length) {
+        targets = candidates.filter(el => el.matches("span,strong,em"));
+      }
+
+      if (!targets.length) {
+        missing.push(phrase);
+        return;
+      }
+
+      targets.forEach(el => {
+        el.style.setProperty("text-align", "center", "important");
+        el.style.setProperty("margin-left", "auto", "important");
+        el.style.setProperty("margin-right", "auto", "important");
+      });
+    });
+
+    return missing;
+  }
+
+  function init() {
+    const missing = applyAlignment();
+
+    // Retry briefly if any of the text blocks are rendered dynamically.
+    if (missing.length && document.body) {
+      const observer = new MutationObserver(() => {
+        if (!applyAlignment().length) observer.disconnect();
+      });
+
+      observer.observe(document.body, {
+        subtree: true,
+        childList: true,
+        characterData: true
+      });
+
+      setTimeout(() => observer.disconnect(), 10000);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- GV-THREE-TEXTS-CENTER-FINAL-END -->
+<!-- GV-HEADER-NEON-PERSISTENT-START -->
+<script id="gv-header-neon-gloss-persistent-js">
+(() => {
+  const links = [
+    ...document.querySelectorAll('a.gv-booking-live-cta[href="/booking/"]')
+  ];
+  if (!links.length) return;
+
+  document.getElementById('gv-header-neon-gloss-persistent-style')?.remove();
+
+  const style = document.createElement('style');
+  style.id = 'gv-header-neon-gloss-persistent-style';
+  style.textContent = `
+    @keyframes gvHeaderNeonPulse {
+      0%, 100% {
+        box-shadow:
+          0 5px 16px rgba(158,216,74,.32),
+          0 0 0 0 rgba(158,216,74,0),
+          inset 0 1px 0 rgba(255,255,255,.75),
+          inset 0 -2px 0 rgba(49,93,19,.15);
+      }
+      50% {
+        box-shadow:
+          0 8px 25px rgba(158,216,74,.52),
+          0 0 0 5px rgba(158,216,74,.16),
+          inset 0 1px 0 rgba(255,255,255,.9),
+          inset 0 -2px 0 rgba(49,93,19,.12);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      a.gv-booking-live-cta[data-gv-neon-gloss="1"] {
+        animation: none !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const reduceMotion =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  links.forEach(el => {
+    el.setAttribute('data-gv-neon-gloss', '1');
+
+    el.style.setProperty(
+      'background-image',
+      'linear-gradient(180deg,rgba(255,255,255,.48),rgba(255,255,255,.12) 42%,transparent 52%),linear-gradient(115deg,#9ED84A,#B5F36B)',
+      'important'
+    );
+    el.style.setProperty('background-color', '#9ED84A', 'important');
+    el.style.setProperty('color', '#12351A', 'important');
+    el.style.setProperty('-webkit-text-fill-color', '#12351A', 'important');
+    el.style.setProperty('border', '1px solid rgba(255,255,255,.72)', 'important');
+
+    /* سایه را به انیمیشن واگذار می‌کنیم تا ضربان آن دیده شود. */
+    el.style.removeProperty('box-shadow');
+
+    el.style.setProperty(
+      'animation',
+      reduceMotion ? 'none' : 'gvHeaderNeonPulse 3s ease-in-out infinite',
+      'important'
+    );
+    el.style.setProperty(
+      'transition',
+      'filter .25s ease,transform .25s ease',
+      'important'
+    );
+  });
+
+  console.info('[Green Vita] Neon gloss applied:', links.length);
+})();
+</script>
+<!-- GV-HEADER-NEON-PERSISTENT-END -->
+<script id="gv-chat-neon-gloss-script" src="/static/js/gv-chat-neon-gloss.js?v=20261021-chat-neon2" defer></script>
 </body>
 </html>

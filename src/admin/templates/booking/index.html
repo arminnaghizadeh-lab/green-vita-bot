@@ -2,285 +2,2257 @@
 <html lang="fa" dir="rtl">
 <head>
     {% include "booking/pwa-head.html" %}
+{% set selected_service_id = selected_service_id|default(None) %}
+{% set selected_service = selected_service|default(None) %}
+{% set auto_step2 = auto_step2|default(False) %}
+
+{% set seo_map = {
+    "apartment-plants": {
+        "title": "ویزیت گیاهان آپارتمانی | تشخیص و درمان تخصصی | گرین ویتا",
+        "description": "ویزیت تخصصی گیاهان آپارتمانی در گرین ویتا؛ بررسی بیماری‌ها، آفات، آبیاری، نور، خاک و ریشه و ارائه برنامه درمان و مراقبت متناسب با شرایط گیاه.",
+        "intro": "در این ویزیت، وضعیت گیاهان آپارتمانی از نظر بیماری‌ها، آفات، آبیاری، نور، خاک و ریشه بررسی می‌شود و بر اساس شرایط واقعی گیاه، راهکار درمان و مراقبت ارائه می‌کنیم."
+    },
+    "outdoor-plants": {
+        "title": "ویزیت گیاهان فضای باز | تشخیص بیماری و آفات | گرین ویتا",
+        "description": "ویزیت تخصصی گیاهان فضای باز در گرین ویتا؛ بررسی آفات، بیماری‌ها، آبیاری، خاک، تغذیه و شرایط محیطی برای انتخاب راهکار مناسب درمان و نگهداری.",
+        "intro": "در ویزیت گیاهان فضای باز، علائم بیماری و آفات، وضعیت آبیاری، خاک، تغذیه و شرایط محیطی بررسی می‌شود تا راهکار مناسب درمان و نگهداری مشخص شود."
+    },
+    "gardens": {
+        "title": "ویزیت باغات | بررسی بیماری و آفات درختان | گرین ویتا",
+        "description": "ویزیت تخصصی باغات در گرین ویتا؛ بررسی بیماری‌ها، آفات، مشکلات تغذیه‌ای، آبیاری، خاک و وضعیت درختان و ارائه برنامه مدیریت و درمان.",
+        "intro": "در ویزیت باغات، وضعیت درختان و باغ از نظر بیماری‌ها، آفات، تغذیه، آبیاری، خاک و عوامل محیطی بررسی شده و برنامه مناسب برای مدیریت و درمان ارائه می‌شود."
+    },
+    "phone-consultation": {
+        "title": "ویزیت آنلاین گیاه پزشکی | مشاوره تخصصی | گرین ویتا",
+        "description": "ویزیت آنلاین گیاه پزشکی گرین ویتا برای بررسی مشکلات گیاه با استفاده از توضیحات و تصاویر شما و ارائه راهکار تخصصی برای درمان و مراقبت.",
+        "intro": "در ویزیت آنلاین، مشکل گیاه بر اساس توضیحات و تصاویر ارسالی شما بررسی می‌شود و راهکار تخصصی برای تشخیص، درمان و مراقبت از گیاه ارائه خواهد شد."
+    }
+} %}
+
+{% set seo = seo_map.get(selected_service.slug if selected_service else "", {
+    "title": "رزرو ویزیت گیاه پزشکی | گرین ویتا",
+    "description": "رزرو ویزیت گیاه پزشکی گرین ویتا برای گیاهان آپارتمانی، فضای باز، باغات و ویزیت آنلاین؛ زمان مناسب خود را انتخاب و درخواست ویزیت را ثبت کنید.",
+    "intro": ""
+}) %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="رزرو آنلاین خدمات کلینیک گیاه پزشکی گرین ویتا">
-    <title>رزرو آنلاین | گرین ویتا</title>
+    <title>{{ seo.title }}</title>
+<meta name="description" content="{{ seo.description }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://greenvitaclinic.ir{{ request.url.path }}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="Green Vita">
+<meta property="og:title" content="{{ seo.title }}">
+<meta property="og:description" content="{{ seo.description }}">
+<meta property="og:url" content="https://greenvitaclinic.ir{{ request.url.path }}">
 
-    <style>
-        * {
-            box-sizing: border-box;
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ seo.title }}">
+<meta name="twitter:description" content="{{ seo.description }}">
+
+
+{% if selected_service %}
+    <script type="application/ld+json">
+    {{ {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "@id": "https://greenvitaclinic.ir" ~ request.url.path ~ "#service",
+      "name": selected_service.title,
+      "serviceType": selected_service.title,
+      "description": seo.description,
+      "url": "https://greenvitaclinic.ir" ~ request.url.path,
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://greenvitaclinic.ir/#business",
+        "name": "کلینیک گیاه پزشکی گرین ویتا",
+        "url": "https://greenvitaclinic.ir/",
+        "logo": "https://greenvitaclinic.ir/static/icon-192.png"
+      }
+    } | tojson }}
+    </script>
+
+    <script type="application/ld+json">
+    {{ {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "https://greenvitaclinic.ir/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "رزرو ویزیت",
+          "item": "https://greenvitaclinic.ir/booking/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": selected_service.title,
+          "item": "https://greenvitaclinic.ir" ~ request.url.path
         }
+      ]
+    } | tojson }}
+    </script>
+{% else %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://greenvitaclinic.ir/booking/#webpage",
+      "url": "https://greenvitaclinic.ir/booking/",
+      "name": "رزرو ویزیت گیاه پزشکی | گرین ویتا",
+      "description": "رزرو ویزیت گیاه پزشکی گرین ویتا برای گیاهان آپارتمانی، فضای باز، باغات و ویزیت آنلاین.",
+      "inLanguage": "fa-IR",
+      "isPartOf": {
+        "@id": "https://greenvitaclinic.ir/#business"
+      }
+    }
+    </script>
+{% endif %}
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
 
-        body {
-            margin: 0;
-            font-family: "Vazir", Tahoma, Arial, sans-serif;
-            background: #f7f8f5;
-            color: #26352b;
-        }
-
-        .container {
-            width: min(1100px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 32px 0 50px;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .hero h1 {
-            margin: 0 0 10px;
-            font-size: clamp(25px, 5vw, 38px);
-        }
-
-        .hero p {
-            margin: 0;
-            color: #66736a;
-            font-size: 15px;
-        }
-
-        .track-card {
-            margin-bottom: 24px;
-            background: #fff;
-            border: 1px solid #e5e9e4;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(30, 50, 35, 0.06);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-        }
-
-        .track-card h2 {
-            margin: 0 0 7px;
-            font-size: 20px;
-        }
-
-        .track-card p {
-            margin: 0;
-            color: #66736a;
-            font-size: 14px;
-            line-height: 1.9;
-        }
-
-        .track-button {
-            flex: 0 0 auto;
-            border: 0;
-            border-radius: 12px;
-            padding: 13px 18px;
-            background: #2f6b3d;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            text-decoration: none;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .track-button:hover {
-            opacity: .9;
-        }
-
-        .services {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 16px;
-            width: 100%;
-        }
-
-        .service-card {
-            background: #fff;
-            border: 1px solid #e5e9e4;
-            border-radius: 20px;
-            padding: 18px;
-            box-shadow: 0 8px 25px rgba(30, 50, 35, 0.06);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            text-align: center;
-            align-items: center;
-        }
-
-        .service-image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 14px;
-            object-fit: cover;
-            background: #edf1eb;
-        }
-
-        .service-placeholder {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 14px;
-            background: #edf1eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-        }
-
-        .service-card h2 {
-            margin: 0;
-            font-size: 20px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .price {
-            width: 100%;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        .price small {
-            font-size: 12px;
-            font-weight: normal;
-        }
-
-        .choose {
-            width: 100%;
-            border: 0;
-            border-radius: 12px;
-            padding: 13px 16px;
-            background: #2f6b3d;
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .choose:hover {
-            opacity: .9;
-        }
-
-        @media (max-width: 700px) {
-            .container {
-                width: min(100% - 20px, 560px);
-                padding-top: 22px;
-            }
-
-            .services {
-                grid-template-columns: 1fr;
-            }
-
-            .track-card {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .track-button {
-                width: 100%;
-            }
-
-            .service-card h2 {
-                font-size: 18px;
-            }
-        }
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
     
-html,
-body,
-button,
-input,
-textarea,
-select{
-  font-family: "Vazir", sans-serif !important;
-}
-\n</style>
-  <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    
+    
+    
+    <link rel="stylesheet" href="/static/css/booking-prototype.css?v=20260920-booking-hero-final1">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20261012-service-heading-dynamic-final2">
+    <link rel="stylesheet" href="/static/css/public-shared-header.css?v=20260918-cta-final">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260915-stepper2">
+    <link rel="stylesheet" href="/static/css/booking-header-modern.css?v=20260918-cta-final">
+
+
+<style id="gv-booking-validation-ui">
+    .gv-field-invalid {
+        position: relative;
+    }
+
+    .gv-field-invalid input,
+    .gv-field-invalid textarea {
+        border-color: #c94a4a !important;
+        box-shadow: 0 0 0 3px rgba(201,74,74,.10) !important;
+    }
+
+    .gv-field-error {
+        display: none;
+        margin-top: 6px;
+        color: #b33d3d;
+        font-size: 12px;
+        line-height: 1.7;
+        font-weight: 600;
+    }
+.gv-field-invalid .gv-field-error {
+        display: block;
+    }
+
+    .gv-field-valid input,
+    .gv-field-valid textarea {
+        border-color: #8bc53d !important;
+        box-shadow: 0 0 0 3px rgba(139,197,61,.08) !important;
+    }
+</style>
+
+<style id="gv-booking-service-details">
+.booking-service-details{
+    margin:22px 0 4px;
+    padding:20px;
+    background:#f7faf2;
+    border:1px solid #e4f0cc;
+    border-radius:18px;
+}
+.booking-service-details.hidden{
+    display:none;
+}
+.booking-service-details h3{
+    margin:0 0 8px;
+    color:#022f12;
+    font-size:18px;
+}
+.booking-service-details p{
+    margin:0;
+    color:#66736a;
+    line-height:1.9;
+    text-align:justify;
+}
+.booking-service-details ul{
+    margin:12px 0 0;
+    padding-right:20px;
+    color:#66736a;
+    line-height:2;
+}
+.booking-service-details li + li{
+    margin-top:2px;
+}
+</style>
+
+
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
+<link id="gv-booking-cta-motion-css" rel="stylesheet" href="/static/css/booking-cta-motion.css?v=gvbookmotion-20261012-011828">
+<link rel="stylesheet" href="/static/css/booking-page-background.css?v=20261021-bg1">
 </head>
 
-<body>
-<main class="container">
+<body class="gv-booking-page">
 
-    <header class="hero">
-        <h1>رزرو آنلاین خدمات</h1>
-        <p>خدمت موردنظر خود را انتخاب کنید</p>
-    </header>
+{% include "partials/public-header.html" %}
 
-    <section class="track-card">
-        <div>
-            <h2>پیگیری / ویرایش رزرو</h2>
-            <p>
-                با کد رهگیری و شماره تماس، وضعیت رزرو خود را ببینید
-                و در صورت مجاز بودن آن را ویرایش کنید.
-            </p>
+
+
+
+<section class="bk-hero wrap">
+    <h1>رزرو نوبت ویزیت</h1>
+    <p>در ۴ مرحله، نوبتت رو رزرو کن.</p>
+</section>
+
+
+<div class="stepper wrap" id="stepper">
+
+    <div class="st active" data-step="1">
+        <div class="circle">۱</div>
+        <span class="lbl">سرویس</span>
+    </div>
+
+    <div class="st" data-step="2">
+        <div class="circle">۲</div>
+        <span class="lbl">زمان</span>
+    </div>
+
+    <div class="st" data-step="3">
+        <div class="circle">۳</div>
+        <span class="lbl">تکمیل اطلاعات</span>
+    </div>
+
+    <div class="st" data-step="4">
+        <div class="circle">۴</div>
+        <span class="lbl">تایید</span>
+    </div>
+
+</div>
+
+
+<div class="bk-card">
+
+    <!-- STEP 1 -->
+
+    <div class="bk-step active" data-step="1">
+
+        {% if selected_service %}<h2>سرویس انتخاب‌شده</h2>{% else %}<h2>یک سرویس رو انتخاب کن</h2>{% endif %}
+
+        <div class="svc-pick" id="svcPick">
+
+            {% for service in services %}
+            {% if not auto_step2 or service.id == selected_service_id %}
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="svc"
+                    value="{{ service.id }}"
+                    data-title="{{ service.title }}"
+                    data-price="{{ service.price or 0 }}"
+                    {% if selected_service_id and service.id == selected_service_id %}checked{% endif %}
+                >
+
+                <span class="name">
+                    {{ service.title }}
+                </span>
+
+                <span class="price">
+
+                    {% if service.price %}
+                        از
+                        {{ "{:,}".format(service.price|int)
+                            .replace("0","۰")
+                            .replace("1","۱")
+                            .replace("2","۲")
+                            .replace("3","۳")
+                            .replace("4","۴")
+                            .replace("5","۵")
+                            .replace("6","۶")
+                            .replace("7","۷")
+                            .replace("8","۸")
+                            .replace("9","۹")
+                        }}
+                        ت
+                    {% else %}
+                        رایگان
+                    {% endif %}
+
+                </span>
+
+            </label>
+
+            {% endif %}
+            {% endfor %}
+
         </div>
 
-        <a class="track-button" href="/booking/track/">
-            پیگیری / ویرایش رزرو
-        </a>
-    </section>
+        <div class="bk-actions">
+            <span></span>
+            <button
+                class="next-btn"
+                id="toStep2"
+                onclick="{% if auto_step2 %}goStep(2){% else %}goToSelectedService(){% endif %}"
+                disabled
+            >
+                مرحله بعد
+            </button>
+        </div>
 
-    <section class="services">
-        {% for service in services %}
-        <article class="service-card">
+    </div>
 
-            {% if service.id == 1 %}
-                <img
-                    class="service-image"
-                    src="https://shermila.net/wp-content/uploads/2025/05/GiyahNakhleNicolai.jpg"
-                    alt="ویزیت گیاهان آپارتمانی"
-                    loading="lazy"
-                >
-            {% elif service.id == 2 %}
-                <img
-                    class="service-image"
-                    src="https://pardisnadi.ir/wp-content/uploads/2023/11/%D8%A7%D8%B5%D9%88%D9%84-%D9%86%DA%AF%D9%87%D8%AF%D8%A7%D8%B1%DB%8C-%D9%81%D8%B6%D8%A7%DB%8C-%D8%B3%D8%A8%D8%B2.jpg"
-                    alt="ویزیت گیاهان فضای باز"
-                    loading="lazy"
-                >
-            {% elif service.id == 3 %}
-                <img
-                    class="service-image"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtSPwkOX3Ypli20UCFtdv1qNmRDocQLBBCOyCY5VbzOMSz7BRuIo5Kx9lL&s=10"
-                    alt="ویزیت باغات"
-                    loading="lazy"
-                >
-            {% elif service.id == 4 %}
-                <img
-                    class="service-image"
-                    src="https://cdn.tamin24.ir/posts/images/67188.jpg"
-                    alt="مشاوره تلفنی"
-                    loading="lazy"
-                >
-            {% elif service.image_url %}
-                <img
-                    class="service-image"
-                    src="{{ service.image_url }}"
-                    alt="{{ service.title }}"
-                    loading="lazy"
-                >
-            {% else %}
-                <div class="service-placeholder" aria-hidden="true">🌿</div>
-            {% endif %}
 
-            <h2>{{ service.title }}</h2>
+    <!-- STEP 2 -->
 
-            <div class="price">
-                {% if service.price %}
-                    {{ "{:,}".format(service.price|int).replace("0","۰").replace("1","۱").replace("2","۲").replace("3","۳").replace("4","۴").replace("5","۵").replace("6","۶").replace("7","۷").replace("8","۸").replace("9","۹") }}
-                    <small>تومان</small>
-                {% else %}
-                    رایگان
-                {% endif %}
+    <div class="bk-step" data-step="2">
+
+        <section
+            id="bookingServiceDetails"
+            class="booking-service-details hidden"
+            aria-live="polite"
+            aria-label="توضیحات سرویس"
+        >
+            <h3 id="bookingServiceDetailsTitle"></h3>
+            <p id="bookingServiceDetailsIntro"></p>
+            <ul id="bookingServiceDetailsPoints"></ul>
+        </section>
+
+        <h2>روز و ساعت رو انتخاب کن</h2>
+
+        <div class="week-nav">
+
+            <button onclick="shiftWeek(-1)">‹</button>
+
+            <div class="range" id="weekRange">—</div>
+
+            <button onclick="shiftWeek(1)">›</button>
+
+        </div>
+
+
+        <div class="cal-week" id="calWeek"></div>
+
+
+        <div class="slot-grid" id="slotGrid"></div>
+
+
+        <div class="bk-actions">
+
+            <button
+                class="back-btn"
+                onclick="{% if auto_step2 %}window.location.href='/booking/?service={{ selected_service_id }}'{% else %}goStep(1){% endif %}"
+            >
+                مرحله قبل
+            </button>
+
+            <button
+                class="next-btn"
+                id="toStep3"
+                onclick="goStep(3)"
+                disabled
+            >
+                مرحله بعد
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 3 -->
+
+    <div class="bk-step" data-step="3">
+
+        <h2>اطلاعات زیر رو تکمیل کن</h2>
+
+
+        <div class="field-group">
+
+            <label>نام و نام خانوادگی</label>
+
+            <input
+                id="customerName"
+                type="text"
+                autocomplete="name"
+                minlength="3"
+                maxlength="80"
+                placeholder="مثلاً آرمین نقی‌زاده"
+            >
+<div
+                class="gv-field-error"
+                id="gv-field-error-customerName"
+            >نام و نام خانوادگی را به فارسی و حداقل ۳ حرف وارد کنید.</div>
+</div>
+
+
+        <div class="field-group">
+
+            <label>نام گیاه</label>
+
+            <input
+                id="plantName"
+                type="text"
+                placeholder="مثلاً مونستِرا"
+            >
+
+        </div>
+
+
+        <div class="field-group">
+
+            <label>توضیح کوتاه وضعیت گیاه</label>
+
+            <textarea
+                id="plantDesc"
+                placeholder="مثلاً لکه‌های قهوه‌ای روی برگ‌های پایینی"
+            ></textarea>
+
+        </div>
+
+
+        <div class="field-group">
+
+            <label>شماره تماس</label>
+
+            <input
+                id="plantPhone"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                maxlength="11"
+                placeholder="09123456789"
+            >
+<div
+                class="gv-field-error"
+                id="gv-field-error-plantPhone"
+            >شماره را به فرمت 09123456789 وارد کنید.</div>
+</div>
+
+
+        <div class="field-group">
+
+            <label>ایمیل</label>
+
+            <input
+                id="customerEmail"
+                type="email"
+                autocomplete="email"
+                placeholder="اختیاری"
+            >
+<div
+                class="gv-field-error"
+                id="gv-field-error-customerEmail"
+            >فرمت ایمیل واردشده معتبر نیست.</div>
+</div>
+
+
+        <div class="bk-actions">
+
+            <button
+                class="back-btn"
+                onclick="goStep(2)"
+            >
+                مرحله قبل
+            </button>
+
+            <button
+                class="next-btn"
+                onclick="goStep(4)"
+            >
+                مرحله بعد
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- STEP 4 -->
+
+    <div class="bk-step" data-step="4">
+
+        <h2>بررسی نهایی و تایید</h2>
+
+
+        <div id="summaryBox">
+
+            <div class="summary-row">
+                <span class="lbl2">سرویس</span>
+                <span class="val" id="sumSvc">—</span>
             </div>
 
-            <a class="choose" href="/booking/service/{{ service.id }}/">
-                انتخاب
-            </a>
+            <div class="summary-row">
+                <span class="lbl2">زمان</span>
+                <span class="val" id="sumTime">—</span>
+            </div>
 
-        </article>
-        {% endfor %}
-    </section>
+            <div class="summary-row">
+                <span class="lbl2">نام گیاه</span>
+                <span class="val" id="sumPlant">—</span>
+            </div>
 
-</main>
+            <div class="summary-row">
+                <span class="lbl2">شماره تماس</span>
+                <span class="val" id="sumPhone">—</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="lbl2">نام مراجعه‌کننده</span>
+                <span class="val" id="sumCustomer">—</span>
+            </div>
+
+            <div class="summary-row total">
+                <span class="lbl2">مبلغ قابل پرداخت</span>
+                <span class="val" id="sumPrice">—</span>
+            </div>
+
+        </div>
+
+
+        <div id="confirmArea">
+
+            <div class="bk-actions">
+
+                <button
+                    class="back-btn"
+                    onclick="goStep(3)"
+                >
+                    مرحله قبل
+                </button>
+
+                <button
+                    class="next-btn"
+                    id="confirmButton"
+                    onclick="confirmBooking()"
+                >
+                    ثبت رزرو
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="success-box"
+            id="successBox"
+            style="display:none;"
+        >
+
+            <div class="check">✓</div>
+
+            <h2 style="margin-bottom:6px;">
+                نوبت شما ثبت شد
+            </h2>
+
+            <p style="color:#5c6353;">
+                پیامک تایید به شماره‌ت ارسال می‌شه.
+            </p>
+
+            <div class="code">
+                کد پیگیری:
+                GV-<span id="trackCode"></span>
+            </div>
+
+        </div>
+
+
+        <div
+            id="bookingError"
+            style="
+                display:none;
+                margin-top:16px;
+                padding:10px 12px;
+                border:1px solid #d9b3a6;
+                background:#f7e8e1;
+                color:#762d1e;
+                font-size:13px;
+                border-radius:6px;
+            "
+        ></div>
+
+    </div>
+
+</div>
+
+
+<footer id="contact">
+
+    <div class="wrap">
+
+        <div class="foot-grid">
+
+            <div>
+
+                <div class="foot-brand">
+
+                    <img
+                        src="/static/icon-192.png"
+                        alt="گرین‌ویتا"
+                        width="28"
+                        height="28"
+                    >
+
+                    گرین‌ویتا
+
+                </div>
+
+                <p style="max-width:240px;">
+                    کلینیک تخصصی گیاه‌پزشکی —
+                    تشخیص و درمان گیاهان آپارتمانی،
+                    فضای باز و باغات.
+                </p>
+
+            </div>
+
+
+            <div class="foot-col">
+
+                <h4>دسترسی سریع</h4>
+
+                <a href="/#services">خدمات</a>
+                <a href="/booking/" class="gv-booking-live-cta">رزرو نوبت</a>
+                <a href="/#diagnosis">تشخیص آنلاین</a>
+                <a href="/#blog">وبلاگ</a>
+
+            </div>
+
+
+            <div class="foot-col">
+
+                <h4>ارتباط با ما</h4>
+
+                <a
+                    href="https://instagram.com/greenvita_clinic"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    اینستاگرام
+                </a>
+
+                <a
+                    href="https://wa.me/989128111058"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    واتساپ 09128111058
+                </a>
+
+                <a
+                    href="http://ble.ir/greenvita"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    بله
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="foot-bottom">
+            © گرین‌ویتا — کلینیک تخصصی گیاه‌پزشکی
+        </div>
+
+    </div>
+
+</footer>
+
+
+<a
+    class="float-contact"
+    href="https://wa.me/989128111058"
+    target="_blank"
+    rel="noopener"
+>
+
+    <span class="tip">
+        پیام در واتساپ
+    </span>
+
+    <svg viewBox="0 0 24 24" fill="#fff">
+        <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.1-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.43-4.4-1.19l-.32-.19-3.02.79.8-2.94-.2-.3A7.94 7.94 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.4-5.6c-.24-.12-1.43-.7-1.65-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.46-.39-.4-.54-.41-.14-.01-.3-.01-.46-.01s-.42.06-.64.3c-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.43-.58 1.63-1.15.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28z"/>
+    </svg>
+
+</a>
+
+
+<script>
+/* =========================================================
+   GREEN VITA — EXACT PROTOTYPE BEHAVIOR
+   Dynamic data only. Visual structure preserved.
+   ========================================================= */
+
+function div(a,b){
+    return Math.floor(a / b);
+}
+
+
+/* ------------------------------
+   Gregorian → Jalali
+   ------------------------------ */
+
+function gToJ(gy, gm, gd){
+
+    var g_d_m = [
+        0,31,59,90,120,151,
+        181,212,243,273,304,334
+    ];
+
+    var jy = (gy <= 1600) ? 0 : 979;
+
+    gy -= (gy <= 1600) ? 621 : 1600;
+
+    var gy2 = (gm > 2)
+        ? (gy + 1)
+        : gy;
+
+    var days =
+        (365 * gy) +
+        div((gy2 + 3),4) -
+        div((gy2 + 99),100) +
+        div((gy2 + 399),400) -
+        80 +
+        gd +
+        g_d_m[gm - 1];
+
+    jy += 33 * div(days,12053);
+
+    days %= 12053;
+
+    jy += 4 * div(days,1461);
+
+    days %= 1461;
+
+    if(days > 365){
+
+        jy += div((days - 1),365);
+
+        days =
+            (days - 1) % 365;
+    }
+
+    var jm =
+        (days < 186)
+            ? 1 + div(days,31)
+            : 7 + div((days - 186),30);
+
+    var jd =
+        1 +
+        (
+            (days < 186)
+                ? days % 31
+                : (days - 186) % 30
+        );
+
+    return [jy,jm,jd];
+}
+
+
+var jMonths = [
+    "فروردین",
+    "اردیبهشت",
+    "خرداد",
+    "تیر",
+    "مرداد",
+    "شهریور",
+    "مهر",
+    "آبان",
+    "آذر",
+    "دی",
+    "بهمن",
+    "اسفند"
+];
+
+
+var dowFa = [
+    "یکشنبه",
+    "دوشنبه",
+    "سه‌شنبه",
+    "چهارشنبه",
+    "پنجشنبه",
+    "جمعه",
+    "شنبه"
+];
+
+
+var dowShort = [
+    "یکشنبه",
+    "دوشنبه",
+    "سه‌شنبه",
+    "چهارشنبه",
+    "پنجشنبه",
+    "جمعه",
+    "شنبه"
+];
+
+
+var weekOffset = 0;
+var selectedDay = null;
+var selectedDate = null;
+var selectedSlot = null;
+var selectedDuration = null;
+var selectedEndTime = null;
+
+var selectedService = null;
+
+function goToSelectedService(){
+
+    if(!selectedService){
+        return;
+    }
+
+    window.location.href =
+        "/booking/service/" +
+        selectedService.id +
+        "/";
+}
+
+
+
+var serviceDetails = {
+    {% for service in services %}
+    "{{ service.id }}": {
+        title: {{ service.title | tojson }},
+        {% if service.slug == "apartment-plants" %}
+        intro: "در این ویزیت، وضعیت گیاهان آپارتمانی از نظر بیماری‌ها، آفات، آبیاری، نور، خاک و ریشه بررسی می‌شود و بر اساس شرایط واقعی گیاه، راهکار درمان و مراقبت ارائه می‌کنیم.",
+        points: [
+            "بررسی علائم بیماری و نشانه‌های آلودگی به آفات",
+            "بررسی آبیاری، نور، تهویه و شرایط نگهداری",
+            "بررسی خاک، گلدان، ریشه و زهکشی"
+        ]
+        {% elif service.slug == "outdoor-plants" %}
+        intro: "در ویزیت گیاهان فضای باز، علائم بیماری و آفات، وضعیت آبیاری، خاک، تغذیه و شرایط محیطی بررسی می‌شود تا راهکار مناسب درمان و نگهداری مشخص شود.",
+        points: [
+            "بررسی علائم بیماری و آفات گیاه",
+            "بررسی آبیاری، نور، خاک و زهکشی",
+            "بررسی تغذیه، شرایط محیطی و عوامل تنش‌زا"
+        ]
+        {% elif service.slug == "gardens" %}
+        intro: "در ویزیت باغات، وضعیت درختان و باغ از نظر بیماری‌ها، آفات، تغذیه، آبیاری، خاک و عوامل محیطی بررسی شده و برنامه مناسب برای مدیریت و درمان ارائه می‌شود.",
+        points: [
+            "بررسی بیماری‌ها و آفات درختان و گیاهان باغ",
+            "بررسی وضعیت خاک، آبیاری و تغذیه",
+            "بررسی شرایط محیطی و الگوی بروز علائم در باغ"
+        ]
+        {% elif service.slug == "phone-consultation" %}
+        intro: "در ویزیت آنلاین، مشکل گیاه بر اساس توضیحات و تصاویر ارسالی شما بررسی می‌شود و راهکار تخصصی برای تشخیص، درمان و مراقبت از گیاه ارائه خواهد شد.",
+        points: [
+            "بررسی علائم ظاهری بیماری و آفات",
+            "بررسی شرایط نگهداری، آبیاری و نور",
+            "بررسی مشکلات احتمالی خاک، ریشه و تغذیه بر اساس اطلاعات ارسالی"
+        ]
+        {% else %}
+        intro: {{ (service.description or "") | tojson }},
+        points: []
+        {% endif %}
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+};
+
+function renderServiceDetails(serviceId){
+    var box = document.getElementById("bookingServiceDetails");
+    var title = document.getElementById("bookingServiceDetailsTitle");
+    var intro = document.getElementById("bookingServiceDetailsIntro");
+    var points = document.getElementById("bookingServiceDetailsPoints");
+
+    var details = serviceDetails[String(serviceId)];
+
+    if(!box || !title || !intro || !points || !details){
+        if(box){
+            box.classList.add("hidden");
+        }
+        return;
+    }
+
+    title.textContent = "درباره " + details.title;
+    intro.textContent = details.intro;
+    points.innerHTML = "";
+
+    (details.points || []).forEach(function(point){
+        var li = document.createElement("li");
+        li.textContent = point;
+        points.appendChild(li);
+    });
+
+    box.classList.remove("hidden");
+}
+
+
+
+/* ------------------------------
+   Utilities
+   ------------------------------ */
+
+function persianDigits(value){
+
+    return String(value).replace(
+        /\d/g,
+        function(d){
+            return "۰۱۲۳۴۵۶۷۸۹"[Number(d)];
+        }
+    );
+}
+
+
+function englishDigits(value){
+
+    return String(value)
+        .replace(/[۰-۹]/g, function(d){
+            return String(
+                "۰۱۲۳۴۵۶۷۸۹".indexOf(d)
+            );
+        });
+}
+
+
+function formatPrice(value){
+
+    var n = Number(value || 0);
+
+    if(!n){
+        return "رایگان";
+    }
+
+    return n.toLocaleString("fa-IR") + " تومان";
+}
+
+
+/* ------------------------------
+   Service selection
+   ------------------------------ */
+
+document.querySelectorAll(
+    'input[name="svc"]'
+).forEach(function(input){
+
+    input.addEventListener(
+        "change",
+        function(){
+
+            selectedService = {
+                id: Number(input.value),
+                title: input.dataset.title || "",
+                price: Number(
+                    input.dataset.price || 0
+                )
+            };
+
+            renderServiceDetails(
+                selectedService.id
+            );
+
+            document.getElementById(
+                "toStep2"
+            ).disabled = false;
+
+            if(selectedDate){
+                renderSlots(selectedDate);
+            }
+        }
+    );
+});
+
+
+/* ------------------------------
+   Week
+   ------------------------------ */
+
+function startOfWeek(d){
+
+    var day = d.getDay();
+
+    var diff =
+        (day === 6)
+            ? 0
+            : (day + 1);
+
+    var s = new Date(d);
+
+    s.setDate(
+        d.getDate() - diff
+    );
+
+    return s;
+}
+
+
+function renderWeek(){
+
+    var base = new Date();
+
+    base.setDate(
+        base.getDate() +
+        weekOffset * 7
+    );
+
+    var start =
+        startOfWeek(base);
+
+    var calWeek =
+        document.getElementById(
+            "calWeek"
+        );
+
+    calWeek.innerHTML = "";
+
+    var today =
+        new Date();
+
+    today.setHours(0,0,0,0);
+
+
+    for(var i=0;i<7;i++){
+
+        var d =
+            new Date(start);
+
+        d.setDate(
+            start.getDate() + i
+        );
+
+        var jd =
+            gToJ(
+                d.getFullYear(),
+                d.getMonth()+1,
+                d.getDate()
+            );
+
+
+        var item =
+            document.createElement("div");
+
+        item.className = "day";
+
+
+        if(
+            d.toDateString() ===
+            today.toDateString()
+        ){
+            item.classList.add(
+                "today"
+            );
+        }
+
+
+        if(d <= today){
+
+            item.classList.add(
+                "disabled"
+            );
+
+        }
+
+
+        item.innerHTML =
+            '<span class="dow">' +
+            dowShort[d.getDay()] +
+            '</span>' +
+
+            '<span class="num">' +
+            persianDigits(jd[2]) +
+            '</span>';
+
+
+        item.dataset.gdate =
+            d.toISOString()
+             .slice(0,10);
+
+
+        item.dataset.label =
+            dowFa[d.getDay()] +
+            " " +
+            persianDigits(jd[2]) +
+            " " +
+            jMonths[jd[1]-1];
+
+
+        item.dataset.jdate =
+            jd[0] + "-" +
+            String(jd[1]).padStart(2,"0") +
+            "-" +
+            String(jd[2]).padStart(2,"0");
+
+
+        if(!item.classList.contains("disabled")){
+
+            item.addEventListener(
+                "click",
+                function(){
+
+                    document
+                        .querySelectorAll(
+                            ".cal-week .day"
+                        )
+                        .forEach(
+                            function(x){
+                                x.classList.remove(
+                                    "selected"
+                                );
+                            }
+                        );
+
+
+                    this.classList.add(
+                        "selected"
+                    );
+
+
+                    selectedDay =
+                        this.dataset.label;
+
+                    selectedDate =
+                        this.dataset.jdate;
+
+                    selectedSlot = null;
+                    selectedDuration = null;
+                    selectedEndTime = null;
+
+
+                    renderSlots(
+                        selectedDate
+                    );
+
+                    checkStep2();
+                }
+            );
+        }
+
+
+        calWeek.appendChild(item);
+    }
+
+
+    var endD =
+        new Date(start);
+
+    endD.setDate(
+        start.getDate()+6
+    );
+
+
+    var jStart =
+        gToJ(
+            start.getFullYear(),
+            start.getMonth()+1,
+            start.getDate()
+        );
+
+
+    var jEnd =
+        gToJ(
+            endD.getFullYear(),
+            endD.getMonth()+1,
+            endD.getDate()
+        );
+
+
+    document.getElementById(
+        "weekRange"
+    ).textContent =
+        persianDigits(jStart[2]) +
+        " " +
+        jMonths[jStart[1]-1] +
+        " الی " +
+        persianDigits(jEnd[2]) +
+        " " +
+        jMonths[jEnd[1]-1];
+
+
+    var firstAvailable =
+        calWeek.querySelector(
+            ".day:not(.disabled)"
+        );
+
+    if(firstAvailable){
+        firstAvailable.click();
+    }
+}
+
+
+/* ------------------------------
+   Real slots
+   ------------------------------ */
+
+async function renderSlots(jalaliDate){
+
+    var grid =
+        document.getElementById(
+            "slotGrid"
+        );
+
+    grid.innerHTML = `
+        <div style="
+            grid-column:1/-1;
+            text-align:center;
+            color:#6b7360;
+            padding:15px;
+            font-size:13px;
+        ">
+            در حال دریافت زمان‌های قابل رزرو...
+        </div>
+    `;
+
+
+    if(!selectedService){
+        grid.innerHTML = "";
+        return;
+    }
+
+
+    try{
+
+        var response =
+            await fetch(
+                `/booking/api/slots/${selectedService.id}/${jalaliDate}`,
+                {
+                    credentials:"same-origin",
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        var data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "خطا در دریافت زمان‌ها"
+            );
+        }
+
+
+        grid.innerHTML = "";
+
+
+        if(
+            !data.slots ||
+            !data.slots.length
+        ){
+
+            grid.innerHTML = `
+                <div style="
+                    grid-column:1/-1;
+                    text-align:center;
+                    color:#6b7360;
+                    padding:15px;
+                    font-size:13px;
+                ">
+                    برای این روز نوبت آزادی وجود ندارد.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        data.slots.forEach(
+            function(slot){
+
+                var b =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                b.type = "button";
+
+
+                b.textContent =
+                    persianDigits(
+                        slot.time
+                    );
+
+
+                if(
+                    !slot.available_durations ||
+                    !slot.available_durations.length
+                ){
+
+                    b.classList.add(
+                        "full"
+                    );
+
+                    b.disabled = true;
+
+                }else{
+
+                    b.addEventListener(
+                        "click",
+                        function(){
+
+                            document
+                                .querySelectorAll(
+                                    ".slot-grid button"
+                                )
+                                .forEach(
+                                    function(x){
+                                        x.classList.remove(
+                                            "selected"
+                                        );
+                                    }
+                                );
+
+
+                            this.classList.add(
+                                "selected"
+                            );
+
+
+                            selectedSlot =
+                                slot;
+
+
+                            var durations =
+                                slot.available_durations ||
+                                [];
+
+
+                            /*
+                             * Prototype UI intentionally has
+                             * no extra duration selector.
+                             * Select the first valid real duration
+                             * returned by the backend.
+                             */
+
+                            if(durations.length){
+
+                                selectedDuration =
+                                    durations[0].hours;
+
+                                selectedEndTime =
+                                    durations[0].end_time;
+
+                            }else{
+
+                                selectedDuration =
+                                    null;
+
+                                selectedEndTime =
+                                    null;
+                            }
+
+
+                            checkStep2();
+                        }
+                    );
+                }
+
+
+                grid.appendChild(b);
+            }
+        );
+
+
+    }catch(error){
+
+        grid.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                color:#762d1e;
+                padding:15px;
+                font-size:13px;
+            ">
+                ${escapeHtml(
+                    error.message ||
+                    "خطا در دریافت زمان‌ها"
+                )}
+            </div>
+        `;
+    }
+}
+
+
+function checkStep2(){
+
+    document.getElementById(
+        "toStep3"
+    ).disabled =
+        !(
+            selectedDate &&
+            selectedSlot &&
+            selectedDuration
+        );
+}
+
+
+/* ------------------------------
+   Week navigation
+   ------------------------------ */
+
+function shiftWeek(dir){
+
+    weekOffset += dir;
+
+    if(weekOffset < 0){
+        weekOffset = 0;
+    }
+
+    renderWeek();
+}
+
+
+/* ------------------------------
+   Step navigation
+   ------------------------------ */
+
+
+function normalizeBookingDigits(value) {
+    return String(value || "")
+        .replace(/[۰-۹]/g, function(d) {
+            return "۰۱۲۳۴۵۶۷۸۹".indexOf(d);
+        })
+        .replace(/[٠-٩]/g, function(d) {
+            return "٠١٢٣٤٥٦٧٨٩".indexOf(d);
+        });
+}
+
+
+function setBookingFieldState(fieldId, valid, message) {
+    const field = document.getElementById(fieldId);
+
+    if (!field) {
+        return;
+    }
+
+    const group = field.closest(".field-group");
+
+    if (!group) {
+        return;
+    }
+
+    const error = document.getElementById(
+        "gv-field-error-" + fieldId
+    );
+
+    group.classList.toggle(
+        "gv-field-invalid",
+        !valid
+    );
+
+    group.classList.toggle(
+        "gv-field-valid",
+        valid && String(field.value || "").trim() !== ""
+    );
+
+    if (error && message) {
+        error.textContent = message;
+    }
+
+    field.setAttribute(
+        "aria-invalid",
+        valid ? "false" : "true"
+    );
+}
+
+function validateBookingName(value) {
+    const name = String(value || "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const lettersOnly = name
+        .replace(/[\s‌]/g, "");
+
+    return (
+        lettersOnly.length >= 3 &&
+        /^[آ-یءٔ‌ ]+$/.test(name)
+    );
+}
+
+function validateBookingPhone(value) {
+    const phone = normalizeBookingDigits(value).trim();
+
+    return /^09\d{9}$/.test(phone);
+}
+
+
+function validateBookingFields(showErrors = true) {
+    const nameField =
+        document.getElementById("customerName");
+
+    const phoneField =
+        document.getElementById("plantPhone");
+
+    const emailField =
+        document.getElementById("customerEmail");
+
+    const nameValid =
+        validateBookingName(nameField.value);
+
+    const phoneValid =
+        validateBookingPhone(phoneField.value);
+
+    const emailValid =
+        validateBookingEmail(emailField.value);
+
+    if (showErrors) {
+        setBookingFieldState(
+            "customerName",
+            nameValid,
+            "نام و نام خانوادگی باید حداقل ۳ حرف فارسی باشد."
+        );
+
+        setBookingFieldState(
+            "plantPhone",
+            phoneValid,
+            "شماره باید مثل 09123456789 باشد."
+        );
+
+        setBookingFieldState(
+            "customerEmail",
+            emailValid,
+            "مثلاً name@example.com"
+        );
+    }
+
+    return {
+        nameValid,
+        phoneValid,
+        emailValid,
+        valid:
+            nameValid &&
+            phoneValid &&
+            emailValid,
+    };
+}
+
+function validateBookingEmail(value) {
+    const email = String(value || "").trim();
+
+    if (!email) {
+        return true;
+    }
+
+    return /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/.test(email);
+}
+
+function goStep(n){
+
+    if(n === 2){
+
+        if(!selectedService){
+            return;
+        }
+    }
+
+
+    if(n === 3){
+
+        if(
+            !selectedDay ||
+            !selectedSlot ||
+            !selectedDuration
+        ){
+            return;
+        }
+    }
+
+
+    if(n === 4){
+
+        clearError();
+
+        const validation =
+            validateBookingFields(true);
+
+        if (!validation.valid) {
+            showError(
+                "لطفاً فیلدهای مشخص‌شده را اصلاح کنید."
+            );
+
+            if (!validation.nameValid) {
+                document.getElementById("customerName").focus();
+            } else if (!validation.phoneValid) {
+                document.getElementById("plantPhone").focus();
+            } else if (!validation.emailValid) {
+                document.getElementById("customerEmail").focus();
+            }
+
+            return;
+        }
+
+        const customerName =
+            document
+                .getElementById("customerName")
+                .value
+                .trim();
+
+        const phone =
+            normalizeBookingDigits(
+                document
+                    .getElementById("plantPhone")
+                    .value
+                    .trim()
+            );
+
+        const email =
+            document
+                .getElementById("customerEmail")
+                .value
+                .trim();
+
+        document.getElementById("plantPhone").value =
+            normalizeBookingDigits(phone);
+
+        fillSummary();
+    }
+
+
+    document
+        .querySelectorAll(
+            ".bk-step"
+        )
+        .forEach(
+            function(s){
+
+                s.classList.toggle(
+                    "active",
+                    s.dataset.step == n
+                );
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".stepper .st"
+        )
+        .forEach(
+            function(s){
+
+                var sn =
+                    parseInt(
+                        s.dataset.step
+                    );
+
+
+                s.classList.remove(
+                    "active",
+                    "done"
+                );
+
+
+                if(sn < n){
+                    s.classList.add(
+                        "done"
+                    );
+                }
+
+
+                if(sn == n){
+                    s.classList.add(
+                        "active"
+                    );
+                }
+            }
+        );
+
+
+    if(n === 4){
+        document.documentElement.style.overflowX = "hidden";
+        document.body.style.overflowX = "hidden";
+        document.body.style.width = "100%";
+
+        requestAnimationFrame(function(){
+            window.scrollTo(0, 0);
+            window.scrollTo({
+                left: 0,
+                top: 0,
+                behavior: "auto"
+            });
+        });
+    } else {
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+    }
+}
+
+
+/* ------------------------------
+   Summary
+   ------------------------------ */
+
+function fillSummary(){
+
+    document.getElementById(
+        "sumSvc"
+    ).textContent =
+        selectedService
+            ? selectedService.title
+            : "—";
+
+
+    document.getElementById(
+        "sumPrice"
+    ).textContent =
+        selectedService
+            ? formatPrice(
+                selectedService.price
+            )
+            : "—";
+
+
+    document.getElementById(
+        "sumTime"
+    ).textContent =
+        (
+            selectedDay ||
+            "—"
+        ) +
+        " ساعت " +
+        (
+            selectedSlot
+                ? selectedSlot.time
+                : "—"
+        ) +
+        (
+            selectedEndTime
+                ? " تا " + selectedEndTime
+                : ""
+        );
+
+
+    document.getElementById(
+        "sumPlant"
+    ).textContent =
+        document
+            .getElementById(
+                "plantName"
+            )
+            .value
+            .trim() ||
+        "—";
+
+
+    document.getElementById(
+        "sumPhone"
+    ).textContent =
+        document
+            .getElementById(
+                "plantPhone"
+            )
+            .value
+            .trim() ||
+        "—";
+
+
+    document.getElementById(
+        "sumCustomer"
+    ).textContent =
+        document
+            .getElementById(
+                "customerName"
+            )
+            .value
+            .trim() ||
+        "—";
+}
+
+
+
+(function setupBookingLiveValidation() {
+    const nameField =
+        document.getElementById("customerName");
+
+    const phoneField =
+        document.getElementById("plantPhone");
+
+    const emailField =
+        document.getElementById("customerEmail");
+
+    if (!nameField || !phoneField || !emailField) {
+        return;
+    }
+
+    nameField.addEventListener("input", function () {
+        const valid =
+            validateBookingName(this.value);
+
+        if (this.value.trim() === "") {
+            setBookingFieldState(
+                "customerName",
+                true,
+                ""
+            );
+            return;
+        }
+
+        setBookingFieldState(
+            "customerName",
+            valid,
+            "نام و نام خانوادگی باید حداقل ۳ حرف فارسی باشد."
+        );
+    });
+
+    phoneField.addEventListener("input", function () {
+        this.value = normalizeBookingDigits(this.value);
+
+        if (this.value.trim() === "") {
+            setBookingFieldState(
+                "plantPhone",
+                true,
+                ""
+            );
+            return;
+        }
+
+        setBookingFieldState(
+            "plantPhone",
+            validateBookingPhone(this.value),
+            "شماره باید مثل 09123456789 باشد."
+        );
+    });
+
+    emailField.addEventListener("input", function () {
+        if (this.value.trim() === "") {
+            setBookingFieldState(
+                "customerEmail",
+                true,
+                ""
+            );
+            return;
+        }
+
+        setBookingFieldState(
+            "customerEmail",
+            validateBookingEmail(this.value),
+            "مثلاً name@example.com"
+        );
+    });
+
+    [nameField, phoneField, emailField].forEach(function (field) {
+        field.addEventListener("blur", function () {
+            if (this.value.trim() === "") {
+                if (this.id === "customerEmail") {
+                    setBookingFieldState(
+                        this.id,
+                        true,
+                        ""
+                    );
+                }
+                return;
+            }
+
+            if (this.id === "customerName") {
+                setBookingFieldState(
+                    this.id,
+                    validateBookingName(this.value),
+                    "نام و نام خانوادگی باید حداقل ۳ حرف فارسی باشد."
+                );
+            }
+
+            if (this.id === "plantPhone") {
+                this.value =
+                    normalizeBookingDigits(this.value);
+
+                setBookingFieldState(
+                    this.id,
+                    validateBookingPhone(this.value),
+                    "شماره باید مثل 09123456789 باشد."
+                );
+            }
+
+            if (this.id === "customerEmail") {
+                setBookingFieldState(
+                    this.id,
+                    validateBookingEmail(this.value),
+                    "مثلاً name@example.com"
+                );
+            }
+        });
+    });
+})();
+
+
+/* ------------------------------
+   Real booking API
+   ------------------------------ */
+
+async function confirmBooking(){
+
+    clearError();
+
+
+    if(
+        !selectedService ||
+        !selectedDate ||
+        !selectedSlot ||
+        !selectedDuration
+    ){
+
+        showError(
+            "اطلاعات رزرو کامل نیست."
+        );
+
+        return;
+    }
+
+
+    var customerName =
+        document
+            .getElementById(
+                "customerName"
+            )
+            .value
+            .trim();
+
+
+    var customerPhone =
+        englishDigits(
+            document
+                .getElementById(
+                    "plantPhone"
+                )
+                .value
+                .trim()
+        );
+
+
+    var customerEmail =
+        document
+            .getElementById(
+                "customerEmail"
+            )
+            .value
+            .trim();
+
+
+    var plantName =
+        document
+            .getElementById(
+                "plantName"
+            )
+            .value
+            .trim();
+
+
+    var plantDescription =
+        document
+            .getElementById(
+                "plantDesc"
+            )
+            .value
+            .trim();
+
+
+    if(!customerName){
+
+        showError(
+            "نام و نام خانوادگی را وارد کنید."
+        );
+
+        return;
+    }
+
+
+    if(!validateBookingName(customerName)){
+
+        showError(
+            "نام و نام خانوادگی باید حداقل ۳ حرف فارسی داشته باشد و فقط شامل حروف فارسی و فاصله باشد."
+        );
+
+        return;
+    }
+
+
+    if(!validateBookingPhone(customerPhone)){
+
+        showError(
+            "شماره تماس باید یک شماره موبایل معتبر ایران مانند 09123456789 باشد."
+        );
+
+        return;
+    }
+
+
+    if(!validateBookingEmail(customerEmail)){
+
+        showError(
+            "فرمت ایمیل واردشده معتبر نیست."
+        );
+
+        return;
+    }
+
+
+    var button =
+        document.getElementById(
+            "confirmButton"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "در حال ثبت...";
+
+
+    var form =
+        new FormData();
+
+
+    form.append(
+        "service_id",
+        String(selectedService.id)
+    );
+
+
+    form.append(
+        "slot_id",
+        String(selectedSlot.id)
+    );
+
+
+    form.append(
+        "duration_hours",
+        String(selectedDuration)
+    );
+
+
+    form.append(
+        "customer_name",
+        customerName
+    );
+
+
+    form.append(
+        "customer_phone",
+        customerPhone
+    );
+
+
+    form.append(
+        "customer_email",
+        customerEmail
+    );
+
+
+    form.append(
+        "plant_name",
+        plantName
+    );
+
+
+    form.append(
+        "plant_description",
+        plantDescription
+    );
+
+
+    form.append(
+        "notes",
+        ""
+    );
+
+
+    try{
+
+        var response =
+            await fetch(
+                "/booking/api/book",
+                {
+                    method:"POST",
+                    body:form,
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        var data =
+            await response.json();
+
+
+        if(
+            !response.ok ||
+            !data.success
+        ){
+
+            showError(
+                data.error ||
+                "ثبت رزرو انجام نشد."
+            );
+
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "ثبت رزرو";
+
+            return;
+        }
+
+
+        document.getElementById(
+            "confirmArea"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "summaryBox"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "successBox"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "trackCode"
+        ).textContent =
+            data.tracking_code;
+
+
+        document.getElementById(
+            "successBox"
+        ).scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+
+    }catch(error){
+
+        showError(
+            "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید."
+        );
+
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "ثبت رزرو";
+    }
+}
+
+
+/* ------------------------------
+   Error
+   ------------------------------ */
+
+function showError(message){
+
+    var el =
+        document.getElementById(
+            "bookingError"
+        );
+
+    el.textContent =
+        message;
+
+    el.style.display =
+        "block";
+
+    el.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+}
+
+
+function clearError(){
+
+    var el =
+        document.getElementById(
+            "bookingError"
+        );
+
+    el.style.display =
+        "none";
+
+    el.textContent =
+        "";
+}
+
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+/* initial */
+
+renderWeek();
+renderSlots(
+    document.querySelector(
+        ".cal-week .day.selected"
+    )?.dataset.jdate || ""
+);
+
+</script>
+
+
+<script id="GV_SERVICE_ROUTE_BOOT">
+(() => {
+
+  const serviceId =
+    {{ selected_service_id if selected_service_id else "null" }};
+
+  if (!serviceId) return;
+
+  {% if not auto_step2 %}
+  return;
+  {% endif %}
+
+  const radio =
+    [...document.querySelectorAll('input[name="svc"]')]
+      .find(el => el.value === String(serviceId));
+
+  if (!radio) return;
+
+  radio.checked = true;
+  radio.dispatchEvent(
+    new Event("change", { bubbles: true })
+  );
+
+  if (typeof goStep === "function") {
+    requestAnimationFrame(() => {
+      goStep(2);
+    });
+  }
+
+})();
+</script>
+
 </body>
 </html>

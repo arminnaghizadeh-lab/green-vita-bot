@@ -83,11 +83,27 @@
     .gv-queue-picker-close {
         border: 0;
         width: 38px;
+        min-width: 38px;
         height: 38px;
+        min-height: 38px;
+        flex: 0 0 38px;
         border-radius: 12px;
         background: #f4f7ef;
+        color: #022f12;
         cursor: pointer;
         font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+
+    .gv-queue-picker-close:hover {
+        background: #e4f0cc;
+        color: #021408;
     }
 
     .gv-queue-days {
@@ -100,10 +116,29 @@
     .gv-queue-day {
         border: 1px solid rgba(2,47,18,.10);
         background: #fbfcf8;
+        color: #022f12;
         border-radius: 14px;
         padding: 10px 6px;
         cursor: pointer;
         text-align: center;
+    }
+
+    .gv-queue-day .day-name,
+    .gv-queue-day .day-number {
+        color: #022f12;
+    }
+
+    .gv-queue-day .day-year {
+        color: #64748b;
+    }
+
+    .gv-queue-day.is-selected .day-name,
+    .gv-queue-day.is-selected .day-number {
+        color: #021408;
+    }
+
+    .gv-queue-day.is-selected .day-year {
+        color: rgba(2,20,8,.68);
     }
 
     .gv-queue-day.is-selected {
@@ -188,6 +223,126 @@
         font-size: 13px;
     }
 
+    .gv-queue-manual-form {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid #e5eadf;
+    }
+
+    .gv-queue-manual-form-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: #022f12;
+        margin-bottom: 6px;
+    }
+
+    .gv-queue-manual-form-subtitle {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 14px;
+    }
+
+    .gv-queue-manual-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .gv-queue-manual-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .gv-queue-manual-field.full {
+        grid-column: 1 / -1;
+    }
+
+    .gv-queue-manual-field label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .gv-queue-manual-field input,
+    .gv-queue-manual-field textarea {
+        width: 100%;
+        border: 1px solid #dfe7d7;
+        border-radius: 12px;
+        padding: 10px 11px;
+        outline: none;
+        background: #fff;
+    }
+
+    .gv-queue-manual-field input:focus,
+    .gv-queue-manual-field textarea:focus {
+        border-color: #8bc53d;
+        box-shadow: 0 0 0 3px rgba(139,197,61,.12);
+    }
+
+    .gv-queue-manual-field textarea {
+        min-height: 82px;
+        resize: vertical;
+    }
+
+    .gv-queue-manual-error {
+        display: none;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff1f1;
+        color: #a33b3b;
+        font-size: 12px;
+    }
+
+    .gv-queue-manual-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+        align-items: center;
+    }
+
+    .gv-queue-manual-actions #gv-manual-back {
+        width: auto;
+        min-width: 108px;
+        height: 42px;
+        padding: 0 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        line-height: 1;
+        flex: 0 0 auto;
+        color: #022f12;
+        background: #f4f7ef;
+    }
+
+    .gv-queue-manual-submit {
+        border: 0;
+        border-radius: 12px;
+        padding: 10px 16px;
+        background: #8bc53d;
+        color: #021408;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .gv-queue-manual-submit:disabled {
+        opacity: .55;
+        cursor: wait;
+    }
+
+    @media (max-width: 700px) {
+        .gv-queue-manual-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .gv-queue-manual-field.full {
+            grid-column: auto;
+        }
+    }
+
     @media (max-width: 700px) {
         .gv-queue-days {
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -197,6 +352,29 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
+
+    /* Mobile: keep customer form at normal page scale */
+    @media (max-width: 640px) {
+        .gv-queue-picker-backdrop {
+            align-items: flex-start;
+            padding: 8px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gv-queue-picker {
+            width: 100%;
+            max-height: none;
+            overflow: visible;
+            border-radius: 18px;
+        }
+
+        .gv-queue-manual-field input,
+        .gv-queue-manual-field textarea {
+            font-size: 16px !important;
+        }
+    }
+
 </style>
 
 <div id="gv-queue-picker-root" hidden></div>
@@ -221,8 +399,10 @@
 
     let selectedKind = null;
     let selectedRecordId = null;
+    let selectedMode = "schedule";
     let currentJalali = null;
     let selectedJalali = null;
+    let pendingManualStartAt = null;
 
     function formatPersianNumber(value) {
         return String(value).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
@@ -425,6 +605,9 @@
     }
 
     function openPicker(kind, recordId) {
+        selectedMode = "schedule";
+        pendingManualStartAt = null;
+
         selectedKind = kind;
         selectedRecordId = Number(recordId);
 
@@ -439,10 +622,30 @@
         loadSlots();
     }
 
+    window.openManualPhonePicker = function () {
+        selectedMode = "manual";
+        pendingManualStartAt = null;
+
+        selectedKind = null;
+        selectedRecordId = null;
+
+        const today = jalaliNow();
+
+        currentJalali = today;
+        selectedJalali = today;
+
+        root.hidden = false;
+
+        renderPicker();
+        loadSlots();
+    };
+
     function closePicker() {
         root.hidden = true;
         selectedKind = null;
         selectedRecordId = null;
+        selectedMode = "schedule";
+        pendingManualStartAt = null;
     }
 
     function renderPicker() {
@@ -460,10 +663,18 @@
                     <div class="gv-queue-picker-head">
                         <div>
                             <div class="gv-queue-picker-title">
-                                انتخاب زمان ویزیت
+                                ${
+                                    selectedMode === "manual"
+                                        ? "ثبت نوبت تلفنی"
+                                        : "انتخاب زمان ویزیت"
+                                }
                             </div>
                             <div class="gv-queue-picker-subtitle">
-                                درخواست #${selectedKind === "identification" ? "I-" : "D-"}${selectedRecordId}
+                                ${
+                                    selectedMode === "manual"
+                                        ? "انتخاب زمان و سپس تکمیل مشخصات مشتری"
+                                        : `درخواست #${selectedKind === "identification" ? "I-" : "D-"}${selectedRecordId}`
+                                }
                             </div>
 
                         </div>
@@ -526,6 +737,8 @@
                     </div>
 
                     <div class="gv-queue-slots" id="gv-queue-slots"></div>
+
+                    <div id="gv-queue-manual-form-root"></div>
                 </div>
             </div>
         `;
@@ -648,6 +861,261 @@
         }
     }
 
+    function showManualForm(startAt) {
+        pendingManualStartAt = startAt;
+
+        const rootForm =
+            document.getElementById("gv-queue-manual-form-root");
+
+        if (!rootForm) {
+            return;
+        }
+
+        const selectedTime =
+            new Date(startAt).toLocaleTimeString("fa-IR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+            });
+
+        rootForm.innerHTML = `
+            <form class="gv-queue-manual-form" id="gv-queue-manual-form">
+                <div class="gv-queue-manual-form-title">
+                    مشخصات مشتری
+                </div>
+
+                <div class="gv-queue-manual-form-subtitle">
+                    زمان انتخاب‌شده: ${selectedTime}
+                </div>
+
+                <div class="gv-queue-manual-grid">
+
+                    <div class="gv-queue-manual-field full">
+                        <label for="gv-manual-customer-name">
+                            نام و نام خانوادگی *
+                        </label>
+                        <input
+                            id="gv-manual-customer-name"
+                            required
+                            autocomplete="name"
+                        >
+                    </div>
+
+                    <div class="gv-queue-manual-field">
+                        <label for="gv-manual-customer-phone">
+                            تلفن *
+                        </label>
+                        <input
+                            id="gv-manual-customer-phone"
+                            required
+                            inputmode="tel"
+                            autocomplete="tel"
+                        >
+                    </div>
+
+                    <div class="gv-queue-manual-field">
+                        <label for="gv-manual-plant">
+                            نام گیاه
+                        </label>
+                        <input
+                            id="gv-manual-plant"
+                        >
+                    </div>
+
+                    <div class="gv-queue-manual-field full">
+                        <label for="gv-manual-address">
+                            آدرس
+                        </label>
+                        <textarea
+                            id="gv-manual-address"
+                        ></textarea>
+                    </div>
+
+                    <div class="gv-queue-manual-field full">
+                        <label for="gv-manual-description">
+                            توضیحات
+                        </label>
+                        <textarea
+                            id="gv-manual-description"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div
+                    id="gv-queue-manual-error"
+                    class="gv-queue-manual-error"
+                ></div>
+
+                <div class="gv-queue-manual-actions">
+                    <button
+                        type="button"
+                        class="gv-queue-picker-close"
+                        id="gv-manual-back"
+                    >
+                        تغییر زمان
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="gv-queue-manual-submit"
+                        id="gv-manual-submit"
+                    >
+                        ثبت نوبت تلفنی
+                    </button>
+                </div>
+            </form>
+        `;
+
+        const form =
+            document.getElementById("gv-queue-manual-form");
+
+        const back =
+            document.getElementById("gv-manual-back");
+
+        const errorBox =
+            document.getElementById("gv-queue-manual-error");
+
+        const submit =
+            document.getElementById("gv-manual-submit");
+
+        back.addEventListener("click", () => {
+            pendingManualStartAt = null;
+            rootForm.innerHTML = "";
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            // iOS Safari: release input focus and restore normal page scale.
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+
+            const viewport = document.querySelector('meta[name="viewport"]');
+            const originalViewport = viewport ? viewport.getAttribute("content") : null;
+
+            if (viewport) {
+                viewport.setAttribute(
+                    "content",
+                    "width=device-width, initial-scale=1, maximum-scale=1"
+                );
+            }
+
+            window.scrollTo(0, window.scrollY);
+
+            setTimeout(() => {
+                if (viewport && originalViewport) {
+                    viewport.setAttribute("content", originalViewport);
+                }
+            }, 250);
+
+            errorBox.style.display = "none";
+            submit.disabled = true;
+            submit.textContent = "در حال ثبت...";
+
+            const params = new URLSearchParams({
+                start_at: pendingManualStartAt || "",
+                customer_name:
+                    document.getElementById(
+                        "gv-manual-customer-name"
+                    ).value.trim(),
+                customer_phone:
+                    document.getElementById(
+                        "gv-manual-customer-phone"
+                    ).value.trim(),
+                customer_plant:
+                    document.getElementById(
+                        "gv-manual-plant"
+                    ).value.trim(),
+                customer_address:
+                    document.getElementById(
+                        "gv-manual-address"
+                    ).value.trim(),
+                customer_description:
+                    document.getElementById(
+                        "gv-manual-description"
+                    ).value.trim(),
+            });
+
+            if (!params.get("customer_name")) {
+                errorBox.textContent =
+                    "نام و نام خانوادگی الزامی است.";
+                errorBox.style.display = "block";
+                submit.disabled = false;
+                submit.textContent = "ثبت نوبت تلفنی";
+                return;
+            }
+
+            if (!params.get("customer_phone")) {
+                errorBox.textContent =
+                    "شماره تلفن الزامی است.";
+                errorBox.style.display = "block";
+                submit.disabled = false;
+                submit.textContent = "ثبت نوبت تلفنی";
+                return;
+            }
+
+            try {
+                const result = await api(
+                    "/api/calendar/manual-appointments?" +
+                    params.toString(),
+                    {
+                        method: "POST",
+                    }
+                );
+
+                if (result.success === false) {
+                    throw new Error(
+                        result.error ||
+                        "ثبت نوبت انجام نشد."
+                    );
+                }
+
+                closePicker();
+
+                alert(
+                    "نوبت تلفنی با موفقیت ثبت شد."
+                );
+
+                window.location.reload();
+
+            } catch (error) {
+                errorBox.textContent =
+                    error.message ||
+                    "ثبت نوبت انجام نشد.";
+
+                errorBox.style.display = "block";
+
+                submit.disabled = false;
+                submit.textContent = "ثبت نوبت تلفنی";
+            }
+        });
+
+        // iOS Safari: keep the page at its normal scale after form focus.
+        requestAnimationFrame(() => {
+            if (document.activeElement && typeof document.activeElement.blur === "function") {
+                document.activeElement.blur();
+            }
+
+            const viewport = window.visualViewport;
+            if (viewport && viewport.scale && viewport.scale !== 1) {
+                window.scrollTo(0, window.scrollY);
+            }
+        });
+
+        rootForm.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+        });
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                window.scrollTo(0, window.scrollY);
+            });
+        });
+    }
+
     async function scheduleSelected(startAt) {
         const params = new URLSearchParams({
             start_at: startAt
@@ -731,6 +1199,13 @@
             event.target.closest("[data-queue-start-at]");
 
         if (slot && !slot.disabled) {
+            if (selectedMode === "manual") {
+                showManualForm(
+                    slot.dataset.queueStartAt
+                );
+                return;
+            }
+
             scheduleSelected(
                 slot.dataset.queueStartAt
             ).catch(error => {

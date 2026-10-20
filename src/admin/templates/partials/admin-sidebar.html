@@ -1,0 +1,120 @@
+<aside class="gv-admin-sidebar">
+
+    <div class="gv-admin-sidebar-brand">
+        <img src="/static/logo-v4.webp" alt="Green Vita">
+        <div>
+            <strong>Green Vita</strong>
+            <small>پنل مدیریت</small>
+        </div>
+    </div>
+
+    <nav class="gv-admin-sidebar-nav" aria-label="منوی پنل مدیریت">
+
+        <a
+            href="/dashboard/"
+            class="{% if request.url.path.startswith('/dashboard') %}active{% endif %}"
+        >
+            <span>🏠</span>
+            <span>داشبورد</span>
+        </a>
+
+        <a
+            href="/visits"
+            class="{% if request.url.path.startswith('/visits') %}active{% endif %}"
+        >
+            <span class="gv-sidebar-icon">🩺</span>
+            <span class="gv-sidebar-label">درخواست‌های ویزیت</span>
+            <span
+                id="gv-unscheduled-visits-badge"
+                class="gv-unscheduled-visits-badge"
+                hidden
+                aria-label="تعداد ویزیت‌های زمان‌بندی‌نشده"
+            >0</span>
+        </a>
+
+        <a
+            href="/reservations"
+            class="{% if request.url.path.startswith('/reservations') %}active{% endif %}"
+        >
+            <span>🗓</span>
+            <span>مدیریت رزروهای سایت</span>
+        </a>
+
+        <a
+            href="/contactus/"
+            class="{% if request.url.path.startswith('/contactus') %}active{% endif %}"
+        >
+            <span>📊</span>
+            <span>آمار Smart Bio</span>
+        </a>
+
+        <a
+            href="/"
+            target="_blank"
+            rel="noopener"
+        >
+            <span>🌐</span>
+            <span>مشاهده صفحه عمومی</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- GV_UNSCHEDULED_VISITS_BADGE -->
+<script>
+(() => {
+    const badge = document.getElementById("gv-unscheduled-visits-badge");
+
+    if (!badge) return;
+
+    async function updateUnscheduledVisitsBadge() {
+        try {
+            const response = await fetch(
+                "/dashboard/api/unscheduled-visits-count",
+                {
+                    credentials: "same-origin",
+                    cache: "no-store",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("unscheduled visits badge request failed");
+            }
+
+            const data = await response.json();
+            const count = Math.max(0, Number(data.count || 0));
+
+            const persianCount = count
+                .toLocaleString("fa-IR");
+
+            badge.textContent = persianCount;
+            badge.title =
+                persianCount + " ویزیت زمان‌بندی‌نشده";
+
+            if (count > 0) {
+                badge.hidden = false;
+            } else {
+                badge.hidden = true;
+            }
+        } catch (error) {
+            console.error(
+                "Green Vita unscheduled visits badge:",
+                error
+            );
+        }
+    }
+
+    updateUnscheduledVisitsBadge();
+
+    setInterval(
+        updateUnscheduledVisitsBadge,
+        30000
+    );
+})();
+</script>
+

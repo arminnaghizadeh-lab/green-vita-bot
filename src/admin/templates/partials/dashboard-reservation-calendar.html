@@ -1,0 +1,75 @@
+<div
+    id="gv-dashboard-reservation-calendar"
+    class="gv-dashboard-reservation-calendar"
+    hidden
+>
+    <div class="rv-main">
+<section class="rv-card rv-toolbar">
+            <div>
+                <div class="rv-toolbar-title">۷ روز آینده</div>
+                <div class="rv-toolbar-sub">
+                    امروز + شش روز بعد
+                </div>
+            </div>
+
+            <div class="rv-actions">
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="shiftDays(-7)">
+                    ← ۷ روز قبل
+                </button>
+
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="goToday()">
+                    امروز
+                </button>
+
+                <button class="rv-btn rv-btn-soft" type="button"
+                        onclick="shiftDays(7)">
+                    ۷ روز بعد →
+                </button>
+            </div>
+        </section>
+
+        <section id="daysGrid" class="rv-days"></section>
+
+        <section id="monthCard" class="rv-card rv-month">
+            <div class="rv-month-head">
+                <div>
+                    <h2 class="rv-section-title">تقویم ماهانه</h2>
+                    <div id="monthTitle" class="rv-section-sub"></div>
+                </div>
+
+                <div class="rv-actions">
+                    <button class="rv-btn rv-btn-soft" type="button"
+                            onclick="changeMonth(-1)">
+                        ماه قبل
+                    </button>
+                    <button class="rv-btn rv-btn-soft" type="button"
+                            onclick="changeMonth(1)">
+                        ماه بعد
+                    </button>
+                </div>
+            </div>
+
+            <div id="monthGrid" class="rv-month-grid"></div>
+        </section>
+
+        <section class="rv-bottom">
+
+            <section class="rv-card rv-section">
+                <h2 class="rv-section-title">جزئیات روز</h2>
+                <div id="selectedDateTitle" class="rv-section-sub"></div>
+                <div id="detailsList"></div>
+            </section>
+
+            <section class="rv-card rv-section">
+                <h2 class="rv-section-title">بازه‌های زمانی</h2>
+                <div class="rv-section-sub">
+                    فعال یا غیرفعال‌کردن Slot بدون تغییر رزروهای موجود
+                </div>
+                <div id="slotGrid" class="rv-slot-grid"></div>
+            </section>
+
+        </section>
+    </div>
+</div>

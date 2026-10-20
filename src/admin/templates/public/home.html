@@ -1,6 +1,33 @@
 {% extends "public/base.html" %}
 
-{% block title %}Green Vita | کلینیک گیاه پزشکی
+{% block title %}کلینیک گیاه پزشکی گرین ویتا | تشخیص و درمان گیاهان{% endblock %}
+
+{% block og_title %}کلینیک گیاه پزشکی گرین ویتا | تشخیص و درمان گیاهان{% endblock %}
+
+{% block twitter_title %}کلینیک گیاه پزشکی گرین ویتا | تشخیص و درمان گیاهان{% endblock %}
+
+{% block meta_description %}کلینیک گیاه پزشکی گرین ویتا؛ تشخیص و درمان بیماری‌ها و آفات گیاهان آپارتمانی، فضای باز و باغات، ویزیت حضوری و آنلاین و مشاوره تخصصی.
+{% endblock %}
+
+{% block og_description %}تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات؛ ویزیت حضوری و آنلاین توسط کلینیک گیاه پزشکی گرین ویتا.{% endblock %}
+
+{% block twitter_description %}تشخیص و درمان بیماری‌ها و آفات گیاهان آپارتمانی، فضای باز و باغات؛ ویزیت تخصصی گرین ویتا.{% endblock %}
+
+{% block extra_head %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://greenvitaclinic.ir/#website",
+  "name": "Green Vita",
+  "alternateName": "گرین ویتا",
+  "url": "https://greenvitaclinic.ir/"
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
 <script id="gv-card-master-final">
 (() => {
   const cards = [
@@ -58,13 +85,715 @@
 })();
 </script>
 
-<script src="/static/js/gv-card-responsive.js?v=20260921-final2"></script>
+
+
+
+<script id="gv-hero-title-persisted-fix">
+(() => {
+  const apply = () => {
+    if (!matchMedia("(max-width: 768px)").matches) return;
+    if (document.fonts && document.fonts.status !== "loaded") return;
+
+    const section = document.querySelector("#root > section:first-child");
+    const h = section?.querySelector(
+      'h1:has(> span[dir="ltr"].font-garamond)'
+    );
+    const en = h?.querySelector(
+      ':scope > span[dir="ltr"].font-garamond'
+    );
+    if (!h || !en) return;
+
+    const fa = [...h.querySelectorAll("span")]
+      .filter(s => s !== en && /[\u0600-\u06FF]/.test(s.innerText))
+      .sort((a, b) =>
+        a.querySelectorAll("span").length -
+        b.querySelectorAll("span").length
+      )[0];
+    if (!fa) return;
+
+    if (!en.dataset.gvBaseFontSize) {
+      const initialSize = parseFloat(getComputedStyle(en).fontSize);
+      if (!initialSize) return;
+      en.dataset.gvBaseFontSize = String(initialSize);
+    }
+
+    h.style.setProperty("position", "relative", "important");
+    h.style.setProperty("left", "0", "important");
+    h.style.setProperty("right", "0", "important");
+    h.style.setProperty("display", "block", "important");
+    h.style.setProperty("width", "100vw", "important");
+    h.style.setProperty("max-width", "100vw", "important");
+    h.style.setProperty("margin-inline", "0", "important");
+    h.style.setProperty("transform", "none", "important");
+    h.style.setProperty("text-align", "center", "important");
+    h.style.setProperty("box-sizing", "border-box", "important");
+
+    for (const child of h.children) {
+      if (child.tagName === "SPAN") {
+        child.style.setProperty("width", "auto", "important");
+        child.style.setProperty("min-width", "0", "important");
+        child.style.setProperty("box-sizing", "border-box", "important");
+      }
+    }
+
+    fa.style.setProperty("display", "inline-block", "important");
+    fa.style.setProperty("width", "max-content", "important");
+    fa.style.setProperty("max-width", "100%", "important");
+
+    en.style.setProperty("position", "static", "important");
+    en.style.setProperty("left", "auto", "important");
+    en.style.setProperty("right", "auto", "important");
+    en.style.setProperty("float", "none", "important");
+    en.style.setProperty("display", "block", "important");
+    en.style.setProperty("max-width", "100%", "important");
+    en.style.setProperty("margin", "0 auto", "important");
+    en.style.setProperty("text-align", "center", "important");
+    en.style.setProperty("white-space", "nowrap", "important");
+    en.style.setProperty(
+      "font-size",
+      `${parseFloat(en.dataset.gvBaseFontSize) * 0.97}px`,
+      "important"
+    );
+    en.style.setProperty("box-sizing", "border-box", "important");
+    en.style.setProperty("transform", "none", "important");
+
+    const range = document.createRange();
+    range.selectNodeContents(fa);
+    const targetWidth = Math.min(
+      range.getBoundingClientRect().width,
+      h.clientWidth
+    );
+    if (targetWidth > 0) {
+      en.style.setProperty("width", `${targetWidth}px`, "important");
+    }
+  };
+
+  const root = document.querySelector("#root") || document.body;
+  new MutationObserver(() => requestAnimationFrame(apply))
+    .observe(root, { childList: true, subtree: true });
+
+  document.fonts?.ready.then(() => requestAnimationFrame(apply));
+  addEventListener("resize", () => requestAnimationFrame(apply), {
+    passive: true
+  });
+  requestAnimationFrame(apply);
+})();
+</script>
+
+<script id="gv-diagnosis-bg-persistent">
+(function () {
+  function applyGreenVitaDiagnosisBgFix() {
+    const s = document.querySelector('#gv-online-diagnosis-cta');
+    if (!s) return;
+
+    s.style.setProperty('background', 'transparent', 'important');
+    s.style.setProperty('background-color', 'transparent', 'important');
+    s.style.setProperty('background-image', 'none', 'important');
+    s.style.setProperty('box-shadow', 'none', 'important');
+
+    let st = document.getElementById('gv-console-final-bg-fix');
+    if (!st) {
+      st = document.createElement('style');
+      st.id = 'gv-console-final-bg-fix';
+      document.head.appendChild(st);
+    }
+
+    st.textContent = `
+      #gv-online-diagnosis-cta::before,
+      #gv-online-diagnosis-cta::after,
+      #gv-online-diagnosis-cta > .gv-dx-living-particles {
+        display: none !important;
+        content: none !important;
+        background: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+      }
+    `;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener(
+      'DOMContentLoaded',
+      applyGreenVitaDiagnosisBgFix,
+      { once: true }
+    );
+  } else {
+    applyGreenVitaDiagnosisBgFix();
+  }
+})();
+</script>
+
+<script id="gv-diagnosis-photo-size-final">
+(function () {
+  function applyPhotoSettings() {
+    const img = document.querySelector('#gv-diagnosis-photo');
+    const frame = document.querySelector('#gv-diagnosis-photo-frame');
+    if (!img || !frame) return;
+
+    frame.style.setProperty('height', 'auto', 'important');
+    frame.style.setProperty('min-height', '0', 'important');
+    frame.style.setProperty('max-height', 'none', 'important');
+    frame.style.setProperty('aspect-ratio', 'auto', 'important');
+    frame.style.setProperty('overflow', 'visible', 'important');
+
+    img.style.setProperty('display', 'block', 'important');
+    img.style.setProperty('height', 'auto', 'important');
+    img.style.setProperty('min-height', '0', 'important');
+    img.style.setProperty('max-height', 'none', 'important');
+    img.style.setProperty('position', 'relative', 'important');
+    img.style.setProperty('left', 'auto', 'important');
+    img.style.setProperty('right', 'auto', 'important');
+    img.style.setProperty('inset', 'auto', 'important');
+
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      // موبایل: زوم 300 درصد و جابه‌جایی 700 پیکسل
+      img.style.setProperty('width', '300%', 'important');
+      img.style.setProperty('max-width', 'none', 'important');
+      img.style.setProperty('margin-left', '-100%', 'important');
+      img.style.setProperty('margin-right', '0', 'important');
+      img.style.setProperty('transform', 'translateX(700px)', 'important');
+      img.style.setProperty('object-fit', 'contain', 'important');
+      img.style.setProperty('object-position', 'center top', 'important');
+    } else {
+      // دسکتاپ: بازگشت به اندازه عادی
+      img.style.setProperty('width', '100%', 'important');
+      img.style.setProperty('max-width', '100%', 'important');
+      img.style.setProperty('margin-left', '0', 'important');
+      img.style.setProperty('margin-right', '0', 'important');
+      img.style.setProperty('transform', 'none', 'important');
+      img.style.setProperty('object-fit', 'initial', 'important');
+      img.style.setProperty('object-position', 'center top', 'important');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyPhotoSettings, { once: true });
+  } else {
+    applyPhotoSettings();
+  }
+
+  window.addEventListener('resize', applyPhotoSettings, { passive: true });
+})();
+</script>
+
+<script id="gv-home-mobile-bg-fit-fixed-final">
+(function () {
+  function setup() {
+    if (!document.body) return;
+
+    let bg = document.getElementById('gv-home-mobile-fixed-background');
+    if (!bg) {
+      bg = document.createElement('div');
+      bg.id = 'gv-home-mobile-fixed-background';
+      document.body.prepend(bg);
+    }
+
+    let css = document.getElementById('gv-home-mobile-bg-fit-fixed-style');
+    if (!css) {
+      css = document.createElement('style');
+      css.id = 'gv-home-mobile-bg-fit-fixed-style';
+      document.head.appendChild(css);
+    }
+
+    css.textContent = `
+      @media (max-width: 767px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
+        html { background-image: none !important; }
+        body {
+          position: relative !important;
+          isolation: isolate !important;
+          background-image: none !important;
+          background-color: transparent !important;
+          background-attachment: scroll !important;
+        }
+        #gv-home-mobile-fixed-background {
+          display: block !important;
+          position: fixed !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100vh !important;
+          height: 100dvh !important;
+          z-index: -1 !important;
+          pointer-events: none !important;
+          background-image: url("/static/images/home1.jpeg") !important;
+          background-repeat: no-repeat !important;
+          background-position: center center !important;
+          background-size: auto 100vh !important;
+          background-size: auto 100dvh !important;
+        }
+      }
+      @media (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse) {
+        #gv-home-mobile-fixed-background {
+          background-size: cover !important;
+          background-position: center center !important;
+        }
+      }
+
+      @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+        #gv-home-mobile-fixed-background {
+          display: none !important;
+        }
+      }
+    `;
+  }
+
+  function refreshBackground() {
+    setup();
+    const bg = document.getElementById('gv-home-mobile-fixed-background');
+    if (bg) {
+      bg.style.setProperty('inset', '0', 'important');
+      const portraitMobile = window.matchMedia(
+        '(orientation: portrait) and (hover: none) and (pointer: coarse)'
+      ).matches;
+      bg.style.setProperty(
+        'background-position',
+        portraitMobile ? '20% center' : 'center center',
+        'important'
+      );
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', refreshBackground, { once: true });
+  } else {
+    refreshBackground();
+  }
+
+  window.addEventListener('load', refreshBackground, { once: true });
+  window.addEventListener('resize', refreshBackground, { passive: true });
+  window.addEventListener('orientationchange', refreshBackground, { passive: true });
+  window.visualViewport?.addEventListener('resize', refreshBackground, { passive: true });
+})();
+</script>
 
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/home-luxury.css?v=20260921-hero-dingding-final1">
-<link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css">
+<link rel="stylesheet" href="/static/css/home-luxury.css?v=20261018-home1-jpeg-final1">
+<link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css?v=20261011-craos-mobile1">
+
+
+<style id="gv-online-diagnosis-dynamic-style">
+/* GREEN VITA — dynamic online diagnosis CTA */
+#gv-online-diagnosis-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(42px, 6vw, 72px) 16px !important;
+  background:
+    radial-gradient(ellipse at 10% 15%, rgba(177, 210, 135, .22), transparent 34%),
+    radial-gradient(ellipse at 90% 90%, rgba(150, 188, 105, .18), transparent 33%),
+    linear-gradient(180deg, #f7faf2 0%, #eef4e6 100%) !important;
+}
+#gv-online-diagnosis-cta::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 230px;
+  height: 230px;
+  top: 4%;
+  left: -115px;
+  border: 1px solid rgba(104, 145, 72, .18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px rgba(104, 145, 72, .035),
+              0 0 0 46px rgba(104, 145, 72, .025);
+  animation: gvDxRingFloat 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+#gv-online-diagnosis-cta > .container > div {
+  position: relative;
+  isolation: isolate;
+  transform: translateZ(0);
+  border: 1px solid rgba(215, 226, 177, .29) !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(112deg, rgba(4, 27, 17, .97), rgba(18, 62, 39, .98) 53%, rgba(35, 79, 49, .98)) !important;
+  box-shadow: 0 26px 65px rgba(8, 38, 23, .17),
+              inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+  animation: gvDxCardEnter .85s cubic-bezier(.2, .7, .2, 1) both;
+}
+#gv-online-diagnosis-cta > .container > div::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -115px;
+  right: -65px;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(160, 202, 112, .2), rgba(160, 202, 112, 0) 70%);
+  animation: gvDxGlowFloat 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+#gv-online-diagnosis-cta > .container > div::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: -140px;
+  left: 4%;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 180, 111, .13), rgba(201, 180, 111, 0) 70%);
+  animation: gvDxGlowFloat 10s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+}
+#gv-online-diagnosis-cta > .container > div > * {
+  position: relative;
+  z-index: 1;
+}
+#gv-online-diagnosis-cta > .container > div > p:first-child {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 0 auto 17px !important;
+  padding: 7px 13px;
+  border: 1px solid rgba(201, 220, 162, .2);
+  border-radius: 999px;
+  background: rgba(220, 237, 195, .075);
+  color: #d4e8b6 !important;
+  font-size: 10px !important;
+  letter-spacing: .14em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+#gv-online-diagnosis-cta > .container > div > p:first-child::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #b9db83;
+  box-shadow: 0 0 0 4px rgba(185, 219, 131, .1),
+              0 0 15px rgba(185, 219, 131, .55);
+  animation: gvDxStatusPulse 2.6s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta h2 {
+  color: #fffdf4 !important;
+  font-weight: 850 !important;
+  letter-spacing: -.025em;
+  line-height: 1.65 !important;
+  text-wrap: balance;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, .15);
+}
+#gv-online-diagnosis-cta h2::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 2px;
+  margin: 15px auto 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg, transparent, #c6dca0, #e0cb8c, transparent);
+  transform-origin: center;
+  animation: gvDxUnderline 3.8s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta h2 + p {
+  color: rgba(245, 248, 236, .82) !important;
+  font-size: 14px !important;
+  line-height: 2.1 !important;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 52px !important;
+  padding: 14px 28px !important;
+  border: 1px solid rgba(255, 255, 255, .36);
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #d9e9b9 0%, #b8d88c 48%, #a5cb76 100%) !important;
+  color: #173822 !important;
+  box-shadow: 0 9px 25px rgba(5, 22, 13, .2),
+              inset 0 1px 0 rgba(255, 255, 255, .55) !important;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"]::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -70%;
+  left: -60%;
+  width: 40%;
+  height: 240%;
+  transform: rotate(22deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .62), transparent);
+  animation: gvDxButtonShine 5s ease-in-out infinite;
+  pointer-events: none;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"] span {
+  display: inline-block;
+  transition: transform .25s ease;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"]:hover {
+  transform: translateY(-3px);
+  filter: saturate(1.08);
+  box-shadow: 0 14px 32px rgba(4, 25, 14, .29),
+              0 0 0 5px rgba(190, 219, 150, .09) !important;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"]:hover span {
+  transform: translateX(-4px);
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"]:focus-visible {
+  outline: 3px solid #e4d39d;
+  outline-offset: 5px;
+}
+@keyframes gvDxCardEnter {
+  from { opacity: 0; transform: translateY(18px) scale(.988); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes gvDxRingFloat {
+  from { transform: translate3d(0, -5px, 0) rotate(0deg); }
+  to   { transform: translate3d(22px, 18px, 0) rotate(18deg); }
+}
+@keyframes gvDxGlowFloat {
+  from { transform: translate3d(0, 0, 0) scale(.92); opacity: .65; }
+  to   { transform: translate3d(-18px, 14px, 0) scale(1.08); opacity: 1; }
+}
+@keyframes gvDxStatusPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(185,219,131,.1), 0 0 12px rgba(185,219,131,.35); }
+  50%      { box-shadow: 0 0 0 7px rgba(185,219,131,.035), 0 0 20px rgba(185,219,131,.65); }
+}
+@keyframes gvDxUnderline {
+  0%, 100% { transform: scaleX(.72); opacity: .7; }
+  50%      { transform: scaleX(1); opacity: 1; }
+}
+@keyframes gvDxButtonShine {
+  0%, 58% { left: -60%; }
+  82%, 100% { left: 135%; }
+}
+@media (max-width: 640px) {
+  #gv-online-diagnosis-cta {
+    padding: 34px 13px !important;
+  }
+  #gv-online-diagnosis-cta > .container > div {
+    border-radius: 23px !important;
+    padding: 31px 19px !important;
+  }
+  #gv-online-diagnosis-cta > .container > div > p:first-child {
+    font-size: 8px !important;
+    letter-spacing: .09em;
+    padding: 6px 10px;
+    margin-bottom: 13px !important;
+  }
+  #gv-online-diagnosis-cta h2 {
+    font-size: clamp(23px, 6.3vw, 32px) !important;
+    line-height: 1.75 !important;
+  }
+  #gv-online-diagnosis-cta h2 + p {
+    font-size: 12px !important;
+    line-height: 2 !important;
+    margin-bottom: 21px !important;
+  }
+  #gv-online-diagnosis-cta a[href="/diagnosis/"] {
+    min-height: 48px !important;
+    padding: 12px 21px !important;
+    font-size: 13px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gv-online-diagnosis-cta *,
+  #gv-online-diagnosis-cta::before,
+  #gv-online-diagnosis-cta > .container > div::before,
+  #gv-online-diagnosis-cta > .container > div::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* GV-DX-LIVELY-MOTION-START */
+#gv-online-diagnosis-cta > .container {
+  position: relative;
+  isolation: isolate;
+}
+#gv-online-diagnosis-cta > .container > div {
+  background-image:
+    radial-gradient(ellipse at 16% 18%, rgba(153,203,105,.18), transparent 35%),
+    radial-gradient(ellipse at 88% 83%, rgba(211,195,135,.11), transparent 34%),
+    linear-gradient(125deg, #061c12 0%, #16462b 30%, #0b3020 58%, #285838 80%, #092819 100%) !important;
+  background-size: 170% 170%, 180% 180%, 300% 300% !important;
+  background-position: 0% 20%, 100% 80%, 0% 50%;
+  animation:
+    gvDxCardEnter .85s cubic-bezier(.2,.7,.2,1) both,
+    gvDxLivingGradient 16s ease-in-out infinite,
+    gvDxLivingShadow 6s ease-in-out infinite !important;
+  will-change: background-position;
+}
+#gv-online-diagnosis-cta > .container > div::before {
+  width: 360px !important;
+  height: 360px !important;
+  top: -145px !important;
+  right: -95px !important;
+  background: radial-gradient(circle, rgba(154,211,106,.27), rgba(115,176,84,.07) 44%, transparent 72%) !important;
+  animation: gvDxOrbDrift 11s ease-in-out infinite alternate !important;
+}
+#gv-online-diagnosis-cta > .container > div::after {
+  width: 310px !important;
+  height: 310px !important;
+  bottom: -165px !important;
+  left: -45px !important;
+  background: radial-gradient(circle, rgba(204,190,127,.17), rgba(139,190,99,.06) 47%, transparent 72%) !important;
+  animation: gvDxOrbDrift2 14s ease-in-out infinite alternate !important;
+}
+#gv-online-diagnosis-cta > .container > div > .gv-dx-living-particles {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span {
+  position: absolute;
+  display: block;
+  width: 8px;
+  height: 16px;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(145deg, rgba(218,239,183,.8), rgba(135,190,91,.12));
+  box-shadow: 0 0 15px rgba(179,222,127,.12);
+  opacity: 0;
+  animation: gvDxLeafDrift 10s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(1) {
+  top: 21%; left: 8%; animation-delay: -1s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(2) {
+  top: 29%; right: 9%; width: 6px; height: 12px; animation-delay: -4s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(3) {
+  bottom: 18%; left: 16%; width: 7px; height: 14px; animation-delay: -6s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(4) {
+  bottom: 22%; right: 12%; animation-delay: -2.5s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(5) {
+  top: 12%; left: 34%; width: 5px; height: 10px; animation-delay: -7s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles span:nth-child(6) {
+  bottom: 12%; right: 35%; width: 6px; height: 12px; animation-delay: -5s;
+}
+#gv-online-diagnosis-cta .gv-dx-living-particles::before {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: -40%;
+  width: 22%;
+  height: 170%;
+  transform: rotate(21deg);
+  background: linear-gradient(90deg, transparent, rgba(222,240,194,.1), rgba(255,255,255,.13), transparent);
+  filter: blur(3px);
+  animation: gvDxLightSweep 9s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"] {
+  animation: gvDxButtonBreath 3.8s ease-in-out infinite;
+  transform-origin: center;
+}
+#gv-online-diagnosis-cta a[href="/diagnosis/"]:hover {
+  animation-play-state: paused;
+  filter: brightness(1.08) saturate(1.1);
+}
+#gv-online-diagnosis-cta h2::after {
+  animation: gvDxUnderline 3s ease-in-out infinite,
+             gvDxUnderlineGlow 3s ease-in-out infinite !important;
+}
+@keyframes gvDxLivingGradient {
+  0%, 100% { background-position: 0% 20%, 100% 80%, 0% 50%; }
+  50%      { background-position: 100% 70%, 0% 25%, 100% 50%; }
+}
+@keyframes gvDxLivingShadow {
+  0%, 100% { box-shadow: 0 25px 60px rgba(8,38,23,.17), inset 0 1px 0 rgba(255,255,255,.08); }
+  50%      { box-shadow: 0 30px 72px rgba(8,38,23,.23), inset 0 1px 0 rgba(255,255,255,.12); }
+}
+@keyframes gvDxOrbDrift {
+  from { transform: translate3d(0,0,0) scale(.88); opacity: .7; }
+  to   { transform: translate3d(-32px,25px,0) scale(1.12); opacity: 1; }
+}
+@keyframes gvDxOrbDrift2 {
+  from { transform: translate3d(8px,0,0) scale(1.08); opacity: .55; }
+  to   { transform: translate3d(36px,-24px,0) scale(.88); opacity: .95; }
+}
+@keyframes gvDxLeafDrift {
+  0%   { opacity: 0; transform: translate3d(0,15px,0) rotate(-15deg) scale(.7); }
+  25%  { opacity: .62; }
+  60%  { opacity: .35; transform: translate3d(12px,-13px,0) rotate(24deg) scale(1); }
+  100% { opacity: 0; transform: translate3d(-8px,-30px,0) rotate(48deg) scale(.75); }
+}
+@keyframes gvDxLightSweep {
+  0%, 18% { left: -40%; opacity: 0; }
+  30%     { opacity: .9; }
+  62%     { opacity: .45; }
+  82%, 100% { left: 125%; opacity: 0; }
+}
+@keyframes gvDxButtonBreath {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50%      { filter: brightness(1.055) saturate(1.07); }
+}
+@keyframes gvDxUnderlineGlow {
+  0%, 100% { filter: drop-shadow(0 0 1px rgba(198,220,160,.15)); }
+  50%      { filter: drop-shadow(0 0 6px rgba(198,220,160,.6)); }
+}
+@media (max-width: 640px) {
+  #gv-online-diagnosis-cta .gv-dx-living-particles span {
+    transform-origin: center;
+  }
+  #gv-online-diagnosis-cta > .container > div::before {
+    width: 260px !important;
+    height: 260px !important;
+  }
+  #gv-online-diagnosis-cta > .container > div::after {
+    width: 230px !important;
+    height: 230px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gv-online-diagnosis-cta > .container > div,
+  #gv-online-diagnosis-cta > .container > div::before,
+  #gv-online-diagnosis-cta > .container > div::after,
+  #gv-online-diagnosis-cta .gv-dx-living-particles *,
+  #gv-online-diagnosis-cta .gv-dx-living-particles::before,
+  #gv-online-diagnosis-cta a[href="/diagnosis/"],
+  #gv-online-diagnosis-cta h2::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* GV-DX-LIVELY-MOTION-END */
+
+</style>
+
+<style id="gv-services-glossy-final">
+.gv-service-preview-section .gv-preview-card {
+  background: linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.2) 45%),linear-gradient(180deg,#fff,#fbfdf8 58%,#edf5e6) !important;
+  border: 1px solid rgba(255,255,255,.95) !important;
+  box-shadow: 0 18px 36px rgba(2,20,8,.20),0 5px 12px rgba(2,20,8,.10),inset 0 1px 0 rgba(255,255,255,.98) !important;
+  transition: box-shadow .25s,border-color .25s !important;
+}
+@media (hover:hover) {
+  .gv-service-preview-section .gv-preview-card:hover {
+    box-shadow: 0 24px 44px rgba(2,20,8,.25),0 8px 18px rgba(2,20,8,.12) !important;
+    border-color: rgba(139,197,61,.48) !important;
+  }
+}
+</style>
+
+
+<style id="gv-title-desktop-mobile-color-final">
+@media (min-width: 768px) {
+  html body #gv-online-diagnosis-cta > .container > h2 {
+    color: rgb(255, 253, 244) !important;
+    -webkit-text-fill-color: rgb(255, 253, 244) !important;
+    text-shadow: rgba(0, 0, 0, 0.15) 0px 4px 30px !important;
+    -webkit-text-stroke-color: rgb(255, 253, 244) !important;
+    -webkit-text-stroke-width: 0px !important;
+  }
+}
+</style>
+
+
+<style id="gv-remove-hero-booking-final">
+.gv-home-hero a[class~="bg-[#8BC53D]"][class~="px-8"][class~="sm:px-10"] {
+  display: none !important;
+}
+</style>
+
 {% endblock %}
 
 {% block content %}
@@ -87,7 +816,7 @@
     "
 >
     <div
-        class="gv-home-hero"
+        class="gv-home-hero-controller"
         style="
             position:fixed!important;
             top:0!important;
@@ -100,9 +829,9 @@
             opacity:1!important;
         "
     >
-        <div class="gv-home-hero">
+        <div class="gv-home-hero" style="transform:none!important;bottom:0!important;">
         <div id="root"></div>
-        <script type="module" src="/static/react/green-vita-hero/green-vita-hero.js"></script>
+        <script type="module" src="/static/react/green-vita-hero/green-vita-hero.js?v=20261011-broela-centerfix10"></script>
     </div>
     </div>
 </div>
@@ -125,90 +854,406 @@
         z-index:1!important;
     "
 >
-    <section
-    class="section gv-home-services"
-    id="services"
-   
- style="
-        min-height:0!important;
-        height:auto!important;
-        margin:0!important;
-        padding-bottom:6px!important;
-    ">
-    <div class="container">
+    
 
-        <div class="section-head gv-services-heading">
-            <span class="gv-services-eyebrow">GREEN VITA SERVICES</span>
-            <h2>برای هر گیاه، یک مسیر تخصصی</h2>
-            <p>تشخیص، ویزیت و مشاوره را متناسب با شرایط واقعی گیاه انتخاب کنید.</p>
+<!-- =====================================================
+         GREEN VITA SERVICE CARDS — NEW PREVIEW ONLY
+         Original service cards above remain untouched.
+         ===================================================== -->
+
+    
+<style id="gv-diagnosis-image-desktop-mobile">
+html body section#gv-online-diagnosis-cta {
+  background-color: #021408 !important;
+  background-image:
+    linear-gradient(rgba(2,20,8,.42), rgba(2,20,8,.58)),
+    url("/static/images/home-diag.jpeg?v=20261018-dx-bg2") !important;
+  background-size: cover, cover !important;
+  background-position: center center, center center !important;
+  background-repeat: no-repeat, no-repeat !important;
+}
+
+@media (max-width: 768px) {
+  html body section#gv-online-diagnosis-cta {
+    margin-top: 64px !important;
+    background-size: cover, 130% auto !important;
+    background-position: center center, center top !important;
+    background-repeat: no-repeat, no-repeat !important;
+  }
+}
+
+/* GV-DIAGNOSIS-REMOVE-MOTION-20261018 */
+
+/* حذف تزئینات متحرک؛ محتوای اصلی و دکمه حفظ می‌شوند */
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta .gv-dx-living-particles,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta .gv-online-bot-animation,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta .gv-online-clinic-side-lines,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta [class*="particle"],
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta [class*="side-line"],
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta [class*="bot-animation"] {
+  display: none !important;
+}
+
+/* توقف انیمیشن‌های CSS در محدوده همین بنر */
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta *,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta *::before,
+html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta *::after {
+  animation: none !important;
+}
+
+
+/* GV-DIAGNOSIS-DESKTOP-UNZOOM-20261018 */
+html body #gv-diagnosis-photo {
+  transform: none !important;
+  transform-origin: center top !important;
+}
+@media (max-width: 768px) {
+  html body #gv-diagnosis-photo {
+    transform: scale(1.3) !important;
+    transform-origin: center top !important;
+  }
+}
+
+@media (min-width:769px){html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta{background-color:transparent!important;background-image:none!important}html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta::before,html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta::after{content:none!important;display:none!important;background:none!important;box-shadow:none!important}html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta>.container{background:transparent!important;box-shadow:none!important;border:0!important}html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta>.container>.gv-online-clinic-eyebrow{color:#48672d!important}html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta>.container>h2{color:#021408!important}html body section#gv-online-diagnosis-cta#gv-online-diagnosis-cta>.container>h2+p{color:#344638!important}html body #gv-online-bottom-edge-final{display:none!important}}
+/* GV-DIAGNOSIS-EYEBROW-LINES-RESTORE */
+html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  color: #d4b46e !important;
+}
+html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::before,
+html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::after {
+  content: "" !important;
+  display: block !important;
+  position: static !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 1 !important;
+  background: #d4b46e !important;
+  box-shadow: none !important;
+}
+html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::before {
+  background: linear-gradient(90deg, transparent, #d4b46e) !important;
+}
+html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::after {
+  background: linear-gradient(90deg, #d4b46e, transparent) !important;
+}
+@media (max-width: 768px) {
+  html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::before,
+  html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyebrow::after {
+    flex-basis: 17px !important;
+    width: 17px !important;
+    min-width: 17px !important;
+    max-width: 17px !important;
+  }
+}
+</style>
+
+<style id="gv-diagnosis-eyebrow-glow">
+/* GV-DIAGNOSIS-EYEBROW-GLOW-V1 */
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static {
+  text-shadow: 0 0 5px rgba(212,180,110,.42),
+               0 0 13px rgba(212,180,110,.22) !important;
+  animation: gvEyebrowGlow 3.2s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:first-child,
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:last-child {
+  box-shadow: 0 0 5px rgba(212,180,110,.45);
+  animation: gvEyebrowLineGlow 2.4s ease-in-out infinite;
+}
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:nth-child(2) {
+  color: #f2d99a;
+  background: linear-gradient(105deg,
+    #d4b46e 0%, #f2d99a 32%, #fff8d8 48%,
+    #f2d99a 58%, #d4b46e 100%);
+  background-size: 220% 100%;
+  background-position: 100% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gvEyebrowShimmer 3.8s ease-in-out infinite;
+}
+@keyframes gvEyebrowGlow {
+  0%, 100% { opacity: .88; }
+  50% { opacity: 1; }
+}
+@keyframes gvEyebrowLineGlow {
+  0%, 100% { opacity: .65; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.65); }
+}
+@keyframes gvEyebrowShimmer {
+  0%, 15% { background-position: 100% 50%; }
+  65%, 100% { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static,
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span {
+    animation: none !important;
+  }
+}
+</style>
+
+<section id="gv-online-diagnosis-cta" dir="rtl"
+  style="padding:0 !important; margin-top:64px !important; scroll-margin-top:78px; background-image:none !important;  height:auto !important; min-height:0 !important; box-sizing:border-box !important">
+  
+<div id="gv-diagnosis-photo-frame" style="display:block !important;width:100% !important;height:auto !important;overflow:hidden !important;position:relative !important;margin:0 !important;padding:0 !important;line-height:0 !important;box-sizing:border-box !important">
+    
+    <img id="gv-diagnosis-photo" src="/static/images/home-diag.jpeg?v=20261018-dx-bg2" alt="تصویر بنر تشخیص آنلاین گرین ویتا" fetchpriority="high" style="display:block !important;width:100% !important;height:auto !important;max-width:100% !important;object-fit:initial !important;object-position:center top !important">
+    <p class="gv-diagnosis-eyebrow-static" style="display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:9px!important;margin:0 auto 12px!important;padding:0 8px!important;color:#B58A3C!important;font-size:11px!important;font-weight:800!important;letter-spacing:.16em!important;line-height:1.5!important;white-space:nowrap!important; position:absolute!important; top:15px!important; left:0!important; right:0!important; z-index:3!important;"><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,transparent,#B58A3C)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span><span style="color:#B58A3C!important;-webkit-text-fill-color:#B58A3C!important;font-weight:800!important;text-shadow:0 1px 0 rgba(255,255,255,.55),0 3px 8px rgba(2,47,18,.24)!important;">GREEN VITA · ONLINE PLANT CLINIC</span><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,#B58A3C,transparent)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span></p>
+</div>
+  <div class="container" style="max-width:1120px !important;width:100% !important;margin:0 auto !important;transform:none !important;padding:28px 16px 40px !important;position:relative !important;z-index:2 !important;box-sizing:border-box !important;text-align:center !important;">
+    
+      
+
+      
+      
+      <h2 style="margin:0 auto 12px;max-width:720px;
+        font-size:clamp(24px,4vw,38px);line-height:1.7;;color:#022F12!important;-webkit-text-fill-color:#022F12!important;font-weight:800!important;text-shadow:0 1px 0 rgba(255,255,255,.55),0 3px 8px rgba(2,47,18,.24)!important;">
+        مشکل گیاهت رو همین‌جا حل کن
+      </h2>
+      <p style="max-width:600px;margin:0 auto 24px;
+        color:#e0eadd;font-size:14px;line-height:2.1;">عکس گیاهت رو بارگذاری کن و نوع گیاه یا مشکلش رو بررسی و درمان کن.</p>
+      <a href="/diagnosis/" style="display:inline-flex;align-items:center;
+        justify-content:center;gap:12px;min-height:50px;padding:13px 25px;
+        border-radius:100px;background:#b8d88c;color:#173822;
+        text-decoration:none;font-size:14px;font-weight:800;">
+        شروع تشخیص آنلاین <span aria-hidden="true">←</span>
+      </a>
+    
+  </div>
+
+  <div class="gv-dx-living-particles" aria-hidden="true">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+
+
+</section>
+
+
+<!-- GV-ONLINE-BOTTOM-EDGE-SHADOW-PERSISTENT-START -->
+
+
+
+<!-- GV-ONLINE-BOTTOM-EDGE-SHADOW-PERSISTENT-END -->
+
+<!-- GV-ONLINE-BOT-ANIMATION-STYLE-START -->
+<style id="gv-online-bot-animation-style">
+  #gv-online-diagnosis-cta .gv-online-bot-animation {
+    display: block;
+    width: clamp(88px, 18vw, 136px);
+    height: 136px;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto 14px;
+    background: transparent;
+  }
+  @media (max-width: 480px) {
+    #gv-online-diagnosis-cta .gv-online-bot-animation {
+      width: 104px;
+      height: 104px;
+      margin-bottom: 10px;
+    }
+  }
+</style>
+<!-- GV-ONLINE-BOT-ANIMATION-STYLE-END -->
+
+
+
+
+<!-- GV-ONLINE-CLINIC-SIDE-LINES-FINAL-START -->
+<style id="gv-online-clinic-side-lines-final-style">
+#gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  margin: 0 0 13px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #d4b46e !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .19em !important;
+  line-height: normal !important;
+  white-space: nowrap !important;
+}
+
+#gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::before,
+#gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::after {
+  content: "" !important;
+  position: static !important;
+  display: block !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  height: 1px !important;
+  min-height: 1px !important;
+  max-height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+  pointer-events: none !important;
+}
+
+#gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::before {
+  background: linear-gradient(90deg, transparent, #d4b46e) !important;
+}
+
+#gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::after {
+  background: linear-gradient(90deg, #d4b46e, transparent) !important;
+}
+
+@media (max-width: 768px) {
+  #gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow {
+    gap: 9px !important;
+    margin-bottom: 12px !important;
+    font-size: 9px !important;
+    letter-spacing: .16em !important;
+  }
+
+  #gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::before,
+  #gv-online-diagnosis-cta > .container > div > p.gv-online-clinic-eyebrow::after {
+    flex-basis: 17px !important;
+    width: 17px !important;
+    min-width: 17px !important;
+    max-width: 17px !important;
+  }
+}
+</style>
+<!-- GV-ONLINE-CLINIC-SIDE-LINES-FINAL-END -->
+
+
+
+
+
+<!-- GV-ONLINE-SECTION-BACKGROUND-FINAL-START -->
+
+
+
+
+
+<section class="gv-service-preview-section" id="gv-service-preview-v2">
+
+        <div class="gv-services-main-heading">
+            <span class="gv-services-main-eyebrow">GREEN VITA CLINIC</span>
+            <h1>کلینیک گیاه پزشکی گرین ویتا</h1>
+                تشخیص و درمان بیماری‌ها و آفات گیاهان آپارتمانی، فضای باز و باغات؛
+                ویزیت حضوری و آنلاین متناسب با شرایط واقعی گیاه
+            </p>
+            <p class="gv-services-select-hint">لطفاً سرویس مورد نظر خود را انتخاب کنید</p>
+
         </div>
+<div class="gv-service-preview-grid">
 
-        <div class="services">
-
-            {% set icons = ["🪴", "🌳", "🌿", "📞"] %}
-            {% set service_images = [
-                "/static/images/services/apartment.jpeg",
-                "/static/images/services/outdoor.jpg",
-                "/static/images/services/gardens.jpg",
-                "/static/images/services/phone.jpg"
+            {% set preview_images = [
+                "/static/images/services/apartment.webp",
+                "/static/images/services/outdoor.webp",
+                "/static/images/services/gardens.webp",
+                "/static/images/services/phone.webp"
             ] %}
 
-            {% for service in services %}
-            <article class="service">
+            {% for service in services[:4] %}
 
-                <div class="service-image">
-                    <img
-                        src="{{ service_images[loop.index0] if loop.index0 < 4 else '/static/images/services/apartment.jpeg' }}"
+            <article
+    class="gv-preview-card"
+    tabindex="0"
+    aria-expanded="false"
+>
+
+                <div class="gv-preview-image">
+
+                    <img loading="lazy" decoding="async"
+                        src="{{ preview_images[loop.index0] }}"
                         alt="{{ service.title }}"
                         loading="lazy"
+                        decoding="async"
                     >
+
+                    <div class="gv-preview-gradient"></div>
+
+                    <div class="gv-preview-title">
+                        {{ service.title }}
+                    </div>
+
+                    <span class="gv-preview-click-circle" aria-hidden="true">
+                        <span></span>
+                    </span>
+
+                    <span class="gv-preview-hint" aria-hidden="true">
+                        <span class="gv-preview-hint-arrow">←</span>
+                    </span>
+
                 </div>
 
-                <div class="service-icon">
-                    {{ icons[loop.index0] if loop.index0 < 4 else "🌱" }}
+                <div class="gv-preview-content">
+
+                    <div class="gv-preview-content-inner">
+
+                        <span class="gv-preview-icon">
+                            {{ ["🪴","🌳","🌿","📞"][loop.index0] }}
+                        </span>
+
+                        <h3>{{ service.title }}</h3>
+
+                        <p>{{ service.description or "" }}</p>
+
+                        {% if service.price %}
+                        <div class="gv-preview-price">
+                            <span>هزینه ویزیت</span>
+                            <strong>
+                                {{ "{:,}".format(service.price|int) }} تومان
+                            </strong>
+                        </div>
+                        {% else %}
+                        <div class="gv-preview-price">
+                            <strong>رایگان</strong>
+                        </div>
+                        {% endif %}
+
+                        <a
+                            href="/booking/service/{{ service.id }}/"
+                            class="gv-preview-book"
+                        >
+                            انتخاب سرویس
+                        </a>
+
+                    </div>
+
                 </div>
-
-                <h3>{{ service.title }}</h3>
-
-                <p>
-                    {{ service.description or "" }}
-                </p>
-
-                {% if service.price %}
-                <div class="service-price">
-                    <span class="service-price-label">هر ساعت ویزیت متخصص</span>
-                    <span class="service-price-amount">{{ "{:,}".format(service.price|int) }} تومان</span>
-                </div>
-                {% else %}
-                <div class="service-price">رایگان</div>
-                {% endif %}
-
-                <a href="/booking/?service={{ service.id }}" class="btn btn-primary">
-                    انتخاب سرویس
-                </a>
-                <div class="gv-service-green-real-box" aria-hidden="true"></div>
 
             </article>
+
             {% endfor %}
 
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-    </div>
     </section>
-
-    <section
+<style id="gv-customer-trust-transparent-final">
+body section.gv-customer-trust {
+  background-color: transparent !important;
+}
+</style>
+<section
     class="gv-customer-trust" style="
         position:relative!important;
         display:block!important;
@@ -273,7 +1318,7 @@
                         font-size:28px;
                         font-weight:700;
                     "
-                >۵ سال</strong>
+                >+۷ سال</strong>
                 <span
                     style="
                         display:block;
@@ -495,6 +1540,9 @@
 </section>
 
 
+
+
+
 <!-- ================= GREEN VITA BOT PROMO ================= -->
 <section class="gv-bot-promo" id="green-vita-bots">
   <div class="gv-bot-promo-orb gv-bot-orb-1"></div>
@@ -504,10 +1552,10 @@
 
     <div class="gv-bot-promo-head">
       <span class="gv-bot-eyebrow">GREEN VITA ASSISTANT</span>
-      <h2>دستیار گرین‌ویتا همیشه کنارت هست</h2>
+      <h2>ربات گیاه پزشک گرین‌ویتا همیشه کنارت هست</h2>
       <p>
-        تشخیص اولیه گیاه، دریافت راهنمایی و ارتباط سریع با گرین‌ویتا؛
-        همین حالا از ربات استفاده کن.
+        ربات گیاه پزشک گرین‌ویتا برای تشخیص اولیه مشکل گیاه،
+        دریافت راهنمایی، بررسی عکس و ارتباط سریع با متخصص در دسترس توست.
       </p>
     </div>
 
@@ -515,7 +1563,9 @@
 <div class="gv-bot-chat">
 
         <div class="gv-chat-top">
-          <div class="gv-chat-avatar">🌿</div>
+          <div class="gv-chat-avatar" style="overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;background-color:#fff!important;">
+            <img loading="lazy" decoding="async" src="/static/icon-192.png" alt="Green Vita" style="width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;display:block!important;margin:0!important;">
+          </div>
           <div>
             <strong>Green Vita AI</strong>
             <span><i></i> آنلاین</span>
@@ -524,13 +1574,13 @@
 
         <div class="gv-chat-body">
           <div class="gv-chat-art" aria-hidden="true">
-            <img src="/static/images/robotic-hand.png" alt="">
+            <img loading="lazy" src="/static/images/robotic-hand.webp" alt="" decoding="async">
           </div>
 
           <!-- BOT MESSAGE 1 -->
         <div class="gv-chat-msg gv-chat-msg-bot">
           <div class="gv-chat-line">
-            <img
+            <img loading="lazy" decoding="async"
               src="https://web.bale.ai/emoji-data/img-apple-64/1f33f.png"
               alt="🌿"
               class="gv-chat-emoji"
@@ -551,7 +1601,7 @@
         <!-- BOT MESSAGE 2 -->
         <div class="gv-chat-msg gv-chat-msg-bot">
           <div class="gv-chat-line">
-            <img
+            <img loading="lazy" decoding="async"
               src="https://web.bale.ai/emoji-data/img-apple-64/1fa7a.png"
               alt="🩺"
               class="gv-chat-emoji"
@@ -559,7 +1609,7 @@
             <span>تشخیص بیماری گیاه</span>
           </div>
           <div class="gv-chat-text">
-            <img
+            <img loading="lazy" decoding="async"
               src="https://web.bale.ai/emoji-data/img-apple-64/1f4f7.png"
               alt="📷"
               class="gv-chat-emoji"
@@ -577,7 +1627,7 @@
         <!-- BOT MESSAGE 3 -->
         <div class="gv-chat-msg gv-chat-msg-bot">
           <div class="gv-chat-line">
-            <img
+            <img loading="lazy" decoding="async"
               src="https://web.bale.ai/emoji-data/img-apple-64/1f50e.png"
               alt="🔎"
               class="gv-chat-emoji"
@@ -611,8 +1661,8 @@
         <h3>مشکل گیاهت رو با ما در میون بذار</h3>
 
         <p>
-          عکس گیاهت رو بفرست، راهنمایی اولیه بگیر و اگر نیاز بود
-          برای ویزیت تخصصی با گرین‌ویتا در ارتباط باش.
+          عکس گیاهت رو بفرست، راهنمایی اولیه برای بیماری و آفات بگیر
+          و اگر نیاز بود برای ویزیت تخصصی با گرین‌ویتا در ارتباط باش.
         </p>
 
         <div class="gv-bot-actions">
@@ -682,7 +1732,7 @@
                         تشخیص آنلاین با عکس خیلی سریع بود و باعث شد زودتر و به موقع
                         ویزیت حضوری رزرو کنم و بتونم قبل از نابودی گیاه، نجاتش بدم.
                     </p>
-                    <strong>نگار / اصفهان</strong>
+                    <strong>نیما / تهران</strong>
                 </article>
 
                 <article class="gv-testimonial-card">
@@ -691,7 +1741,7 @@
                         برای باغ پدرم مشاوره گرفتم، برنامه درمانی دقیقی دادن که
                         همون فصل جواب داد.
                     </p>
-                    <strong style="display:block; transform:translateY(28px);">رضا / کرج</strong>
+                    <strong>رضا / کرج</strong>
                 </article>
 
                 <article class="gv-testimonial-card">
@@ -703,7 +1753,83 @@
                     <strong>شیوا / تهران</strong>
                 </article>
 
-            </div>
+            
+                <!-- MORE REVIEWS START -->
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        برای پتوسم چند ماه درگیر زردی برگ‌ها بودم. بعد از بررسی نور
+                        و آبیاری، دقیقاً فهمیدم مشکل از کجاست.
+                    </p>
+                    <strong>محمدی / تهران</strong>
+                </article>
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        خیلی ساده و قابل فهم توضیح دادن که چه تغییری در آبیاری گیاه
+                        ایجاد کنم و نتیجه‌اش رو خیلی زود دیدم.
+                    </p>
+                    <strong>ف.لطفی / تهران</strong>
+                </article>
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        برای گیاه بالکنم مشکل آفت داشتم و با راهنمایی درست تونستم
+                        قبل از شدید شدن مشکل کنترلش کنم.
+                    </p>
+                    <strong>رضایی / کرج</strong>
+                </article>
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        چیزی که دوست داشتم این بود که فقط یک راه‌حل کلی نگرفتم؛
+                        شرایط خود گیاه و محیطش هم بررسی شد.
+                    </p>
+                    <strong>م.سامانی / ورامین</strong>
+                </article>
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        مشکل خاک گلدونم رو متوجه نمی‌شدم تا اینکه با بررسی تخصصی
+                        مشخص شد زهکشی مناسب نیست.
+                    </p>
+                    <strong>احمدی / اصفهان</strong>
+                </article>
+
+                <article class="gv-testimonial-card gv-extra-review">
+                    <div class="gv-testimonial-quote">“</div>
+                    <p>
+                        توضیحات کامل بود و بعد از ویزیت هم می‌دونستم برای ادامه مراقبت
+                        از گیاه دقیقاً چه کارهایی باید انجام بدم.
+                    </p>
+                    <strong>نداف / تهران</strong>
+                </article>
+
+                <!-- MORE REVIEWS END -->
+
+                </div>
+
+                <div class="gv-more-reviews-block">
+                    <div class="gv-more-reviews-indicator" aria-hidden="true">
+                        <span class="active"></span>
+                        <span></span>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="gv-more-reviews-btn"
+                        aria-label="نمایش نظرات بیشتر"
+                    >
+                        <span>بیشتر</span>
+                        <b>⌄</b>
+                    </button>
+                </div>
+
         </div>
     </section>
 
@@ -1011,7 +2137,7 @@
         </p>
         <a
     href="/booking/"
-    class="cta"
+    class="cta gv-booking-live-cta"
     style="
         display:inline-flex !important;
         align-items:center !important;
@@ -1060,7 +2186,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const stage = document.querySelector(".gv-home-stage");
-  const hero = document.querySelector(".gv-home-hero");
+  const hero = document.querySelector(".gv-home-hero-controller");
   const content = document.querySelector(".gv-home-content");
   const header = document.querySelector(".site-header");
 
@@ -1613,8 +2739,543 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+
+
+<script id="gv-service-card-click-final">
+(() => {
+  document.addEventListener("click", (event) => {
+    const root = document.getElementById("gv-service-preview-v2");
+    if (!root) return;
+
+    const cards = root.querySelectorAll(".gv-preview-card");
+    if (!cards.length) return;
+
+    const clickedCard = event.target.closest(".gv-preview-card");
+
+    // دکمه رزرو
+    if (event.target.closest(".gv-preview-book")) {
+      return;
+    }
+
+    // کلیک روی کارت
+    if (clickedCard) {
+      const wasOpen = clickedCard.classList.contains("is-open");
+
+      cards.forEach(card => {
+        card.classList.remove("is-open");
+        card.setAttribute("aria-expanded", "false");
+      });
+
+      if (!wasOpen) {
+        clickedCard.classList.add("is-open");
+        clickedCard.setAttribute("aria-expanded", "true");
+      }
+
+      return;
+    }
+
+    // هر کلیک خارج از کارت
+    cards.forEach(card => {
+      card.classList.remove("is-open");
+      card.setAttribute("aria-expanded", "false");
+    });
+  });
+})();
+</script>
+
+
+
+<script id="gv-service-preview-hint-final">
+(() => {
+  document.addEventListener("click", (event) => {
+    const card = event.target.closest(
+      "#gv-service-preview-v2 .gv-preview-card"
+    );
+
+    if (card) {
+      card.classList.add("gv-has-seen");
+    }
+  }, true);
+})();
+</script>
+
+
+
+
+<script id="gv-dx-sync-header-booking-button">
+(function () {
+  function syncBookingGreen() {
+    const target = document.querySelector(
+      '#gv-online-diagnosis-cta a[href*="/diagnosis/"]'
+    );
+    const header =
+      document.querySelector('header.site-header, .site-header') ||
+      document.querySelector('header');
+
+    if (!target || !header) return;
+
+    const visible = el => {
+      const cs = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return cs.display !== "none" &&
+             cs.visibility !== "hidden" &&
+             r.width > 0 && r.height > 0;
+    };
+
+    const candidates = Array.from(
+      header.querySelectorAll('a, button, [role="button"]')
+    ).filter(el => {
+      if (!visible(el)) return false;
+      const label = [
+        el.innerText,
+        el.textContent,
+        el.getAttribute("aria-label"),
+        el.getAttribute("title"),
+        el.getAttribute("href")
+      ].filter(Boolean).join(" ");
+      return /رزرو|booking|reserve/i.test(label);
+    });
+
+    const score = el => {
+      const label = [
+        el.innerText,
+        el.textContent,
+        el.getAttribute("aria-label"),
+        el.getAttribute("title")
+      ].filter(Boolean).join(" ");
+      const href = el.getAttribute("href") || "";
+      const cs = getComputedStyle(el);
+      let n = 0;
+
+      if (/رزرو\s*آنلاین/.test(label)) n += 100;
+      else if (/رزرو/.test(label)) n += 60;
+      if (/booking/i.test(href)) n += 30;
+
+      const rgb = cs.backgroundColor.match(/[\d.]+/g);
+      if (rgb && rgb.length >= 3) {
+        const [r, g, b] = rgb.map(Number);
+        if (g > r && g > b && g > 100) n += 20;
+      }
+      if (cs.backgroundImage !== "none") n += 5;
+      return n;
+    };
+
+    candidates.sort((a, b) => score(b) - score(a));
+    const source = candidates[0];
+
+    if (!source || score(source) < 50) {
+      console.warn("Green Vita: دکمه رزرو آنلاینِ قابل‌مشاهده در هدر پیدا نشد.");
+      return;
+    }
+
+    const cs = getComputedStyle(source);
+
+    [
+      "background-color",
+      "background-image",
+      "background-repeat",
+      "background-position",
+      "background-size",
+      "color",
+      "border-top-color",
+      "border-right-color",
+      "border-bottom-color",
+      "border-left-color"
+    ].forEach(prop => {
+      const value = cs.getPropertyValue(prop);
+      if (value) target.style.setProperty(prop, value, "important");
+    });
+
+    target.dataset.gvHeaderButtonColor = "synced-all-devices";
+    console.info(
+      "Green Vita: رنگ دکمه تشخیص با دکمه رزرو هدر هماهنگ شد.",
+      { background: cs.backgroundColor, gradient: cs.backgroundImage }
+    );
+  }
+
+  const scheduleSync = () => requestAnimationFrame(syncBookingGreen);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scheduleSync, { once: true });
+  } else {
+    scheduleSync();
+  }
+
+  window.addEventListener("load", scheduleSync);
+  window.addEventListener("resize", scheduleSync, { passive: true });
+})();
+</script>
+
+
+
+
+
+
+<!-- GV-ONLINE-SECTION-UNWRAPPED-HEIGHT-FINAL-START -->
+<style id="gv-online-section-unwrapped-height-final">
+@keyframes gvOnlineSectionBgMovePermanent {
+  0%, 100% { background-position: 0% 20%, 100% 80%, 0% 50%; }
+  50%      { background-position: 100% 80%, 0% 20%, 100% 50%; }
+}
+@keyframes gvOnlineSectionGlowLeftPermanent {
+  0%, 100% { transform: translate3d(0,0,0) scale(.94); opacity: .48; }
+  50%      { transform: translate3d(4%,-3%,0) scale(1.08); opacity: .88; }
+}
+@keyframes gvOnlineSectionGlowRightPermanent {
+  0%, 100% { transform: translate3d(0,0,0) scale(1.04); opacity: .42; }
+  50%      { transform: translate3d(-4%,4%,0) scale(.92); opacity: .78; }
+}
+
+/* The section itself becomes the full-width animated canvas */
+html body #gv-online-diagnosis-cta {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 46.84vw !important;
+  padding: 24px 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-color: #021408 !important;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(139,197,61,.14), transparent 32%),
+    radial-gradient(circle at 85% 75%, rgba(212,180,110,.11), transparent 30%),
+    linear-gradient(145deg, #021408 0%, #062414 48%, #021408 100%) !important;
+  background-size: 180% 180%, 180% 180%, 300% 300% !important;
+  background-repeat: no-repeat !important;
+  background-position: 0% 20%, 100% 80%, 0% 50%;
+  background-attachment: scroll !important;
+  background-blend-mode: normal, normal, normal !important;
+  animation: gvOnlineSectionBgMovePermanent 18s ease-in-out infinite !important;
+}
+
+/* Living light blooms stay attached to the section, not a card */
+html body #gv-online-diagnosis-cta::before,
+html body #gv-online-diagnosis-cta::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  width: min(68vw, 620px) !important;
+  height: min(68vw, 620px) !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: blur(5px) !important;
+  pointer-events: none !important;
+}
+html body #gv-online-diagnosis-cta::before {
+  top: -34% !important;
+  right: -12% !important;
+  bottom: auto !important;
+  left: auto !important;
+  background: radial-gradient(circle, rgba(139,197,61,.22), rgba(139,197,61,.06) 44%, transparent 72%) !important;
+  animation: gvOnlineSectionGlowLeftPermanent 12s ease-in-out infinite alternate !important;
+}
+html body #gv-online-diagnosis-cta::after {
+  bottom: -38% !important;
+  left: -12% !important;
+  top: auto !important;
+  right: auto !important;
+  background: radial-gradient(circle, rgba(212,180,110,.17), rgba(139,197,61,.05) 48%, transparent 73%) !important;
+  animation: gvOnlineSectionGlowRightPermanent 15s ease-in-out infinite alternate !important;
+}
+
+/* Transparent content container: no rounded card, border, or separate shadow */
+html body #gv-online-diagnosis-cta > .container {
+  position: relative !important;
+  isolation: isolate !important;
+  z-index: 2 !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1120px !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: center !important;
+}
+
+/* Keep animated particles as a full-section background layer */
+html body #gv-online-diagnosis-cta > .gv-dx-living-particles {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+/* Match the exact tapered gold lines used by GREEN VITA ASSISTANT */
+html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #d4b46e !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: .19em !important;
+  line-height: normal !important;
+  white-space: nowrap !important;
+}
+html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::before,
+html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::after {
+  content: "" !important;
+  display: block !important;
+  position: static !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  min-width: 24px !important;
+  max-width: 24px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+  pointer-events: none !important;
+}
+html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::before {
+  background: linear-gradient(90deg, transparent, #d4b46e) !important;
+}
+html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::after {
+  background: linear-gradient(90deg, #d4b46e, transparent) !important;
+}
+
+/* Compact, content-led height */
+html body #gv-online-diagnosis-cta > .container > h2 {
+  max-width: 720px !important;
+  margin: 0 auto 8px !important;
+  color: #fffdf4 !important;
+  line-height: 1.45 !important;
+}
+html body #gv-online-diagnosis-cta > .container > h2 + p {
+  max-width: 600px !important;
+  margin: 0 auto 14px !important;
+  color: rgba(245,248,236,.86) !important;
+  font-size: 14px !important;
+  line-height: 1.9 !important;
+}
+html body #gv-online-diagnosis-cta > .container > a[href="/diagnosis/"] {
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 0 auto !important;
+  min-height: 46px !important;
+  padding: 10px 23px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 768px) {
+  html body #gv-online-diagnosis-cta {
+    padding: 20px 14px !important;
+  }
+  html body #gv-online-diagnosis-cta::before,
+  html body #gv-online-diagnosis-cta::after {
+    width: 88vw !important;
+    height: 88vw !important;
+  }
+  html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow {
+    margin-bottom: 8px !important;
+    font-size: 9px !important;
+    letter-spacing: .16em !important;
+    gap: 9px !important;
+  }
+  html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::before,
+  html body #gv-online-diagnosis-cta > .container > .gv-online-clinic-eyebrow::after {
+    flex-basis: 17px !important;
+    width: 17px !important;
+    min-width: 17px !important;
+    max-width: 17px !important;
+  }
+  html body #gv-online-diagnosis-cta > .container > h2 + p {
+    margin-bottom: 12px !important;
+    font-size: 13px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body #gv-online-diagnosis-cta,
+  html body #gv-online-diagnosis-cta::before,
+  html body #gv-online-diagnosis-cta::after {
+    animation: none !important;
+  }
+}
+/* GV-ONLINE-SECTION-UNWRAPPED-HEIGHT-FINAL-END */
+
+</style>
+
+
+
+
+<!-- GV-SERVICE-HEADING-DYNAMIC-FINAL-START -->
+<style id="gv-service-heading-dynamic-final">
+@keyframes gvServiceHintGreenFlowFinal {
+  0%, 100% {
+    background-position: 0% 50%;
+    text-shadow: 0 1px 2px rgba(2,47,18,.05);
+  }
+  50% {
+    background-position: 100% 50%;
+    text-shadow: 0 2px 10px rgba(2,47,18,.17);
+  }
+}
+
+html body p.gv-services-select-hint {
+  color: #022F12 !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(
+    100deg,
+    #022F12 0%,
+    #064D2A 30%,
+    #176D3B 50%,
+    #064D2A 70%,
+    #022F12 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-position: 0% 50%;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gvServiceHintGreenFlowFinal 5s ease-in-out infinite !important;
+  transition: filter .3s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body p.gv-services-select-hint {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+}
+/* GV-SERVICE-HEADING-DYNAMIC-FINAL-END */
+</style>
+
+
+
+<!-- GV-SERVICE-HEADING-DYNAMIC-FINAL-START -->
+<style id="gv-service-heading-dynamic-final">
+@keyframes gvServiceHintGreenFlowFinal {
+  0%, 100% {
+    background-position: 0% 50%;
+    text-shadow: 0 1px 2px rgba(2,47,18,.05);
+  }
+  50% {
+    background-position: 100% 50%;
+    text-shadow: 0 2px 10px rgba(2,47,18,.17);
+  }
+}
+
+html body p.gv-services-select-hint {
+  color: #022F12 !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(
+    100deg,
+    #022F12 0%,
+    #064D2A 30%,
+    #176D3B 50%,
+    #064D2A 70%,
+    #022F12 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-position: 0% 50%;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gvServiceHintGreenFlowFinal 5s ease-in-out infinite !important;
+  transition: filter .3s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body p.gv-services-select-hint {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+}
+/* GV-SERVICE-HEADING-DYNAMIC-FINAL-END */
+</style>
+
+
+
+<!-- GV-SERVICE-HINT-EXACT-FINAL-START -->
+<style id="gv-service-hint-exact-final-style">
+@keyframes gvServiceHintDarkGreenFlow {
+  0%, 100% {
+    background-position: 0% 50%;
+    text-shadow: 0 1px 2px rgba(2,47,18,.05);
+  }
+  50% {
+    background-position: 100% 50%;
+    text-shadow: 0 2px 10px rgba(2,47,18,.17);
+  }
+}
+
+html body p.gv-services-select-hint {
+  color: #022F12 !important;
+  background: linear-gradient(
+    100deg,
+    #022F12 0%,
+    #064D2A 30%,
+    #176D3B 50%,
+    #064D2A 70%,
+    #022F12 100%
+  ) !important;
+  background-size: 220% 100% !important;
+  background-position: 0% 50%;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gvServiceHintDarkGreenFlow 5s ease-in-out infinite !important;
+  transition: filter .3s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body p.gv-services-select-hint {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+}
+</style>
+<!-- GV-SERVICE-HINT-EXACT-FINAL-END -->
+
+
+
+
+
+<style id="gv-home1-landscape-background-final">
+@media (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse) {
+  html body {
+    background-image: url("/static/images/home1.jpeg") !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+  }
+}
+</style>
+
 {% endblock %}
-
-
-
-

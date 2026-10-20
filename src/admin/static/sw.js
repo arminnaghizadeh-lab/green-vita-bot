@@ -1,4 +1,4 @@
-const CACHE_NAME = "green-vita-admin-v3";
+const CACHE_NAME = "green-vita-admin-v20261006";
 
 self.addEventListener("install", event => {
   self.skipWaiting();

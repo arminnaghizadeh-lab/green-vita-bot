@@ -1,0 +1,104 @@
+{% extends "public/base.html" %}
+
+{% block title %}تشخیص آنلاین گیاه با هوش مصنوعی | گرین‌ویتا{% endblock %}
+{% block meta_description %}عکس گیاهت را در سایت گرین‌ویتا بارگذاری کن؛ برای تشخیص مشکل و بیماری یا شناسایی نوع گیاه و راهنمای نگهداری، بدون ورود به بات.{% endblock %}
+{% block og_title %}تشخیص آنلاین گیاه | گرین‌ویتا{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/diagnosis-online.css?v=20261020-glossy-cta1">
+<link rel="stylesheet" href="/static/css/diagnosis-background.css?v=20261020-fixed-layer1">
+{% endblock %}
+
+{% block content %}
+<main class="gv-dx-page" dir="rtl">
+  <section class="gv-dx-hero">
+    <a class="gv-dx-back" href="/">← بازگشت به سایت گرین‌ویتا</a>
+    <p class="gv-dx-eyebrow">GREEN VITA · ONLINE PLANT CLINIC</p>
+    <h1>از گیاهت عکس بگیر، بهتر بشناسش</h1>
+    <p class="gv-dx-intro">
+      مشکل گیاهت را بررسی کن یا نوع و روش نگهداری آن را بشناس؛
+      تمام مراحل همین‌جا در سایت انجام می‌شود.
+    </p>
+
+  </section>
+
+  
+
+
+<section class="gv-dx-panel" aria-labelledby="gv-dx-form-title">
+    <h2 id="gv-dx-form-title">چه کمکی از ما می‌خواهی؟</h2>
+    <p class="gv-dx-muted">یکی از دو روش زیر را انتخاب کن.</p>
+
+    <div class="gv-dx-modes" role="group" aria-label="نوع تحلیل">
+      <button class="gv-dx-mode is-active" type="button"
+              data-mode="diagnose" aria-pressed="true">
+        <span class="gv-dx-mode-icon" aria-hidden="true">⌕</span>
+        <strong>تشخیص مشکل گیاه</strong>
+        <small>زردی، لکه، آفت، پوسیدگی یا ضعف گیاه</small>
+      </button>
+      <button class="gv-dx-mode" type="button"
+              data-mode="identify" aria-pressed="false">
+        <span class="gv-dx-mode-icon" aria-hidden="true">♧</span>
+        <strong>شناسایی نوع گیاه</strong>
+        <small>نام گیاه و راهنمای نگهداری آن</small>
+      </button>
+    </div>
+
+    <form id="gv-dx-form" enctype="multipart/form-data">
+      <input type="hidden" id="gv-dx-mode" name="mode" value="diagnose">
+
+      <div class="gv-dx-field">
+        <label for="gv-dx-image">عکس گیاه</label>
+        <label class="gv-dx-drop" id="gv-dx-drop" for="gv-dx-image">
+          <input id="gv-dx-image" name="image" type="file"
+                 accept="image/*" required>
+          <span class="gv-dx-upload-icon" aria-hidden="true">＋</span>
+          <strong id="gv-dx-upload-title">برای انتخاب عکس کلیک کن</strong>
+          <span id="gv-dx-upload-help">یا عکس را اینجا رها کن · JPG، PNG یا WEBP</span>
+          <img id="gv-dx-preview" alt="پیش‌نمایش عکس گیاه" hidden>
+          <span id="gv-dx-file-name" class="gv-dx-file-name"></span>
+        </label>
+      </div>
+
+      <div class="gv-dx-field">
+        <label for="gv-dx-plant-name">نام گیاه <span>(اختیاری)</span></label>
+        <input id="gv-dx-plant-name" name="plant_name" type="text"
+               maxlength="120" placeholder="مثلاً پتوس، فیکوس یا سانسوریا">
+      </div>
+
+      <div class="gv-dx-field">
+        <label for="gv-dx-notes">علائم و توضیحات <span>(اختیاری)</span></label>
+        <textarea id="gv-dx-notes" name="notes" rows="4" maxlength="1500"
+          placeholder="از چه زمانی این مشکل شروع شده؟ آبیاری و نور گیاه چطور است؟"></textarea>
+      </div>
+
+      <p class="gv-dx-privacy">
+        عکس برای تحلیل به سرویس هوش مصنوعی ارسال می‌شود و در این نسخه
+        به‌عنوان پرونده یا سابقه در سایت ذخیره نمی‌شود.
+      </p>
+
+      <button id="gv-dx-submit" class="gv-dx-submit" type="submit">
+        <span class="gv-dx-submit-label">شروع تشخیص آنلاین</span>
+        <span aria-hidden="true">←</span>
+      </button>
+      <p id="gv-dx-status" class="gv-dx-status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section id="gv-dx-result" class="gv-dx-result" aria-live="polite" hidden>
+    <div class="gv-dx-result-heading">
+      <p class="gv-dx-eyebrow">GREEN VITA ANALYSIS</p>
+      <h2>نتیجه بررسی گیاه</h2>
+      <p class="gv-dx-muted">نتیجه بر اساس عکس و توضیحات ارسال‌شده تولید شده است.</p>
+    </div>
+    <div id="gv-dx-result-content"></div>
+    <p class="gv-dx-disclaimer">
+      این نتیجه راهنمای اولیه هوش مصنوعی است و جای معاینه قطعی کارشناس گیاه‌پزشکی را نمی‌گیرد.
+      اگر مشکل ادامه داشت، برای بررسی تخصصی اقدام کن.
+    </p>
+    <a class="gv-dx-visit gv-booking-live-cta" href="/booking/">درخواست ویزیت تخصصی گیاه</a>
+  </section>
+</main>
+
+<script src="/static/js/diagnosis-online.js?v=20261011-online1" defer></script>
+{% endblock %}

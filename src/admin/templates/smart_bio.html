@@ -2,127 +2,517 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-        
-    
-    
-    <link rel="manifest" href="/static/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style"
-          content="default">
-    <meta name="apple-mobile-web-app-title"
-          content="Green Vita">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>آمار Smart Bio | Green Vita</title>
 
-    <title>Green Vita | کلینیک گیاه پزشکی</title>
-
-    <link rel="stylesheet" href="/static/css/smart-bio.css">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="stylesheet" href="/static/css/admin.css">
     <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvlogo-20260907">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvlogo-20260907">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvlogo-20260907">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+
+    <style>
+        .gv-analytics-page {
+            padding-bottom: 50px;
+        }
+
+        .gv-analytics-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .gv-analytics-hero h1 {
+            margin: 6px 0 8px;
+        }
+
+        .gv-analytics-hero p {
+            margin: 0;
+            opacity: .72;
+        }
+
+        .gv-analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .gv-analytics-card,
+        .gv-analytics-section {
+            background: #fff;
+            border: 1px solid rgba(2,47,18,.10);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(2,20,8,.06);
+        }
+
+        .gv-analytics-card {
+            padding: 20px;
+        }
+
+        .gv-analytics-card span {
+            display: block;
+            font-size: .88rem;
+            opacity: .68;
+            margin-bottom: 8px;
+        }
+
+        .gv-analytics-card strong {
+            display: block;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .gv-analytics-section {
+            padding: 26px;
+            margin-bottom: 22px;
+        }
+
+        .gv-analytics-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .gv-analytics-section-head h2 {
+            margin: 0;
+        }
+
+        .gv-analytics-section-head p {
+            margin: 6px 0 0;
+            opacity: .68;
+        }
+
+        .gv-smart-periods {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .gv-smart-period {
+            padding: 18px;
+            border-radius: 16px;
+            background: #F7FAF2;
+            border: 1px solid #E4F0CC;
+        }
+
+        .gv-smart-period span {
+            display: block;
+            opacity: .68;
+            margin-bottom: 8px;
+        }
+
+        .gv-smart-period strong {
+            font-size: 1.8rem;
+        }
+
+        .gv-channel-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .gv-channel-row {
+            padding: 15px 16px;
+            border: 1px solid #DCE6D7;
+            border-radius: 15px;
+        }
+
+        .gv-channel-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 9px;
+        }
+
+        .gv-channel-progress {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: #E8EFDf;
+        }
+
+        .gv-channel-progress span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #8BC53D, #C8A96B);
+        }
+
+        .gv-recent {
+            display: grid;
+            gap: 8px;
+        }
+
+        .gv-recent-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr;
+            gap: 12px;
+            padding: 12px 14px;
+            border-bottom: 1px solid #edf1ea;
+        }
+
+        .gv-link-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .gv-link-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 18px;
+            text-decoration: none;
+            color: inherit;
+            background: #F7FAF2;
+            border: 1px solid #E4F0CC;
+            border-radius: 16px;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .gv-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(2,20,8,.08);
+        }
+
+        .gv-link-card small {
+            opacity: .65;
+        }
+
+        @media (max-width: 1100px) {
+            .gv-analytics-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .gv-link-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .gv-analytics-hero {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .gv-smart-periods,
+            .gv-analytics-grid,
+            .gv-link-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gv-recent-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
 </head>
 
-<body>
+<body class="gv-admin-smart-bio">
 
-<main class="bio-page">
+{% include "partials/admin-sidebar.html" %}
+<div class="gv-admin-shell-content">
+{% include "partials/admin-topbar.html" %}
 
-    <section class="bio-card">
+<main class="container gv-analytics-page">
 
-        <div class="bio-logo-wrap">
-            <img
-                src="/static/logo.png"
-                alt="Green Vita"
-                class="bio-logo"
-            >
+    <section class="gv-analytics-hero">
+        <div>
+            <span class="gv-eyebrow">مرکز داده و عملکرد</span>
+            <h1>📊 آمار Smart Bio</h1>
+            <p>آمار، عملکرد کانال‌ها و وضعیت کلی کلینیک گرین ویتا</p>
         </div>
 
-        <h1>Green Vita</h1>
+        <a class="primary-link" href="/" target="_blank" rel="noopener">
+            🌐 مشاهده صفحه عمومی
+        </a>
+    </section>
 
-        <p class="bio-title">
-            کلینیک گیاه پزشکی گرین ویتا
-        </p>
+    <!-- CORE KPI -->
+    <section class="gv-analytics-grid">
 
-        <p class="bio-description">
-            تشخیص، درمان و نگهداری تخصصی گیاهان آپارتمانی
-        </p>
-
-        <div class="bio-links">
-
-            <a
-                href="/go/telegram"
-                class="bio-link"
-                data-channel="telegram"
-            >
-                <span class="link-icon" aria-hidden="true">
-                    <img src="/static/icons/telegram.svg" alt="">
-                </span>
-                <span>
-                    <strong>تلگرام</strong>
-                    <small>دستیار هوشمند کلینیک گیاه پزشکی گرین ویتا</small>
-                </span>
-                <span class="link-arrow">←</span>
-            </a>
-
-            <a
-                href="/go/instagram"
-                class="bio-link"
-                data-channel="instagram"
-            >
-                <span class="link-icon" aria-hidden="true">
-                    <img src="/static/icons/instagram.svg" alt="">
-                </span>
-                <span>
-                    <strong>اینستاگرام</strong>
-                    <small>آموزش و محتوای گیاه پزشکی</small>
-                </span>
-                <span class="link-arrow">←</span>
-            </a>
-
-            <a
-                href="/go/whatsapp"
-                class="bio-link"
-                data-channel="whatsapp"
-            >
-                <span class="link-icon" aria-hidden="true">
-                    <img src="/static/icons/whatsapp.svg" alt="">
-                </span>
-                <span>
-                    <strong>واتساپ</strong>
-                    <small>ارسال عکس و مشاوره رایگان</small>
-                </span>
-                <span class="link-arrow">←</span>
-            </a>
-
-            <a
-                href="/go/bale"
-                class="bio-link"
-                data-channel="bale"
-            >
-                <span class="link-icon" aria-hidden="true">
-                    <img src="/static/icons/bale.png?v=4" alt="">
-                </span>
-                <span>
-                    <strong>پیام‌رسان بله</strong>
-                    <small>آموزش و محتوای گیاه پزشکی</small>
-                </span>
-                <span class="link-arrow">←</span>
-            </a>
-
+        <div class="gv-analytics-card">
+            <span>👥 کاربران</span>
+            <strong>{{ analytics.totals.users }}</strong>
         </div>
 
-        <div class="bio-footer">
-            <span>🌿</span>
-            <span>اورژانس گیاهان آپارتمانی</span>
-            <span>🌿</span>
+        <div class="gv-analytics-card">
+            <span>🌱 پرونده گیاه</span>
+            <strong>{{ analytics.totals.plants }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>🩺 تشخیص‌ها</span>
+            <strong>{{ analytics.totals.diagnoses }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>🔍 شناسایی‌ها</span>
+            <strong>{{ analytics.totals.identifications }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>📞 کل درخواست ویزیت</span>
+            <strong>{{ analytics.totals.visits }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>⏳ درخواست‌های در انتظار</span>
+            <strong>{{ analytics.visits.pending }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>✅ ویزیت‌های زمان‌بندی‌شده</span>
+            <strong>{{ analytics.visits.scheduled }}</strong>
+        </div>
+
+        <div class="gv-analytics-card">
+            <span>📅 برنامه امروز</span>
+            <strong>{{ analytics.today.total }}</strong>
         </div>
 
     </section>
 
+    <!-- SMART BIO -->
+    <section class="gv-analytics-section">
+
+        <div class="gv-analytics-section-head">
+            <div>
+                <h2>🔗 عملکرد Smart Bio</h2>
+                <p>عملکرد لینک‌های ارتباطی گرین ویتا</p>
+            </div>
+        </div>
+
+        <div class="gv-smart-periods">
+
+            <div class="gv-smart-period">
+                <span>۲۴ ساعت اخیر</span>
+                <strong>{{ smart_bio.last_24h }}</strong>
+            </div>
+
+            <div class="gv-smart-period">
+                <span>۷ روز اخیر</span>
+                <strong>{{ smart_bio.last_7d }}</strong>
+            </div>
+
+            <div class="gv-smart-period">
+                <span>کل کلیک‌ها</span>
+                <strong>{{ smart_bio.total }}</strong>
+            </div>
+
+        </div>
+
+        {% if smart_bio.top_channel %}
+        <div class="gv-smart-period" style="margin-bottom:18px;">
+            <span>🏆 پربازده‌ترین کانال</span>
+            <strong>
+                {% if smart_bio.top_channel.channel == "telegram" %}
+                    ✈️ تلگرام
+                {% elif smart_bio.top_channel.channel == "instagram" %}
+                    ◎ اینستاگرام
+                {% elif smart_bio.top_channel.channel == "whatsapp" %}
+                    ◉ واتساپ
+                {% elif smart_bio.top_channel.channel == "bale" %}
+                    ➤ بله
+                {% else %}
+                    {{ smart_bio.top_channel.channel }}
+                {% endif %}
+            </strong>
+            <small>
+                {{ smart_bio.top_channel.count }} کلیک ·
+                {{ smart_bio.top_channel.percentage }}٪
+            </small>
+        </div>
+        {% endif %}
+
+        <div class="gv-channel-list">
+
+            {% for item in smart_bio.channel_stats %}
+
+            <div class="gv-channel-row">
+
+                <div class="gv-channel-head">
+                    <span>
+                        {% if item.channel == "telegram" %}
+                            ✈️ تلگرام
+                        {% elif item.channel == "instagram" %}
+                            ◎ اینستاگرام
+                        {% elif item.channel == "whatsapp" %}
+                            ◉ واتساپ
+                        {% elif item.channel == "bale" %}
+                            ➤ بله
+                        {% else %}
+                            {{ item.channel }}
+                        {% endif %}
+                    </span>
+
+                    <strong>
+                        {{ item.count }}
+                        <small>({{ item.percentage }}٪)</small>
+                    </strong>
+                </div>
+
+                <div class="gv-channel-progress">
+                    <span style="width: {{ item.percentage }}%;"></span>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- TODAY -->
+    <section class="gv-analytics-section">
+
+        <div class="gv-analytics-section-head">
+            <div>
+                <h2>📅 وضعیت امروز</h2>
+                <p>تفکیک برنامه‌های ثبت‌شده برای امروز</p>
+            </div>
+        </div>
+
+        <div class="gv-smart-periods">
+
+            <div class="gv-smart-period">
+                <span>رزروهای سایت</span>
+                <strong>{{ analytics.today.bookings }}</strong>
+            </div>
+
+            <div class="gv-smart-period">
+                <span>ویزیت‌های داخلی</span>
+                <strong>{{ analytics.today.appointments }}</strong>
+            </div>
+
+            <div class="gv-smart-period">
+                <span>مجموع برنامه امروز</span>
+                <strong>{{ analytics.today.total }}</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SMART BIO LINKS -->
+    <section class="gv-analytics-section">
+
+        <div class="gv-analytics-section-head">
+            <div>
+                <h2>🌐 کانال‌های Smart Bio</h2>
+                <p>لینک‌ها و تعداد کلیک هر کانال</p>
+            </div>
+        </div>
+
+        <div class="gv-link-grid">
+
+            <a href="/go/telegram"
+               class="gv-link-card">
+                <strong>✈️ تلگرام</strong>
+                <span>{{ smart_bio.channels.get("telegram", 0) }} کلیک</span>
+                <small>/go/telegram</small>
+            </a>
+
+            <a href="/go/instagram"
+               class="gv-link-card">
+                <strong>◎ اینستاگرام</strong>
+                <span>{{ smart_bio.channels.get("instagram", 0) }} کلیک</span>
+                <small>/go/instagram</small>
+            </a>
+
+            <a href="/go/whatsapp"
+               class="gv-link-card">
+                <strong>◉ واتساپ</strong>
+                <span>{{ smart_bio.channels.get("whatsapp", 0) }} کلیک</span>
+                <small>/go/whatsapp</small>
+            </a>
+
+            <a href="/go/bale"
+               class="gv-link-card">
+                <strong>➤ پیام‌رسان بله</strong>
+                <span>{{ smart_bio.channels.get("bale", 0) }} کلیک</span>
+                <small>/go/bale</small>
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- RECENT CLICKS -->
+    <section class="gv-analytics-section">
+
+        <div class="gv-analytics-section-head">
+            <div>
+                <h2>🕘 آخرین کلیک‌ها</h2>
+                <p>آخرین فعالیت ثبت‌شده در Smart Bio</p>
+            </div>
+        </div>
+
+        {% if smart_bio.recent %}
+
+        <div class="gv-recent">
+
+            {% for click in smart_bio.recent %}
+
+            <div class="gv-recent-row">
+
+                <span>
+                    {% if click.channel == "telegram" %}
+                        ✈️ تلگرام
+                    {% elif click.channel == "instagram" %}
+                        ◎ اینستاگرام
+                    {% elif click.channel == "whatsapp" %}
+                        ◉ واتساپ
+                    {% elif click.channel == "bale" %}
+                        ➤ بله
+                    {% else %}
+                        {{ click.channel }}
+                    {% endif %}
+                </span>
+
+                <span>{{ click.source_path or "—" }}</span>
+
+                <time>
+                    {{ click.created_at.strftime("%Y-%m-%d %H:%M")
+                       if click.created_at else "—" }}
+                </time>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="gv-smart-period">
+            هنوز کلیکی ثبت نشده است.
+        </div>
+
+        {% endif %}
+
+    </section>
+
 </main>
+
+</div>
 
 </body>
 </html>

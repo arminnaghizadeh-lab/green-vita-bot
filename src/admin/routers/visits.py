@@ -46,7 +46,11 @@ def _format_request_datetime(value):
     if not value:
         return "—"
 
-    jalali_dt = jdatetime.datetime.fromgregorian(datetime=value)
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+
+    local_dt = value.astimezone(ZoneInfo("Asia/Tehran"))
+    jalali_dt = jdatetime.datetime.fromgregorian(datetime=local_dt)
 
     return jalali_dt.strftime("%Y/%m/%d - %H:%M").translate(
         str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
@@ -84,7 +88,7 @@ DEFAULT_SLOT_STEP_MINUTES = 30
 
 def _format_visit_datetime(value: datetime, fmt: str) -> str:
     settings = get_settings()
-    return value.astimezone(ZoneInfo(settings.timezone)).strftime(fmt)
+    return value.astimezone(ZoneInfo("Asia/Tehran")).strftime(fmt)
 
 
 async def _send_visit_push_safe(
@@ -132,7 +136,7 @@ def _parse_datetime(value: str, field_name: str) -> datetime:
         from zoneinfo import ZoneInfo
 
         settings = get_settings()
-        parsed = parsed.replace(tzinfo=ZoneInfo(settings.timezone))
+        parsed = parsed.replace(tzinfo=ZoneInfo("Asia/Tehran"))
 
     return parsed.astimezone(timezone.utc)
 
@@ -483,6 +487,8 @@ async def calendar_create_manual_appointment(
     customer_name: str,
     customer_phone: str = "",
     customer_plant: str = "",
+    customer_address: str = "",
+    customer_description: str = "",
     admin_note: str = "",
     session: AsyncSession = Depends(get_session),
 ):
@@ -545,6 +551,8 @@ async def calendar_create_manual_appointment(
             customer_name=customer_name,
             customer_phone=customer_phone.strip() or None,
             customer_plant=customer_plant.strip() or None,
+            customer_address=customer_address.strip() or None,
+            customer_description=customer_description.strip() or None,
         )
 
         session.add(appointment)
@@ -739,26 +747,6 @@ async def reservations_page(
         "reservations.html",
         {
             "request": request,
-        },
-    )
-
-
-@router.get("/calendar")
-async def calendar_page(
-    request: Request,
-    session: AsyncSession = Depends(get_session),
-    settings: Settings = Depends(get_settings),
-):
-    redirect = require_authentication(request)
-    if redirect:
-        return redirect
-
-    return templates.TemplateResponse(
-        "calendar.html",
-        {
-            "request": request,
-            "app_name": settings.app_name,
-            "environment": settings.app_env,
         },
     )
 

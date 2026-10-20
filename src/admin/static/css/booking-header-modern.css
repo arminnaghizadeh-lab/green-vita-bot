@@ -1,0 +1,186 @@
+
+/* =========================================================
+   GREEN VITA BOOKING — MODERN PUBLIC HEADER
+   Scoped ONLY to /booking/
+   ========================================================= */
+
+html body.gv-booking-page .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+
+    width: 100% !important;
+
+    background: rgba(247,250,242,.88) !important;
+    backdrop-filter: blur(16px) saturate(1.05) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.05) !important;
+
+    border-bottom: 1px solid rgba(2,47,18,.08) !important;
+    box-shadow: 0 6px 24px rgba(2,20,8,.045) !important;
+}
+
+html body.gv-booking-page .site-header .nav {
+    width: 100% !important;
+    max-width: 1160px !important;
+    height: 78px !important;
+    min-height: 78px !important;
+
+    margin: 0 auto !important;
+    padding: 0 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    box-sizing: border-box !important;
+}
+
+html body.gv-booking-page .site-header .brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #021408 !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+}
+
+html body.gv-booking-page .site-header .brand-mark {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+html body.gv-booking-page .site-header .brand-mark img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+
+    object-fit: contain !important;
+}
+
+html body.gv-booking-page .site-header .menu {
+    display: flex !important;
+    align-items: center !important;
+    gap: 28px !important;
+}
+
+html body.gv-booking-page .site-header .menu a {
+    position: relative !important;
+
+    margin: 0 !important;
+    padding: 7px 0 !important;
+
+    color: #536158 !important;
+    background: transparent !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    font-size: 14px !important;
+    font-weight: 500 !important;
+
+    text-decoration: none !important;
+
+    transition:
+        color .2s ease,
+        opacity .2s ease !important;
+}
+
+html body.gv-booking-page .site-header .menu a:hover {
+    color: #022F12 !important;
+}
+
+html body.gv-booking-page .site-header .menu a::after {
+    content: "" !important;
+
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 0 !important;
+    height: 2px !important;
+
+    background: #8BC53D !important;
+
+    transition: width .22s ease !important;
+}
+
+html body.gv-booking-page .site-header .menu a:hover::after {
+    width: 100% !important;
+}
+
+html body.gv-booking-page .site-header .menu .cta {
+    padding: 11px 22px !important;
+
+    background: #022F12 !important;
+    color: #F7FAF2 !important;
+
+    border: 0 !important;
+    border-radius: 999px !important;
+
+    box-shadow: 0 8px 20px rgba(2,47,18,.14) !important;
+}
+
+html body.gv-booking-page .site-header .menu .cta::after {
+    display: none !important;
+}
+
+html body.gv-booking-page .site-header .menu .cta:hover {
+    background: #8BC53D !important;
+    color: #022F12 !important;
+}
+
+@media (max-width: 900px) {
+    html body.gv-booking-page .site-header .menu {
+        gap: 18px !important;
+    }
+
+    html body.gv-booking-page .site-header .menu a {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 620px) {
+    html body.gv-booking-page .site-header .nav {
+        height: 70px !important;
+        min-height: 70px !important;
+        padding: 0 18px !important;
+    }
+
+    html body.gv-booking-page .site-header .menu {
+        display: none !important;
+    }
+}
+
+
+/* FINAL BOOKING HEADER CTA — MATCH GLOBAL */
+.site-header .menu a.cta,
+.site-header .menu .cta,
+.site-header a.cta {
+    border-radius: 999px !important;
+}
+
+
+
+/* =========================================================
+   GREEN VITA — FINAL HEADER CTA SHAPE
+   ========================================================= */
+html body .site-header .menu a.cta {
+    border-radius: 999px !important;
+}

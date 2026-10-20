@@ -32,3 +32,15 @@ htmlcov/
 
 .env.backup
 backups/
+
+# Generated / temporary project artifacts
+*.bak*
+*.orig
+*~
+frontend/node_modules/
+frontend/dist/
+
+# Secrets and local environment files
+.env.*
+!.env.example
+*.env.backup*

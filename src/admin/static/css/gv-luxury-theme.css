@@ -14,36 +14,36 @@
    ========================================================= */
 
 :root {
-    --gv-bg: #F7FAF2;
-    --gv-sidebar: #021408;
+    --gv-bg: var(--gv-color-bg);
+    --gv-sidebar: var(--gv-color-sidebar);
 
-    --gv-primary: #8BC53D;
-    --gv-primary-dark: #022F12;
+    --gv-primary: var(--gv-color-primary);
+    --gv-primary-dark: var(--gv-color-primary-dark);
 
-    --gv-surface: #FFFFFF;
-    --gv-soft: #E4F0CC;
+    --gv-surface: var(--gv-color-surface);
+    --gv-soft: var(--gv-color-primary-soft);
 
-    --gv-text: #021408;
-    --gv-text-soft: #66736A;
-    --gv-muted: #8A948E;
+    --gv-text: var(--gv-color-text);
+    --gv-text-soft: var(--gv-color-text-soft);
+    --gv-muted: var(--gv-color-text-muted);
 
-    --gv-border: #E3E9DF;
+    --gv-border: var(--gv-color-border);
 
-    --gv-gold: #C6A15B;
-    --gv-gold-soft: #E8D8B5;
+    --gv-gold: var(--gv-color-gold);
+    --gv-gold-soft: var(--gv-color-gold-soft);
 
-    --gv-danger: #B84A4A;
-    --gv-warning: #B98224;
-    --gv-success: #3E7D4A;
+    --gv-danger: var(--gv-color-danger);
+    --gv-warning: var(--gv-color-warning);
+    --gv-success: var(--gv-color-success);
 
-    --gv-radius-sm: 10px;
-    --gv-radius-md: 14px;
-    --gv-radius-lg: 18px;
-    --gv-radius-xl: 24px;
+    --gv-radius-sm: var(--gv-token-radius-sm);
+    --gv-radius-md: var(--gv-token-radius-md);
+    --gv-radius-lg: var(--gv-token-radius-lg);
+    --gv-radius-xl: var(--gv-token-radius-xl);
 
-    --gv-shadow-sm: 0 4px 14px rgba(2, 20, 8, .05);
-    --gv-shadow: 0 10px 30px rgba(2, 20, 8, .07);
-    --gv-shadow-hover: 0 16px 38px rgba(2, 20, 8, .11);
+    --gv-shadow-sm: var(--gv-token-shadow-sm);
+    --gv-shadow: var(--gv-token-shadow-md);
+    --gv-shadow-hover: var(--gv-token-shadow-lg);
 }
 
 /* =========================================================
@@ -2523,12 +2523,12 @@ body:has(.wrap) .tracking {
    ========================================================= */
 
 :root {
-    --gv-public-dark: #021408;
-    --gv-public-primary: #8bc53d;
-    --gv-public-primary-dark: #022f12;
-    --gv-public-soft: #e4f0cc;
-    --gv-public-gold: #c6a15b;
-    --gv-public-gold-soft: #e8d8b5;
+    --gv-public-dark: var(--gv-color-sidebar);
+    --gv-public-primary: var(--gv-color-primary);
+    --gv-public-primary-dark: var(--gv-color-primary-dark);
+    --gv-public-soft: var(--gv-color-primary-soft);
+    --gv-public-gold: var(--gv-color-gold);
+    --gv-public-gold-soft: var(--gv-color-gold-soft);
 }
 
 /* Header */

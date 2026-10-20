@@ -1,0 +1,353 @@
+<style id="gv-header-broela">
+@font-face {
+  font-family: "GV Broela";
+  src: url("/static/fonts/Broela.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.gv-header-brand-broela {
+  font-family: "GV Broela", sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+}
+</style>
+
+
+<header class="site-header">
+    <nav class="nav">
+        <a href="/" class="brand">
+            <span class="brand-mark">
+                <img
+                    src="/static/greenvita-header-logo-v3.webp?v=1"
+                    alt="Green Vita"
+                >
+            </span>
+            <span class="gv-header-brand-broela">GREEN VITA</span>
+        </a>
+
+        
+<!-- GV MOBILE HEADER CLEAN START -->
+<div class="gv-mobile-actions">
+  <a href="/booking/" class="gv-mobile-cta gv-booking-live-cta">رزرو آنلاین</a>
+
+  <button
+    type="button"
+    class="gv-mobile-toggle"
+    aria-label="باز کردن منو"
+    aria-expanded="false"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>
+<!-- GV MOBILE HEADER CLEAN END -->
+
+    <div class="menu" id="gv-public-mobile-menu">
+            <a href="/">خانه</a>
+            <a href="/about/">درباره ما</a>
+            <a href="/contact/">تماس با ما</a>
+            <a href="/booking/track/">پیگیری رزرو</a>
+            <a href="/booking/" class="cta gv-booking-live-cta" style="border-radius:999px !important;">رزرو آنلاین</a>
+        </div>
+    </nav>
+
+<!-- GV MOBILE HEADER CSS moved to public-shared-header.css -->
+
+
+<!-- GV MOBILE HEADER SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector(".site-header");
+  const toggle = document.querySelector(".gv-mobile-toggle");
+
+  if (!header || !toggle) return;
+
+  const closeMenu = () => {
+    header.classList.remove("gv-mobile-open");
+    toggle.setAttribute("aria-expanded", "false");
+  };
+
+  toggle.addEventListener("click", () => {
+    const open = header.classList.toggle("gv-mobile-open");
+
+    toggle.setAttribute(
+      "aria-expanded",
+      open ? "true" : "false"
+    );
+  });
+
+  header.querySelectorAll(".menu a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  document.addEventListener("click", event => {
+    if (
+      header.classList.contains("gv-mobile-open") &&
+      !header.contains(event.target)
+    ) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener("resize", closeMenu);
+});
+</script>
+<!-- GV MOBILE HEADER SCRIPT END -->
+
+
+<style>
+/* GV HEADER TEXT FINAL START */
+
+/* Desktop + landscape = WHITE */
+@media screen and (min-width: 769px),
+       screen and (orientation: landscape) {
+  html body .site-header .menu > a:not(.cta),
+  html body .site-header .menu > a:not(.cta):link,
+  html body .site-header .menu > a:not(.cta):visited,
+  html body .site-header .menu > a:not(.cta):hover {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Portrait hamburger = DARK */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  html body .site-header.gv-mobile-open .menu > a:not(.cta),
+  html body .site-header.gv-mobile-open .menu > a:not(.cta):link,
+  html body .site-header.gv-mobile-open .menu > a:not(.cta):visited,
+  html body .site-header.gv-mobile-open .menu > a:not(.cta):hover {
+    color: #021408 !important;
+    -webkit-text-fill-color: #021408 !important;
+    opacity: 1 !important;
+  }
+}
+
+/* GV HEADER TEXT FINAL END */
+</style>
+
+</header>
+<script src="/static/js/gv-public-header-offset.js?v=20261021-offset1"></script>
+
+<script id="gv-persistent-header-no-lines">
+(function () {
+  const STYLE_ID = "gv-persistent-header-no-lines-style";
+
+  const css = `
+    html body header.site-header::before,
+    html body header.site-header::after,
+    html body header.site-header > .nav::before,
+    html body header.site-header > .nav::after {
+      content: none !important;
+      display: none !important;
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+    }
+  `;
+
+  function ensureStyle() {
+    let s = document.getElementById(STYLE_ID);
+    if (!s) {
+      s = document.createElement("style");
+      s.id = STYLE_ID;
+      (document.head || document.documentElement).appendChild(s);
+    }
+    if (s.textContent !== css) s.textContent = css;
+  }
+
+  const watched = new WeakSet();
+  const observer = new MutationObserver(function () {
+    enforce();
+  });
+
+  function lockProperties(el) {
+    if (!el) return;
+
+    [
+      ["border", "0px"],
+      ["border-bottom", "0px"],
+      ["border-top", "0px"],
+      ["outline", "none"],
+      ["box-shadow", "none"]
+    ].forEach(function (item) {
+      const prop = item[0], value = item[1];
+      if (
+        el.style.getPropertyValue(prop).trim() !== value ||
+        el.style.getPropertyPriority(prop) !== "important"
+      ) {
+        el.style.setProperty(prop, value, "important");
+      }
+    });
+
+    if (!watched.has(el)) {
+      watched.add(el);
+      observer.observe(el, {
+        attributes: true,
+        attributeFilter: ["style", "class"]
+      });
+    }
+  }
+
+  function enforce() {
+    ensureStyle();
+    const h = document.querySelector("header.site-header");
+    if (!h) return;
+    lockProperties(h);
+    lockProperties(h.querySelector(".nav"));
+  }
+
+  enforce();
+
+  // اگر اسکریپتی هدر را بازسازی کند نیز اصلاح دوباره اعمال می‌شود.
+  const pageObserver = new MutationObserver(function () {
+    enforce();
+  });
+
+  pageObserver.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+
+  window.addEventListener("pageshow", enforce);
+})();
+</script>
+
+
+
+<!-- GV mobile header colors moved to public-shared-header.css -->
+
+
+<!-- GREEN VITA GLOBAL HEADER CTA START -->
+<style>
+html body .site-header .menu a.cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+  height: 44px !important;
+  min-height: 44px !important;
+
+  margin: 0 !important;
+  padding: 0 22px !important;
+
+  background: #022F12 !important;
+  color: #F7FAF2 !important;
+
+  border: 1px solid #022F12 !important;
+  border-radius: 999px !important;
+
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+
+  box-shadow: 0 8px 20px rgba(2,47,18,.12) !important;
+  transform: none !important;
+  opacity: 1 !important;
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease !important;
+}
+
+.site-header .menu a.cta:hover {
+  background: #8BC53D !important;
+  color: #022F12 !important;
+  border-color: #8BC53D !important;
+
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 24px rgba(2,47,18,.16) !important;
+}
+</style>
+<!-- GREEN VITA GLOBAL HEADER CTA END -->
+
+<style id="gv-mobile-menu-text-final">
+@media screen and (max-width: 768px) and (orientation: portrait) {
+
+  html body .site-header.gv-mobile-open .menu a:not(.cta),
+  html body .site-header.gv-mobile-open .menu a:not(.cta):link,
+  html body .site-header.gv-mobile-open .menu a:not(.cta):visited,
+  html body .site-header.gv-mobile-open .menu a:not(.cta):active,
+  html body .site-header.gv-mobile-open .menu a:not(.cta):focus {
+    color: #021408 !important;
+    -webkit-text-fill-color: #021408 !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+  }
+
+  html body .site-header.gv-mobile-open .menu a:not(.cta) *,
+  html body .site-header.gv-mobile-open .menu a:not(.cta) span {
+    color: #021408 !important;
+    -webkit-text-fill-color: #021408 !important;
+    opacity: 1 !important;
+  }
+}
+</style>
+
+<!-- GV-HEADER-BOTTOM-EDGE-SHADOW-SCRIPT-START -->
+<script id="gv-header-bottom-edge-final-script">
+(() => {
+  const header = document.querySelector("header.site-header");
+  if (!header || !document.body) return;
+
+  const cleanupKey = "__gvHeaderBottomEdgeFinalCleanup";
+  if (typeof window[cleanupKey] === "function") window[cleanupKey]();
+
+  let edge = document.getElementById("gv-header-bottom-edge-final");
+  if (!edge) {
+    edge = document.createElement("span");
+    edge.id = "gv-header-bottom-edge-final";
+    edge.setAttribute("aria-hidden", "true");
+  }
+  if (edge.parentElement !== header) header.appendChild(edge);
+
+  let shadow = document.getElementById("gv-header-bottom-shadow-final");
+  if (!shadow) {
+    shadow = document.createElement("div");
+    shadow.id = "gv-header-bottom-shadow-final";
+    shadow.setAttribute("aria-hidden", "true");
+  }
+  if (shadow.parentElement !== document.body) document.body.appendChild(shadow);
+
+  const update = () => {
+    const rect = header.getBoundingClientRect();
+    shadow.style.left = (rect.left + 12) + "px";
+    shadow.style.width = Math.max(0, rect.width - 24) + "px";
+    shadow.style.top = (rect.bottom - 1) + "px";
+  };
+
+  window.addEventListener("resize", update, { passive: true });
+  window.addEventListener("scroll", update, { passive: true });
+
+  let observer = null;
+  if ("ResizeObserver" in window) {
+    observer = new ResizeObserver(update);
+    observer.observe(header);
+  }
+
+  window[cleanupKey] = () => {
+    window.removeEventListener("resize", update);
+    window.removeEventListener("scroll", update);
+    if (observer) observer.disconnect();
+  };
+
+  update();
+  requestAnimationFrame(update);
+})();
+</script>
+<!-- GV-HEADER-BOTTOM-EDGE-SHADOW-SCRIPT-END -->

@@ -1,0 +1,858 @@
+/* =========================================================
+   GREEN VITA — SHARED PUBLIC HEADER
+   EXACT SAME HEADER ON ALL PUBLIC PAGES
+   ========================================================= */
+
+.site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    width: 100% !important;
+
+    background: rgba(248,247,241,.92) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+
+    border-bottom: 1px solid #D9E4C4 !important;
+    box-shadow: none !important;
+}
+
+.site-header .nav {
+    width: 100% !important;
+    max-width: 1160px !important;
+    height: 78px !important;
+    min-height: 78px !important;
+
+    margin: 0 auto !important;
+    padding: 0 28px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    box-sizing: border-box !important;
+}
+
+.site-header .brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 20px !important;
+    font-weight: 800 !important;
+
+    color: #021408 !important;
+    text-decoration: none !important;
+}
+
+.site-header .brand-mark {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    overflow: hidden !important;
+}
+
+.site-header .brand-mark img {
+    display: block !important;
+
+    width: 34px !important;
+    height: 34px !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    object-fit: contain !important;
+}
+
+.site-header .menu {
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 30px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.site-header .menu a {
+    position: relative !important;
+
+    margin: 0 !important;
+    padding: 6px 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+
+    color: #14200F !important;
+
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1.5 !important;
+
+    text-decoration: none !important;
+}
+
+.site-header .menu a::after {
+    content: "" !important;
+
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    width: 0 !important;
+    height: 2px !important;
+
+    background: #D9B54A !important;
+
+    transition: width .25s ease !important;
+}
+
+.site-header .menu a:hover::after {
+    width: 100% !important;
+}
+
+.site-header .menu .cta {
+    padding: 12px 26px !important;
+
+    background: #022F12 !important;
+    color: #F8F7F1 !important;
+
+    border-radius: 999px !important;
+}
+
+.site-header .menu .cta::after {
+    display: none !important;
+}
+
+.site-header .menu .cta:hover {
+    background: #021408 !important;
+    color: #F8F7F1 !important;
+}
+
+@media (max-width: 900px) {
+    .site-header .menu {
+        gap: 16px !important;
+    }
+}
+
+@media (max-width: 620px) {
+    .site-header .nav {
+        height: 70px !important;
+        min-height: 70px !important;
+        padding: 0 18px !important;
+    }
+
+    .site-header .menu {
+        display: none !important;
+    }
+}
+
+/* Global public-page reset */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* FINAL GLOBAL PUBLIC RESET */
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html body .site-header {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — GLOBAL GLASS HEADER
+   Same visual language across every public page
+   ========================================================= */
+
+.site-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2, 20, 8, .88),
+            rgba(2, 20, 8, .76)
+        ) !important;
+
+    backdrop-filter: blur(20px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(135%) !important;
+
+    border-bottom: 1px solid rgba(198, 161, 91, .22) !important;
+
+    box-shadow:
+        0 10px 30px rgba(2, 20, 8, .20),
+        0 2px 8px rgba(2, 20, 8, .14),
+        inset 0 1px 0 rgba(255,255,255,.05) !important;
+
+    color: #ffffff !important;
+}
+
+.site-header .brand,
+.site-header .menu a {
+    color: #ffffff !important;
+}
+
+.site-header .menu a:hover {
+    color: #E4F0CC !important;
+}
+
+.site-header .menu a::after {
+    background: #C6A15B !important;
+}
+
+.site-header .menu .cta,
+.site-header .cta {
+    background: #8BC53D !important;
+    color: #022F12 !important;
+    border: 1px solid rgba(139,197,61,.45) !important;
+
+    box-shadow:
+        0 8px 22px rgba(139,197,61,.20),
+        inset 0 1px 0 rgba(255,255,255,.25) !important;
+}
+
+.site-header .menu .cta:hover,
+.site-header .cta:hover {
+    background: #9ED84A !important;
+    color: #022F12 !important;
+    transform: translateY(-1px);
+}
+
+
+
+/* =========================================================
+   GLOBAL PUBLIC HEADER — GREEN VITA GLASS
+   Loaded after every public page stylesheet.
+   ========================================================= */
+
+html body:has(#root, .site-header) .site-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10000 !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(2,20,8,.90),
+            rgba(2,20,8,.72)
+        ) !important;
+
+    backdrop-filter: blur(20px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(135%) !important;
+
+    border-bottom:
+        1px solid rgba(198,161,91,.20) !important;
+
+    box-shadow:
+        0 12px 35px rgba(2,20,8,.22),
+        0 3px 10px rgba(2,20,8,.12),
+        inset 0 1px 0 rgba(255,255,255,.055) !important;
+
+    color: #fff !important;
+}
+
+html body:has(#root, .site-header) .site-header .brand,
+html body:has(#root, .site-header) .site-header .menu a {
+    color: #fff !important;
+}
+
+html body:has(#root, .site-header) .site-header .menu a:hover {
+    color: #E4F0CC !important;
+}
+
+html body:has(#root, .site-header) .site-header .menu a::after {
+    background: #C6A15B !important;
+}
+
+html body:has(#root, .site-header) .site-header .menu .cta {
+    background: #8BC53D !important;
+    color: #022F12 !important;
+    border: 1px solid rgba(139,197,61,.45) !important;
+    box-shadow:
+        0 8px 24px rgba(139,197,61,.20),
+        inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+
+html body:has(#root, .site-header) .site-header .menu .cta:hover {
+    background: #9ED84A !important;
+    color: #022F12 !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — GLOBAL HEADER CTA
+   رزرو آنلاین — یکسان در تمام صفحات
+   ========================================================= */
+
+.site-header .menu a.cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 22px !important;
+
+  background: #022F12 !important;
+  color: #F7FAF2 !important;
+
+  border: 1px solid #022F12 !important;
+  border-radius: 999px !important;
+
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+
+  text-decoration: none !important;
+
+  box-shadow: 0 8px 20px rgba(2,47,18,.12) !important;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease !important;
+}
+
+.site-header .menu a.cta:hover {
+  background: #8BC53D !important;
+  color: #022F12 !important;
+  border-color: #8BC53D !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 24px rgba(2,47,18,.16) !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — GLOBAL HEADER CTA
+   رزرو آنلاین — یکسان در تمام صفحات
+   ========================================================= */
+
+.site-header .menu a.cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 22px !important;
+
+  background: #022F12 !important;
+  color: #F7FAF2 !important;
+
+  border: 1px solid #022F12 !important;
+  border-radius: 999px !important;
+
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+
+  text-decoration: none !important;
+
+  box-shadow: 0 8px 20px rgba(2,47,18,.12) !important;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease !important;
+}
+
+.site-header .menu a.cta:hover {
+  background: #8BC53D !important;
+  color: #022F12 !important;
+  border-color: #8BC53D !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 24px rgba(2,47,18,.16) !important;
+}
+
+
+/* FINAL GLOBAL HEADER CTA */
+.site-header .menu a.cta,
+.site-header .menu .cta,
+.site-header a.cta {
+    border-radius: 999px !important;
+}
+
+
+
+/* =========================================================
+   GREEN VITA — FINAL HEADER CTA SHAPE
+   ========================================================= */
+html body .site-header .menu a.cta {
+    border-radius: 999px !important;
+}
+
+/* =========================================================
+   GREEN VITA — MOBILE SAFARI HORIZONTAL LOCK
+   Keep public pages centered and prevent horizontal dragging
+   ========================================================= */
+
+@media screen and (max-width: 700px) {
+
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+        overscroll-behavior-x: none !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body {
+        position: relative !important;
+    }
+
+    .site-header,
+    .gv-inner-page,
+    .gv-footer,
+    .site-footer {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .gv-inner-page > .container,
+    .gv-inner-page .container {
+        width: calc(100% - 32px) !important;
+        max-width: 920px !important;
+        min-width: 0 !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
+    }
+
+    .gv-inner-hero,
+    .gv-inner-grid,
+    .gv-inner-card,
+    .gv-contact-main,
+    .gv-contact-grid,
+    .gv-contact-card,
+    .gv-emergency {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* Home final CTA — same light-green pill as header CTA */
+.gv-final-cta a {
+  background: rgb(139, 197, 61) !important;
+  background-image: none !important;
+  color: rgb(2, 47, 18) !important;
+  border: 1px solid rgba(139, 197, 61, 0.45) !important;
+  border-radius: 999px !important;
+  box-shadow:
+    rgba(139, 197, 61, 0.2) 0 8px 24px,
+    rgba(255, 255, 255, 0.24) 0 1px 0 inset !important;
+}
+
+.gv-final-cta a::after {
+  display: none !important;
+  content: none !important;
+}
+
+.gv-final-cta a:hover {
+  background: rgb(158, 216, 74) !important;
+  background-image: none !important;
+  color: rgb(2, 47, 18) !important;
+  border-color: rgb(139, 197, 61) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* GV-MOBILE-HEADER-FIRST-PAINT-START */
+/* =========================================================
+   GREEN VITA — CLEAN MOBILE HEADER
+   Portrait phones only
+   ========================================================= */
+
+.gv-mobile-actions {
+  display: none;
+}
+
+/* ---------- PORTRAIT MOBILE ---------- */
+
+@media (max-width: 768px) and (orientation: portrait) {
+
+  html body .site-header .nav {
+    width: 100% !important;
+    max-width: none !important;
+
+    min-height: 64px !important;
+    height: 64px !important;
+
+    margin: 0 !important;
+    padding: 0 14px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    box-sizing: border-box !important;
+    gap: 10px !important;
+  }
+
+  html body .site-header .brand {
+    display: inline-flex !important;
+    align-items: center !important;
+
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body .site-header .brand-mark {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+  }
+
+  html body .site-header .brand > span:last-child {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Mobile actions: CTA + hamburger */
+  html body .site-header .gv-mobile-actions {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin-inline-start: auto !important;
+
+    flex: 0 0 auto !important;
+  }
+
+  html body .site-header .gv-mobile-cta {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    height: 40px !important;
+    min-height: 40px !important;
+
+    padding: 0 15px !important;
+
+    border: 1px solid #022F12 !important;
+    border-radius: 999px !important;
+
+    background: #022F12 !important;
+    color: #F7FAF2 !important;
+
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+    text-decoration: none !important;
+
+    box-shadow: 0 6px 16px rgba(2,47,18,.12) !important;
+  }
+
+  html body .site-header .gv-mobile-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: inline-flex !important;
+    flex-direction: column !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+
+    border: 1px solid rgba(2,47,18,.12) !important;
+    border-radius: 999px !important;
+
+    background: #F7FAF2 !important;
+    color: #022F12 !important;
+
+    box-shadow: 0 5px 15px rgba(2,47,18,.07) !important;
+
+    cursor: pointer !important;
+  }
+
+  html body .site-header .gv-mobile-toggle span {
+    width: 16px !important;
+    height: 2px !important;
+
+    display: block !important;
+
+    border-radius: 999px !important;
+
+    background: #022F12 !important;
+
+    transition: transform .18s ease, opacity .18s ease !important;
+  }
+
+  /* Existing desktop menu becomes mobile drawer */
+  html body .site-header .menu {
+    display: none !important;
+
+    position: absolute !important;
+
+    top: calc(100% + 8px) !important;
+    left: 12px !important;
+    right: 12px !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 8px !important;
+
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+
+    background: rgba(247,250,242,.98) !important;
+
+    border: 1px solid rgba(2,47,18,.09) !important;
+    border-radius: 18px !important;
+
+    box-shadow: 0 18px 45px rgba(2,20,8,.14) !important;
+
+    z-index: 10001 !important;
+  }
+
+  html body .site-header.gv-mobile-open .menu {
+    display: flex !important;
+  }
+
+  /* Hide duplicate desktop CTA inside drawer */
+  html body .site-header .menu > a.cta {
+    display: none !important;
+  }
+
+  html body .site-header .menu > a:not(.cta) {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-height: 46px !important;
+
+    padding: 0 14px !important;
+
+    border-radius: 12px !important;
+
+    color: #021408 !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+  }
+
+  html body .site-header .menu > a:not(.cta):active,
+  html body .site-header .menu > a:not(.cta):hover {
+    background: #E4F0CC !important;
+  }
+
+  /* X state */
+  html body .site-header.gv-mobile-open .gv-mobile-toggle span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg) !important;
+  }
+
+  html body .site-header.gv-mobile-open .gv-mobile-toggle span:nth-child(2) {
+    opacity: 0 !important;
+  }
+
+  html body .site-header.gv-mobile-open .gv-mobile-toggle span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg) !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  html body .site-header {
+    background: rgba(248, 247, 241, .92) !important;
+    background-color: rgba(248, 247, 241, .92) !important;
+    border-bottom: 1px solid #D9E4C4 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(6px) !important;
+  }
+
+  html body .site-header .gv-mobile-actions .gv-mobile-cta {
+    background: #8BC53D !important;
+    background-color: #8BC53D !important;
+    background-image: none !important;
+    color: #022F12 !important;
+    border: 1px solid rgba(2, 47, 18, .18) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 6px 16px rgba(2, 47, 18, .12) !important;
+    transition: background-color .2s ease, box-shadow .2s ease !important;
+  }
+
+  html body .site-header .gv-mobile-actions .gv-mobile-cta:hover,
+  html body .site-header .gv-mobile-actions .gv-mobile-cta:active {
+    background: #9ED84A !important;
+    background-color: #9ED84A !important;
+    color: #022F12 !important;
+  }
+}
+/* GV-MOBILE-HEADER-FIRST-PAINT-END */
+
+/* GV-HEADER-FINAL-GLASS-NOBORDER-START */
+/* Green Vita glass header — remove every edge line and external shadow */
+html body header.site-header {
+  background:
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(139,197,61,.13) 0%,
+      rgba(139,197,61,0) 58%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(17,75,39,.97) 0%,
+      rgba(5,57,28,.97) 48%,
+      rgba(2,47,18,.97) 100%
+    ) !important;
+  background-color: #022F12 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+  backdrop-filter: blur(16px) saturate(150%) !important;
+}
+
+html body header.site-header > .nav {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+html body header.site-header::before,
+html body header.site-header::after,
+html body header.site-header > .nav::before,
+html body header.site-header > .nav::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+/* GV-HEADER-FINAL-GLASS-NOBORDER-END */
+
+/* GV-HEADER-REMOVE-LINE-FINAL-START */
+/* Permanent version of the successful console test.
+   Preserve the current glass background and all header geometry. */
+html body header.site-header,
+html body header.site-header > .nav {
+  border: 0 !important;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+html body header.site-header::before,
+html body header.site-header::after,
+html body header.site-header > .nav::before,
+html body header.site-header > .nav::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+/* GV-HEADER-REMOVE-LINE-FINAL-END */
+
+/* GV-HEADER-BOTTOM-EDGE-SHADOW-FINAL-START */
+html body header.site-header > #gv-header-bottom-edge-final {
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: linear-gradient(
+    90deg,
+    rgba(139,197,61,.55) 0%,
+    #9edc5c 15%,
+    #e5f8bf 50%,
+    #9edc5c 85%,
+    rgba(139,197,61,.55) 100%
+  ) !important;
+  box-shadow:
+    0 0 3px rgba(211,255,159,.95),
+    0 1px 8px rgba(139,197,61,.75),
+    0 2px 15px rgba(139,197,61,.32) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  z-index: 10002 !important;
+}
+
+html body #gv-header-bottom-shadow-final {
+  position: fixed !important;
+  height: 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 0 50% 50% !important;
+  background: linear-gradient(
+    180deg,
+    rgba(1,15,8,.30) 0%,
+    rgba(1,15,8,.15) 38%,
+    rgba(1,15,8,0) 100%
+  ) !important;
+  box-shadow: 0 5px 13px rgba(0,0,0,.15) !important;
+  filter: blur(5px) !important;
+  opacity: .9 !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+}
+/* GV-HEADER-BOTTOM-EDGE-SHADOW-FINAL-END */

@@ -4,7 +4,94 @@
     {% include "booking/pwa-head.html" %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{{ service.title }} | گرین ویتا</title>
+{% set seo_map = {
+    "apartment-plants": {
+        "title": "ویزیت گیاهان آپارتمانی | تشخیص و درمان تخصصی | گرین ویتا",
+        "description": "ویزیت تخصصی گیاهان آپارتمانی در گرین ویتا؛ بررسی بیماری‌ها، آفات، آبیاری، نور، خاک و ریشه و ارائه برنامه درمان و مراقبت متناسب با شرایط گیاه.",
+        "intro": "در این ویزیت، وضعیت گیاهان آپارتمانی از نظر بیماری‌ها، آفات، آبیاری، نور، خاک و ریشه بررسی می‌شود و بر اساس شرایط واقعی گیاه، راهکار درمان و مراقبت ارائه می‌کنیم."
+    },
+    "outdoor-plants": {
+        "title": "ویزیت گیاهان فضای باز | تشخیص بیماری و آفات | گرین ویتا",
+        "description": "ویزیت تخصصی گیاهان فضای باز در گرین ویتا؛ بررسی آفات، بیماری‌ها، آبیاری، خاک، تغذیه و شرایط محیطی برای انتخاب راهکار مناسب درمان و نگهداری.",
+        "intro": "در ویزیت گیاهان فضای باز، علائم بیماری و آفات، وضعیت آبیاری، خاک، تغذیه و شرایط محیطی بررسی می‌شود تا راهکار مناسب درمان و نگهداری مشخص شود."
+    },
+    "gardens": {
+        "title": "ویزیت باغات | بررسی بیماری و آفات درختان | گرین ویتا",
+        "description": "ویزیت تخصصی باغات در گرین ویتا؛ بررسی بیماری‌ها، آفات، مشکلات تغذیه‌ای، آبیاری، خاک و وضعیت درختان و ارائه برنامه مدیریت و درمان.",
+        "intro": "در ویزیت باغات، وضعیت درختان و باغ از نظر بیماری‌ها، آفات، تغذیه، آبیاری، خاک و عوامل محیطی بررسی شده و برنامه مناسب برای مدیریت و درمان ارائه می‌شود."
+    },
+    "phone-consultation": {
+        "title": "ویزیت آنلاین گیاه پزشکی | مشاوره تخصصی | گرین ویتا",
+        "description": "ویزیت آنلاین گیاه پزشکی گرین ویتا برای بررسی مشکلات گیاه با استفاده از توضیحات و تصاویر شما و ارائه راهکار تخصصی برای درمان و مراقبت.",
+        "intro": "در ویزیت آنلاین، مشکل گیاه بر اساس توضیحات و تصاویر ارسالی شما بررسی می‌شود و راهکار تخصصی برای تشخیص، درمان و مراقبت از گیاه ارائه خواهد شد."
+    }
+} %}
+
+{% set seo = seo_map.get(service.slug, {
+    "title": service.title ~ " | گرین ویتا",
+    "description": "ویزیت تخصصی گیاه پزشکی در گرین ویتا برای بررسی و درمان مشکلات گیاهان.",
+    "intro": "این ویزیت برای بررسی تخصصی وضعیت گیاه و انتخاب راهکار مناسب درمان و مراقبت ارائه می‌شود."
+}) %}
+
+<title>{{ seo.title }}</title>
+<meta name="description" content="{{ seo.description }}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://greenvitaclinic.ir{{ request.url.path }}">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="Green Vita">
+<meta property="og:title" content="{{ seo.title }}">
+<meta property="og:description" content="{{ seo.description }}">
+<meta property="og:url" content="https://greenvitaclinic.ir{{ request.url.path }}">
+
+
+<script type="application/ld+json">
+{{ {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": "https://greenvitaclinic.ir" ~ request.url.path ~ "#service",
+    "name": service.title,
+    "serviceType": service.title,
+    "description": seo.description,
+    "url": "https://greenvitaclinic.ir" ~ request.url.path,
+    "provider": {
+        "@type": "Organization",
+        "@id": "https://greenvitaclinic.ir/#business",
+        "name": "کلینیک گیاه پزشکی گرین ویتا",
+        "url": "https://greenvitaclinic.ir/",
+        "logo": "https://greenvitaclinic.ir/static/logo-v4.webp"
+    }
+} | tojson }}
+</script>
+
+<script type="application/ld+json">
+{{ {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "خانه",
+            "item": "https://greenvitaclinic.ir/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "رزرو ویزیت",
+            "item": "https://greenvitaclinic.ir/booking/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": service.title,
+            "item": "https://greenvitaclinic.ir" ~ request.url.path
+        }
+    ]
+} | tojson }}
+</script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f6f8f5;font-family:"Vazir",Tahoma,Arial,sans-serif;color:#18251c}
@@ -13,7 +100,7 @@ body{margin:0;background:#f6f8f5;font-family:"Vazir",Tahoma,Arial,sans-serif;col
 .back{display:inline-block;margin-bottom:20px;color:#28743b;text-decoration:none}
 h1{margin:0 0 10px;font-size:25px}
 .desc{color:#66736a;line-height:1.9}
-.price{font-size:20px;font-weight:bold;color:#28743b;margin:18px 0}
+.booking-service-details{margin:18px 0 8px;padding:18px 20px;background:#f7faf2;border:1px solid #e4f0cc;border-radius:18px}.booking-service-details h2{font-size:18px;margin:0 0 8px;color:#022f12}.booking-service-details p{margin:0;color:#66736a;line-height:1.9}.booking-service-details ul{margin:10px 0 0;padding-right:20px;color:#66736a;line-height:2}.booking-service-more{margin:18px 0 6px;border:1px solid #e4ebe5;border-radius:16px;background:#fff;overflow:hidden}.booking-service-more summary{padding:14px 16px;cursor:pointer;font-weight:700;color:#28743b}.booking-service-more-content{padding:0 16px 16px}.booking-service-more-content h3{font-size:16px;margin:16px 0 7px;color:#28743b}.booking-service-more-content p{margin:0;color:#66736a;line-height:1.9}.price{font-size:20px;font-weight:bold;color:#28743b;margin:18px 0}
 h2{font-size:19px;margin-top:30px}
 .dates{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .date{
@@ -53,7 +140,7 @@ h2{font-size:19px;margin-top:30px}
 }
 @media(max-width:600px){
   .dates{grid-template-columns:repeat(2,1fr)}
-  .times{grid-template-columns:repeat(2,1fr)}
+  .times{grid-template-columns:repeat(3,1fr)}
 
   #previewSection .summary-row{
     grid-template-columns:105px minmax(0,1fr);
@@ -268,18 +355,92 @@ select{
 }
 \n</style>
   <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20261012-service-heading-dynamic-final2">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+
+    <!-- Green Vita standard icons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon-32x32.png?v=gvicon-20261012-011452">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/icon-192.png?v=gvicon-20261012-011452">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/icon-512.png?v=gvicon-20261012-011452">
+    
+<link id="gv-booking-cta-motion-css" rel="stylesheet" href="/static/css/booking-cta-motion.css?v=gvbookmotion-20261012-011828">
 </head>
 <body>
 <main class="wrap">
-<a class="back" href="/booking/">← بازگشت به خدمات</a>
+<a class="back gv-booking-live-cta" href="/booking/">← بازگشت به خدمات</a>
 
 <section class="card">
 <h1>{{ service.title }}</h1>
 
-{% if service.description %}
-<p class="desc">{{ service.description }}</p>
-{% endif %}
+<section
+  class="booking-service-details"
+  aria-label="درباره خدمت"
+>
+  <h2>درباره {{ service.title }}</h2>
+  <p>{{ seo.intro }}</p>
+
+  {% if service.slug == "apartment-plants" %}
+  <ul>
+    <li>بررسی علائم بیماری و نشانه‌های آلودگی به آفات</li>
+    <li>بررسی آبیاری، نور، تهویه و شرایط نگهداری</li>
+    <li>بررسی خاک، گلدان، ریشه و زهکشی</li>
+  </ul>
+  {% elif service.slug == "outdoor-plants" %}
+  <ul>
+    <li>بررسی علائم بیماری و آفات گیاه</li>
+    <li>بررسی آبیاری، نور، خاک و زهکشی</li>
+    <li>بررسی تغذیه، شرایط محیطی و عوامل تنش‌زا</li>
+  </ul>
+  {% elif service.slug == "gardens" %}
+  <ul>
+    <li>بررسی بیماری‌ها و آفات درختان و گیاهان باغ</li>
+    <li>بررسی وضعیت خاک، آبیاری و تغذیه</li>
+    <li>بررسی شرایط محیطی و الگوی بروز علائم در باغ</li>
+  </ul>
+  {% elif service.slug == "phone-consultation" %}
+  <ul>
+    <li>بررسی علائم ظاهری بیماری و آفات</li>
+    <li>بررسی شرایط نگهداری، آبیاری و نور</li>
+    <li>بررسی مشکلات احتمالی خاک، ریشه و تغذیه بر اساس اطلاعات ارسالی</li>
+  </ul>
+  {% endif %}
+</section>
+
+<details class="booking-service-more">
+  <summary>جزئیات بیشتر درباره این خدمت</summary>
+
+  <div class="booking-service-more-content">
+    {% if service.slug == "apartment-plants" %}
+    <h3>این ویزیت برای چه مشکلاتی مناسب است؟</h3>
+    <p>اگر برگ‌ها زرد یا لکه‌دار شده‌اند، رشد گیاه متوقف شده، ریشه یا ساقه دچار مشکل شده یا گیاه با آبیاری و نور سازگار نیست، این ویزیت برای بررسی علت مشکل مناسب است.</p>
+    <h3>خروجی ویزیت</h3>
+    <p>پس از بررسی شرایط گیاه، علت یا عوامل محتمل مشکل مشخص می‌شود و برنامه مناسب درمان و مراقبت متناسب با وضعیت همان گیاه ارائه خواهد شد.</p>
+
+    {% elif service.slug == "outdoor-plants" %}
+    <h3>این ویزیت برای چه مشکلاتی مناسب است؟</h3>
+    <p>برای گیاهان فضای باز که با زردی برگ، لکه، ضعف رشد، آفت، سوختگی، تنش محیطی یا مشکل در آبیاری و تغذیه مواجه شده‌اند، بررسی تخصصی به پیدا کردن علت اصلی کمک می‌کند.</p>
+    <h3>خروجی ویزیت</h3>
+    <p>بر اساس علائم و شرایط محیط، راهکار مناسب برای کنترل مشکل، درمان و ادامه مراقبت از گیاه مشخص می‌شود.</p>
+
+    {% elif service.slug == "gardens" %}
+    <h3>این ویزیت برای چه مشکلاتی مناسب است؟</h3>
+    <p>این خدمت برای باغ‌ها و درختانی مناسب است که با بیماری، آفت، ضعف رشد، علائم تغذیه‌ای، مشکل آبیاری یا افت سلامت عمومی مواجه شده‌اند.</p>
+    <h3>خروجی ویزیت</h3>
+    <p>پس از بررسی شرایط باغ و علائم موجود، اولویت‌های مدیریت مشکل و برنامه مناسب برای درمان و مراقبت پیشنهاد می‌شود.</p>
+
+    {% elif service.slug == "phone-consultation" %}
+    <h3>ویزیت آنلاین چگونه انجام می‌شود؟</h3>
+    <p>در این خدمت، مشکل گیاه بر اساس توضیحات شما و تصاویر ارسالی بررسی می‌شود. هرچه عکس‌ها واضح‌تر و اطلاعاتی مثل نام گیاه، شرایط نور، آبیاری و علائم کامل‌تر باشد، بررسی دقیق‌تر خواهد بود.</p>
+    <h3>خروجی ویزیت</h3>
+    <p>در پایان، تشخیص اولیه و راهنمایی تخصصی برای اقدام بعدی، درمان و مراقبت از گیاه ارائه می‌شود.</p>
+    {% endif %}
+  </div>
+</details>
 
 <div class="price">
 {% if service.price %}
@@ -383,7 +544,7 @@ select{
 
     <div class="summary">
       <div class="summary-row">
-        <span>خدمت</span>
+        <span>سرویس</span>
         <strong id="previewService">—</strong>
       </div>
 

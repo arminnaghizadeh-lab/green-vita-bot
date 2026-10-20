@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    {% include "booking/pwa-head.html" %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+{% extends "public/base.html" %}
 
-<title>پیگیری / ویرایش رزرو | گرین ویتا</title>
+{% block title %}پیگیری / ویرایش رزرو | گرین ویتا{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 
-<link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
-    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/booking-page-background.css?v=20261021-bg1">
+{% endblock %}
+
+{% block content %}
 
 <style>
 *{box-sizing:border-box}
@@ -155,13 +154,10 @@ button:disabled{
   font-size:20px;
 }
 </style>
-</head>
 
-<body>
+<main class="wrap gv-booking-track-page">
 
-<main class="wrap">
-
-<a class="back" href="/booking/">← بازگشت به رزرو آنلاین</a>
+<a class="back gv-booking-live-cta" href="/booking/">← بازگشت به رزرو آنلاین</a>
 
 <section class="card">
 
@@ -205,7 +201,7 @@ button:disabled{
   <div class="tracking" id="resultTracking">—</div>
 
   <div class="row">
-    <span>خدمت</span>
+    <span>سرویس</span>
     <strong id="resultService">—</strong>
   </div>
 
@@ -462,5 +458,40 @@ document.getElementById("newBookingBtn")
   });
 </script>
 
-</body>
-</html>
+
+<!-- GV_TRACK_FINAL_70PX_CENTER -->
+<style id="gv-track-final-style">
+  body > main,
+  body > footer {
+    position: relative !important;
+    top: 70px !important;
+  }
+
+  .gv-whatsapp-float,
+  .gv-contact-float-wrap {
+    top: auto !important;
+    transform: none !important;
+  }
+</style>
+
+<script id="gv-track-final-script">
+(() => {
+  const title = [...document.querySelectorAll('*')].find(el =>
+    el.children.length === 0 &&
+    el.textContent.trim() === 'Green Vita · کلینیک گیاه پزشکی'
+  );
+
+  if (!title) return;
+
+  const block = title.parentElement;
+
+  block.style.setProperty('text-align', 'center', 'important');
+
+  [...block.querySelectorAll('*')].forEach(el => {
+    el.style.setProperty('text-align', 'center', 'important');
+  });
+})();
+</script>
+<!-- /GV_TRACK_FINAL_70PX_CENTER -->
+
+{% endblock %}

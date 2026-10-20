@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 
 import secrets
 from datetime import datetime, timedelta
@@ -115,7 +116,7 @@ def available_durations(
 
     def slot_is_free(slot: BookingTimeSlot) -> bool:
         return (
-            slot.is_available
+            slot.is_enabled
             and slot.starts_at not in occupied_starts
         )
 
@@ -161,8 +162,46 @@ def available_durations(
         if not contiguous:
             break
 
+        start_at = reserved[0].starts_at
         end_at = reserved[-1].ends_at
 
+        # بافر قبل از شروع ویزیت.
+        # برای اولین Slotهای روز بافر قبلی وجود ندارد و نباید
+        # باعث حذف 09:00 و 10:00 شود.
+        if start_index >= buffer_hours:
+            pre_buffer_slots = [
+                slot
+                for slot in slots
+                if (
+                    slot.starts_at >= start_at - timedelta(hours=buffer_hours)
+                    and slot.starts_at < start_at
+                )
+            ]
+
+            if len(pre_buffer_slots) != buffer_hours:
+                break
+
+            pre_buffer_contiguous = True
+
+            for i in range(1, len(pre_buffer_slots)):
+                previous = pre_buffer_slots[i - 1]
+                current = pre_buffer_slots[i]
+
+                if current.starts_at != previous.ends_at:
+                    pre_buffer_contiguous = False
+                    break
+
+            if not pre_buffer_contiguous:
+                break
+
+            if not all(
+                slot_is_free(slot)
+                for slot in pre_buffer_slots
+            ):
+                break
+
+        # بافر ۲ ساعته بعد از پایان ویزیت.
+        # این بافر نیز فقط با زمان واقعی رزروهای دیگر نباید تداخل داشته باشد.
         buffer_slots = [
             slot
             for slot in slots
@@ -227,6 +266,7 @@ async def get_shared_occupied_starts(
         .where(
             BookingTimeSlot.starts_at >= start_g,
             BookingTimeSlot.starts_at < end_g,
+            BookingSlotAssignment.kind == "RESERVED",
             Booking.status.in_(
                 (
                     BookingStatus.PENDING,
@@ -263,6 +303,15 @@ async def get_shared_occupied_starts(
     include_in_schema=False,
 )
 async def booking_home(request: Request):
+    selected_service_id = None
+
+    raw_service_id = request.query_params.get("service")
+    if raw_service_id:
+        try:
+            selected_service_id = int(raw_service_id)
+        except (TypeError, ValueError):
+            selected_service_id = None
+
     async with AsyncSessionLocal() as session:
         result = await session.execute(
             select(Service)
@@ -272,11 +321,29 @@ async def booking_home(request: Request):
 
         services = result.scalars().all()
 
+        selected_service = None
+
+        if selected_service_id is not None:
+            selected_service = next(
+                (
+                    service
+                    for service in services
+                    if service.id == selected_service_id
+                ),
+                None,
+            )
+
+            if selected_service is None:
+                selected_service_id = None
+
     return templates.TemplateResponse(
         "booking/index.html",
         {
             "request": request,
             "services": services,
+            "selected_service": selected_service,
+            "selected_service_id": selected_service_id,
+            "auto_step2": False,
         },
     )
 
@@ -407,17 +474,28 @@ async def booking_service(
     async with AsyncSessionLocal() as session:
         service = await session.get(Service, service_id)
 
-    if service is None or not service.is_active:
-        return HTMLResponse(
-            "خدمت موردنظر پیدا نشد.",
-            status_code=404,
+        if service is None or not service.is_active:
+            return HTMLResponse(
+                "خدمت موردنظر پیدا نشد.",
+                status_code=404,
+            )
+
+        result = await session.execute(
+            select(Service)
+            .where(Service.is_active.is_(True))
+            .order_by(Service.id)
         )
 
+        services = result.scalars().all()
+
     return templates.TemplateResponse(
-        "booking/service.html",
+        "booking/index.html",
         {
             "request": request,
-            "service": service,
+            "services": services,
+            "selected_service": service,
+            "selected_service_id": service.id,
+            "auto_step2": True,
         },
     )
 
@@ -492,9 +570,9 @@ async def booking_slots(
     end_g = start_g + timedelta(days=1)
     now_tehran = datetime.now(TEHRAN)
 
-    if start_g.date() < now_tehran.date():
+    if start_g.date() <= now_tehran.date():
         return {
-            "error": "رزرو برای تاریخ‌های گذشته امکان‌پذیر نیست.",
+            "error": "رزرو برای امروز امکان‌پذیر نیست.",
             "slots": [],
         }
 
@@ -737,7 +815,7 @@ async def edit_booking(
                 return {
                     "success": False,
                     "error": (
-                        "برای مشاوره تلفنی تخصصی فقط ۱ ساعت قابل رزرو است."
+                        "برای ویزیت آنلاین فقط ۱ ساعت قابل رزرو است."
                         if service.id == PHONE_CONSULTATION_SERVICE_ID
                         else "مدت رزرو فقط بین ۱ تا ۳ ساعت مجاز است."
                     ),
@@ -1097,6 +1175,34 @@ async def toggle_booking_slot_enabled(
                 "error": "زمان موردنظر پیدا نشد.",
             }
 
+        active_booking_statuses = (
+            BookingStatus.PENDING,
+            BookingStatus.REVIEWING,
+            BookingStatus.SCHEDULED,
+            BookingStatus.CONFIRMED,
+            BookingStatus.IN_PROGRESS,
+        )
+
+        reserved_booking = await session.scalar(
+            select(BookingSlotAssignment.id)
+            .join(
+                Booking,
+                BookingSlotAssignment.booking_id == Booking.id,
+            )
+            .where(
+                BookingSlotAssignment.time_slot_id == slot_id,
+                BookingSlotAssignment.kind == "RESERVED",
+                Booking.status.in_(active_booking_statuses),
+            )
+            .limit(1)
+        )
+
+        if reserved_booking is not None:
+            return {
+                "success": False,
+                "error": "این بازه قبلاً رزرو شده و قابل غیرفعال‌سازی نیست.",
+            }
+
         # فقط فعال/غیرفعال بودن دستی را تغییر می‌دهیم.
         # وضعیت رزرو/ظرفیت مستقل باقی می‌ماند.
         slot.is_enabled = enabled
@@ -1135,6 +1241,59 @@ async def create_booking(
         or None
     )
     notes = notes.strip() or None
+
+    # Normalize Persian / Arabic digits in phone numbers.
+    customer_phone = (
+        customer_phone
+        .translate(str.maketrans(
+            "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
+            "01234567890123456789",
+        ))
+        .strip()
+    )
+
+    # Persian-only customer name, minimum 3 letters.
+    name_letters = customer_name.replace(" ", "").replace("‌", "")
+
+    if (
+        len(name_letters) < 3
+        or not re.fullmatch(
+            r"[آ-یءٔ‌ ]+",
+            customer_name,
+        )
+    ):
+        return {
+            "success": False,
+            "error": (
+                "نام و نام خانوادگی باید حداقل ۳ حرف فارسی "
+                "داشته باشد و فقط شامل حروف فارسی و فاصله باشد."
+            ),
+        }
+
+    # Iranian mobile number.
+    if not re.fullmatch(
+        r"09\d{9}",
+        customer_phone,
+    ):
+        return {
+            "success": False,
+            "error": (
+                "شماره تماس باید یک شماره موبایل معتبر ایران "
+                "مانند 09123456789 باشد."
+            ),
+        }
+
+    # Optional email — validate only when supplied.
+    if customer_email is not None:
+        if not re.fullmatch(
+            r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@"
+            r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+",
+            customer_email,
+        ):
+            return {
+                "success": False,
+                "error": "فرمت ایمیل واردشده معتبر نیست.",
+            }
 
     if not customer_name:
         return {
@@ -1186,7 +1345,7 @@ async def create_booking(
                 return {
                     "success": False,
                     "error": (
-                        "برای مشاوره تلفنی تخصصی فقط ۱ ساعت قابل رزرو است."
+                        "برای ویزیت آنلاین فقط ۱ ساعت قابل رزرو است."
                         if service.id == PHONE_CONSULTATION_SERVICE_ID
                         else "مدت رزرو فقط بین ۱ تا ۳ ساعت مجاز است."
                     ),
@@ -1435,11 +1594,15 @@ async def create_booking(
 
         # Web Push برای پنل ادمین.
         # خطای اعلان نباید باعث شکست رزرو شود.
+        print(f"=== BOOKING PUSH ENTER booking_id={booking.id} ===", flush=True)
         try:
             async with AsyncSessionLocal() as push_session:
+                print(f"=== PUSH SESSION OPEN booking_id={booking.id} ===", flush=True)
                 badge_count = await get_admin_badge_count(push_session)
 
-                await send_push(
+                print(f"=== BEFORE SEND_PUSH booking_id={booking.id} ===", flush=True)
+
+                sent = await send_push(
                     push_session,
                     title="رزرو جدید گرین ویتا",
                     body=(
@@ -1451,7 +1614,24 @@ async def create_booking(
                     url="/dashboard/",
                     badge_count=badge_count,
                 )
-        except Exception:
+
+                print(
+                    f"=== AFTER SEND_PUSH booking_id={booking.id} sent={sent} ===",
+                    flush=True,
+                )
+
+                import logging
+                logging.getLogger(__name__).info(
+                    "booking_admin_push_sent booking_id=%s subscriptions_sent=%s",
+                    booking.id,
+                    sent,
+                )
+        except Exception as exc:
+            print(
+                f"=== PUSH EXCEPTION booking_id={booking.id} "
+                f"type={type(exc).__name__} error={exc} ===",
+                flush=True,
+            )
             import logging
             logging.getLogger(__name__).exception(
                 "booking_admin_push_failed",

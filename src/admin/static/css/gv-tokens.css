@@ -1,0 +1,192 @@
+/* ============================================================
+   GREEN VITA — DESIGN TOKENS v1
+   ------------------------------------------------------------
+   Authoritative token layer.
+   IMPORTANT:
+   - This file intentionally contains NO component styling.
+   - It is not linked into templates yet.
+   - Legacy CSS remains untouched during migration.
+   ============================================================ */
+
+:root {
+    /* ========================================================
+       BRAND
+       ======================================================== */
+
+    --gv-color-primary: #8BC53D;
+    --gv-color-primary-dark: #022F12;
+    --gv-color-sidebar: #021408;
+    --gv-color-primary-soft: #E4F0CC;
+
+    /* ========================================================
+       SURFACES
+       ======================================================== */
+
+    --gv-color-bg: #F7FAF2;
+    --gv-color-surface: #FFFFFF;
+    --gv-color-surface-soft: #F5F8EF;
+    --gv-color-highlight: #E4F0CC;
+
+    /* ========================================================
+       TEXT
+       ======================================================== */
+
+    --gv-color-text: #021408;
+    --gv-color-text-soft: #496054;
+    --gv-color-text-muted: #7C8B82;
+    --gv-color-text-inverse: #FFFFFF;
+
+    /* ========================================================
+       BORDERS
+       ======================================================== */
+
+    --gv-color-border: #DCE6D7;
+    --gv-color-border-soft: #EAF0E6;
+
+    /* ========================================================
+       PREMIUM ACCENT
+       ======================================================== */
+
+    --gv-color-gold: #C6A15B;
+    --gv-color-gold-soft: #E8D8B5;
+
+    /* ========================================================
+       SEMANTIC
+       ======================================================== */
+
+    --gv-color-success: #3E7D4A;
+    --gv-color-warning: #B98523;
+    --gv-color-danger: #C94A4A;
+    --gv-color-info: #3D708F;
+
+    /* ========================================================
+       TYPOGRAPHY
+       ======================================================== */
+
+    --gv-font-family:
+        "Vazirmatn",
+        "Vazir",
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    --gv-font-size-xs: 12px;
+    --gv-font-size-sm: 13px;
+    --gv-font-size-md: 15px;
+    --gv-font-size-body: 16px;
+    --gv-font-size-lg: 18px;
+    --gv-font-size-xl: 21px;
+    --gv-font-size-2xl: 26px;
+    --gv-font-size-3xl: 32px;
+    --gv-font-size-4xl: 40px;
+    --gv-font-size-display: 48px;
+
+    --gv-font-weight-regular: 400;
+    --gv-font-weight-medium: 500;
+    --gv-font-weight-semibold: 600;
+    --gv-font-weight-bold: 700;
+
+    --gv-line-height-body: 1.85;
+    --gv-line-height-heading: 1.45;
+
+    /* ========================================================
+       SPACING
+       ======================================================== */
+
+    --gv-space-1: 4px;
+    --gv-space-2: 8px;
+    --gv-space-3: 12px;
+    --gv-space-4: 16px;
+    --gv-space-5: 20px;
+    --gv-space-6: 24px;
+    --gv-space-8: 32px;
+    --gv-space-10: 40px;
+    --gv-space-12: 48px;
+    --gv-space-16: 64px;
+    --gv-space-20: 80px;
+
+    /* ========================================================
+       RADIUS
+       ======================================================== */
+
+    --gv-token-radius-sm: 10px;
+    --gv-token-radius-md: 14px;
+    --gv-token-radius-lg: 18px;
+    --gv-token-radius-xl: 24px;
+    --gv-token-radius-pill: 999px;
+
+    /* ========================================================
+       SHADOWS
+       ======================================================== */
+
+    --gv-token-shadow-sm:
+        0 2px 8px rgba(2, 20, 8, .05);
+
+    --gv-token-shadow-md:
+        0 10px 30px rgba(2, 20, 8, .07);
+
+    --gv-token-shadow-lg:
+        0 18px 50px rgba(2, 20, 8, .10);
+
+    /* ========================================================
+       MOTION
+       ======================================================== */
+
+    --gv-duration-fast: 150ms;
+    --gv-duration-normal: 180ms;
+    --gv-duration-slow: 220ms;
+
+    --gv-ease-standard: cubic-bezier(.2, .65, .3, 1);
+
+    --gv-transition-fast:
+        150ms cubic-bezier(.2, .65, .3, 1);
+
+    --gv-transition:
+        180ms cubic-bezier(.2, .65, .3, 1);
+
+    --gv-transition-slow:
+        220ms cubic-bezier(.2, .65, .3, 1);
+
+    /* ========================================================
+       LAYOUT
+       ======================================================== */
+
+    --gv-sidebar-width: 272px;
+    --gv-content-max-width: 1500px;
+    --gv-public-max-width: 1180px;
+
+    --gv-header-height: 72px;
+
+    /* ========================================================
+       INTERACTION
+       ======================================================== */
+
+    --gv-touch-target: 44px;
+
+    --gv-focus-ring:
+        0 0 0 3px rgba(139, 197, 61, .28);
+
+    /* ========================================================
+       Z-INDEX
+       ======================================================== */
+
+    --gv-z-base: 1;
+    --gv-z-dropdown: 100;
+    --gv-z-sticky: 200;
+    --gv-z-overlay: 500;
+    --gv-z-modal: 1000;
+    --gv-z-toast: 1100;
+}
+
+/* ============================================================
+   ACCESSIBILITY / MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --gv-transition-fast: none;
+        --gv-transition: none;
+        --gv-transition-slow: none;
+    }
+}

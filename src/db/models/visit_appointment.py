@@ -88,6 +88,16 @@ class VisitAppointment(Base, TimestampMixin):
         nullable=True,
     )
 
+    customer_address: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    customer_description: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
     diagnosis = relationship("Diagnosis", back_populates="appointment")
     identification = relationship("PlantIdentification")
 
