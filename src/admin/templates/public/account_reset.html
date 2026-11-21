@@ -1,0 +1,51 @@
+{% extends "public/base.html" %}
+{% block title %}تنظیم رمز جدید | گرین‌ویتا{% endblock %}
+{% block meta_description %}تنظیم رمز جدید حساب کاربری گرین‌ویتا.{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/account.css?v=account-bg-viewport-fixed-v1-20261107">
+<script defer src="/static/js/account-password-toggle.js?v=20261023-eye2"></script>
+{% endblock %}
+{% block content %}
+<main class="gv-account-page" dir="rtl">
+  <div class="gv-account-wrap">
+    <section class="gv-account-card">
+      <p class="gv-account-eyebrow">GREEN VITA · ACCOUNT SECURITY</p>
+      <h1 class="gv-account-title">تنظیم رمز جدید</h1>
+
+      {% if error %}
+        <p role="alert" class="gv-account-error">{{ error }}</p>
+      {% endif %}
+
+      {% if token %}
+        <p class="gv-account-description">رمز جدید باید حداقل ۸ کاراکتر و شامل دست‌کم یک حرف و یک عدد باشد.</p>
+        <form class="gv-account-form" method="post" action="/account/reset/{{ token }}/">
+          <div class="gv-account-field">
+            <label for="password">رمز جدید</label>
+            <div class="gv-password-wrap">
+              <input id="password" name="password" type="password"
+                   minlength="8" maxlength="128"
+                   autocomplete="new-password" required>
+              <button class="gv-password-toggle" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false" aria-label="نمایش رمز">👁️</button>
+            </div>
+          </div>
+          <div class="gv-account-field">
+            <label for="password_confirm">تکرار رمز جدید</label>
+            <div class="gv-password-wrap">
+              <input id="password_confirm" name="password_confirm" type="password"
+                   minlength="8" maxlength="128"
+                   autocomplete="new-password" required>
+              <button class="gv-password-toggle" type="button" data-password-toggle="password_confirm" aria-controls="password_confirm" aria-pressed="false" aria-label="نمایش رمز">👁️</button>
+            </div>
+          </div>
+          <button class="gv-account-submit" type="submit">ثبت رمز جدید</button>
+        </form>
+      {% endif %}
+
+      <div class="gv-account-links">
+        <a href="/account/login/">ورود به حساب</a>
+        <a href="/">بازگشت به سایت</a>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}

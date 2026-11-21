@@ -1,0 +1,110 @@
+{% extends "public/base.html" %}
+{% block title %}پروفایل من | گرین‌ویتا{% endblock %}
+{% block meta_description %}پروفایل و سوابق رزرو و تشخیص آنلاین گرین‌ویتا.{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/account.css?v=account-bg-viewport-fixed-v1-20261107">
+{% endblock %}
+{% block content %}
+<main class="gv-account-page" dir="rtl">
+  <div class="gv-account-wrap">
+    <section class="gv-account-card">
+      <div class="gv-account-profile-head">
+        <div>
+          <p class="gv-account-eyebrow">GREEN VITA · PROFILE</p>
+          <h1 class="gv-account-title">پروفایل من</h1>
+          <p class="gv-account-description">{{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+        <form class="gv-account-logout" method="post" action="/account/logout/">
+          <button type="submit">خروج از حساب</button>
+        </form>
+      </div>
+      <div class="gv-account-summary">
+        <div><small>نام و نام خانوادگی</small><strong>{{ user.first_name }} {{ user.last_name }}</strong></div>
+        <div><small>نام کاربری / تلفن</small><strong dir="ltr">{{ account.phone_number }}</strong></div>
+      </div>
+
+      <section class="gv-account-section">
+        <h2>سوابق رزرو</h2>
+        {% if bookings %}
+          {% for entry in bookings %}
+            <article class="gv-account-record">
+              <strong>{{ entry.service.title }}</strong><br>
+              زمان: {{ entry.slot.starts_at.astimezone(tehran).strftime('%Y/%m/%d — %H:%M') }}<br>
+              وضعیت: {{ entry.booking.status.value if entry.booking.status.value is defined else entry.booking.status }}<br>
+              کد پیگیری: <span dir="ltr">{{ entry.booking.tracking_code }}</span>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p class="gv-account-empty">هنوز رزروی به این حساب متصل نشده است.</p>
+        {% endif %}
+      </section>
+
+      <section class="gv-account-section">
+        <h2>سوابق تشخیص آنلاین</h2>
+        <p class="gv-account-empty">سهمیه هر حساب یک تشخیص در روز است. تصویر اصلی ذخیره نمی‌شود؛ اطلاعات متنی و نتیجه تشخیص برای نمایش سابقه نگهداری می‌شود.</p>
+        {% if diagnoses %}
+          {% for item in diagnoses %}
+            <article class="gv-account-record">
+              <strong>{{ 'تشخیص مشکل گیاه' if item.mode == 'diagnose' else 'شناسایی نوع گیاه' }}</strong><br>
+              تاریخ: {{ item.created_at.strftime('%Y/%m/%d %H:%M') }}<br>
+              {% if item.plant_name %}نام گیاه: {{ item.plant_name }}<br>{% endif %}
+              {% if item.result %}
+                {% if item.result.get('disease_name') %}نتیجه: {{ item.result.get('disease_name') }}<br>{% endif %}
+                {% if item.result.get('persian_name') %}نام گیاه: {{ item.result.get('persian_name') }}<br>{% endif %}
+              {% endif %}
+              وضعیت: {{ item.status }}
+            </article>
+          {% endfor %}
+        {% else %}
+          <p class="gv-account-empty">هنوز سابقهٔ تشخیصی به این حساب متصل نشده است.</p>
+        {% endif %}
+      </section>
+
+      <section class="gv-account-section">
+        <h2>سوابق فاکتورها</h2>
+
+        {% if invoice_customer %}
+          <p class="gv-account-empty">
+            سوابق مالی پرونده مشتری متصل به این حساب:
+            {{ invoice_customer.name }}
+          </p>
+
+          {% if invoices %}
+            {% for invoice in invoices %}
+              <article class="gv-account-record">
+                <strong>فاکتور شماره
+                  <span dir="ltr">{{ invoice.no }}</span>
+                </strong><br>
+                تاریخ: {{ invoice.date }}<br>
+                مبلغ قابل پرداخت:
+                <strong>{{ invoice.payable_text }} ریال</strong><br>
+                وضعیت:
+                {% if invoice.status == 'void' %}
+                  <span>باطل‌شده</span>
+                {% else %}
+                  <span>ثبت نهایی</span>
+                {% endif %}
+              </article>
+            {% endfor %}
+          {% else %}
+            <p class="gv-account-empty">
+              هنوز فاکتور نهایی ثبت‌شده‌ای برای این پرونده وجود ندارد.
+            </p>
+          {% endif %}
+        {% else %}
+          <p class="gv-account-empty">
+            هنوز پرونده مشتری به حساب شما متصل نشده است.
+            پس از تأیید و اتصال توسط مدیریت، سوابق فاکتورها در این قسمت نمایش داده می‌شوند.
+          </p>
+        {% endif %}
+      </section>
+
+      <div class="gv-account-links">
+        <a href="/booking/">رزرو آنلاین</a>
+        <a href="/diagnosis/">تشخیص آنلاین</a>
+        <a href="/">بازگشت به سایت</a>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}

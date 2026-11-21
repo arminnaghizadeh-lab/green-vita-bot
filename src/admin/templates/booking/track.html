@@ -5,6 +5,32 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="/static/css/booking-page-background.css?v=20261021-bg1">
+
+<script id="gv-booking-track-footer-top70-permanent">
+(() => {
+  const applyFooterPosition = () => {
+    const footer = document.querySelector('body > footer.gv-footer');
+    if (!footer) {
+      console.warn('GV TRACK: footer not found');
+      return;
+    }
+
+    footer.style.setProperty('position', 'relative', 'important');
+    footer.style.setProperty('top', '70px', 'important');
+
+    console.log('GV TRACK FOOTER POSITION:', {
+      position: getComputedStyle(footer).position,
+      top: getComputedStyle(footer).top
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyFooterPosition, {once: true});
+  } else {
+    applyFooterPosition();
+  }
+})();
+</script>
 {% endblock %}
 
 {% block content %}
@@ -35,12 +61,31 @@ body{
   box-shadow:0 8px 30px #0000000d;
 }
 
-.back{
-  display:inline-block;
-  margin-bottom:20px;
-  color:#28743b;
-  text-decoration:none;
+/* GV-TRACK-BACK-PILL-V1 */
+body main.gv-booking-track-page a.back {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 11px 21px;
+  border: 1px solid #B8891E;
+  border-radius: 999px !important;
+  background: #022F12;
+  color: #F8F7F1 !important;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none !important;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
 }
+
+body main.gv-booking-track-page a.back:hover {
+  background: #B8891E;
+  border-color: #B8891E;
+  color: #021408 !important;
+  transform: translateY(-1px);
+}
+/* END GV-TRACK-BACK-PILL-V1 */
 
 h1{
   margin:0 0 10px;

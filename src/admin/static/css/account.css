@@ -1,0 +1,240 @@
+.gv-account-page {
+  max-width: 100%;
+  min-height: 62vh;
+  padding: 44px 16px 70px;
+  color: #183522;
+}
+.gv-account-wrap {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+.gv-account-card {
+  background: rgba(255,255,255,.94);
+  border: 1px solid #dce8d1;
+  border-radius: 24px;
+  padding: clamp(22px, 5vw, 38px);
+  box-shadow: 0 16px 48px rgba(2,47,18,.08);
+}
+.gv-account-eyebrow {
+  color: #8a6816;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.gv-account-title {
+  margin: 8px 0 10px;
+  color: #022f12;
+  font-size: clamp(25px, 5vw, 34px);
+  font-weight: 800;
+}
+.gv-account-description {
+  color: #687667;
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+.gv-account-form {
+  display: grid;
+  gap: 15px;
+}
+.gv-account-field {
+  display: grid;
+  gap: 7px;
+}
+.gv-account-field label {
+  color: #294531;
+  font-size: 13px;
+  font-weight: 700;
+}
+.gv-account-field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 13px;
+  color: #183522;
+  background: #fff;
+  border: 1px solid #cfddc4;
+  border-radius: 12px;
+  font: inherit;
+  box-sizing: border-box;
+}
+.gv-account-field input:focus {
+  outline: 3px solid rgba(139,197,61,.22);
+  border-color: #4c8c35;
+}
+.gv-account-submit {
+  min-height: 49px;
+  border: 1px solid #174b29;
+  border-radius: 13px;
+  background: #174b29;
+  color: white;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.gv-account-submit:hover { background: #226239; }
+.gv-account-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  background: #fff0ed;
+  border: 1px solid #f1c6bd;
+  color: #8b3022;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+.gv-account-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.gv-account-links a,
+.gv-account-back {
+  color: #226239;
+  font-weight: 700;
+  text-decoration: none;
+}
+.gv-account-links a:hover,
+.gv-account-back:hover { text-decoration: underline; }
+.gv-account-profile-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.gv-account-logout { margin: 0; }
+.gv-account-logout button {
+  border: 1px solid #d8e4cf;
+  border-radius: 10px;
+  background: #f7faf2;
+  color: #174b29;
+  padding: 9px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+.gv-account-section { margin-top: 28px; }
+.gv-account-section h2 {
+  color: #022f12;
+  font-size: 19px;
+  margin: 0 0 14px;
+}
+.gv-account-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.gv-account-summary > div {
+  padding: 14px;
+  background: #f7faf2;
+  border: 1px solid #e0e9d7;
+  border-radius: 14px;
+  min-width: 0;
+}
+.gv-account-summary small {
+  display: block;
+  color: #73816e;
+  margin-bottom: 6px;
+}
+.gv-account-summary strong {
+  overflow-wrap: anywhere;
+  color: #174b29;
+}
+.gv-account-record {
+  padding: 15px 0;
+  border-bottom: 1px solid #e5ecdf;
+  line-height: 1.9;
+}
+.gv-account-record:last-child { border-bottom: 0; }
+.gv-account-record strong { color: #174b29; }
+.gv-account-empty { color: #75816f; font-size: 13px; line-height: 1.9; }
+@media (max-width: 560px) {
+  .gv-account-page { padding: 26px 12px 48px; }
+  .gv-account-card { border-radius: 18px; }
+  .gv-account-summary { grid-template-columns: 1fr; }
+}
+
+
+/* Green Vita password visibility toggle */
+.gv-password-wrap {
+  position: relative;
+  width: 100%;
+}
+.gv-password-wrap input {
+  width: 100%;
+  padding-inline-end: 3rem !important;
+}
+.gv-password-toggle {
+  position: absolute;
+  inset-inline-end: .4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.3rem;
+  height: 2.3rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: .6rem;
+  background: transparent;
+  color: #174d2c;
+  cursor: pointer;
+  font-size: 1.1rem;
+  z-index: 2;
+}
+.gv-password-toggle:focus-visible {
+  outline: 2px solid #8bc53d;
+  outline-offset: 2px;
+}
+
+
+/* Registration live validation — aligned with booking form */
+.gv-account-field .gv-field-error {
+  display: none;
+  margin-top: 6px;
+  color: #b33d3d;
+  font-size: 12px;
+  line-height: 1.7;
+  font-weight: 600;
+}
+.gv-account-field.gv-field-invalid .gv-field-error { display: block; }
+.gv-account-field.gv-field-invalid > input {
+  border-color: #c94a4a !important;
+  box-shadow: 0 0 0 3px rgba(201, 74, 74, .10) !important;
+}
+.gv-account-field.gv-field-valid > input {
+  border-color: #8bc53d !important;
+  box-shadow: 0 0 0 3px rgba(139, 197, 61, .08) !important;
+}
+
+
+/* GV ACCOUNT VIEWPORT FIXED BACKGROUND V1 */
+
+html:has(.gv-account-page),
+body:has(.gv-account-page) {
+    background: transparent !important;
+}
+
+body:has(.gv-account-page) {
+    position: relative !important;
+    isolation: isolate !important;
+}
+
+body:has(.gv-account-page)::before {
+    content: "" !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    display: block !important;
+    pointer-events: none !important;
+    background-image: url("/static/images/account.jpeg") !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+body:has(.gv-account-page) .gv-account-page {
+    position: relative !important;
+    background: transparent !important;
+}
+
+/* END GV ACCOUNT VIEWPORT FIXED BACKGROUND V1 */

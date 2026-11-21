@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F7FAF2">
+<title>انبار و موجودی | Green Vita</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+<link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+<link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+<link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+<link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<link rel="stylesheet" href="/static/css/finance.css?v=1">
+<link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+<header class="gv-accounting-hero">
+  <div>
+    <span class="gv-finance-eyebrow">GREEN VITA · INVENTORY</span>
+    <h1>انبار و موجودی کالا</h1>
+    <p>موجودی قابل فروش، قرنطینه و سوابق گردش کالا</p>
+  </div>
+  <a class="gv-finance-primary" href="/finance/purchases/new/">ثبت فاکتور خرید</a>
+</header>
+
+<nav class="gv-accounting-nav">
+  <a class="active" href="/finance/inventory/">موجودی و کاردکس</a>
+  <a href="/finance/purchases/">فاکتورهای خرید</a>
+  <a href="/finance/sales-returns/">برگشت از فروش</a>
+  <a href="/finance/">مدیریت مالی</a>
+</nav>
+
+<section class="gv-accounting-panel">
+  <div class="gv-accounting-section-heading">
+    <h2>موجودی کالاهای انباردار</h2>
+    <span>{{ tracked_count }} قلم کالا</span>
+  </div>
+  <div class="gv-accounting-table-wrap">
+    <table class="gv-accounting-table">
+      <thead>
+        <tr>
+          <th>نام کالا</th>
+          <th>واحد</th>
+          {% for warehouse in warehouses %}
+          <th>{{ warehouse.name }}</th>
+          {% endfor %}
+          <th>حداقل موجودی</th>
+          <th>وضعیت</th>
+          <th>کاردکس</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for p in products %}
+        <tr>
+          <td>{{ p.name }}</td>
+          <td>{{ p.unit }}</td>
+          {% for warehouse in warehouses %}
+          <td class="gv-accounting-balance">{{ p.balances.get(warehouse.code, "0") }}</td>
+          {% endfor %}
+          <td>{{ p.minimum }}</td>
+          <td>
+            {% if p.low %}
+              <span class="gv-accounting-stock-low">نیاز به تأمین</span>
+            {% else %}
+              <span class="gv-accounting-stock-ok">موجود</span>
+            {% endif %}
+          </td>
+          <td><button class="gv-accounting-button secondary gv-kardex" data-id="{{ p.id }}" data-name="{{ p.name }}">مشاهده</button></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="{{ 5 + (warehouses|length) }}" class="gv-finance-empty">هنوز کالای انبارداری تعریف نشده است.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div id="gv-kardex-result" class="gv-kardex-result" hidden></div>
+</section>
+
+<section class="gv-accounting-panel">
+  <div class="gv-accounting-section-heading">
+    <h2>ثبت موجودی اول دوره</h2>
+    <span>برای هر کالا فقط یک بار و پیش از اولین گردش</span>
+  </div>
+  <p class="gv-finance-note">
+    موجودی اولیه را بر اساس شمارش واقعی انبار وارد کن. کالاهایی که قبلاً گردش انبار دارند، از ثبت مجدد موجودی اول دوره محافظت می‌شوند.
+  </p>
+  <form id="gv-opening-form" class="gv-accounting-filters">
+    <label>تاریخ موجودی
+      <input type="text" id="gv-opening-date" data-gv-jalali-date required>
+    </label>
+    <label>کالا
+      <select id="gv-opening-product" required>
+        <option value="">در حال دریافت کالاها...</option>
+      </select>
+    </label>
+    <label>انبار مقصد
+      <select id="gv-opening-warehouse" required>
+        <option value="">در حال دریافت انبارها...</option>
+      </select>
+    </label>
+    <label>تعداد موجودی
+      <input type="number" id="gv-opening-qty" min="0.001" step="0.001" required>
+    </label>
+    <label>بهای تمام‌شده هر واحد (ریال)
+      <input type="number" id="gv-opening-cost" min="0" step="1" required>
+    </label>
+    <button class="gv-accounting-button" id="gv-opening-submit" type="submit">ثبت موجودی اولیه</button>
+  </form>
+  <p id="gv-opening-message" class="gv-accounting-message" role="status"></p>
+</section>
+
+<section class="gv-accounting-panel">
+  <div class="gv-accounting-section-heading">
+    <h2>آخرین گردش‌های انبار</h2>
+    <span>۱۵ عملیات آخر</span>
+  </div>
+  <div class="gv-accounting-table-wrap">
+    <table class="gv-accounting-table">
+      <thead>
+        <tr>
+          <th>تاریخ</th>
+          <th>کالا</th>
+          <th>نوع انبار</th>
+          <th>تغییر تعداد</th>
+          <th>بهای واحد</th>
+          <th>شرح</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for m in movements %}
+        <tr>
+          <td data-gv-date-display="{{ m.movement_date }}">{{ m.movement_date }}</td>
+          <td>{{ m.product_name }}</td>
+          <td>{{ warehouse_names.get(m.warehouse, m.warehouse) }}</td>
+          <td>{{ m.quantity_delta }}</td>
+          <td>{{ "{:,.0f}".format(m.unit_cost or 0) }}</td>
+          <td>{{ m.description or m.source_type }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="gv-finance-empty">گردشی ثبت نشده است.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+</main>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[ch]);
+  const message = $('#gv-opening-message');
+  const submit = $('#gv-opening-submit');
+  const date = $('#gv-opening-date');
+  let openingProducts = [];
+
+  const now = new Date();
+  date.value = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, '0'),
+    String(now.getDate()).padStart(2, '0')
+  ].join('-');
+
+  async function loadProducts() {
+    const response = await fetch('/finance/api/products', {
+      credentials: 'same-origin'
+    });
+    if (!response.ok) throw new Error('دریافت فهرست کالاها ناموفق بود.');
+
+    const data = await response.json();
+    if (!Array.isArray(data.products) || !Array.isArray(data.warehouses) || !data.warehouses.length) {
+      throw new Error('فهرست کالاها یا انبارهای فعال نامعتبر است.');
+    }
+
+    openingProducts = data.products;
+
+    const warehouseSelect = $('#gv-opening-warehouse');
+    warehouseSelect.innerHTML = '';
+    data.warehouses.forEach(warehouse => {
+      const option = document.createElement('option');
+      option.value = String(warehouse.code);
+      option.textContent = warehouse.name;
+      warehouseSelect.appendChild(option);
+    });
+
+    const defaultWarehouse = data.warehouses.find(w => String(w.code) === 'main') || data.warehouses[0];
+    warehouseSelect.value = String(defaultWarehouse.code);
+
+    const select = $('#gv-opening-product');
+    const refreshProducts = () => {
+      const warehouseCode = warehouseSelect.value;
+      const previousValue = select.value;
+      select.innerHTML = '<option value="">انتخاب کالا</option>';
+
+      openingProducts.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.id;
+        const balance = product.balances?.[warehouseCode] ?? '0';
+        option.textContent = product.name + ' — موجودی این انبار: ' + balance;
+        select.appendChild(option);
+      });
+
+      if (openingProducts.some(product => String(product.id) === previousValue)) {
+        select.value = previousValue;
+      }
+    };
+
+    warehouseSelect.addEventListener('change', refreshProducts);
+    refreshProducts();
+  }
+
+  loadProducts().catch(error => {
+    message.textContent = error.message;
+  });
+
+  $('#gv-opening-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    message.textContent = '';
+    submit.disabled = true;
+
+    try {
+      const response = await fetch('/finance/api/opening-stock', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          document_date: window.gvGetISODate(date),
+          lines: [{
+            product_id: Number($('#gv-opening-product').value),
+            warehouse: $('#gv-opening-warehouse').value,
+            quantity: $('#gv-opening-qty').value,
+            unit_cost: $('#gv-opening-cost').value
+          }]
+        })
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.detail || 'ثبت موجودی انجام نشد.');
+
+      message.textContent = result.message + ' شماره سند: ' + result.document.document_no;
+      message.className = 'gv-accounting-message success';
+      window.location.reload();
+    } catch (error) {
+      message.textContent = error.message;
+      message.className = 'gv-accounting-message error';
+      submit.disabled = false;
+    }
+  });
+
+  document.querySelectorAll('.gv-kardex').forEach(button => {
+    button.addEventListener('click', async () => {
+      const box = $('#gv-kardex-result');
+      box.hidden = false;
+      box.textContent = 'در حال دریافت کاردکس...';
+
+      try {
+        const response = await fetch('/finance/api/kardex/' + button.dataset.id, {
+          credentials: 'same-origin'
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'دریافت کاردکس ناموفق بود.');
+
+        const rows = data.movements.map(m => `
+          <tr>
+            <td>${window.gvFormatJalaliDate(m.date)}</td>
+            <td>${escapeHtml(m.warehouse_name || m.warehouse)}</td>
+            <td>${m.quantity}</td>
+            <td>${m.balance}</td>
+            <td>${m.unit_cost}</td>
+            <td>${m.description}</td>
+          </tr>
+        `).join('');
+
+        box.innerHTML = `
+          <h3>کاردکس ${data.product}</h3>
+          <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table">
+              <thead><tr><th>تاریخ</th><th>انبار</th><th>ورودی/خروجی</th><th>مانده</th><th>بهای واحد</th><th>شرح</th></tr></thead>
+              <tbody>${rows || '<tr><td colspan="6">گردشی موجود نیست.</td></tr>'}</tbody>
+            </table>
+          </div>`;
+      } catch (error) {
+        box.textContent = error.message;
+      }
+    });
+  });
+})();
+</script>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

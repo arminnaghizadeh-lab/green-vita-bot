@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}اتصال حساب کاربران به مشتریان | گرین‌ویتا{% endblock %}
+{% block content %}
+<section class="max-w-5xl mx-auto p-6" dir="rtl">
+  <div class="bg-white rounded-2xl shadow p-6">
+    <h1 class="text-2xl font-bold mb-3">اتصال حساب کاربران به مشتریان</h1>
+
+    <p class="text-gray-600 mb-5">
+      هر حساب سایت فقط به یک پرونده مشتری متصل می‌شود.
+      اتصال را پس از احراز هویت مشتری انجام دهید.
+    </p>
+
+    {% if updated %}
+      <p role="status" class="mb-4 rounded-xl bg-green-50 text-green-800 p-3">
+        اتصال با موفقیت ذخیره شد.
+      </p>
+    {% endif %}
+
+    {% if error %}
+      <p role="alert" class="mb-4 rounded-xl bg-red-50 text-red-800 p-3">
+        {{ error }}
+      </p>
+    {% endif %}
+
+    {% if rows %}
+      <div class="space-y-5">
+        {% for row in rows %}
+          <article class="rounded-xl border p-4">
+            <div class="mb-4">
+              <strong class="text-lg">
+                {{ row.user.first_name }} {{ row.user.last_name }}
+              </strong>
+              <div class="text-sm text-gray-600 mt-1" dir="ltr">
+                {{ row.account.phone_number }}
+              </div>
+              <div class="text-xs text-gray-500 mt-1">
+                شناسه حساب: {{ row.account.id }}
+              </div>
+            </div>
+
+            <div class="mb-3 text-sm">
+              {% if row.customer %}
+                <span class="text-green-700 font-semibold">
+                  پرونده مشتری متصل است:
+                </span>
+                {{ row.customer.name }}
+                <span class="text-gray-500">
+                  (#{{ row.customer.id }})
+                </span>
+              {% else %}
+                <span class="text-amber-700">
+                  هنوز پرونده‌ای به این حساب متصل نشده است.
+                </span>
+              {% endif %}
+            </div>
+
+            <form method="post"
+                  action="/account/admin/customer-links/"
+                  class="flex flex-col sm:flex-row gap-3">
+
+              <input type="hidden" name="csrf_token"
+                     value="{{ csrf_token }}">
+
+              <input type="hidden" name="account_id"
+                     value="{{ row.account.id }}">
+
+              <select name="customer_id"
+                      class="flex-1 min-w-0 rounded-xl border p-3">
+                <option value="">بدون اتصال به مشتری</option>
+
+                {% for customer in customers %}
+                  <option value="{{ customer.id }}"
+                    {% if row.customer and row.customer.id == customer.id %}
+                      selected
+                    {% endif %}
+                    {% if customer.web_account_id and customer.web_account_id != row.account.id %}
+                      disabled
+                    {% endif %}>
+                    {{ customer.name }}
+                    — {{ customer.data.get('phone', '') }}
+                    — #{{ customer.id }}
+                    {% if customer.web_account_id and customer.web_account_id != row.account.id %}
+                      (متصل به حساب دیگر)
+                    {% endif %}
+                  </option>
+                {% endfor %}
+              </select>
+
+              <button type="submit"
+                      class="rounded-xl px-5 py-3 font-bold text-white"
+                      style="background:#174d2c">
+                ذخیره اتصال
+              </button>
+            </form>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-500">هنوز حساب فعال سایت وجود ندارد.</p>
+    {% endif %}
+
+    <div class="mt-7 border-t pt-5">
+      <a href="/account/admin/password-reset/"
+         class="text-green-800 font-semibold">
+        بازگشت به بازیابی رمز کاربران
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

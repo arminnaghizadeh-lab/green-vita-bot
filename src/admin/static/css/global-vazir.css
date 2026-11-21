@@ -166,3 +166,15 @@ nav,
 main {
     font-family: "Vazir", Tahoma, Arial, sans-serif !important;
 }
+
+/* GV GLOBAL REMOVE ALL AFTER PSEUDO ELEMENTS V1 */
+html:not(#gv-after-off-a):not(#gv-after-off-b):not(#gv-after-off-c):not(#gv-after-off-d):not(#gv-after-off-e)::after,
+html:not(#gv-after-off-a):not(#gv-after-off-b):not(#gv-after-off-c):not(#gv-after-off-d):not(#gv-after-off-e) *::after {
+    content: none !important;
+    display: none !important;
+    visibility: hidden !important;
+    background: none !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+}

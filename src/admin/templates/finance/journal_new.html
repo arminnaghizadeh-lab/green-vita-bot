@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7FAF2">
+    <title>ثبت سند حسابداری | Green Vita</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+    <link rel="stylesheet" href="/static/css/finance.css?v=1">
+    <link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+    <header class="gv-accounting-hero">
+        <div>
+            <span class="gv-finance-eyebrow">GREEN VITA · ACCOUNTING JOURNAL</span>
+            <h1>ثبت سند حسابداری</h1>
+            <p>ثبت سند دوطرفه با کنترل برابری جمع بدهکار و بستانکار</p>
+        </div>
+    </header>
+
+    <nav class="gv-accounting-nav">
+        <a href="/finance/general-ledger/">دفتر کل</a>
+        <a href="/finance/subsidiary-ledger/">دفتر معین</a>
+        <a class="active" href="/finance/journal/new/">ثبت سند</a>
+        <a href="/finance/">مدیریت مالی</a>
+    </nav>
+
+    <section class="gv-accounting-panel">
+        <div class="gv-accounting-form-top">
+            <label>تاریخ سند
+                <input id="gv-entry-date" type="text" data-gv-jalali-date value="{{ today }}" required>
+            </label>
+            <label class="gv-accounting-description">شرح کلی سند
+                <input id="gv-entry-description" type="text" maxlength="500"
+                       placeholder="شرح عملیات مالی را وارد کنید" required>
+            </label>
+        </div>
+
+        <div class="gv-accounting-section-heading">
+            <h2>ردیف‌های سند</h2>
+            <button type="button" id="gv-add-line" class="gv-accounting-button secondary">افزودن ردیف</button>
+        </div>
+
+        <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table gv-journal-table">
+                <thead>
+                    <tr>
+                        <th>حساب</th>
+                        <th>نوع طرف حساب</th>
+                        <th>نام طرف حساب</th>
+                        <th>شرح ردیف</th>
+                        <th>بدهکار (ریال)</th>
+                        <th>بستانکار (ریال)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="gv-journal-lines"></tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4">جمع</th>
+                        <th id="gv-total-debit">۰</th>
+                        <th id="gv-total-credit">۰</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div id="gv-balance-state" class="gv-accounting-balance-state">ابتدا ردیف‌های سند را تکمیل کنید.</div>
+
+        <div class="gv-accounting-actions">
+            <button type="button" id="gv-submit-journal" class="gv-accounting-button">ثبت قطعی سند</button>
+            <a href="/finance/" class="gv-accounting-cancel">انصراف</a>
+        </div>
+        <p id="gv-journal-message" class="gv-accounting-message" role="status"></p>
+    </section>
+
+    <p class="gv-finance-note">
+        سند فقط در صورت برابر بودن جمع بدهکار و بستانکار ثبت می‌شود. سند قطعی این نسخه قابل حذف یا ویرایش مستقیم نیست؛ برای اصلاح اشتباه باید سند اصلاحی جداگانه ثبت شود.
+    </p>
+</main>
+
+<datalist id="gv-customer-list">
+{% for name in customer_names %}
+    <option value="{{ name }}">
+{% endfor %}
+</datalist>
+
+<script id="gv-account-options" type="application/json">{{ account_options|tojson }}</script>
+<script>
+(() => {
+    const accounts = JSON.parse(document.getElementById('gv-account-options').textContent);
+    const body = document.getElementById('gv-journal-lines');
+    const message = document.getElementById('gv-journal-message');
+    const addButton = document.getElementById('gv-add-line');
+    const submitButton = document.getElementById('gv-submit-journal');
+
+    const digits = value => String(value || '').replace(/[۰-۹٠-٩]/g, ch => {
+        const fa = '۰۱۲۳۴۵۶۷۸۹';
+        const ar = '٠١٢٣٤٥٦٧٨٩';
+        const i = fa.indexOf(ch);
+        return i >= 0 ? String(i) : String(ar.indexOf(ch));
+    });
+
+    const amount = input => {
+        const raw = digits(input.value).replace(/[,\s٬،]/g, '');
+        const n = Number(raw || 0);
+        return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+    };
+
+    const format = value =>
+        new Intl.NumberFormat('fa-IR').format(value || 0);
+
+    function makeCell(className) {
+        const td = document.createElement('td');
+        if (className) td.className = className;
+        return td;
+    }
+
+    function makeRow() {
+        const tr = document.createElement('tr');
+
+        const accountCell = makeCell();
+        const accountSelect = document.createElement('select');
+        accountSelect.className = 'gv-line-account';
+        accountSelect.innerHTML = '<option value="">انتخاب حساب</option>';
+
+        accounts.forEach(account => {
+            const option = document.createElement('option');
+            option.value = account.id;
+            option.textContent = account.code + ' — ' + account.name;
+            accountSelect.appendChild(option);
+        });
+        accountCell.appendChild(accountSelect);
+        tr.appendChild(accountCell);
+
+        const partyTypeCell = makeCell();
+        const partyType = document.createElement('select');
+        partyType.className = 'gv-line-party-type';
+        partyType.innerHTML = `
+            <option value="">بدون طرف حساب</option>
+            <option value="customer">مشتری</option>
+            <option value="supplier">تأمین‌کننده</option>
+            <option value="other">سایر</option>`;
+        partyTypeCell.appendChild(partyType);
+        tr.appendChild(partyTypeCell);
+
+        const partyNameCell = makeCell();
+        const partyName = document.createElement('input');
+        partyName.className = 'gv-line-party-name';
+        partyName.setAttribute('list', 'gv-customer-list');
+        partyName.placeholder = 'نام طرف حساب';
+        partyNameCell.appendChild(partyName);
+        tr.appendChild(partyNameCell);
+
+        const descriptionCell = makeCell();
+        const lineDescription = document.createElement('input');
+        lineDescription.className = 'gv-line-description';
+        lineDescription.placeholder = 'شرح ردیف';
+        descriptionCell.appendChild(lineDescription);
+        tr.appendChild(descriptionCell);
+
+        const debitCell = makeCell();
+        const debit = document.createElement('input');
+        debit.type = 'number';
+        debit.min = '0';
+        debit.step = '1';
+        debit.inputMode = 'numeric';
+        debit.className = 'gv-line-debit';
+        debit.placeholder = '۰';
+        debitCell.appendChild(debit);
+        tr.appendChild(debitCell);
+
+        const creditCell = makeCell();
+        const credit = document.createElement('input');
+        credit.type = 'number';
+        credit.min = '0';
+        credit.step = '1';
+        credit.inputMode = 'numeric';
+        credit.className = 'gv-line-credit';
+        credit.placeholder = '۰';
+        creditCell.appendChild(credit);
+        tr.appendChild(creditCell);
+
+        const actionCell = makeCell();
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'gv-accounting-remove';
+        remove.textContent = '×';
+        remove.title = 'حذف ردیف';
+        remove.addEventListener('click', () => {
+            if (body.children.length <= 2) {
+                message.textContent = 'سند باید حداقل دو ردیف داشته باشد.';
+                return;
+            }
+            tr.remove();
+            updateTotals();
+        });
+        actionCell.appendChild(remove);
+        tr.appendChild(actionCell);
+
+        accountSelect.addEventListener('change', () => {
+            const account = accounts.find(a => String(a.id) === accountSelect.value);
+            const required = Boolean(account && account.requires_party);
+            partyType.disabled = !required && !partyName.value.trim();
+            partyName.required = required;
+            if (required && !partyType.value) partyType.value = 'customer';
+            updateTotals();
+        });
+
+        partyName.addEventListener('input', () => {
+            partyType.disabled = false;
+        });
+
+        [debit, credit].forEach(input => input.addEventListener('input', () => {
+            const other = input === debit ? credit : debit;
+            if (amount(input) > 0) other.value = '';
+            updateTotals();
+        }));
+
+        body.appendChild(tr);
+        return tr;
+    }
+
+    function updateTotals() {
+        let debitTotal = 0;
+        let creditTotal = 0;
+
+        body.querySelectorAll('tr').forEach(row => {
+            debitTotal += amount(row.querySelector('.gv-line-debit'));
+            creditTotal += amount(row.querySelector('.gv-line-credit'));
+        });
+
+        document.getElementById('gv-total-debit').textContent = format(debitTotal);
+        document.getElementById('gv-total-credit').textContent = format(creditTotal);
+
+        const state = document.getElementById('gv-balance-state');
+        if (debitTotal === 0 && creditTotal === 0) {
+            state.textContent = 'ابتدا ردیف‌های سند را تکمیل کنید.';
+            state.className = 'gv-accounting-balance-state';
+        } else if (debitTotal === creditTotal) {
+            state.textContent = 'سند تراز است؛ آماده ثبت.';
+            state.className = 'gv-accounting-balance-state balanced';
+        } else {
+            state.textContent = 'سند تراز نیست؛ اختلاف: ' + format(Math.abs(debitTotal - creditTotal)) + ' ریال';
+            state.className = 'gv-accounting-balance-state unbalanced';
+        }
+
+        return {debitTotal, creditTotal};
+    }
+
+    addButton.addEventListener('click', makeRow);
+    makeRow();
+    makeRow();
+
+    submitButton.addEventListener('click', async () => {
+        message.textContent = '';
+
+        const entryDate = window.gvGetISODate(document.getElementById('gv-entry-date'));
+        const description = document.getElementById('gv-entry-description').value.trim();
+
+        if (!entryDate || !description) {
+            message.textContent = 'تاریخ و شرح کلی سند را وارد کنید.';
+            return;
+        }
+
+        const lines = [];
+        let invalid = false;
+
+        body.querySelectorAll('tr').forEach((row, index) => {
+            const accountId = row.querySelector('.gv-line-account').value;
+            const partyType = row.querySelector('.gv-line-party-type').value;
+            const partyName = row.querySelector('.gv-line-party-name').value.trim();
+            const account = accounts.find(a => String(a.id) === accountId);
+            const debit = amount(row.querySelector('.gv-line-debit'));
+            const credit = amount(row.querySelector('.gv-line-credit'));
+
+            if (!account || (debit === 0 && credit === 0) || (debit > 0 && credit > 0)) {
+                message.textContent = 'حساب و مبلغ یک‌طرفه ردیف ' + (index + 1) + ' را بررسی کنید.';
+                invalid = true;
+                return;
+            }
+
+            if (account.requires_party && !partyName) {
+                message.textContent = 'برای حساب «' + account.name + '» باید طرف حساب وارد شود.';
+                invalid = true;
+                return;
+            }
+
+            lines.push({
+                account_id: Number(accountId),
+                party_type: partyType,
+                party_name: partyName,
+                description: row.querySelector('.gv-line-description').value.trim(),
+                debit,
+                credit
+            });
+        });
+
+        if (invalid) return;
+
+        if (lines.length < 2) {
+            message.textContent = 'حداقل دو ردیف برای سند لازم است.';
+            return;
+        }
+
+        const totals = updateTotals();
+        if (totals.debitTotal <= 0 || totals.debitTotal !== totals.creditTotal) {
+            message.textContent = 'جمع بدهکار و بستانکار باید برابر و بیشتر از صفر باشد.';
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'در حال ثبت...';
+
+        try {
+            const response = await fetch('/finance/journals/', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    entry_date: entryDate,
+                    description,
+                    lines
+                })
+            });
+
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(result.detail || 'ثبت سند انجام نشد.');
+            }
+
+            message.textContent = result.message + ' شماره سند: ' + result.number;
+            message.className = 'gv-accounting-message success';
+
+            window.location.href =
+                '/finance/general-ledger/?from_date=' +
+                encodeURIComponent(entryDate) +
+                '&to_date=' + encodeURIComponent(entryDate);
+
+        } catch (error) {
+            message.textContent = error.message || 'ارتباط با سرور برقرار نشد.';
+            message.className = 'gv-accounting-message error';
+            submitButton.disabled = false;
+            submitButton.textContent = 'ثبت قطعی سند';
+        }
+    });
+})();
+</script>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

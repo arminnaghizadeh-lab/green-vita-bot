@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ثبت برگشت از فروش | Green Vita</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+<link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+<link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+<link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+<link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<link rel="stylesheet" href="/static/css/finance.css?v=1">
+<link rel="stylesheet" href="/static/css/accounting.css?v=1">
+<style>
+.gv-return-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.gv-return-fields label{display:flex;flex-direction:column;gap:8px}
+.gv-return-fields input,.gv-return-fields select,.gv-return-table input,.gv-return-table select{width:100%;min-width:90px;padding:10px;border:1px solid #dce5d5;border-radius:10px;background:#fff;font:inherit}
+.gv-return-table .gv-return-qty{max-width:125px}
+.gv-return-hint{color:#667568;font-size:13px;margin:12px 0}
+.gv-return-message{margin-top:16px;font-weight:600}
+.gv-return-message.error{color:#b42318}
+.gv-return-message.success{color:#187343}
+.gv-return-submit:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:700px){.gv-return-table{min-width:760px}}
+</style>
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+
+<header class="gv-accounting-hero">
+<div>
+<span class="gv-finance-eyebrow">GREEN VITA · SALES RETURN</span>
+<h1>ثبت برگشت از فروش</h1>
+<p>انتخاب فاکتور اصلی و بازگشت کالا به انبار</p>
+</div>
+</header>
+
+<nav class="gv-accounting-nav">
+<a href="/finance/inventory/">انبار</a>
+<a href="/finance/purchases/">خریدها</a>
+<a class="active" href="/finance/sales-returns/">برگشت از فروش</a>
+<a href="/finance/">مدیریت مالی</a>
+</nav>
+
+<section class="gv-accounting-panel">
+<div class="gv-return-fields">
+<label>
+تاریخ برگشت
+<input id="gv-return-date" type="text" data-gv-jalali-date required>
+</label>
+<label>
+فاکتور فروش اصلی
+<select id="gv-invoice" required>
+<option value="">در حال دریافت فاکتورها...</option>
+</select>
+</label>
+<label>
+شرح برگشت
+<input id="gv-return-description" maxlength="2000" placeholder="توضیحات اختیاری">
+</label>
+</div>
+
+<div class="gv-accounting-section-heading">
+<h2>اقلام قابل برگشت</h2>
+</div>
+
+<div id="gv-return-warehouse-labels"
+     data-main="{{ warehouse_names['main'] }}"
+     data-quarantine="{{ warehouse_names['quarantine'] }}"
+     hidden></div>
+<p class="gv-return-hint">
+فقط مقدار برگشتی را وارد کن. کالای سالم به «{{ warehouse_names['main'] }}» و کالای آسیب‌دیده به «{{ warehouse_names['quarantine'] }}» برمی‌گردد.
+</p>
+
+<div class="gv-accounting-table-wrap">
+<table class="gv-accounting-table gv-return-table">
+<thead>
+<tr>
+<th>نام کالا</th>
+<th>تعداد فروش</th>
+<th>قبلاً برگشت‌شده</th>
+<th>مانده قابل برگشت</th>
+<th>تعداد برگشتی</th>
+<th>وضعیت کالا</th>
+</tr>
+</thead>
+<tbody id="gv-return-lines">
+<tr><td colspan="6" class="gv-finance-empty">ابتدا فاکتور فروش را انتخاب کن.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="gv-accounting-actions">
+<button type="button" id="gv-return-submit" class="gv-accounting-button gv-return-submit" disabled>
+ثبت قطعی برگشت و ورود به انبار
+</button>
+<a href="/finance/sales-returns/" class="gv-accounting-cancel">انصراف</a>
+</div>
+
+<p id="gv-return-message" class="gv-return-message" role="status"></p>
+</section>
+
+<p class="gv-finance-note">
+ثبت این سند، موجودی انبار را افزایش می‌دهد. کالای قرنطینه‌شده به موجودی قابل فروش اضافه نمی‌شود. این عملیات به‌تنهایی ثبت استرداد وجه یا سند حسابداری ایجاد نمی‌کند.
+</p>
+</main>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const invoiceSelect = $('gv-invoice');
+const linesBody = $('gv-return-lines');
+const message = $('gv-return-message');
+const submit = $('gv-return-submit');
+const labelElement = $('gv-return-warehouse-labels');
+const warehouseLabels = {
+  main: labelElement?.dataset.main || 'انبار اصلی',
+  quarantine: labelElement?.dataset.quarantine || 'قرنطینه'
+};
+
+let invoices = [];
+let selectedInvoice = null;
+
+const localDate = () => {
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 10);
+};
+
+const number = value => {
+  const n = Number(String(value || '').replace(/[,\s٬،]/g, ''));
+  return Number.isFinite(n) ? n : 0;
+};
+
+const format = value =>
+  new Intl.NumberFormat('fa-IR', {maximumFractionDigits: 3})
+    .format(Number(value || 0));
+
+function showMessage(text, type='') {
+  message.textContent = text;
+  message.className = 'gv-return-message ' + type;
+}
+
+function renderLines(invoice) {
+  selectedInvoice = invoice || null;
+  linesBody.replaceChildren();
+  showMessage('');
+  submit.disabled = !invoice;
+
+  if (!invoice || !Array.isArray(invoice.lines) || !invoice.lines.length) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 6;
+    td.className = 'gv-finance-empty';
+    td.textContent = 'برای این فاکتور قلم قابل برگشتی وجود ندارد.';
+    tr.appendChild(td);
+    linesBody.appendChild(tr);
+    return;
+  }
+
+  invoice.lines.forEach(line => {
+    const tr = document.createElement('tr');
+
+    const values = [
+      line.product_name || '—',
+      format(line.sold),
+      format(line.returned),
+      format(line.available)
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement('td');
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    const qtyCell = document.createElement('td');
+    const qtyInput = document.createElement('input');
+    qtyInput.type = 'number';
+    qtyInput.className = 'gv-return-qty';
+    qtyInput.min = '0';
+    qtyInput.max = String(line.available);
+    qtyInput.step = '0.001';
+    qtyInput.placeholder = 'مقدار برگشت';
+    qtyInput.inputMode = 'decimal';
+    qtyCell.appendChild(qtyInput);
+    tr.appendChild(qtyCell);
+
+    const conditionCell = document.createElement('td');
+    const condition = document.createElement('select');
+
+    [
+      ['good', `سالم – ${warehouseLabels.main}`],
+      ['quarantine', `آسیب‌دیده – ${warehouseLabels.quarantine}`]
+    ].forEach(([value, label]) => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = label;
+      condition.appendChild(option);
+    });
+
+    conditionCell.appendChild(condition);
+    tr.appendChild(conditionCell);
+
+    tr.dataset.lineNo = String(line.line_no);
+    tr.dataset.available = String(line.available);
+    linesBody.appendChild(tr);
+
+    qtyInput.addEventListener('input', () => {
+      const qty = number(qtyInput.value);
+      if (qty > number(line.available)) {
+        qtyInput.setCustomValidity('مقدار واردشده بیشتر از مانده قابل برگشت است.');
+      } else {
+        qtyInput.setCustomValidity('');
+      }
+    });
+  });
+}
+
+async function loadInvoices() {
+  const response = await fetch('/finance/api/final-sales', {
+    credentials: 'same-origin'
+  });
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.detail || 'دریافت فاکتورهای فروش ناموفق بود.');
+  }
+
+  invoices = result.invoices || [];
+  invoiceSelect.replaceChildren();
+
+  const first = document.createElement('option');
+  first.value = '';
+  first.textContent = 'انتخاب فاکتور فروش قطعی';
+  invoiceSelect.appendChild(first);
+
+  invoices.forEach(invoice => {
+    const option = document.createElement('option');
+    option.value = String(invoice.id);
+    option.textContent = [
+      invoice.no || ('فاکتور ' + invoice.id),
+      invoice.date || '',
+      invoice.customer || ''
+    ].filter(Boolean).join(' | ');
+    invoiceSelect.appendChild(option);
+  });
+
+  if (!invoices.length) {
+    first.textContent = 'فاکتور واجد شرایط برگشت وجود ندارد';
+    showMessage('فاکتور قطعی دارای کالای انباردار و مانده قابل برگشت پیدا نشد.', '');
+  } else {
+    showMessage('فاکتور فروش موردنظر را انتخاب کن.');
+  }
+
+  renderLines(null);
+}
+
+invoiceSelect.addEventListener('change', () => {
+  const id = Number(invoiceSelect.value);
+  const invoice = invoices.find(item => Number(item.id) === id);
+  renderLines(invoice || null);
+});
+
+submit.addEventListener('click', async () => {
+  showMessage('');
+
+  if (!selectedInvoice) {
+    showMessage('ابتدا فاکتور فروش اصلی را انتخاب کن.', 'error');
+    return;
+  }
+
+  const rows = [...linesBody.querySelectorAll('tr[data-line-no]')];
+  const lines = [];
+
+  for (const row of rows) {
+    const qtyInput = row.querySelector('.gv-return-qty');
+    const quantity = number(qtyInput.value);
+
+    if (quantity <= 0) continue;
+
+    if (quantity > number(row.dataset.available)) {
+      showMessage('تعداد برگشتی از مانده قابل برگشت بیشتر است.', 'error');
+      qtyInput.focus();
+      return;
+    }
+
+    if (!qtyInput.reportValidity()) return;
+
+    lines.push({
+      reference_line_no: Number(row.dataset.lineNo),
+      quantity: qtyInput.value,
+      condition: row.querySelector('select').value
+    });
+  }
+
+  if (!lines.length) {
+    showMessage('تعداد برگشتی حداقل یک قلم را وارد کن.', 'error');
+    return;
+  }
+
+  if (!window.gvGetISODate($('gv-return-date'))) {
+    showMessage('تاریخ برگشت را انتخاب کن.', 'error');
+    return;
+  }
+
+  submit.disabled = true;
+  submit.textContent = 'در حال ثبت برگشت...';
+
+  try {
+    const response = await fetch('/finance/api/sales-returns', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        invoice_id: selectedInvoice.id,
+        document_date: window.gvGetISODate($('gv-return-date')),
+        description: $('gv-return-description').value.trim(),
+        lines
+      })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.detail || 'ثبت برگشت از فروش ناموفق بود.');
+    }
+
+    showMessage(
+      result.message + ' شماره سند: ' + result.document.document_no,
+      'success'
+    );
+
+    window.location.replace('/finance/sales-returns/');
+  } catch (error) {
+    showMessage(error.message, 'error');
+    submit.disabled = false;
+    submit.textContent = 'ثبت قطعی برگشت و ورود به انبار';
+  }
+});
+
+$('gv-return-date').value = localDate();
+
+loadInvoices().catch(error => {
+  invoiceSelect.replaceChildren();
+  const option = document.createElement('option');
+  option.textContent = 'خطا در دریافت فاکتورها';
+  invoiceSelect.appendChild(option);
+  showMessage(error.message, 'error');
+});
+})();
+</script>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

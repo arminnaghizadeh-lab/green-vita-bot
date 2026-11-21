@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+import hashlib
 import ipaddress
 import time
 from collections import deque
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
+
+from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
+
+from src.db.models.web_account import WebAccount, WebDiagnosisUsage
+from src.db.session import AsyncSessionLocal
 
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from fastapi.templating import Jinja2Templates
@@ -70,6 +79,108 @@ def _check_rate_limit(request: Request) -> None:
             _request_times.pop(ip, None)
 
 
+
+
+TEHRAN = ZoneInfo("Asia/Tehran")
+
+
+async def _reserve_daily_usage(
+    *,
+    account_id: int,
+    mode: str,
+    plant_name: str,
+    notes: str,
+    image_filename: str | None,
+    image_sha256: str,
+) -> int:
+    """Reserve one diagnosis for this account and Tehran calendar day."""
+    now = datetime.now(timezone.utc)
+    today = now.astimezone(TEHRAN).date()
+
+    async with AsyncSessionLocal() as session:
+        account = await session.scalar(
+            select(WebAccount)
+            .where(
+                WebAccount.id == account_id,
+                WebAccount.is_active.is_(True),
+            )
+            .with_for_update()
+        )
+        if account is None:
+            raise HTTPException(
+                status_code=401,
+                detail="حساب کاربری فعال پیدا نشد؛ دوباره وارد حساب شو.",
+            )
+
+        existing = await session.scalar(
+            select(WebDiagnosisUsage).where(
+                WebDiagnosisUsage.account_id == account_id,
+                WebDiagnosisUsage.usage_date == today,
+            )
+        )
+
+        if existing is not None:
+            stale = False
+            if existing.status == "processing" and existing.created_at:
+                created = existing.created_at
+                if created.tzinfo is None:
+                    created = created.replace(tzinfo=timezone.utc)
+                stale = now - created > timedelta(minutes=10)
+
+            if existing.status == "failed" or stale:
+                await session.delete(existing)
+                await session.flush()
+            elif existing.status == "processing":
+                raise HTTPException(
+                    status_code=429,
+                    detail="درخواست تشخیص امروز هنوز در حال پردازش است؛ کمی بعد دوباره بررسی کن.",
+                    headers={"Retry-After": "60"},
+                )
+            else:
+                raise HTTPException(
+                    status_code=429,
+                    detail="سهمیه تشخیص آنلاین امروز استفاده شده است. فردا دوباره مراجعه کن.",
+                )
+
+        usage = WebDiagnosisUsage(
+            account_id=account_id,
+            usage_date=today,
+            mode=mode,
+            plant_name=plant_name or None,
+            notes=notes or None,
+            image_filename=image_filename,
+            image_sha256=image_sha256,
+            status="processing",
+        )
+        session.add(usage)
+
+        try:
+            await session.commit()
+        except IntegrityError:
+            await session.rollback()
+            raise HTTPException(
+                status_code=429,
+                detail="سهمیه تشخیص آنلاین امروز استفاده شده است. فردا دوباره مراجعه کن.",
+            ) from None
+
+        return usage.id
+
+
+async def _remove_failed_usage(usage_id: int) -> None:
+    """Free the daily quota when analysis fails."""
+    try:
+        async with AsyncSessionLocal() as session:
+            usage = await session.get(WebDiagnosisUsage, usage_id)
+            if usage is not None and usage.status == "processing":
+                await session.delete(usage)
+                await session.commit()
+    except Exception as exc:
+        logger.error(
+            "web_plant_analysis_usage_cleanup_failed",
+            error_type=type(exc).__name__,
+        )
+
+
 @router.get("/diagnosis/", include_in_schema=False)
 async def diagnosis_page(request: Request):
     return templates.TemplateResponse(
@@ -95,6 +206,14 @@ async def analyze_plant_online(
     if mode not in {"diagnose", "identify"}:
         raise HTTPException(status_code=400, detail="نوع درخواست معتبر نیست.")
 
+    try:
+        account_id = int(request.session.get("web_account_id"))
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=401,
+            detail="برای استفاده از تشخیص آنلاین ابتدا از بخش حساب کاربری وارد شو.",
+        ) from None
+
     plant_name = plant_name.strip()
     notes = notes.strip()
 
@@ -104,6 +223,7 @@ async def analyze_plant_online(
         raise HTTPException(status_code=400, detail="توضیحات بیش از حد طولانی است.")
 
     _check_rate_limit(request)
+    usage_id: int | None = None
 
     try:
         if image.content_type != "image/jpeg":
@@ -131,6 +251,22 @@ async def analyze_plant_online(
                 status_code=415,
                 detail="فایل عکس معتبر نیست؛ لطفاً تصویر دیگری انتخاب کن.",
             )
+
+        safe_filename = (
+            str(image.filename or "")
+            .replace("\\", "/")
+            .rsplit("/", 1)[-1][:255]
+            or None
+        )
+
+        usage_id = await _reserve_daily_usage(
+            account_id=account_id,
+            mode=mode,
+            plant_name=plant_name,
+            notes=notes,
+            image_filename=safe_filename,
+            image_sha256=hashlib.sha256(image_bytes).hexdigest(),
+        )
 
         provider = get_ai_provider()
 
@@ -177,11 +313,24 @@ async def analyze_plant_online(
                 "parse_succeeded": result.parse_succeeded,
             }
 
+        async with AsyncSessionLocal() as session:
+            usage = await session.get(WebDiagnosisUsage, usage_id)
+            if usage is None:
+                raise RuntimeError("Diagnosis usage reservation was not found")
+            usage.result = payload
+            usage.status = "completed"
+            usage.ai_provider = type(provider).__name__[:32]
+            await session.commit()
+
         return {"ok": True, "mode": mode, "result": payload}
 
     except HTTPException:
+        if usage_id is not None:
+            await _remove_failed_usage(usage_id)
         raise
     except Exception as exc:
+        if usage_id is not None:
+            await _remove_failed_usage(usage_id)
         # جزئیات داخلی و اطلاعات محرمانه به مرورگر ارسال نمی‌شوند.
         logger.error(
             "web_plant_analysis_failed",

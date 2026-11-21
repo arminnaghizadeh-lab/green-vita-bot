@@ -753,3 +753,82 @@ body.gv-dashboard .container,body.gv-dashboard .topbar{margin-right:255px}
  .gv-sidebar.open{transform:translateX(0)}
  body.gv-dashboard .container,body.gv-dashboard .topbar{margin-right:0}
 }
+
+/* GV DASHBOARD DESKTOP SIDEBAR SPACING V1 */
+@media (min-width: 769px) {
+  body.gv-dashboard main.gv-command-main {
+    width: calc(100% - 282px) !important;
+    max-width: none !important;
+    margin: 28px 266px 50px 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+/* END GV DASHBOARD DESKTOP SIDEBAR SPACING V1 */
+
+
+/* GV FINANCE DESKTOP SIDEBAR SPACING V1 */
+@media (min-width: 769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width: calc(100% - 282px) !important;
+    max-width: none !important;
+    margin: 28px 266px 50px 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+/* END GV FINANCE DESKTOP SIDEBAR SPACING V1 */
+
+
+/* GV MOBILE DASHBOARD MENU V1 */
+@media(max-width:768px){
+  body.gv-dashboard header.gv-admin-topbar{
+    min-height:48px!important;height:48px!important;
+    padding:6px 12px!important;margin:0!important;
+  }
+  .gv-admin-topbar-spacer{display:none!important}
+  body.gv-dashboard main.gv-command-main{
+    width:auto!important;max-width:none!important;
+    margin:6px 12px 30px!important;padding-top:0!important;
+  }
+  body.gv-dashboard aside.gv-admin-sidebar{
+    position:fixed!important;top:0!important;right:0!important;
+    bottom:0!important;width:min(82vw,310px)!important;
+    z-index:10002!important;transform:translateX(105%)!important;
+    transition:transform .25s ease!important;
+  }
+  body.gv-dashboard aside.gv-admin-sidebar.open{
+    transform:translateX(0)!important;
+  }
+  #gv-mobile-menu-toggle{
+    display:flex!important;position:fixed!important;
+    left:14px!important;top:8px!important;
+    width:42px!important;height:42px!important;
+    align-items:center!important;justify-content:center!important;
+    border:0!important;border-radius:11px!important;
+    background:#174b28!important;color:white!important;
+    font-size:25px!important;z-index:10004!important;
+  }
+  #gv-mobile-menu-overlay{
+    display:none;position:fixed;inset:0;
+    background:rgba(0,0,0,.4);z-index:10001;
+  }
+}
+@media(min-width:769px){
+  #gv-mobile-menu-toggle,#gv-mobile-menu-overlay{display:none!important}
+}
+/* END GV MOBILE DASHBOARD MENU V1 */
+
+/* GV MOBILE SIDEBAR ONE COLUMN V1 */
+@media(max-width:768px) {
+  .gv-admin-sidebar .gv-admin-sidebar-nav {
+    display:flex!important;
+    flex-direction:column!important;
+    flex-wrap:nowrap!important;
+    width:100%!important;
+  }
+  .gv-admin-sidebar .gv-admin-sidebar-nav > a {
+    display:flex!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
+/* END GV MOBILE SIDEBAR ONE COLUMN V1 */

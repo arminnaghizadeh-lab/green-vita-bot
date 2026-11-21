@@ -1,0 +1,172 @@
+<section class="gv-home-widgets">
+  <div class="gv-hw-head">
+    <div>
+      <h2>ابزارهای منتخب من</h2>
+      <p>دسترسی سریع به بخش‌های پرکاربرد پنل</p>
+    </div>
+    <button type="button" id="gv-hw-open">⚙ تنظیمات</button>
+  </div>
+
+  <div id="gv-hw-cards" class="gv-hw-grid">در حال بارگذاری...</div>
+
+  <div id="gv-hw-editor" hidden>
+    <h3>شخصی‌سازی صفحه اصلی</h3>
+    <p>ابزارها را انتخاب و ترتیبشان را با فلش‌ها تنظیم کن.</p>
+    <div id="gv-hw-options"></div>
+    <button type="button" id="gv-hw-save">ذخیره تغییرات</button>
+    <button type="button" id="gv-hw-cancel">انصراف</button>
+    <p id="gv-hw-status"></p>
+  </div>
+</section>
+
+<style>
+.gv-home-widgets{margin:18px 0 25px;padding:20px;border-radius:18px;background:#fff;border:1px solid #e2ecd9;box-shadow:0 5px 20px #173c1710}
+.gv-hw-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gv-hw-head h2{margin:0;color:#194b27;font-size:19px}
+.gv-hw-head p,.gv-home-widgets p{font-size:12px;color:#788477}
+.gv-hw-head button,#gv-hw-save,#gv-hw-cancel{border:0;border-radius:9px;padding:10px 15px;background:#246532;color:white;cursor:pointer}
+.gv-hw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:17px}
+.gv-hw-card{display:flex;align-items:center;gap:10px;padding:14px;border:1px solid #e4eddd;border-radius:12px;background:#f8fbf5;text-decoration:none;color:#194b27}
+.gv-hw-card strong{font-size:13px}
+.gv-hw-card span{font-size:23px}
+#gv-hw-editor{margin-top:18px;padding:15px;border-radius:12px;background:#f5f8f1}
+#gv-hw-editor[hidden]{display:none!important}
+#gv-hw-editor h3{margin:0}
+.gv-hw-option{display:flex;align-items:center;gap:9px;padding:9px;border-bottom:1px solid #e2eadd;font-size:13px}
+.gv-hw-option label{flex:1}
+.gv-hw-option button{border:1px solid #dce8d4;border-radius:7px;background:white;padding:5px 10px;cursor:pointer}
+#gv-hw-save,#gv-hw-cancel{margin-top:12px}
+#gv-hw-cancel{background:#e6eee1;color:#254b2d}
+@media(max-width:600px){.gv-home-widgets{padding:13px}.gv-hw-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<script id="gv-home-widgets-ui-v1">
+(() => {
+  const catalog = [
+    ["reservations","تقویم رزروها","/reservations","📅"],
+    ["visits","ویزیت‌ها","/visits","🪴"],
+    ["finance","امور مالی","/finance/","💳"],
+    ["invoices","فاکتورها","/admin/invoices","🧾"],
+    ["users","مدیریت کاربران","/account/admin/users/","👥"],
+    ["contact","ارتباط با مشتریان","/contactus/","✉️"],
+    ["website","مشاهده وب‌سایت","/","🌿"]
+  ];
+
+  const $ = id => document.getElementById(id);
+  const cards = $("gv-hw-cards");
+  const editor = $("gv-hw-editor");
+  const options = $("gv-hw-options");
+  const status = $("gv-hw-status");
+  const open = $("gv-hw-open");
+  const save = $("gv-hw-save");
+  const cancel = $("gv-hw-cancel");
+
+  let selected = ["reservations","visits","finance","invoices"];
+  let saved = [...selected];
+
+  function render() {
+    cards.replaceChildren();
+
+    selected.forEach(id => {
+      const item = catalog.find(x => x[0] === id);
+      if (!item) return;
+      const a = document.createElement("a");
+      a.className = "gv-hw-card";
+      a.href = item[2];
+      a.innerHTML = `<span>${item[3]}</span><strong>${item[1]}</strong>`;
+      cards.appendChild(a);
+    });
+
+    options.replaceChildren();
+
+    catalog.forEach(item => {
+      const index = selected.indexOf(item[0]);
+      const row = document.createElement("div");
+      row.className = "gv-hw-option";
+
+      const label = document.createElement("label");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = index !== -1;
+      label.append(checkbox, document.createTextNode(" " + item[1]));
+      row.appendChild(label);
+
+      checkbox.onchange = () => {
+        selected = checkbox.checked
+          ? [...selected,item[0]]
+          : selected.filter(x => x !== item[0]);
+        render();
+      };
+
+      ["↑","↓"].forEach((symbol, direction) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = symbol;
+        button.disabled = index === -1 ||
+          (direction === 0 ? index === 0 : index === selected.length - 1);
+
+        button.onclick = () => {
+          const next = index + (direction === 0 ? -1 : 1);
+          [selected[index],selected[next]] = [selected[next],selected[index]];
+          render();
+        };
+        row.appendChild(button);
+      });
+
+      options.appendChild(row);
+    });
+  }
+
+  open.onclick = () => {
+    selected = [...saved];
+    render();
+    editor.hidden = !editor.hidden;
+  };
+
+  cancel.onclick = () => {
+    selected = [...saved];
+    render();
+    editor.hidden = true;
+  };
+
+  save.onclick = async () => {
+    save.disabled = true;
+    status.textContent = "در حال ذخیره...";
+
+    try {
+      const response = await fetch("/dashboard/api/home-widgets", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({widgets:selected})
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) throw new Error(data.detail || "خطا در ذخیره");
+
+      saved = [...data.widgets];
+      selected = [...saved];
+      render();
+      editor.hidden = true;
+      status.textContent = "تنظیمات ذخیره شد.";
+    } catch (e) {
+      status.textContent = e.message;
+    } finally {
+      save.disabled = false;
+    }
+  };
+
+  async function load() {
+    try {
+      const response = await fetch("/dashboard/api/home-widgets");
+      if (!response.ok) throw new Error("خطا در دریافت تنظیمات");
+      const data = await response.json();
+      selected = data.widgets;
+      saved = [...selected];
+    } catch(e) {
+      console.warn("Dashboard preferences:",e);
+    }
+    render();
+  }
+
+  load();
+})();
+</script>

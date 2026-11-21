@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F7FAF2">
+<title>مدیریت اطلاعات پایه | Green Vita</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+<link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+<link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+<link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+<link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<link rel="stylesheet" href="/static/css/finance.css?v=1">
+<style>
+.gv-md-wrap{display:grid;gap:18px}
+.gv-md-hero{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.gv-md-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.gv-md-tab{border:1px solid var(--bd,#dce5d4);background:var(--card,#fff);color:var(--tx,#203321);border-radius:12px;padding:11px 20px;font:inherit;cursor:pointer}
+.gv-md-tab.active{background:#173e25;color:#fff;border-color:#173e25}
+.gv-md-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.gv-md-search{width:min(100%,340px);padding:11px 13px;border:1px solid var(--bd,#dce5d4);border-radius:11px;background:var(--card,#fff);color:var(--tx,#203321);font:inherit}
+.gv-md-button{border:0;border-radius:10px;padding:10px 16px;background:#17452a;color:#fff;font:inherit;cursor:pointer}
+.gv-md-button.secondary{background:#e9f0e3;color:#23452d}
+.gv-md-button.danger{background:#fff0ed;color:#a33224}
+.gv-md-button:disabled{opacity:.55;cursor:not-allowed}
+.gv-md-table-wrap{overflow-x:auto}
+.gv-md-table{width:100%;border-collapse:collapse;min-width:650px}
+.gv-md-table th,.gv-md-table td{padding:12px 10px;border-bottom:1px solid #e8eee4;text-align:right;vertical-align:middle}
+.gv-md-table th{background:#f4f7f0;color:#38533d;font-weight:700;white-space:nowrap}
+.gv-md-actions{display:flex;gap:6px;flex-wrap:wrap}
+.gv-md-actions button{padding:7px 10px;font-size:12px}
+.gv-md-status{display:inline-block;padding:4px 9px;border-radius:20px;background:#e6f3e7;color:#28623a;font-size:12px;white-space:nowrap}
+.gv-md-status.off{background:#f2eeee;color:#796767}
+.gv-md-form{display:none;background:#f7faf4;border:1px solid #e1e9dc;border-radius:14px;padding:18px;margin-bottom:18px}
+.gv-md-form.open{display:block}
+.gv-md-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+.gv-md-fields label{display:grid;gap:6px;font-size:13px;color:#465b48}
+.gv-md-fields input,.gv-md-fields select,.gv-md-fields textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #d7e1d3;border-radius:9px;background:#fff;color:#1f3524;font:inherit}
+.gv-md-fields textarea{min-height:72px;resize:vertical}
+.gv-md-form-actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.gv-md-note{color:#6b7768;font-size:13px;line-height:1.9}
+.gv-md-message{min-height:24px;font-size:13px;color:#355b3c}
+.gv-md-empty{text-align:center!important;color:#788475;padding:28px!important}
+@media(max-width:600px){.gv-md-tab{flex:1;padding:10px 8px}.gv-md-toolbar{align-items:stretch}.gv-md-search{width:100%}}
+</style>
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+
+<main class="container gv-command-main gv-finance-main">
+  <header class="gv-finance-hero gv-md-hero">
+    <div>
+      <span class="gv-finance-eyebrow">GREEN VITA · MASTER DATA</span>
+      <h1>مدیریت اطلاعات پایه</h1>
+      <p>مدیریت یکپارچه کالاها، مشتریان و انبارها</p>
+    </div>
+    <a class="gv-finance-primary" href="/finance/">بازگشت به مدیریت مالی</a>
+  </header>
+
+  <nav class="gv-accounting-nav">
+    <a href="/finance/">نمای کلی مالی</a>
+    <a href="/finance/inventory/">موجودی و کاردکس</a>
+    <a href="/finance/purchases/">فاکتورهای خرید</a>
+    <a href="/finance/sales-returns/">برگشت از فروش</a>
+    <a class="active" href="/finance/master-data/">اطلاعات پایه</a>
+  </nav>
+
+  <section class="gv-finance-section gv-md-wrap">
+    <div class="gv-finance-section-title">
+      <h2>دفتر اطلاعات پایه</h2>
+      <span>تغییرات این بخش در فرم‌های مرتبط استفاده می‌شوند.</span>
+    </div>
+
+    <div class="gv-md-tabs" role="tablist">
+      <button class="gv-md-tab active" type="button" data-tab="products">📦 کالاها</button>
+      <button class="gv-md-tab" type="button" data-tab="warehouses">🏬 انبارها</button>
+      <button class="gv-md-tab" type="button" data-tab="customers">👥 مشتریان</button>
+    </div>
+
+    <section class="gv-accounting-panel">
+      <div class="gv-md-toolbar">
+        <input id="gv-md-search" class="gv-md-search" type="search" placeholder="جست‌وجو در فهرست..." autocomplete="off">
+        <button id="gv-md-add" class="gv-md-button" type="button">＋ افزودن مورد جدید</button>
+      </div>
+
+      <div id="gv-md-form" class="gv-md-form">
+        <h3 id="gv-md-form-title">افزودن مورد جدید</h3>
+        <form id="gv-md-editor">
+          <div id="gv-md-fields" class="gv-md-fields"></div>
+          <div class="gv-md-form-actions">
+            <button id="gv-md-save" class="gv-md-button" type="submit">ذخیره</button>
+            <button id="gv-md-cancel" class="gv-md-button secondary" type="button">انصراف</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="gv-md-table-wrap">
+        <table class="gv-md-table">
+          <thead id="gv-md-head"></thead>
+          <tbody id="gv-md-body">
+            <tr><td class="gv-md-empty">در حال دریافت اطلاعات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p id="gv-md-message" class="gv-md-message" role="status"></p>
+      <p class="gv-md-note">
+        رکوردهای دارای سابقه فاکتور یا گردش انبار حذف فیزیکی نمی‌شوند و به‌صورت غیرفعال نگهداری خواهند شد.
+        کد داخلی انبارها ثابت است تا ارتباط گردش‌های قبلی حفظ شود.
+      </p>
+    </section>
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = selector => document.querySelector(selector);
+  const state = {
+    tab: 'products',
+    data: {products: [], customers: [], warehouses: []},
+    editing: null,
+    counter: 0
+  };
+
+  const api = {
+    products: '/finance/api/master-data/p',
+    customers: '/finance/api/master-data/c',
+    warehouses: '/finance/api/warehouses'
+  };
+
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  })[ch]);
+
+  const newId = () => Date.now() * 100 + (state.counter++ % 100);
+
+  function say(message, error=false) {
+    const el = $('#gv-md-message');
+    el.textContent = message || '';
+    el.style.color = error ? '#a33224' : '#355b3c';
+  }
+
+  async function request(url, options={}) {
+    const response = await fetch(url, {
+      credentials: 'same-origin',
+      cache: 'no-store',
+      ...options,
+      headers: {
+        ...(options.body ? {'Content-Type':'application/json'} : {}),
+        ...(options.headers || {})
+      }
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        location.href = '/login';
+      }
+      throw new Error(result.detail || 'ارتباط با سرور ناموفق بود.');
+    }
+    return result;
+  }
+
+  async function loadAll() {
+    say('در حال دریافت اطلاعات...');
+    const [master, warehouses] = await Promise.all([
+      request('/finance/api/master-data'),
+      request('/finance/api/warehouses')
+    ]);
+    state.data.products = master.products || [];
+    state.data.customers = master.customers || [];
+    state.data.warehouses = warehouses.warehouses || [];
+    render();
+    say('اطلاعات با موفقیت دریافت شد.');
+  }
+
+  function currentRows() {
+    return state.data[state.tab] || [];
+  }
+
+  function render() {
+    document.querySelectorAll('[data-tab]').forEach(button => {
+      button.classList.toggle('active', button.dataset.tab === state.tab);
+      button.setAttribute('aria-selected', String(button.dataset.tab === state.tab));
+    });
+
+    const search = $('#gv-md-search').value.trim().toLocaleLowerCase();
+    const rows = currentRows().filter(item =>
+      JSON.stringify(item).toLocaleLowerCase().includes(search)
+    );
+
+    const headers = {
+      products: ['نام کالا/خدمت', 'واحد', 'نوع', 'قیمت واحد', 'حداقل موجودی', 'وضعیت', 'عملیات'],
+      customers: ['نام مشتری', 'تلفن', 'آدرس', 'اتصال حساب کاربری', 'وضعیت', 'عملیات'],
+      warehouses: ['نام انبار', 'کد ثابت', 'وضعیت', 'عملیات']
+    };
+
+    $('#gv-md-head').innerHTML =
+      '<tr>' + headers[state.tab].map(x => `<th>${x}</th>`).join('') + '</tr>';
+
+    if (!rows.length) {
+      $('#gv-md-body').innerHTML =
+        `<tr><td class="gv-md-empty" colspan="${headers[state.tab].length}">موردی برای نمایش وجود ندارد.</td></tr>`;
+      return;
+    }
+
+    $('#gv-md-body').innerHTML = rows.map(item => {
+      const status = item.is_active
+        ? '<span class="gv-md-status">فعال</span>'
+        : '<span class="gv-md-status off">غیرفعال</span>';
+
+      const actions = `
+        <div class="gv-md-actions">
+          <button type="button" class="gv-md-button secondary" data-edit="${esc(item.id ?? item.code)}">ویرایش</button>
+          <button type="button" class="gv-md-button secondary" data-toggle="${esc(item.id ?? item.code)}">${item.is_active ? 'غیرفعال‌سازی' : 'فعال‌سازی'}</button>
+          <button type="button" class="gv-md-button danger" data-delete="${esc(item.id ?? item.code)}">حذف</button>
+        </div>`;
+
+      let cells = '';
+      if (state.tab === 'products') {
+        cells = `
+          <td>${esc(item.name)}</td>
+          <td>${esc(item.unit || '—')}</td>
+          <td>${item.track_inventory ? 'کالای انباردار' : 'خدمت / بدون انبار'}</td>
+          <td>${esc(item.price || '۰')}</td>
+          <td>${esc(item.min_stock || '۰')}</td>
+          <td>${status}</td>
+          <td>${actions}</td>`;
+      } else if (state.tab === 'customers') {
+        cells = `
+          <td>${esc(item.name)}</td>
+          <td>${esc(item.phone || '—')}</td>
+          <td>${esc(item.addr || '—')}</td>
+          <td>${item.web_account_linked ? 'متصل' : '—'}</td>
+          <td>${status}</td>
+          <td>${actions}</td>`;
+      } else {
+        const core = item.code === 'main' || item.code === 'quarantine';
+        cells = `
+          <td>${esc(item.name)}</td>
+          <td><code>${esc(item.code)}</code></td>
+          <td>${status}</td>
+          <td>
+            <div class="gv-md-actions">
+              <button type="button" class="gv-md-button secondary" data-edit="${esc(item.code)}">ویرایش نام</button>
+              ${core
+                ? '<span class="gv-md-note">انبار سیستمی</span>'
+                : `<button type="button" class="gv-md-button secondary" data-toggle="${esc(item.code)}">${item.is_active ? 'غیرفعال‌سازی' : 'فعال‌سازی'}</button>
+                   <button type="button" class="gv-md-button danger" data-delete="${esc(item.code)}">حذف</button>`}
+            </div>
+          </td>`;
+      }
+      return `<tr>${cells}</tr>`;
+    }).join('');
+
+    $('#gv-md-body').querySelectorAll('[data-edit]').forEach(button => {
+      button.addEventListener('click', () => editRecord(button.dataset.edit));
+    });
+    $('#gv-md-body').querySelectorAll('[data-toggle]').forEach(button => {
+      button.addEventListener('click', () => toggleRecord(button.dataset.toggle));
+    });
+    $('#gv-md-body').querySelectorAll('[data-delete]').forEach(button => {
+      button.addEventListener('click', () => deleteRecord(button.dataset.delete));
+    });
+  }
+
+  function field(name, label, value='', type='text', extra='') {
+    return `<label>${label}<input name="${name}" type="${type}" value="${esc(value)}" ${extra}></label>`;
+  }
+
+  function openEditor(record=null) {
+    state.editing = record ? (record.id ?? record.code) : null;
+    const editing = record !== null;
+    $('#gv-md-form-title').textContent = editing ? 'ویرایش اطلاعات' : 'افزودن مورد جدید';
+
+    let fields = '';
+    if (state.tab === 'products') {
+      fields = field('name','نام کالا/خدمت',record?.name || '', 'text','maxlength="200" required') +
+        field('unit','واحد',record?.unit || '', 'text','maxlength="40"') +
+        field('price','بهای واحد (ریال)',record?.price || '0','text') +
+        field('min_stock','حداقل موجودی',record?.min_stock || '0','text') +
+        `<label>نوع مورد<select name="track_inventory">
+          <option value="false" ${record?.track_inventory ? '' : 'selected'}>خدمت / بدون انبار</option>
+          <option value="true" ${record?.track_inventory ? 'selected' : ''}>کالای انباردار</option>
+        </select></label>`;
+    } else if (state.tab === 'customers') {
+      fields = field('name','نام مشتری',record?.name || '', 'text','maxlength="200" required') +
+        field('phone','تلفن/موبایل',record?.phone || '', 'tel','maxlength="40"') +
+        `<label>آدرس<textarea name="addr" maxlength="1000">${esc(record?.addr || '')}</textarea></label>`;
+    } else {
+      fields = field('name','نام انبار',record?.name || '', 'text','maxlength="100" required');
+      if (editing) {
+        fields += `<label>کد ثابت<input value="${esc(record.code)}" disabled></label>`;
+      }
+    }
+
+    $('#gv-md-fields').innerHTML = fields;
+    $('#gv-md-form').classList.add('open');
+    $('#gv-md-fields [name="name"]')?.focus();
+    $('#gv-md-form').scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  function editRecord(id) {
+    const record = currentRows().find(item =>
+      String(item.id ?? item.code) === String(id)
+    );
+    if (!record) return say('رکورد پیدا نشد.', true);
+    openEditor(record);
+  }
+
+  async function saveRecord(event) {
+    event.preventDefault();
+    const button = $('#gv-md-save');
+    if (button.disabled) return;
+    button.disabled = true;
+    say('');
+
+    const form = new FormData($('#gv-md-editor'));
+    const values = Object.fromEntries(form.entries());
+    values.name = String(values.name || '').trim();
+
+    if (!values.name) {
+      button.disabled = false;
+      return say('نام را وارد کنید.', true);
+    }
+
+    try {
+      if (state.tab === 'warehouses') {
+        const url = state.editing
+          ? `${api.warehouses}/${encodeURIComponent(state.editing)}`
+          : api.warehouses;
+        await request(url, {
+          method: state.editing ? 'PATCH' : 'POST',
+          body: JSON.stringify({name: values.name})
+        });
+      } else {
+        const kind = state.tab === 'customers' ? 'c' : 'p';
+        const payload = state.tab === 'customers'
+          ? {name:values.name, phone:values.phone || '', addr:values.addr || ''}
+          : {
+              name:values.name,
+              unit:values.unit || '',
+              price:values.price || '0',
+              min_stock:values.min_stock || '0',
+              track_inventory:values.track_inventory === 'true'
+            };
+
+        const url = state.editing
+          ? `${api[state.tab]}/${state.editing}`
+          : api[state.tab];
+
+        if (!state.editing) payload.id = newId();
+
+        await request(url, {
+          method: state.editing ? 'PATCH' : 'POST',
+          body: JSON.stringify(payload)
+        });
+      }
+
+      $('#gv-md-form').classList.remove('open');
+      state.editing = null;
+      await loadAll();
+      say('اطلاعات با موفقیت ذخیره شد.');
+    } catch (error) {
+      say(error.message, true);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  async function toggleRecord(id) {
+    const record = currentRows().find(item =>
+      String(item.id ?? item.code) === String(id)
+    );
+    if (!record) return;
+
+    const next = !record.is_active;
+    const label = next ? 'فعال' : 'غیرفعال';
+    if (!confirm(`وضعیت این مورد به «${label}» تغییر کند؟`)) return;
+
+    try {
+      if (state.tab === 'warehouses') {
+        const activeCount = state.data.warehouses.filter(x => x.is_active).length;
+        if (!next && record.is_active && activeCount <= 1) {
+          throw new Error('حداقل یک انبار باید فعال باقی بماند.');
+        }
+        await request(`${api.warehouses}/${encodeURIComponent(id)}`, {
+          method:'PATCH',
+          body:JSON.stringify({is_active:next})
+        });
+      } else {
+        const kind = state.tab === 'customers' ? 'c' : 'p';
+        await request(`${api[state.tab]}/${id}`, {
+          method:'PATCH',
+          body:JSON.stringify({is_active:next})
+        });
+      }
+      await loadAll();
+      say('وضعیت با موفقیت تغییر کرد.');
+    } catch (error) {
+      say(error.message, true);
+    }
+  }
+
+  async function deleteRecord(id) {
+    const item = currentRows().find(x => String(x.id ?? x.code) === String(id));
+    if (!item) return;
+
+    if (!confirm(`«${item.name}» حذف شود؟ در صورت داشتن سابقه، سیستم آن را غیرفعال می‌کند.`)) return;
+
+    try {
+      const url = state.tab === 'warehouses'
+        ? `${api.warehouses}/${encodeURIComponent(id)}`
+        : `${api[state.tab]}/${id}`;
+
+      const result = await request(url, {method:'DELETE'});
+      await loadAll();
+
+      if (result.deactivated) {
+        say('این مورد سابقه دارد؛ به‌جای حذف، غیرفعال شد.');
+      } else {
+        say('عملیات حذف با موفقیت انجام شد.');
+      }
+    } catch (error) {
+      say(error.message, true);
+    }
+  }
+
+  document.querySelectorAll('[data-tab]').forEach(button => {
+    button.addEventListener('click', () => {
+      state.tab = button.dataset.tab;
+      state.editing = null;
+      $('#gv-md-form').classList.remove('open');
+      $('#gv-md-search').value = '';
+      render();
+      say('');
+    });
+  });
+
+  $('#gv-md-add').addEventListener('click', () => openEditor());
+  $('#gv-md-cancel').addEventListener('click', () => {
+    $('#gv-md-form').classList.remove('open');
+    state.editing = null;
+  });
+  $('#gv-md-editor').addEventListener('submit', saveRecord);
+  $('#gv-md-search').addEventListener('input', render);
+
+  loadAll().catch(error => say(error.message, true));
+})();
+</script>
+</body>
+</html>

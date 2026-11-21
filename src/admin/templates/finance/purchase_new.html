@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ثبت فاکتور خرید | Green Vita</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+<link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+<link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+<link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+<link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<link rel="stylesheet" href="/static/css/finance.css?v=1">
+<link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+<header class="gv-accounting-hero">
+<div>
+<span class="gv-finance-eyebrow">GREEN VITA · PURCHASE ENTRY</span>
+<h1>ثبت فاکتور خرید</h1>
+<p>ثبت خرید کالا و افزایش موجودی انبار پس از تأیید</p>
+</div>
+</header>
+<nav class="gv-accounting-nav">
+<a href="/finance/inventory/">انبار</a>
+<a class="active" href="/finance/purchases/">فاکتورهای خرید</a>
+<a href="/finance/sales-returns/">برگشت از فروش</a>
+<a href="/finance/">مدیریت مالی</a>
+</nav>
+<section class="gv-accounting-panel">
+<div class="gv-accounting-form-top">
+<label>تاریخ خرید<input id="gv-date" type="text" data-gv-jalali-date required></label>
+<label>نام تأمین‌کننده<input id="gv-supplier" type="text" maxlength="200" placeholder="نام تأمین‌کننده" required></label>
+<label class="gv-accounting-description">شرح خرید<input id="gv-description" maxlength="2000" placeholder="توضیحات اختیاری"></label>
+</div>
+<div class="gv-accounting-section-heading">
+<h2>اقلام خرید</h2>
+<button type="button" id="gv-add-row" class="gv-accounting-button secondary">افزودن کالا</button>
+</div>
+<div class="gv-accounting-table-wrap">
+<table class="gv-accounting-table gv-journal-table">
+<thead><tr><th>کالا</th><th>مقدار</th><th>واحد</th><th>انبار</th><th>بهای خرید واحد (ریال)</th><th>مبلغ کل (ریال)</th><th></th></tr></thead>
+<tbody id="gv-lines"></tbody>
+<tfoot><tr><th colspan="5">جمع فاکتور</th><th id="gv-total">۰</th><th></th></tr></tfoot>
+</table>
+</div>
+<div class="gv-accounting-actions">
+<button type="button" id="gv-submit" class="gv-accounting-button">ثبت قطعی خرید و ورود به انبار</button>
+<a href="/finance/purchases/" class="gv-accounting-cancel">انصراف</a>
+</div>
+<p id="gv-message" class="gv-accounting-message" role="status"></p>
+</section>
+<p class="gv-finance-note">ثبت این فاکتور قطعی است و گردش ورود موجودی ایجاد می‌کند. برای اصلاح، باید سند اصلاحی یا برگشت خرید طراحی و ثبت شود.</p>
+</main>
+<script>
+(() => {
+const $=s=>document.querySelector(s);
+const body=$('#gv-lines');
+const message=$('#gv-message');
+const submit=$('#gv-submit');
+let products=[];
+let warehouses=[];
+
+const localDate=()=>{
+const d=new Date();
+return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+};
+$('#gv-date').value=localDate();
+
+const number=v=>{
+const n=Number(String(v||'').replace(/[,\s٬،]/g,''));
+return Number.isFinite(n)&&n>0?n:0;
+};
+const format=n=>new Intl.NumberFormat('fa-IR').format(Math.round(n||0));
+
+function update(){
+let total=0;
+body.querySelectorAll('tr').forEach(row=>{
+const qty=number(row.querySelector('.gv-qty').value);
+const price=number(row.querySelector('.gv-price').value);
+const line=qty*price;
+row.querySelector('.gv-line-total').textContent=format(line);
+total+=line;
+});
+$('#gv-total').textContent=format(total);
+}
+
+function addRow(){
+const row=document.createElement('tr');
+row.innerHTML=`
+<td><select class="gv-product"><option value="">انتخاب کالا</option></select></td>
+<td><input class="gv-qty" type="number" min="0.001" step="0.001" value="1"></td>
+<td class="gv-unit">—</td>
+<td>
+  <select class="gv-warehouse" aria-label="انبار این ردیف"></select>
+</td>
+<td><input class="gv-price" type="number" min="0" step="1" placeholder="بهای واحد"></td>
+<td class="gv-line-total">۰</td>
+<td><button type="button" class="gv-accounting-remove" title="حذف ردیف">×</button></td>`;
+const select=row.querySelector('.gv-product');
+const warehouseSelect=row.querySelector('.gv-warehouse');
+const hasMain=warehouses.some(item=>String(item.code)==='main');
+
+if(warehouses.length){
+warehouses.forEach((warehouse,index)=>{
+const option=document.createElement('option');
+option.value=String(warehouse.code);
+option.textContent=warehouse.name;
+if(String(warehouse.code)==='main'||(!hasMain&&index===0)) option.selected=true;
+warehouseSelect.appendChild(option);
+});
+}else{
+const option=document.createElement('option');
+option.value='';
+option.textContent='انبار فعالی تعریف نشده است';
+option.disabled=true;
+option.selected=true;
+warehouseSelect.appendChild(option);
+}
+
+products.forEach(product=>{
+const option=document.createElement('option');
+option.value=product.id;
+option.textContent=product.name;
+select.appendChild(option);
+});
+
+select.addEventListener('change',()=>{
+const p=products.find(x=>String(x.id)===select.value);
+row.querySelector('.gv-unit').textContent=p?.unit||'—';
+update();
+});
+row.querySelector('.gv-qty').addEventListener('input',update);
+row.querySelector('.gv-price').addEventListener('input',update);
+row.querySelector('button').addEventListener('click',()=>{
+if(body.children.length>1){row.remove();update();}
+else message.textContent='فاکتور باید حداقل یک ردیف داشته باشد.';
+});
+body.appendChild(row);
+}
+
+async function init(){
+const response=await fetch('/finance/api/products',{credentials:'same-origin'});
+const result=await response.json();
+if(!response.ok)throw new Error(result.detail||'دریافت محصولات ناموفق بود.');
+if(!Array.isArray(result.products)||!Array.isArray(result.warehouses)){
+throw new Error('ساختار فهرست کالاها یا انبارها نامعتبر است.');
+}
+products=result.products;
+warehouses=result.warehouses;
+if(!products.length)throw new Error('هنوز کالای انبارداری تعریف نشده است. ابتدا نوع کالا را در دفتر محصولات فعال کن.');
+if(!warehouses.length)throw new Error('هیچ انبار فعالی برای ثبت خرید وجود ندارد.');
+addRow();
+}
+init().catch(e=>{message.textContent=e.message;message.className='gv-accounting-message error';});
+
+$('#gv-add-row').addEventListener('click',addRow);
+
+submit.addEventListener('click',async()=>{
+message.textContent='';
+const supplier=$('#gv-supplier').value.trim();
+const rows=[...body.querySelectorAll('tr')];
+if(!supplier){message.textContent='نام تأمین‌کننده را وارد کن.';return;}
+if(!window.gvGetISODate($('#gv-date'))){message.textContent='تاریخ خرید را انتخاب کن.';return;}
+
+const lines=rows.map(row=>({
+product_id:Number(row.querySelector('.gv-product').value),
+quantity:row.querySelector('.gv-qty').value,
+unit_price:row.querySelector('.gv-price').value,
+warehouse:row.querySelector('.gv-warehouse').value
+}));
+
+if(lines.some(x=>!x.product_id||number(x.quantity)<=0||!rowPriceValid(x.unit_price))){
+message.textContent='کالا، تعداد و قیمت خرید همه ردیف‌ها را بررسی کن.';
+return;
+}
+
+submit.disabled=true;
+submit.textContent='در حال ثبت خرید...';
+try{
+const response=await fetch('/finance/api/purchases',{
+method:'POST',
+credentials:'same-origin',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+document_date:window.gvGetISODate($('#gv-date')),
+supplier_name:supplier,
+description:$('#gv-description').value.trim(),
+lines
+})
+});
+const result=await response.json().catch(()=>({}));
+if(!response.ok)throw new Error(result.detail||'ثبت فاکتور خرید ناموفق بود.');
+message.textContent=result.message+' شماره سند: '+result.document.document_no;
+message.className='gv-accounting-message success';
+window.location.href='/finance/purchases/';
+}catch(error){
+message.textContent=error.message;
+message.className='gv-accounting-message error';
+submit.disabled=false;
+submit.textContent='ثبت قطعی خرید و ورود به انبار';
+}
+});
+
+function rowPriceValid(v){
+const n=Number(String(v||'').replace(/[,\s٬،]/g,''));
+return Number.isFinite(n)&&n>=0;
+}
+})();
+</script>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

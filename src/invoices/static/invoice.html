@@ -1,0 +1,3067 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>صدور فاکتور – گرین ویتا</title>
+<style>
+@font-face{font-family:"GV Broela";src:url("/static/fonts/Broela.otf?v=20261006") format("opentype");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Vazir";src:url("/static/fonts/Vazir-Regular.woff2?v=global-1") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Vazir";src:url("/static/fonts/Vazir-Medium.woff2?v=global-1") format("woff2");font-style:normal;font-weight:500;font-display:swap}
+@font-face{font-family:"Vazir";src:url("/static/fonts/Vazir-Bold.woff2?v=global-1") format("woff2");font-style:normal;font-weight:700;font-display:swap}
+@font-face{font-family:"Vazir";src:url("/static/fonts/Vazir-Black.woff2?v=global-1") format("woff2");font-style:normal;font-weight:900;font-display:swap}
+
+:root{--bg:#f4f7f5;--card:#fff;--tx:#1b2a21;--mut:#6b7a71;--g:#0a9a3c;--bd:#cfd8d2;--red:#c0392b;--in:#f9fbfa;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111815;--card:#1a2420;--tx:#e8f0ea;--mut:#92a398;--bd:#34443b;--g:#33c46a;--red:#ef6a5b;--in:#212d27}}
+:root[data-theme=dark]{--bg:#111815;--card:#1a2420;--tx:#e8f0ea;--mut:#92a398;--bd:#34443b;--g:#33c46a;--red:#ef6a5b;--in:#212d27}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.7 "Vazir",Tahoma,sans-serif;padding:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:8px;padding:6px 14px}
+button.p{background:var(--g);border-color:var(--g);color:#fff}button.d{color:var(--red);border-color:var(--red)}button.on{background:var(--g);color:#fff;border-color:var(--g)}
+input,textarea{font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--bd);border-radius:6px;padding:4px 8px;width:100%}
+.sec{display:none}.sec.on{display:block}
+.bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.sheet{background:var(--card);border:2px solid var(--tx);border-radius:4px;max-width:1000px;margin:auto;position:relative}
+.sheet fieldset{border:0;margin:0;padding:0;min-width:0}
+.hd{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 116px minmax(0,1fr);gap:10px;padding:14px;border-bottom:2px solid var(--tx);align-items:center}
+.hd h2{margin:0;color:var(--g);font-size:22px}.hd label{display:flex;gap:6px;align-items:center;margin:4px 0;white-space:nowrap}
+.hd label b{min-width:70px}.hd > div:first-child{grid-column:1;min-width:0}.hd > div:last-child{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:26%;min-width:0}.hd > div:last-child label{direction:ltr;display:grid;grid-template-columns:minmax(0,1fr) 96px;column-gap:6px;align-items:center;width:100%;min-width:0}.hd > div:last-child label b{grid-column:2;grid-row:1;direction:rtl;text-align:right;white-space:nowrap}.hd > div:last-child label input{grid-column:1;grid-row:1;direction:rtl;text-align:right}.hd > div:last-child input{width:100%;min-width:0}.hd > div:last-child input#no{width:50%;justify-self:end}.hd > div:last-child input#dt{width:60%;justify-self:start}.logo{position:static;grid-column:2;grid-row:1;width:116px;justify-self:center;text-align:center;color:var(--g);font-weight:400;letter-spacing:0;font-family:"GV Broela",sans-serif;font-size:20px}.logo img{display:block;width:56px;height:70px;object-fit:contain;margin:0 auto 2px}
+.mid{padding:14px;border-bottom:2px solid var(--tx);overflow-x:auto}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--tx);padding:3px;text-align:center}th{background:var(--in);font-size:13px}
+td input{border:0;background:transparent;text-align:center;border-radius:0}
+.tot{width:min(560px,100%);margin:14px auto 0}.tot th{width:35%}.tot td{text-align:start;padding:3px 8px}
+.ft{padding:14px;min-height:190px;position:relative}.sig{display:flex;justify-content:space-around;margin-top:60px;font-weight:700}
+.url{color:var(--g);font:700 20px Georgia,serif;direction:ltr;text-align:left;margin-top:14px}
+.stamp{position:absolute;inset:40% 0 auto;text-align:center;font-size:60px;color:var(--red);opacity:.35;transform:rotate(-12deg);pointer-events:none;display:none}
+.void .stamp{display:block}
+.badge{padding:1px 10px;border-radius:99px;font-size:12px;border:1px solid var(--bd)}.b-final{color:var(--g);border-color:var(--g)}.b-void{color:var(--red);border-color:var(--red)}
+.tw{overflow-x:auto}.tw table td,.tw table th{padding:4px 8px}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--g);color:#fff;padding:8px 18px;border-radius:8px;display:none;z-index:9}
+.note{color:var(--mut);font-size:12px}
+@media(max-width:700px){.hd{display:flex;flex-direction:column;align-items:stretch}.hd > div:first-child{width:100%;padding:0}.hd > div:last-child{position:static;left:auto;top:auto;transform:none;width:100%;padding:0}.hd .logo{position:static;left:auto;top:auto;transform:none;margin:8px auto}}
+@media print{:root{--bg:#fff;--card:#fff;--tx:#000;--g:#0a9a3c;--in:#fff}body{padding:0;background:#fff}.no-print,.tabs{display:none!important}
+.sec{display:none!important}#s-inv{display:block!important}.sheet{border:2px solid #000;max-width:none}input,textarea{border:0!important;background:transparent!important;resize:none}.addrow,.delrow{display:none}}
+
+/* GV INVOICE HEADER LAYOUT FINAL V1 */
+.hd {
+  direction: ltr !important;
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(0,1fr) 116px minmax(0,1fr) !important;
+  align-items: center !important;
+}
+.hd > div:first-child {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  direction: rtl !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+.hd > .logo {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  position: static !important;
+  justify-self: center !important;
+  align-self: center !important;
+  width: 116px !important;
+  margin: 0 auto !important;
+  transform: none !important;
+}
+.hd > div:last-child:not(.logo) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  width: 60% !important;
+  min-width: 0 !important;
+  justify-self: start !important;
+  align-self: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  direction: ltr !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+}
+.hd > div:last-child:not(.logo) label {
+  display: flex !important;
+  flex-direction: row !important;
+  direction: ltr !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  gap: 0 !important;
+  column-gap: 0 !important;
+}
+.hd > div:last-child:not(.logo) label b {
+  order: 2 !important;
+  flex: 0 0 96px !important;
+  width: 96px !important;
+  min-width: 96px !important;
+  direction: rtl !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+.hd > div:last-child:not(.logo) label input {
+  order: 1 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  direction: rtl !important;
+  text-align: right !important;
+}
+.hd > div:last-child:not(.logo) input#dt {
+  width: 60% !important;
+  flex: 0 0 60% !important;
+}
+.hd > div:last-child:not(.logo) input#no {
+  width: 50% !important;
+  flex: 0 0 50% !important;
+}
+@media(max-width:700px) {
+  .hd {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    direction: ltr !important;
+  }
+  .hd > div:first-child {
+    order: 1 !important;
+    width: 100% !important;
+    direction: rtl !important;
+  }
+  .hd > .logo {
+    order: 2 !important;
+    position: static !important;
+    align-self: center !important;
+    margin: 8px auto !important;
+  }
+  .hd > div:last-child:not(.logo) {
+    order: 3 !important;
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    align-self: flex-start !important;
+    margin: 8px 0 0 !important;
+  }
+  .hd > div:last-child:not(.logo) label {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+}
+
+
+/* GV INVOICE DATE LABEL FIT FINAL V1 */
+.hd > div:last-child:not(.logo) label:has(#dt) {
+  gap: 0 !important;
+  column-gap: 0 !important;
+}
+.hd > div:last-child:not(.logo) label:has(#dt) b {
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* GV INVOICE NO HALF WIDTH FINAL V1 */
+.hd > div:last-child:not(.logo) label:has(#no) input#no {
+  width: 25% !important;
+  flex: 0 0 25% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+}
+
+
+/* GV INVOICE DATE WIDTH FINAL V1 */
+.hd > div:last-child:not(.logo) label:has(#dt) input#dt {
+  width: 42% !important;
+  flex: 0 0 42% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+
+/* GV INVOICE DATE LABEL RIGHT 20 FINAL V2 */
+.hd > div:last-child:not(.logo) label:has(#dt) b {
+  transform: translateX(20px) !important;
+}
+
+
+
+/* GV INVOICE A4 PRINT LAYOUT V1 */
+@page {
+  size: A4 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  html, body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    direction: rtl !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-size: 10pt !important;
+  }
+
+  .tabs, .no-print, button, .toast, .note {
+    display: none !important;
+  }
+
+  .sec {
+    display: none !important;
+  }
+
+  #s-inv {
+    display: block !important;
+  }
+
+  .sheet {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    border: 1px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* سه ستون سربرگ */
+  .hd {
+    direction: ltr !important;
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 100px minmax(0,1fr) !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    align-items: center !important;
+  }
+
+  .hd > div:first-child {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    transform: none !important;
+    direction: rtl !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .hd > .logo {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    width: 100px !important;
+    justify-self: center !important;
+    align-self: center !important;
+    transform: none !important;
+    margin: 0 auto !important;
+  }
+
+  .hd .logo img {
+    width: 42px !important;
+    height: 52px !important;
+    margin: 0 auto 2px !important;
+  }
+
+  .hd > div:last-child:not(.logo) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    direction: ltr !important;
+  }
+
+  /* اطلاعات مشتری */
+  .hd > div:first-child label {
+    direction: ltr !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 82px !important;
+    column-gap: 4px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 3px 0 !important;
+    white-space: normal !important;
+  }
+
+  .hd > div:first-child label b {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    text-align: right !important;
+    direction: rtl !important;
+    font-size: 9pt !important;
+  }
+
+  .hd > div:first-child label input {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 2px 4px !important;
+    text-align: right !important;
+  }
+
+  /* تاریخ و شماره فاکتور */
+  .hd > div:last-child:not(.logo) label {
+    direction: ltr !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 88px !important;
+    column-gap: 4px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 3px 0 !important;
+  }
+
+  .hd > div:last-child:not(.logo) label b {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+
+  .hd > div:last-child:not(.logo) label input {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 2px 4px !important;
+  }
+
+  .hd h2 {
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .hd label,
+  .hd label b,
+  .hd input {
+    font-size: 9pt !important;
+  }
+
+  /* جدول اقلام */
+  .mid {
+    overflow: visible !important;
+    padding: 7px !important;
+  }
+
+  .mid table {
+    width: 100% !important;
+    min-width: 0 !important;
+    table-layout: fixed !important;
+  }
+
+  .mid table th,
+  .mid table td {
+    padding: 2px !important;
+    font-size: 8pt !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .mid table th:nth-child(1) { width: 28px !important; }
+  .mid table th:nth-child(3) { width: 48px !important; }
+  .mid table th:nth-child(4) { width: 48px !important; }
+  .mid table th:nth-child(5) { width: 82px !important; }
+  .mid table th:nth-child(6) { width: 88px !important; }
+
+  .mid table input {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+    font-size: 8pt !important;
+  }
+
+  .tot {
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 8px 0 0 auto !important;
+  }
+
+  .tot th, .tot td {
+    font-size: 9pt !important;
+    padding: 3px 5px !important;
+  }
+
+  .ft {
+    padding: 8px !important;
+    min-height: 130px !important;
+    position: relative !important;
+  }
+
+  .sig {
+    margin-top: 36px !important;
+  }
+
+  .url {
+    font-size: 14pt !important;
+  }
+
+  .hd, .tot, .ft {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .mid table thead {
+    display: table-header-group !important;
+  }
+
+  .mid table tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+
+/* GV INVOICE A4 PRINT REPAIR V2 */
+@media print {
+
+  /* سربرگ: تاریخ و شماره چپ، لوگو وسط، اطلاعات مشتری راست */
+  .hd {
+    direction: ltr !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 104px minmax(0,1fr) !important;
+    grid-template-rows: auto !important;
+    gap: 6px !important;
+    padding: 8px !important;
+    align-items: center !important;
+  }
+
+  .hd > div:first-child {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    direction: rtl !important;
+    justify-self: stretch !important;
+  }
+
+  .hd > .logo {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    width: 104px !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    transform: none !important;
+    justify-self: center !important;
+    align-self: center !important;
+    text-align: center !important;
+  }
+
+  .hd > .logo img {
+    display: block !important;
+    width: 42px !important;
+    height: 52px !important;
+    margin: 0 auto 2px !important;
+    object-fit: contain !important;
+  }
+
+  .hd > div:last-child:not(.logo) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-self: center !important;
+    justify-self: stretch !important;
+    direction: ltr !important;
+  }
+
+  /* فیلدهای اطلاعات مشتری */
+  .hd > div:first-child label {
+    direction: ltr !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) max-content !important;
+    column-gap: 4px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 3px 0 !important;
+    white-space: normal !important;
+  }
+
+  .hd > div:first-child label b {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: max-content !important;
+    min-width: 0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-size: 9pt !important;
+  }
+
+  .hd > div:first-child label input {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 2px 4px !important;
+    text-align: right !important;
+  }
+
+  /* تاریخ و شماره فاکتور */
+  .hd > div:last-child:not(.logo) label {
+    direction: ltr !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) max-content !important;
+    column-gap: 4px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 3px 0 !important;
+  }
+
+  .hd > div:last-child:not(.logo) label b {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: max-content !important;
+    min-width: 0 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+
+  .hd > div:last-child:not(.logo) label input {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 2px 4px !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#dt) input#dt {
+    width: 42% !important;
+    justify-self: start !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#no) input#no {
+    width: 25% !important;
+    justify-self: start !important;
+  }
+
+  .hd h2 {
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .hd label,
+  .hd label b,
+  .hd input {
+    font-size: 9pt !important;
+  }
+
+  /* فقط جدول اقلام؛ جدول جمع از این قوانین مستثناست */
+  .mid {
+    overflow: visible !important;
+    padding: 7px !important;
+  }
+
+  .mid > table:not(.tot) {
+    display: table !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  .mid > table:not(.tot) th,
+  .mid > table:not(.tot) td {
+    padding: 2px !important;
+    font-size: 8pt !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .mid > table:not(.tot) th:nth-child(1) {
+    width: 28px !important;
+  }
+
+  .mid > table:not(.tot) th:nth-child(3),
+  .mid > table:not(.tot) th:nth-child(4) {
+    width: 48px !important;
+  }
+
+  .mid > table:not(.tot) th:nth-child(5) {
+    width: 82px !important;
+  }
+
+  .mid > table:not(.tot) th:nth-child(6) {
+    width: 88px !important;
+  }
+
+  .mid > table:not(.tot) input {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+    font-size: 8pt !important;
+  }
+
+  .mid > table:not(.tot) thead {
+    display: table-header-group !important;
+  }
+
+  .mid > table:not(.tot) tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* جدول جمع کل: دو ستون مستقل و خوانا */
+  .mid > table.tot {
+    display: table !important;
+    width: min(560px,100%) !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    table-layout: auto !important;
+    margin: 8px 0 0 auto !important;
+    border-collapse: collapse !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .mid > table.tot th {
+    width: 35% !important;
+    min-width: 0 !important;
+    padding: 3px 6px !important;
+    font-size: 9pt !important;
+    text-align: right !important;
+    white-space: normal !important;
+  }
+
+  .mid > table.tot th:nth-child(1) {
+    width: 35% !important;
+  }
+
+  .mid > table.tot td {
+    width: 65% !important;
+    padding: 3px 8px !important;
+    font-size: 9pt !important;
+    text-align: right !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .mid > table.tot input#di {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .mid > table.tot input#vt {
+    width: 70px !important;
+    max-width: 70px !important;
+    display: inline-block !important;
+    box-sizing: border-box !important;
+  }
+
+  .ft {
+    padding: 8px !important;
+    min-height: 130px !important;
+    position: relative !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .sig {
+    margin-top: 36px !important;
+  }
+
+  .url {
+    font-size: 14pt !important;
+  }
+}
+
+
+/* GV INVOICE PRINT OVERRIDE FIX V1 */
+@media print {
+  .hd > div:last-child:not(.logo) label:has(#dt) b {
+    transform: none !important;
+  }
+}
+\n
+/* GV PRINT LOGO GREEN VITA ONE LINE V1 */
+@media print {
+  .hd > .logo > div {
+    white-space: nowrap !important;
+    display: block !important;
+    width: max-content !important;
+    max-width: none !important;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+}
+
+
+/* GV PRINT LOGO ONE LINE FIX V2 */
+@media print {
+  .hd {
+    grid-template-columns:
+      minmax(0,1fr) 140px minmax(0,1fr) !important;
+  }
+
+  .hd > .logo {
+    width: 140px !important;
+    min-width: 140px !important;
+    justify-self: center !important;
+  }
+
+  .hd > .logo > div {
+    display: block !important;
+    white-space: nowrap !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+  }
+}
+
+
+/* GV PRINT DATE NUMBER TOUCH BOXES FINAL V1 */
+@media print {
+
+  .hd > div:last-child:not(.logo) {
+    position: absolute !important;
+    left: 8px !important;
+    right: auto !important;
+    top: 8px !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 210px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    direction: ltr !important;
+    z-index: 5 !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#dt),
+  .hd > div:last-child:not(.logo) label:has(#no) {
+    direction: ltr !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 0 !important;
+    column-gap: 0 !important;
+    width: 100% !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#dt) input#dt {
+    order: 1 !important;
+    flex: 0 0 42% !important;
+    width: 42% !important;
+    margin: 0 !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#no) input#no {
+    order: 1 !important;
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    margin: 0 !important;
+  }
+
+  .hd > div:last-child:not(.logo) label:has(#dt) b,
+  .hd > div:last-child:not(.logo) label:has(#no) b {
+    order: 2 !important;
+    flex: 0 0 auto !important;
+    width: max-content !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    transform: none !important;
+  }
+}
+\n
+/* GV PRINT CUSTOMER ADDRESS FULL V1 */
+#gv-ca-print-value {
+  display: none !important;
+}
+
+@media print {
+  .hd > div:first-child label:has(#ca) {
+    align-items: flex-start !important;
+  }
+
+  .hd > div:first-child label:has(#ca) input#ca {
+    display: none !important;
+  }
+
+  #gv-ca-print-value {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 2px 4px !important;
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+    font-weight: 400 !important;
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+}
+
+
+/* GV PRINT LOGO FILL HEADER FINAL V1 */
+@media print {
+  .hd {
+    grid-template-columns:
+      minmax(0,1fr) 160px minmax(0,1fr) !important;
+    min-height: 116px !important;
+    align-items: center !important;
+  }
+
+  .hd > .logo {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 160px !important;
+    min-width: 160px !important;
+    height: 108px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 2px !important;
+    margin: 0 auto !important;
+  }
+
+  .hd > .logo img {
+    width: 66px !important;
+    height: 78px !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+  }
+
+  .hd > .logo > div {
+    display: block !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+}
+\n
+/* GV INVOICE SELLER SIGNATURE V1 */
+@font-face {
+  font-family: "GV Alex Brush";
+  src: url("/static/fonts/AlexBrush-Regular.ttf?v=20261111-alex-brush-v1") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.sig {
+  align-items: flex-end !important;
+}
+
+.gv-seller-signature {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  min-width: 135px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.gv-signature-image {
+  display: block !important;
+  width: 189px !important;
+  height: 107px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  margin: 0 auto 2px !important;
+}
+
+
+
+/* GV INVOICE ROUNDED CORNERS V1 */
+.sheet {
+  border-radius: 14px !important;
+}
+
+table {
+  border-radius: 10px !important;
+}
+
+table tr:first-child > :first-child {
+  border-top-right-radius: 9px !important;
+}
+
+table tr:first-child > :last-child {
+  border-top-left-radius: 9px !important;
+}
+
+table tr:last-child > :first-child {
+  border-bottom-right-radius: 9px !important;
+}
+
+table tr:last-child > :last-child {
+  border-bottom-left-radius: 9px !important;
+}
+
+input,
+textarea {
+  border-radius: 8px;
+}
+
+@media print {
+  .sheet {
+    border-radius: 12px !important;
+  }
+
+  table {
+    border-radius: 9px !important;
+  }
+
+  table tr:first-child > :first-child {
+    border-top-right-radius: 8px !important;
+  }
+
+  table tr:first-child > :last-child {
+    border-top-left-radius: 8px !important;
+  }
+
+  table tr:last-child > :first-child {
+    border-bottom-right-radius: 8px !important;
+  }
+
+  table tr:last-child > :last-child {
+    border-bottom-left-radius: 8px !important;
+  }
+}
+
+
+/* GV INVOICE DATALIST ARROWS ALWAYS VISIBLE V1 */
+input[list]::-webkit-calendar-picker-indicator {
+  opacity: 1 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  cursor: pointer !important;
+}
+
+input[list]::-webkit-list-button {
+  opacity: 1 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  cursor: pointer !important;
+}
+
+
+/* GV REAL DATALIST DROPDOWN BUTTON V1 */
+.gv-datalist-field {
+  display: inline-flex !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 0 !important;
+  vertical-align: middle !important;
+}
+.gv-datalist-field > input[list] {
+  flex: 1 1 auto !important;
+  width: 1% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+.hd > div:first-child label .gv-datalist-field {
+  order: 1 !important;
+}
+.gv-datalist-toggle {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  min-width: 34px !important;
+  max-width: 34px !important;
+  height: 32px !important;
+  align-self: center !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 4px !important;
+  padding: 0 !important;
+  border: 1px solid var(--g) !important;
+  border-radius: 7px !important;
+  background: var(--in) !important;
+  color: var(--g) !important;
+  font: 700 22px/1 Arial, sans-serif !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.gv-datalist-toggle svg {
+  display: block !important;
+  width: 17px !important;
+  height: 17px !important;
+}
+.gv-datalist-popup {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  border: 1px solid var(--bd) !important;
+  border-radius: 10px !important;
+  background: var(--card) !important;
+  color: var(--tx) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.22) !important;
+  direction: rtl !important;
+  text-align: right !important;
+  font: 14px/1.7 "Vazir", Tahoma, sans-serif !important;
+}
+.gv-datalist-popup[hidden] {
+  display: none !important;
+}
+button.gv-datalist-option {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  padding: 7px 12px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--bd) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--tx) !important;
+  text-align: right !important;
+  white-space: normal !important;
+}
+button.gv-datalist-option:last-child {
+  border-bottom: 0 !important;
+}
+button.gv-datalist-option:focus,
+button.gv-datalist-option:hover {
+  background: var(--in) !important;
+  outline: 1px solid var(--g) !important;
+}
+.gv-datalist-option small {
+  color: var(--mut) !important;
+  font-size: 11px !important;
+}
+.gv-datalist-empty {
+  padding: 12px !important;
+  color: var(--mut) !important;
+  text-align: center !important;
+}
+
+
+/* GV DROPDOWN BUTTON HIDE IN PRINT V1 */
+@media print {
+  .gv-datalist-toggle,
+  .gv-datalist-popup {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  input[list]::-webkit-calendar-picker-indicator,
+  input[list]::-webkit-list-button {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+
+/* GV INVOICE WEBSITE URL CENTER V1 */
+.ft > .url {
+  text-align: center !important;
+  direction: ltr !important;
+  width: 100% !important;
+}
+\n
+
+
+/* GV INVOICE TOTALS NATURAL WIDTH FIX V3 */
+table.tot {
+  table-layout: auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+}
+table.tot th {
+  width: max-content !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+table.tot td {
+  width: 255px !important;
+  max-width: calc(100vw - 220px) !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  box-sizing: border-box !important;
+}
+
+/* GV INVOICE TOTALS PRINT WIDTH FIX V1 */
+@media print {
+  table.tot {
+    table-layout: auto !important;
+    width: max-content !important;
+    max-width: 100% !important;
+  }
+
+  table.tot th {
+    width: max-content !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  table.tot td {
+    width: 255px !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    box-sizing: border-box !important;
+  }
+}
+
+
+/* GV INVOICE TOTALS CONTENT WIDTH CENTER V4 */
+table.tot {
+  table-layout: auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin: 14px auto 0 !important;
+}
+
+table.tot th {
+  width: max-content !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+}
+
+table.tot td {
+  width: max-content !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+@media print {
+  table.tot {
+    table-layout: auto !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table.tot th {
+    width: max-content !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  table.tot td {
+    width: max-content !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    overflow-wrap: normal !important;
+  }
+}
+
+
+/* GV INVOICE TOTALS FINAL LAYOUT V5 */
+#s-inv .mid > .gv-totals-center {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  margin: 14px 0 0 !important;
+  box-sizing: border-box !important;
+}
+
+#s-inv .mid > .gv-totals-center > table.tot {
+  display: table !important;
+  table-layout: auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+#s-inv table.tot col.gv-tot-label-col {
+  width: 195.6px !important;
+}
+
+#s-inv table.tot col.gv-tot-value-col {
+  width: auto !important;
+}
+
+#s-inv table.tot tr > th:first-child {
+  width: 195.6px !important;
+  min-width: 195.6px !important;
+  max-width: 195.6px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+}
+
+#s-inv table.tot tr > td:nth-child(2) {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+}
+
+#s-inv table.tot #di {
+  width: 110px !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+  box-sizing: border-box !important;
+}
+
+@media print {
+  #s-inv .mid > .gv-totals-center {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 14px 0 0 !important;
+  }
+
+  #s-inv .mid > .gv-totals-center > table.tot {
+    display: table !important;
+    table-layout: auto !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  #s-inv table.tot col.gv-tot-label-col,
+  #s-inv table.tot tr > th:first-child {
+    width: 195.6px !important;
+    min-width: 195.6px !important;
+    max-width: 195.6px !important;
+  }
+
+  #s-inv table.tot col.gv-tot-value-col {
+    width: auto !important;
+  }
+
+  #s-inv table.tot tr > td:nth-child(2) {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+  }
+
+  #s-inv table.tot #di {
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+  }
+}
+
+
+/* GV VAT CELL OVERFLOW FIX V1 */
+#s-inv .gv-vat-inline {
+  display: flex !important;
+  flex-flow: row wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 4px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+#s-inv .gv-vat-inline #vt {
+  display: inline-block !important;
+  flex: 0 0 70px !important;
+  width: 70px !important;
+  min-width: 70px !important;
+  max-width: 70px !important;
+  box-sizing: border-box !important;
+}
+
+#s-inv .gv-vat-inline .gv-vat-unit,
+#s-inv .gv-vat-inline #vamt {
+  white-space: normal !important;
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+#s-inv .gv-vat-inline #vamt {
+  flex: 1 1 auto !important;
+}
+
+@media print {
+  #s-inv .gv-vat-inline {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+    max-width: 100% !important;
+  }
+}
+
+
+/* GV SIGNATURE IMAGE OVERLAP LABEL V1 */
+.gv-seller-signature .gv-signature-image {
+  position: relative !important;
+  top: 6px !important;
+}
+\n
+/* GV INVOICE NAVIGATION V1 */
+.invoice-nav {
+  max-width: 1000px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  direction: rtl;
+}
+.invoice-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 6px 15px;
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--tx);
+  text-decoration: none;
+  font: 500 13px/1.6 "Vazir", Tahoma, sans-serif;
+  transition: background .2s ease, transform .2s ease;
+}
+.invoice-nav a:hover {
+  transform: translateY(-1px);
+}
+.invoice-nav .gv-invoice-nav-home {
+  background: var(--g);
+  border-color: var(--g);
+  color: #fff;
+}
+.invoice-nav a:focus-visible {
+  outline: 2px solid var(--g);
+  outline-offset: 3px;
+}
+@media(max-width:480px) {
+  .invoice-nav a {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+</style></head><body>
+<nav class="invoice-nav no-print" aria-label="ناوبری فاکتور">
+  <a class="gv-invoice-nav-home" href="/dashboard/">خانه</a>
+  <a class="gv-invoice-nav-back" href="/finance/">بازگشت به مدیریت مالی</a>
+</nav>
+<div class="tabs no-print"><button data-t="list" class="on">فاکتورها</button><button data-t="inv">فاکتور جدید / ویرایش</button><button data-t="c">مشتریان</button><button data-t="p">کالا و خدمات</button></div>
+
+<div class="sec on" id="s-list"><div class="bar"><button class="p" id="new1">+ صدور فاکتور جدید</button><input id="q" placeholder="جستجو (نام مشتری یا شماره)" style="max-width:280px"></div><div class="tw"><table id="tl"></table></div></div>
+
+<div class="sec" id="s-inv">
+<div class="bar no-print"><button id="bNew">صدور (جدید)</button><button id="bDraft">ذخیره</button><button class="p" id="bFinal">ثبت نهایی</button><button id="bSP">ذخیره و چاپ</button><button id="bPrint">چاپ</button><button class="d" id="bVoid">ابطال</button><span id="st" class="badge"></span></div>
+<div class="sheet" id="sheet"><div class="stamp">باطل شده</div><fieldset id="fs">
+<div class="hd"><div><h2>کلینیک گیاه پزشکی گرین ویتا</h2>
+<label><b>صورت حساب:</b><input id="cn" list="dlC" placeholder="نام مشتری (انتخاب یا تایپ)"></label>
+<select id="customerRecordPicker" hidden aria-label="انتخاب دقیق پرونده مشتری"
+  style="width:100%;margin-top:6px;padding:8px;border-radius:10px">
+</select>
+<label><b>تلفن/موبایل:</b><input id="cp" inputmode="tel"></label><label><b>آدرس:</b><input id="ca"></label></div>
+<div class="logo"><img src="/static/greenvita-header-logo-v3.webp?v=20261110-invoice" alt="Green Vita"><div>GREEN VITA</div></div>
+<div><label><b>تاریخ:</b><input id="dt"></label><label><b>شماره فاکتور:</b><input id="no"></label></div></div>
+<div class="mid"><table style="min-width:760px"><thead><tr><th style="width:44px">ردیف</th><th>نام کالا/خدمات</th><th style="width:80px">تعداد</th><th style="width:80px">واحد</th><th style="width:120px">بهای واحد (ریال)</th><th style="width:130px">مبلغ کل (ریال)</th><th>شرح کالا</th><th class="no-print" style="width:105px">انبار</th><th class="no-print delrow" style="width:36px"></th></tr></thead><tbody id="rows"></tbody></table>
+<div class="no-print addrow" style="margin-top:8px"><button id="addR">+ افزودن ردیف</button></div>
+<div class="gv-totals-center"><table class="tot"><colgroup><col class="gv-tot-label-col"><col class="gv-tot-value-col"></colgroup><tr><th>جمع کل فاکتور</th><td id="t1"></td></tr><tr><th>تخفیف (ریال)</th><td><input id="di" inputmode="numeric"></td></tr><tr><th>مالیات بر ارزش افزوده (درصد)</th><td><span class="gv-vat-inline"><input id="vt" inputmode="numeric" style="width:70px"><span class="gv-vat-unit">درصد —</span><span id="vamt"></span></span></td></tr><tr><th>مبلغ قابل پرداخت</th><td id="t2"></td></tr><tr><th>مبلغ قابل پرداخت به حروف</th><td id="tw" style="font-size:13px"></td></tr></table></div></div>
+<div class="ft"><b>توضیحات:</b><textarea id="nt" rows="3"></textarea><div class="sig"><span class="gv-seller-signature"><img class="gv-signature-image" src="/static/images/invoice-seller-signature.png?v=20261112-signature-v1" alt="امضای فروشنده"><span>امضا کارشناس</span></span><span>امضا مشتری</span></div><div class="url">www.Greenvitaclinic.ir</div></div>
+</fieldset></div>
+<p class="note no-print">با ثبت/ذخیره، مشتری یا کالای جدید خودکار به بانک اطلاعات اضافه می‌شود. فاکتور باطل‌شده قابل ویرایش نیست.</p></div>
+
+<div class="sec" id="s-c"></div><div class="sec" id="s-p"></div>
+<datalist id="dlC"></datalist><datalist id="dlP"></datalist><div class="toast" id="ts"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let db={c:[],p:[],w:[],i:[],n:1001},cur;
+const API='/admin/api/invoices';let snap={},busy=Promise.resolve(),_s=0;
+const nid=()=>Date.now()*1000+(_s++%1000);
+const mk=()=>{const s={};['c','p','i'].forEach(k=>db[k].forEach(o=>s[k+'/'+o.id]=JSON.stringify(o)));return s};
+function persist(){
+const task=busy.then(async()=>{
+const now=mk(),ops=[];
+for(const k in now)if(snap[k]!==now[k])ops.push(['PUT',k]);
+for(const k in snap)if(!(k in now))ops.push(['DELETE',k]);
+for(const[m,k]of ops){
+let r;
+try{r=await fetch(API+'/'+k,{method:m,credentials:'same-origin',headers:{'Content-Type':'application/json'},body:m==='PUT'?now[k]:undefined})}
+catch(e){toast('ذخیره روی سرور انجام نشد');return false}
+if(!r.ok){
+  const st=r.status;
+  let detail='';
+  try{
+    const payload=await r.json();
+    detail=String(payload.detail||'');
+  }catch(_){}
+
+  let message;
+  if(st===401){
+    message='نشست منقضی شده؛ دوباره وارد شوید';
+  }else if(st===423){
+    message='فاکتور باطل‌شده قابل تغییر نیست';
+  }else if(st===409 && m==='PUT' && k==='i'){
+    message='شماره فاکتور تکراری است؛ شماره را تغییر دهید';
+  }else{
+    message=detail||'ذخیره روی سرور انجام نشد';
+  }
+
+  toast(message);
+  return false;
+}
+if(m==='PUT')snap[k]=now[k];else delete snap[k]
+}
+return true
+});
+busy=task.catch(()=>{toast('ذخیره روی سرور انجام نشد');return false});
+return busy
+}
+/* GV INVOICE BOOT DIAGNOSTICS V1 */
+async function boot(){
+  try {
+    const r = await fetch(API + '/bootstrap', {
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    if (r.status === 401 || r.status === 403) {
+      location.href = '/login';
+      return;
+    }
+
+    if (!r.ok) {
+      const detail = await r.text().catch(() => '');
+      throw new Error('HTTP ' + r.status + ' — ' + detail.slice(0, 160));
+    }
+
+    let payload;
+    try {
+      payload = await r.json();
+    } catch (e) {
+      throw new Error('پاسخ سرور JSON معتبر نیست: ' + e.message);
+    }
+
+    for (const key of ['c', 'p', 'w', 'i']) {
+      if (!Array.isArray(payload?.[key])) {
+        throw new Error('ساختار اطلاعات دریافتی نامعتبر است؛ بخش ' + key);
+      }
+    }
+
+    db = Object.assign(db, payload);
+    snap = mk();
+
+  } catch (e) {
+    console.error('[GV INVOICE BOOT DIAGNOSTIC]', e);
+    const detail = String(e?.message || e || 'خطای نامشخص').slice(0, 130);
+    toast('خطا در بارگذاری فاکتور: ' + detail);
+  }
+
+  dl();
+  list();
+  window.gvInvoiceReady = true;
+
+  // GV INVOICE URL TAB HANDOFF V1
+  const requestedTab = new URLSearchParams(window.location.search).get('tab');
+  if (requestedTab === 'c' || requestedTab === 'p') {
+    tab(requestedTab);
+  }
+}
+
+window.gvInvoiceReady=false;
+window.gvLoadInvoiceForPdf=(v)=>{
+  load(JSON.parse(JSON.stringify(v)));
+  sync();
+};
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const keepFaInput=el=>{
+  const a=el.selectionStart,b=el.selectionEnd,v=toFaDigits(el.value);
+  if(v!==el.value){
+    el.value=v;
+    try{el.setSelectionRange(a,b)}catch(_){}
+  }
+};
+/* GV INVOICE PERSIAN DIGITS FINAL V1 */
+const toFaDigits=s=>String(s??'')
+  .replace(/[0-9]/g,d=>'۰۱۲۳۴۵۶۷۸۹'[Number(d)])
+  .replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
+const toEnDigits=s=>String(s??'')
+  .replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+  .replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+
+
+/* GV INVOICE NUMERIC FILTER AND MONEY GROUPING V1 */
+
+const digitsOnly = value =>
+  toEnDigits(value)
+    .replace(/[٬,،\s]/g, '')
+    .replace(/[^0-9]/g, '');
+
+const decimalOnly = value => {
+  let v = toEnDigits(value)
+    .replace(/٫/g, '.')
+    .replace(/[٬,،\s]/g, '')
+    .replace(/[^0-9.]/g, '');
+
+  const dot = v.indexOf('.');
+  if (dot >= 0) {
+    v = v.slice(0, dot + 1) +
+        v.slice(dot + 1).replace(/\./g, '');
+  }
+  return v;
+};
+
+const formatMoneyDigits = value => {
+  const v = digitsOnly(value);
+  return toFaDigits(v.replace(/\B(?=(\d{3})+(?!\d))/g, '٬'));
+};
+
+const formatDecimalDigits = value => toFaDigits(decimalOnly(value));
+
+const dateOnly = value =>
+  toEnDigits(value).replace(/[^0-9/.-]/g, '');
+
+const formatDateDigits = value => toFaDigits(dateOnly(value));
+
+function formatFieldValue(value, kind) {
+  if (kind === 'money') return formatMoneyDigits(value);
+  if (kind === 'decimal') return formatDecimalDigits(value);
+  if (kind === 'digits') return toFaDigits(digitsOnly(value));
+  if (kind === 'date') return formatDateDigits(value);
+  return toFaDigits(value);
+}
+
+function fieldKind(el) {
+  if (!el || el.type === 'file') return null;
+
+  const id = el.id || '';
+  const k = el.dataset.k || '';
+  const f = el.dataset.f || '';
+
+  if (id === 'di' || k === 'p' || f === 'price') return 'money';
+  if (id === 'vt' || k === 'q') return 'decimal';
+  if (id === 'cp' || id === 'no' || f === 'phone') return 'digits';
+  if (id === 'dt') return 'date';
+
+  if (
+    ['cn','ca','nt','q'].includes(id) ||
+    k || f
+  ) return 'text';
+
+  return null;
+}
+
+function applyFieldFormat(el, kind) {
+  const old = el.value;
+  const start = el.selectionStart ?? old.length;
+  const end = el.selectionEnd ?? start;
+  const next = formatFieldValue(old, kind);
+
+  if (kind === 'money' || kind === 'digits' || kind === 'decimal') {
+    el.inputMode = kind === 'decimal' ? 'decimal' : 'numeric';
+  }
+
+  if (next !== old) {
+    const nextStart = formatFieldValue(old.slice(0, start), kind).length;
+    const nextEnd = formatFieldValue(old.slice(0, end), kind).length;
+
+    el.value = next;
+    try {
+      el.setSelectionRange(nextStart, nextEnd);
+    } catch (_) {}
+  }
+}
+
+function crudDisplay(k, key, value) {
+  if (key === 'price') return formatMoneyDigits(value);
+  if (key === 'phone') return toFaDigits(digitsOnly(value));
+  if (key === 'min_stock') return formatDecimalDigits(value ?? '0');
+  if (key === 'track_inventory') {
+    return value === true || ['true','1','yes','on'].includes(String(value).toLowerCase())
+      ? 'کالای انباردار'
+      : 'خدمت / بدون انبار';
+  }
+  return toFaDigits(value ?? '');
+}
+
+const num=s=>parseFloat(String(s||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[,٬،\s]/g,''))||0;
+const fa=n=>Math.round(n).toLocaleString('fa-IR');
+const today=()=>new Date().toLocaleDateString('fa-IR-u-ca-persian',{year:'numeric',month:'2-digit',day:'2-digit'});
+function toast(m){const t=$('#ts');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600)}
+function ask(b,fn){if(b._a){b._a=0;b.textContent=b._o;fn();return}b._a=1;b._o=b.textContent;b.textContent='مطمئنید؟';setTimeout(()=>{b._a=0;b.textContent=b._o},3000)}
+function words(n){n=Math.round(n);if(!n)return'صفر';const y=['','یک','دو','سه','چهار','پنج','شش','هفت','هشت','نه'],d=['ده','یازده','دوازده','سیزده','چهارده','پانزده','شانزده','هفده','هجده','نوزده'],t=['','','بیست','سی','چهل','پنجاه','شصت','هفتاد','هشتاد','نود'],h=['','صد','دویست','سیصد','چهارصد','پانصد','ششصد','هفتصد','هشتصد','نهصد'],u=['','هزار','میلیون','میلیارد','تریلیون'];
+const th=x=>{let p=[],a=Math.floor(x/100),b=x%100;if(a)p.push(h[a]);if(b>=10&&b<20)p.push(d[b-10]);else{if(b>=20)p.push(t[Math.floor(b/10)]);if(b%10)p.push(y[b%10])}return p.join(' و ')};
+let r=[],i=0;while(n>0){const c=n%1000;if(c)r.unshift(th(c)+(u[i]?' '+u[i]:''));n=Math.floor(n/1000);i++}return r.join(' و ')}
+const defaultWarehouse=()=>{
+  const warehouses=Array.isArray(db.w)?db.w:[];
+  return (warehouses.find(w=>String(w.code)==='main')||warehouses[0]||{}).code || 'main';
+};
+const blank=()=>({n:'',q:'1',u:'',p:'',d:'',warehouse:defaultWarehouse()});
+
+/* GV INVOICE NEXT NUMBER FROM LATEST DATABASE V1 */
+function invoiceNumberValue(value) {
+  const fa = '۰۱۲۳۴۵۶۷۸۹';
+  const ar = '٠١٢٣٤٥٦٧٨٩';
+
+  const normalized = String(value ?? '').trim().replace(/[۰-۹٠-٩]/g, ch => {
+    const a = fa.indexOf(ch);
+    return String(a >= 0 ? a : ar.indexOf(ch));
+  });
+
+  return /^\d+$/.test(normalized) ? Number(normalized) : 0;
+}
+
+async function prepareNewInvoice() {
+  try {
+    const response = await fetch(API + '/bootstrap', {
+      credentials: 'same-origin',
+      cache: 'no-store'
+    });
+
+    if (response.status === 401 || response.status === 403) {
+      location.href = '/login';
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    const latest = await response.json();
+
+    if (!Array.isArray(latest.i) || !Array.isArray(latest.w)) {
+      throw new Error('ساختار فاکتورها یا فهرست انبارها نامعتبر است');
+    }
+
+    const highestSaved = latest.i.reduce(
+      (max, invoice) => Math.max(max, invoiceNumberValue(invoice.no)),
+      1000
+    );
+
+    const serverNext = Number(latest.n);
+    const nextNumber = Math.max(
+      highestSaved + 1,
+      Number.isSafeInteger(serverNext) && serverNext > 0
+        ? serverNext
+        : 1001
+    );
+
+    db.i = latest.i;
+    db.w = latest.w;
+    db.n = nextNumber;
+
+    load(newInv());
+
+    console.info('[GreenVita] Next invoice number:', nextNumber);
+
+  } catch (error) {
+    console.error('[GreenVita] Invoice number refresh failed:', error);
+    toast('دریافت شماره فاکتور جدید ناموفق بود؛ دوباره تلاش کنید');
+  }
+}
+
+const newInv=()=>({id:nid(),no:String(db.n),date:today(),status:'new',customer_id:null,cust:{name:'',phone:'',addr:''},rows:[blank()],disc:'',vat:'0',notes:''});
+const total=r=>num(r.q)*num(r.p);
+const sums=v=>{const s=v.rows.reduce((a,r)=>a+total(r),0),dc=num(v.disc),va=(s-dc)*num(v.vat)/100;return{s,dc,va,pay:s-dc+va}};
+
+function dl(){
+  $('#dlC').innerHTML=db.c.map(c=>`<option value="${E(toFaDigits(c.name))}">${E(toFaDigits(c.phone))}</option>`).join('');
+  $('#dlP').innerHTML=db.p.map(c=>`<option value="${E(toFaDigits(c.name))}">${E(fa(num(c.price)))}</option>`).join('')
+}
+
+function warehouseOptions(selected){
+  const current=String(selected || 'main');
+  const warehouses=Array.isArray(db.w)?db.w:[];
+  const found=warehouses.some(w=>String(w.code)===current);
+  const options=warehouses.map(w=>
+    `<option value="${E(w.code)}" ${String(w.code)===current?'selected':''}>${E(w.name)}</option>`
+  );
+  if(!found){
+    options.unshift(`<option value="${E(current)}" selected disabled>${E(current)} (انبار غیرفعال یا ناموجود)</option>`);
+  }
+  return options.join('');
+}
+
+function drawRows(){
+  $('#rows').innerHTML=cur.rows.map((r,i)=>`
+    <tr data-i="${i}">
+      <td>${fa(i+1)}</td>
+      <td><input data-k="n" list="dlP" data-original-name="${E(toFaDigits(r.n))}" value="${E(toFaDigits(r.n))}"></td>
+      <td><input data-k="q" value="${E(formatDecimalDigits(r.q))}"></td>
+      <td><input data-k="u" value="${E(toFaDigits(r.u))}"></td>
+      <td><input data-k="p" value="${E(formatMoneyDigits(r.p))}"></td>
+      <td class="rt">${fa(total(r))}</td>
+      <td><input data-k="d" value="${E(toFaDigits(r.d))}"></td>
+      <td class="no-print">
+        <select data-k="warehouse" aria-label="انبار ردیف ${i+1}" style="width:100%;min-width:90px">
+          ${warehouseOptions(r.warehouse)}
+        </select>
+      </td>
+      <td class="no-print delrow">
+        <button class="d" data-del="${i}" title="حذف ردیف">×</button>
+      </td>
+    </tr>`).join('')
+}
+
+function calc(){$$('#rows tr').forEach((tr,i)=>tr.querySelector('.rt').textContent=fa(total(cur.rows[i])));const m=sums(cur);$('#t1').textContent=fa(m.s)+' ریال';$('#vamt').textContent=fa(m.va)+' ریال';$('#t2').textContent=fa(m.pay)+' ریال';$('#tw').textContent=words(m.pay)+' ریال'}
+function load(v){
+  cur=v;
+  $('#cn').value=toFaDigits(v.cust.name);
+  refreshCustomerRecordPicker(v.customer_id);
+  $('#cp').value=toFaDigits(digitsOnly(v.cust.phone));
+  $('#ca').value=toFaDigits(v.cust.addr);
+  $('#dt').value=formatDateDigits(v.date);
+  $('#no').value=toFaDigits(digitsOnly(v.no));
+  $('#di').value=formatMoneyDigits(v.disc);
+  $('#vt').value=formatDecimalDigits(v.vat);
+  $('#nt').value=toFaDigits(v.notes);
+  drawRows();calc();
+
+  const L={new:'جدید (ذخیره نشده)',draft:'ذخیره‌شده',final:'ثبت‌شده',void:'باطل‌شده'};
+  const st=$('#st');st.textContent=L[v.status];st.className='badge b-'+v.status;
+  $('#fs').disabled=v.status==='void';
+  $('#sheet').classList.toggle('void',v.status==='void');
+  tab('inv')
+}
+
+function invoiceCustomerNameKey(value) {
+  return toEnDigits(String(value ?? ''))
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLocaleLowerCase();
+}
+
+function invoiceRecordHasName(record, value) {
+  const key = invoiceCustomerNameKey(value);
+  if (!key) return false;
+
+  const aliases = Array.isArray(record?.legacy_names)
+    ? record.legacy_names
+    : [];
+
+  return [record?.name, ...aliases].some(
+    name => invoiceCustomerNameKey(name) === key
+  );
+}
+
+function refreshCustomerRecordPicker(preferredId) {
+  if (!cur) return null;
+
+  const picker = $('#customerRecordPicker');
+  const customerName = $('#cn').value;
+  const matches = db.c.filter(
+    x => invoiceRecordHasName(x, customerName)
+  );
+
+  picker.replaceChildren();
+
+  if (matches.length === 0) {
+    picker.hidden = true;
+    cur.customer_id = null;
+    return null;
+  }
+
+  if (matches.length === 1) {
+    picker.hidden = true;
+    cur.customer_id = Number(matches[0].id);
+    return matches[0];
+  }
+
+  picker.hidden = false;
+
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = 'پرونده مشتری را دقیق انتخاب کنید';
+  picker.appendChild(placeholder);
+
+  for (const customer of matches) {
+    const option = document.createElement('option');
+    option.value = String(customer.id);
+    option.textContent =
+      customer.name + ' — ' +
+      (customer.phone || 'بدون تلفن') +
+      ' — #' + customer.id;
+    picker.appendChild(option);
+  }
+
+  const selected = matches.find(
+    x => String(x.id) === String(preferredId)
+  );
+
+  picker.value = selected ? String(selected.id) : '';
+  cur.customer_id = selected ? Number(selected.id) : null;
+
+  return selected || null;
+}
+
+function sync(){
+  const customerName = toEnDigits($('#cn').value).trim();
+  const customerKey = invoiceCustomerNameKey(customerName);
+
+  const linkedCustomer = db.c.find(
+    x => String(x.id) === String(cur.customer_id) &&
+         invoiceRecordHasName(x, customerName)
+  );
+
+  let matchingCustomers = db.c.filter(
+    x => invoiceCustomerNameKey(x.name) === customerKey
+  );
+  if (!matchingCustomers.length) {
+    matchingCustomers = db.c.filter(
+      x => invoiceRecordHasName(x, customerName)
+    );
+  }
+
+  if (linkedCustomer) {
+    cur.customer_id = Number(linkedCustomer.id);
+  } else if (matchingCustomers.length === 1) {
+    cur.customer_id = Number(matchingCustomers[0].id);
+  } else {
+    cur.customer_id = null;
+  }
+
+  cur.cust={
+    name:customerName,
+    phone:digitsOnly($('#cp').value),
+    addr:toEnDigits($('#ca').value).trim()
+  };
+
+  cur.date=dateOnly($('#dt').value);
+  cur.no=digitsOnly($('#no').value);
+
+  cur.rows.forEach(r=>{
+    r.n=toEnDigits(r.n);
+    r.q=decimalOnly(r.q);
+    r.u=toEnDigits(r.u);
+    r.p=digitsOnly(r.p);
+    r.d=toEnDigits(r.d);
+    r.warehouse = String(r.warehouse || 'main');
+  });
+
+  cur.disc=digitsOnly($('#di').value);
+  cur.vat=decimalOnly($('#vt').value);
+  cur.notes=toEnDigits($('#nt').value);
+}
+
+function upsert(key,o){
+  let f = null;
+  let nw = 0;
+
+  if (key === 'c') {
+    let matches = db.c.filter(
+      x => invoiceCustomerNameKey(x.name) === invoiceCustomerNameKey(o.name)
+    );
+    if (!matches.length) {
+      matches = db.c.filter(x => invoiceRecordHasName(x, o.name));
+    }
+
+    const preferredId = cur && o === cur.cust
+      ? cur.customer_id
+      : null;
+
+    if (preferredId !== null && preferredId !== undefined) {
+      f = matches.find(x => String(x.id) === String(preferredId)) || null;
+    }
+
+    if (!f && matches.length === 1) {
+      f = matches[0];
+    }
+
+    if (!f && matches.length > 1) {
+      return 0;
+    }
+  } else {
+    f = db[key].find(
+      x => invoiceCustomerNameKey(x.name) === invoiceCustomerNameKey(o.name)
+    ) || db[key].find(x => invoiceRecordHasName(x, o.name));
+  }
+
+  if (!f) {
+    const record = Object.assign({id:nid()}, o);
+    db[key].push(record);
+
+    if (key === 'c' && cur && o === cur.cust) {
+      cur.customer_id = Number(record.id);
+    }
+
+    nw = 1;
+  } else {
+    Object.keys(o).forEach(k => {
+      if (!f[k] && o[k]) f[k] = o[k];
+    });
+  }
+
+  return nw;
+}
+async function save(status){if(cur.status==='void')return false;sync();if(!cur.cust.name){toast('نام مشتری را وارد کنید');$('#cn').focus();return false}
+cur.rows=cur.rows.filter((r,i)=>r.n.trim()||num(r.p)||cur.rows.length===1);if(!cur.rows.some(r=>r.n.trim())){toast('حداقل یک کالا/خدمت وارد کنید');cur.rows=cur.rows.length?cur.rows:[blank()];drawRows();return false}
+const customerKey = invoiceCustomerNameKey(cur.cust.name);
+
+let matchingCustomers = db.c.filter(
+  x => invoiceCustomerNameKey(x.name) === customerKey
+);
+
+let selectedCustomer = matchingCustomers.find(
+  x => String(x.id) === String(cur.customer_id)
+);
+
+if (matchingCustomers.length > 1 && !selectedCustomer) {
+  refreshCustomerRecordPicker(cur.customer_id);
+  toast('نام مشتری تکراری است؛ ابتدا پرونده دقیق را انتخاب کنید');
+  $('#customerRecordPicker').focus();
+  return false;
+}
+
+const msgs=[];
+if(upsert('c',cur.cust))msgs.push('مشتری جدید');
+
+matchingCustomers = db.c.filter(
+  x => invoiceCustomerNameKey(x.name) === customerKey
+);
+if (!matchingCustomers.length) {
+  matchingCustomers = db.c.filter(
+    x => invoiceRecordHasName(x, cur.cust.name)
+  );
+}
+
+selectedCustomer = matchingCustomers.find(
+  x => String(x.id) === String(cur.customer_id)
+);
+
+if (!selectedCustomer && matchingCustomers.length === 1) {
+  selectedCustomer = matchingCustomers[0];
+}
+
+if (!selectedCustomer) {
+  toast('پرونده مشتری مشخص نشد؛ فاکتور ذخیره نشد');
+  return false;
+}
+
+cur.customer_id = Number(selectedCustomer.id);
+
+cur.rows.forEach(r=>{if(r.n.trim()&&upsert('p',{name:r.n.trim(),unit:r.u,price:r.p}))msgs.push('کالا/خدمت جدید «'+r.n.trim()+'»')});
+cur.status=status;const k=db.i.findIndex(x=>x.id===cur.id);k<0?db.i.push(cur):db.i[k]=cur;if(+cur.no>=db.n)db.n=(+cur.no||db.n)+1;dl();drawRows();calc();
+const ok=await persist();if(!ok)return false;toast(msgs.length?'ذخیره شد؛ به بانک اطلاعات اضافه شد: '+msgs.join('، '):'ذخیره شد');load(cur);return true}
+function tab(t){$$('.sec').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='list')list();if(t==='c'||t==='p')crud(t)}
+
+$$('.tabs button').forEach(b=>b.onclick=()=>b.dataset.t==='inv'&&!cur?prepareNewInvoice():tab(b.dataset.t));
+$('#new1').onclick=$('#bNew').onclick=prepareNewInvoice;
+$('#addR').onclick=()=>{cur.rows.push(blank());drawRows();calc()};
+$('#bDraft').onclick=()=>save('draft');$('#bFinal').onclick=()=>save('final');
+// GV PDF CLIENT HANDOFF DIAGNOSTICS V3
+async function openInvoicePdf(data, target) {
+  let stage = 'آماده‌سازی تب PDF';
+  let objectUrl = null;
+
+  if (!target || target.closed) {
+    toast('تب PDF باز نشد؛ اجازه باز شدن تب جدید را بررسی کنید');
+    return false;
+  }
+
+  try {
+    stage = 'ارسال درخواست PDF به سرور';
+
+    const response = await fetch(API + '/pdf', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      let detail = '';
+      try {
+        detail = (await response.text()).slice(0, 180);
+      } catch (_) {}
+
+      throw new Error(
+        'HTTP ' + response.status +
+        (detail ? ' — ' + detail : '')
+      );
+    }
+
+    stage = 'دریافت فایل PDF';
+
+    const contentType = response.headers.get('content-type') || '';
+    const blob = await response.blob();
+
+    if (!blob.size) {
+      throw new Error('فایل دریافتی خالی است');
+    }
+
+    stage = 'اعتبارسنجی فایل PDF';
+
+    const signature = await blob.slice(0, 5).text();
+
+    if (signature !== '%PDF-') {
+      throw new Error(
+        'پاسخ سرور PDF معتبر نیست؛ نوع پاسخ: ' +
+        (contentType || 'نامشخص') +
+        '؛ اندازه: ' + blob.size + ' بایت'
+      );
+    }
+
+    stage = 'ساخت لینک نمایش PDF';
+
+    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+    objectUrl = URL.createObjectURL(pdfBlob);
+
+    if (target.closed) {
+      throw new Error('تب نمایش PDF بسته شده است');
+    }
+
+    stage = 'باز کردن PDF در تب جدید';
+
+    try {
+      target.location.href = objectUrl;
+      target.focus();
+    } catch (navigationError) {
+      console.warn('[GV PDF] Tab navigation failed:', navigationError);
+
+      stage = 'دانلود جایگزین PDF';
+
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = 'greenvita-invoice.pdf';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    toast('فایل PDF با موفقیت دریافت شد');
+
+    setTimeout(() => {
+      try {
+        URL.revokeObjectURL(objectUrl);
+      } catch (_) {}
+    }, 600000);
+
+    return true;
+
+  } catch (error) {
+    const detail = String(error?.message || error || 'خطای نامشخص')
+      .slice(0, 160);
+
+    console.error('[GV PDF DELIVERY]', {
+      stage,
+      error,
+      message: detail
+    });
+
+    toast('خطا در ' + stage + ': ' + detail);
+    return false;
+  }
+}
+
+$('#bSP').onclick=async()=>{
+  const target=window.open('about:blank','_blank');
+  if(!target){
+    toast('اجازه باز شدن تب جدید را بدهید');
+    return;
+  }
+  if(await save(cur.status==='final'?'final':'draft')){
+    openInvoicePdf(JSON.parse(JSON.stringify(cur)),target);
+  }else{
+    target.close();
+  }
+};
+$('#bPrint').onclick=()=>{
+  sync();
+  openInvoicePdf(JSON.parse(JSON.stringify(cur)),window.open('about:blank','_blank'));
+};
+$('#bVoid').onclick=e=>ask(e.target,async()=>{if(cur.status==='new'){toast('فاکتور هنوز ذخیره نشده است');return}sync();const previous=cur.status;cur.status='void';db.i[db.i.findIndex(x=>x.id===cur.id)]=cur;const ok=await persist();if(!ok){cur.status=previous;load(cur);return}load(cur);toast('فاکتور باطل شد')});
+
+
+
+/* GV HISTORICAL INVOICE PRICE PRESERVATION V1 */
+$('#rows').addEventListener('change',e=>{
+  if(e.target.dataset.k==='warehouse'){
+    const index = Number(e.target.closest('tr')?.dataset.i);
+    const row = cur.rows[index];
+    if(row){
+      row.warehouse = String(e.target.value || 'main');
+    }
+    return;
+  }
+
+  if(e.target.dataset.k!=='n')return;
+
+  const r=cur.rows[e.target.closest('tr').dataset.i];
+  if(!r)return;
+
+  const previousName = toEnDigits(
+    e.target.dataset.originalName || ''
+  ).trim();
+
+  const selectedName = toEnDigits(
+    e.target.value || ''
+  ).trim();
+
+  // Selecting the same product in an old invoice must not
+  // replace its historical unit price with today's catalogue price.
+  if(selectedName === previousName)return;
+
+  const p=db.p.find(
+    x=>toEnDigits(x.name).trim()===selectedName
+  );
+
+  if(p){
+    r.u=toEnDigits(p.unit||r.u);
+    r.p=digitsOnly(p.price ?? r.p);
+    drawRows();
+    calc();
+  }
+});
+
+$('#rows').addEventListener('click',e=>{const i=e.target.dataset.del;if(i==null)return;cur.rows.splice(i,1);if(!cur.rows.length)cur.rows.push(blank());drawRows();calc()});
+
+
+
+
+$('#cn').addEventListener('change',()=>{
+  if (!cur) return;
+
+  const key = invoiceCustomerNameKey($('#cn').value);
+  const c = refreshCustomerRecordPicker(cur.customer_id);
+
+  if (c) {
+    $('#cp').value = toFaDigits(c.phone || '');
+    $('#ca').value = toFaDigits(c.addr || '');
+  } else if (db.c.filter(
+    x => invoiceCustomerNameKey(x.name) === key
+  ).length > 1) {
+    toast('چند مشتری با این نام وجود دارد؛ پرونده دقیق را انتخاب کنید');
+    $('#customerRecordPicker').focus();
+  }
+});
+
+$('#customerRecordPicker').addEventListener('change',()=>{
+  if (!cur) return;
+
+  const c = db.c.find(
+    x => String(x.id) === String($('#customerRecordPicker').value)
+  );
+
+  if (!c) {
+    cur.customer_id = null;
+    return;
+  }
+
+  cur.customer_id = Number(c.id);
+  $('#cn').value = toFaDigits(c.name);
+  $('#cp').value = toFaDigits(c.phone || '');
+  $('#ca').value = toFaDigits(c.addr || '');
+});
+
+function list(){const q=toEnDigits($('#q').value.trim()),L={draft:'ذخیره‌شده',final:'ثبت‌شده',void:'باطل‌شده'};
+const a=db.i.filter(v=>!q||v.cust.name.includes(q)||String(v.no).includes(toEnDigits(q))).sort((a,b)=>b.id-a.id);
+$('#tl').innerHTML='<tr><th>شماره</th><th>تاریخ</th><th>مشتری</th><th>مبلغ قابل پرداخت</th><th>وضعیت</th><th></th></tr>'+(a.map(v=>`<tr><td>${E(toFaDigits(v.no))}</td><td>${E(toFaDigits(v.date))}</td><td>${E(toFaDigits(v.cust.name))}</td><td>${fa(sums(v).pay)}</td><td><span class="badge b-${v.status}">${L[v.status]}</span></td><td><button data-e="${v.id}">اصلاح</button> <button data-pr="${v.id}">چاپ</button></td></tr>`).join('')||'<tr><td colspan="6">فاکتوری ثبت نشده است</td></tr>')}
+$('#q').oninput=list;
+$('#tl').onclick=e=>{
+  const id=e.target.dataset.e||e.target.dataset.pr;
+  if(!id)return;
+  const v=db.i.find(x=>x.id==id);
+  if(!v)return;
+  if(e.target.dataset.pr){
+    const target=window.open('about:blank','_blank');
+    if(!target){
+      toast('اجازه باز شدن تب جدید را بدهید');
+      return;
+    }
+    load(JSON.parse(JSON.stringify(v)));
+    sync();
+    openInvoicePdf(JSON.parse(JSON.stringify(cur)),target);
+    return;
+  }
+  load(JSON.parse(JSON.stringify(v)));
+};
+
+/* GV CRUD DELETE CONFIRM TWO BUTTONS V1 */
+const CF={c:[['name','نام مشتری'],['phone','تلفن/موبایل'],['addr','آدرس']],p:[['name','نام کالا/خدمت'],['unit','واحد'],['price','بهای واحد (ریال)'],['track_inventory','نوع مورد'],['min_stock','حداقل موجودی']]};let ed={c:null,p:null};
+
+/* GV CRUD INVOICE REFERENCE LOCK V1 */
+function isReferencedByInvoice(kind, record) {
+  const normalize = value =>
+    toEnDigits(String(value ?? ''))
+      .trim()
+      .toLocaleLowerCase()
+      .replace(/\s+/g, ' ');
+
+  const target = normalize(record?.name);
+  if (!target) return false;
+
+  return db.i.some(invoice => {
+    if (kind === 'c') {
+      return normalize(invoice?.cust?.name) === target;
+    }
+
+    if (kind === 'p' && Array.isArray(invoice?.rows)) {
+      return invoice.rows.some(
+        row => normalize(row?.n) === target
+      );
+    }
+
+    return false;
+  });
+}
+
+
+
+/* GV CRUD DIRECT FINAL V4 */
+function crud(k) {
+  const el = $('#s-' + k);
+  const fields = CF[k];
+  const editingId = ed[k];
+  const editing = editingId !== null && editingId !== undefined;
+  const record = editing
+    ? db[k].find(x => String(x.id) === String(editingId))
+    : null;
+
+  if (editing && !record) {
+    ed[k] = null;
+    toast('رکورد موردنظر پیدا نشد');
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="bar">
+      ${fields.map(([key,label]) => {
+        const nameLocked =
+          editing && key === 'name' && isReferencedByInvoice(k, record);
+
+        if (k === 'p' && key === 'track_inventory') {
+          const tracked = record?.track_inventory === true ||
+            ['true','1','yes','on'].includes(String(record?.track_inventory ?? '').toLowerCase());
+
+          return `<label style="display:inline-flex;flex-direction:column;gap:4px;max-width:220px">
+            <span>${label}</span>
+            <select data-f="track_inventory" style="font:inherit;padding:7px;border:1px solid var(--bd);border-radius:7px;background:var(--card);color:var(--tx)">
+              <option value="false" ${tracked ? '' : 'selected'}>خدمت / بدون انبار</option>
+              <option value="true" ${tracked ? 'selected' : ''}>کالای انباردار</option>
+            </select>
+          </label>`;
+        }
+
+        if (k === 'p' && key === 'min_stock') {
+          return `<label style="display:inline-flex;flex-direction:column;gap:4px;max-width:180px">
+            <span>${label}</span>
+            <input type="number" min="0" step="0.001" data-f="min_stock"
+              value="${E(crudDisplay(k,key,record?.[key] ?? '0'))}"
+              style="max-width:180px">
+          </label>`;
+        }
+
+        return `<input data-f="${key}" placeholder="${label}"
+          value="${E(crudDisplay(k,key,record?.[key] ?? ''))}"
+          ${nameLocked ? 'readonly title="نام در فاکتورهای قبلی استفاده شده است"' : ''}
+          style="max-width:220px">`;
+      }).join('')}
+      <button type="button" class="p" id="gv-crud-save">
+        ${editing ? 'ذخیره تغییرات' : '+ افزودن'}
+      </button>
+      ${editing ? '<button type="button" id="gv-crud-cancel">انصراف</button>' : ''}
+      ${k === 'c'
+        ? '<label class="note">وارد کردن از CSV: <input type="file" accept=".csv,.txt" data-imp style="width:auto"></label>'
+        : ''}
+    </div>
+    <div class="tw">
+      <table>
+        <tr>${fields.map(x => '<th>' + x[1] + '</th>').join('')}<th></th></tr>
+        ${db[k].map(r => `
+          <tr>
+            ${fields.map(([key]) => '<td>' + E(crudDisplay(k,key,r[key])) + '</td>').join('')}
+            <td>
+              <button type="button" data-gv-edit="${E(r.id)}">ویرایش</button>
+              ${isReferencedByInvoice(k,r)
+                ? ''
+                : `<button type="button" class="d" data-gv-delete="${E(r.id)}">حذف</button>`}
+            </td>
+          </tr>
+        `).join('') || '<tr><td colspan="4">خالی است</td></tr>'}
+      </table>
+    </div>
+  `;
+
+  // SAVE
+  const saveButton = el.querySelector('#gv-crud-save');
+
+  saveButton.onclick = async e => {
+    e.preventDefault();
+    if (saveButton.disabled) return;
+    saveButton.disabled = true;
+
+    const values = {};
+    el.querySelectorAll('[data-f]').forEach(input => {
+      const key=input.dataset.f;
+      const value=input.value.trim();
+      if (key === 'track_inventory') {
+        values[key] = value === 'true';
+      } else if (key === 'price' || key === 'phone') {
+        values[key] = digitsOnly(value);
+      } else if (key === 'min_stock') {
+        values[key] = decimalOnly(value);
+      } else {
+        values[key] = toEnDigits(value);
+      }
+    });
+
+    if (!values.name) {
+      saveButton.disabled = false;
+      toast('نام را وارد کنید');
+      el.querySelector('[data-f="name"]')?.focus();
+      return;
+    }
+
+    const before = JSON.parse(JSON.stringify(db[k]));
+
+    if (editing) {
+      const target = db[k].find(
+        x => String(x.id) === String(editingId)
+      );
+      if (!target) {
+        saveButton.disabled = false;
+        toast('رکورد موردنظر پیدا نشد');
+        return;
+      }
+      Object.assign(target, values);
+    } else {
+      db[k].push(Object.assign({id:nid()}, values));
+    }
+
+    const ok = await persist();
+
+    if (!ok) {
+      db[k] = before;
+      dl();
+      crud(k);
+      return;
+    }
+
+    ed[k] = null;
+    dl();
+    crud(k);
+    toast('ذخیره شد');
+  };
+
+  // CANCEL EDIT
+  const cancelButton = el.querySelector('#gv-crud-cancel');
+  if (cancelButton) {
+    cancelButton.onclick = () => {
+      ed[k] = null;
+      crud(k);
+    };
+  }
+
+  // EDIT
+  el.querySelectorAll('[data-gv-edit]').forEach(button => {
+    button.onclick = () => {
+      const id = button.dataset.gvEdit;
+      if (!db[k].some(x => String(x.id) === String(id))) {
+        toast('رکورد موردنظر پیدا نشد');
+        return;
+      }
+
+      ed[k] = id;
+      crud(k);
+    };
+  });
+
+  // DELETE: show explicit confirmation buttons
+  el.querySelectorAll('[data-gv-delete]').forEach(button => {
+    button.onclick = () => {
+      if (button.disabled) return;
+
+      const id = button.dataset.gvDelete;
+      const cell = button.closest('td');
+      if (!cell) return;
+
+      button.disabled = true;
+
+      cell.innerHTML = `
+        <span style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap">
+          <span>مطمئنید؟</span>
+          <button type="button" class="d" data-gv-confirm>تأیید</button>
+          <button type="button" data-gv-cancel>انصراف</button>
+        </span>
+      `;
+
+      const confirmButton = cell.querySelector('[data-gv-confirm]');
+      const abortButton = cell.querySelector('[data-gv-cancel]');
+
+      // CONFIRM: direct click handler, no parent event delegation
+      confirmButton.onclick = async e => {
+        e.preventDefault();
+        if (confirmButton.disabled) return;
+
+        confirmButton.disabled = true;
+        abortButton.disabled = true;
+        confirmButton.textContent = 'در حال حذف...';
+
+        const before = JSON.parse(JSON.stringify(db[k]));
+        const oldLength = db[k].length;
+
+        db[k] = db[k].filter(
+          x => String(x.id) !== String(id)
+        );
+
+        if (db[k].length === oldLength) {
+          db[k] = before;
+          dl();
+          crud(k);
+          toast('رکورد موردنظر پیدا نشد');
+          return;
+        }
+
+        const ok = await persist();
+
+        if (!ok) {
+          db[k] = before;
+          dl();
+          crud(k);
+          return;
+        }
+
+        if (String(ed[k]) === String(id)) ed[k] = null;
+
+        dl();
+        crud(k);
+        toast('حذف با موفقیت انجام شد');
+      };
+
+      // CANCEL
+      abortButton.onclick = () => crud(k);
+    };
+  });
+
+  // CSV IMPORT
+  const importInput = el.querySelector('[data-imp]');
+
+  if (importInput) {
+    importInput.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      file.text().then(async content => {
+        const before = JSON.parse(JSON.stringify(db.c));
+        let count = 0;
+
+        content.split(/\r?\n/).forEach(line => {
+          const [name,phone,addr] =
+            line.split(/[,،;\t]/).map(x => x.trim());
+
+          if (name && upsert('c', {
+            name,
+            phone: phone || '',
+            addr: addr || ''
+          })) count++;
+        });
+
+        const ok = await persist();
+
+        if (!ok) {
+          db.c = before;
+          dl();
+          crud('c');
+          return;
+        }
+
+        dl();
+        crud('c');
+        toast(count + ' مشتری وارد شد');
+      }).catch(() => toast('خواندن فایل ناموفق بود'));
+    };
+  }
+}
+
+boot();
+
+
+/* GV CENTRAL NUMERIC INPUT HANDLER V1 */
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (!el || !el.matches('input,textarea')) return;
+
+  const kind = fieldKind(el);
+  if (!kind) return;
+
+  applyFieldFormat(el, kind);
+
+  if (!cur) return;
+
+  if (el.id === 'di') {
+    cur.disc = digitsOnly(el.value);
+    calc();
+    return;
+  }
+
+  if (el.id === 'vt') {
+    cur.vat = decimalOnly(el.value);
+    calc();
+    return;
+  }
+
+  if (el.dataset.k) {
+    const tr = el.closest('tr');
+    if (!tr) return;
+
+    const i = Number(tr.dataset.i);
+    const key = el.dataset.k;
+    if (!cur.rows[i]) return;
+
+    if (key === 'p') cur.rows[i].p = digitsOnly(el.value);
+    else if (key === 'q') cur.rows[i].q = decimalOnly(el.value);
+    else cur.rows[i][key] = toEnDigits(el.value);
+
+    calc();
+  }
+}, true);
+
+
+</script>
+<script id="gv-customer-input-shrink-right-10-final">
+(() => {
+  const field = document.querySelector('#cn');
+  if (!field) return;
+
+  const apply = () => {
+    if (!field.isConnected) return;
+
+    field.style.removeProperty('transform');
+    field.style.removeProperty('width');
+    field.style.removeProperty('flex');
+    field.style.removeProperty('box-sizing');
+
+    const before = field.getBoundingClientRect();
+    if (before.width <= 0) return;
+
+    const newWidth = Math.max(0, before.width - 10);
+
+    field.style.setProperty('box-sizing', 'border-box', 'important');
+    field.style.setProperty('width', `${newWidth}px`, 'important');
+  };
+
+  const schedule = () => window.requestAnimationFrame(apply);
+
+  schedule();
+
+  const invoiceSection = field.closest('#s-inv');
+  if (invoiceSection) {
+    new MutationObserver(schedule).observe(invoiceSection, {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+
+  document.querySelectorAll('[data-t]').forEach(tab => {
+    tab.addEventListener('click', schedule);
+  });
+
+  window.addEventListener('resize', schedule, { passive: true });
+})();
+</script>
+
+
+<script id="gv-customer-phone-shrink-right-10-final">
+(() => {
+  const field = document.querySelector('#cp');
+  if (!field) return;
+
+  const apply = () => {
+    if (!field.isConnected) return;
+
+    field.style.removeProperty('transform');
+    field.style.removeProperty('position');
+    field.style.removeProperty('left');
+    field.style.removeProperty('right');
+    field.style.removeProperty('width');
+    field.style.removeProperty('flex');
+    field.style.removeProperty('box-sizing');
+
+    const before = field.getBoundingClientRect();
+    if (before.width <= 0) return;
+
+    const newWidth = Math.max(0, before.width - 10);
+
+    field.style.setProperty('box-sizing', 'border-box', 'important');
+    field.style.setProperty('width', `${newWidth}px`, 'important');
+    field.style.setProperty('flex', `0 0 ${newWidth}px`, 'important');
+
+    const after = field.getBoundingClientRect();
+    const correction = before.left - after.left;
+
+    if (Math.abs(correction) > 0.5) {
+      field.style.setProperty('position', 'relative', 'important');
+      field.style.setProperty('left', `${correction}px`, 'important');
+    }
+  };
+
+  const schedule = () => window.requestAnimationFrame(apply);
+  schedule();
+
+  const section = field.closest('#s-inv');
+  if (section) {
+    new MutationObserver(schedule).observe(section, {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+
+  document.querySelectorAll('[data-t]').forEach(tab => {
+    tab.addEventListener('click', schedule);
+  });
+
+  window.addEventListener('resize', schedule, {passive:true});
+})();
+</script>
+
+
+<script id="gv-customer-address-expand-right-20-final">
+(() => {
+  const field = document.querySelector('#ca');
+  if (!field) return;
+
+  const apply = () => {
+    if (!field.isConnected) return;
+
+    [
+      'transform', 'position', 'left', 'right',
+      'width', 'flex', 'box-sizing'
+    ].forEach(prop => field.style.removeProperty(prop));
+
+    const before = field.getBoundingClientRect();
+    if (before.width <= 0) return;
+
+    const newWidth = before.width + 20;
+
+    field.style.setProperty('box-sizing', 'border-box', 'important');
+    field.style.setProperty('width', `${newWidth}px`, 'important');
+    field.style.setProperty('flex', `0 0 ${newWidth}px`, 'important');
+
+    const after = field.getBoundingClientRect();
+    const correction = before.left - after.left;
+
+    if (Math.abs(correction) > 0.5) {
+      field.style.setProperty('position', 'relative', 'important');
+      field.style.setProperty('left', `${correction}px`, 'important');
+    }
+  };
+
+  const schedule = () => window.requestAnimationFrame(apply);
+  schedule();
+
+  const section = field.closest('#s-inv');
+  if (section) {
+    new MutationObserver(schedule).observe(section, {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+
+  document.querySelectorAll('[data-t]').forEach(tab => {
+    tab.addEventListener('click', schedule);
+  });
+
+  window.addEventListener('resize', schedule, {passive: true});
+})();
+</script>
+
+
+<script id="gv-invoice-print-field-reset-v1">
+(() => {
+  const ids = ['cn', 'cp', 'ca'];
+  const props = [
+    'transform', 'position', 'left', 'right',
+    'width', 'flex', 'box-sizing'
+  ];
+
+  let saved = null;
+
+  function beforePrint() {
+    saved = new Map();
+
+    ids.forEach(id => {
+      const field = document.getElementById(id);
+      if (!field) return;
+
+      const values = {};
+      props.forEach(prop => {
+        values[prop] = {
+          value: field.style.getPropertyValue(prop),
+          priority: field.style.getPropertyPriority(prop)
+        };
+        field.style.removeProperty(prop);
+      });
+
+      saved.set(field, values);
+    });
+  }
+
+  function afterPrint() {
+    if (saved) {
+      saved.forEach((values, field) => {
+        props.forEach(prop => {
+          field.style.removeProperty(prop);
+          const item = values[prop];
+          if (item.value) {
+            field.style.setProperty(prop, item.value, item.priority);
+          }
+        });
+      });
+    }
+
+    saved = null;
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  window.addEventListener('beforeprint', beforePrint);
+  window.addEventListener('afterprint', afterPrint);
+})();
+</script>
+
+
+<script id="gv-invoice-print-address-full-v1">
+(() => {
+  const field = document.getElementById('ca');
+  if (!field) return;
+
+  let output = document.getElementById('gv-ca-print-value');
+
+  if (!output) {
+    output = document.createElement('span');
+    output.id = 'gv-ca-print-value';
+    field.insertAdjacentElement('afterend', output);
+  }
+
+  const syncAddress = () => {
+    output.textContent = toFaDigits(field.value || '');
+  };
+
+  field.addEventListener('input', syncAddress);
+  field.addEventListener('change', syncAddress);
+  window.addEventListener('beforeprint', syncAddress);
+
+  syncAddress();
+})();
+</script>
+
+
+<script id="gv-real-datalist-dropdown-v1">
+(() => {
+  if (window.__gvRealDatalistDropdownV1) return;
+  window.__gvRealDatalistDropdownV1 = true;
+
+  const popup = document.createElement('div');
+  popup.id = 'gv-datalist-popup';
+  popup.className = 'gv-datalist-popup';
+  popup.hidden = true;
+  popup.setAttribute('role', 'listbox');
+  document.body.appendChild(popup);
+
+  let activeInput = null;
+
+  function optionsFor(input) {
+    const list = document.getElementById(input.getAttribute('list') || '');
+    if (!list) return [];
+    return [...list.options]
+      .map(option => ({
+        value: option.value || '',
+        label: (option.getAttribute('label') || option.textContent || '').trim()
+      }))
+      .filter(option => option.value);
+  }
+
+  function closeMenu() {
+    if (activeInput && activeInput._gvDropdownButton) {
+      activeInput._gvDropdownButton.setAttribute('aria-expanded', 'false');
+    }
+    activeInput = null;
+    popup.hidden = true;
+    popup.replaceChildren();
+  }
+
+  function positionMenu() {
+    if (!activeInput || popup.hidden) return;
+
+    const rect = activeInput.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      closeMenu();
+      return;
+    }
+
+    const width = Math.min(
+      Math.max(rect.width, 190),
+      360,
+      window.innerWidth - 16
+    );
+
+    const below = window.innerHeight - rect.bottom - 8;
+    const above = rect.top - 8;
+    const openBelow = below >= 140 || below >= above;
+    const available = openBelow ? below : above;
+    const height = Math.max(90, Math.min(260, available - 8));
+
+    popup.style.width = width + 'px';
+    popup.style.maxHeight = height + 'px';
+    popup.style.left = Math.max(
+      8,
+      Math.min(rect.right - width, window.innerWidth - width - 8)
+    ) + 'px';
+
+    popup.style.top = openBelow
+      ? Math.min(rect.bottom + 4, window.innerHeight - height - 8) + 'px'
+      : Math.max(8, rect.top - height - 4) + 'px';
+  }
+
+  function renderMenu(input) {
+    popup.replaceChildren();
+
+    const query = input.value.trim().toLocaleLowerCase();
+    const options = optionsFor(input).filter(option =>
+      !query ||
+      option.value.toLocaleLowerCase().includes(query) ||
+      option.label.toLocaleLowerCase().includes(query)
+    );
+
+    if (!options.length) {
+      const empty = document.createElement('div');
+      empty.className = 'gv-datalist-empty';
+      empty.textContent = 'موردی برای انتخاب وجود ندارد';
+      popup.appendChild(empty);
+    } else {
+      options.forEach(option => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'gv-datalist-option';
+        item.setAttribute('role', 'option');
+
+        const title = document.createElement('span');
+        title.textContent = option.value;
+        item.appendChild(title);
+
+        if (option.label && option.label !== option.value) {
+          const meta = document.createElement('small');
+          meta.textContent = option.label;
+          item.appendChild(meta);
+        }
+
+        item.addEventListener('keydown', event => {
+          const items = [...popup.querySelectorAll('.gv-datalist-option')];
+          const index = items.indexOf(item);
+
+          if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            items[Math.min(index + 1, items.length - 1)]?.focus();
+          } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            if (index <= 0) activeInput?.focus();
+            else items[index - 1]?.focus();
+          } else if (event.key === 'Escape') {
+            event.preventDefault();
+            const target = activeInput;
+            closeMenu();
+            target?.focus();
+          }
+        });
+
+        item.addEventListener('click', () => {
+          input.value = option.value;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          closeMenu();
+          input.focus({ preventScroll: true });
+        });
+
+        popup.appendChild(item);
+      });
+    }
+
+    popup.hidden = false;
+    positionMenu();
+  }
+
+  function showMenu(input) {
+    activeInput = input;
+    input._gvDropdownButton?.setAttribute('aria-expanded', 'true');
+    renderMenu(input);
+  }
+
+  function attachDropdown(input) {
+    if (input.dataset.gvDropdownReady === '1') return;
+    if (!input.matches('input[list]')) return;
+
+    input.dataset.gvDropdownReady = '1';
+
+    const wrapper = document.createElement('span');
+    wrapper.className = 'gv-datalist-field';
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'gv-datalist-toggle';
+    button.setAttribute('aria-label', 'باز کردن فهرست انتخاب');
+    button.setAttribute('aria-expanded', 'false');
+    button.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" ' +
+      'aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+    const parent = input.parentNode;
+    parent.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+    wrapper.appendChild(button);
+
+    input._gvDropdownButton = button;
+
+    button.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (activeInput === input && !popup.hidden) {
+        closeMenu();
+      } else {
+        showMenu(input);
+      }
+    });
+
+    input.addEventListener('input', () => {
+      if (activeInput === input && !popup.hidden) renderMenu(input);
+    });
+
+    input.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        showMenu(input);
+        popup.querySelector('.gv-datalist-option')?.focus();
+      } else if (event.key === 'Escape' && !popup.hidden) {
+        closeMenu();
+      }
+    });
+  }
+
+  function attachAll() {
+    document.querySelectorAll('input[list]').forEach(attachDropdown);
+  }
+
+  attachAll();
+
+  const rows = document.getElementById('rows');
+  if (rows) {
+    new MutationObserver(attachAll).observe(rows, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  document.addEventListener('click', event => {
+    if (
+      !event.target.closest('.gv-datalist-field') &&
+      !popup.contains(event.target)
+    ) {
+      closeMenu();
+    }
+  });
+
+  window.addEventListener('scroll', positionMenu, true);
+  window.addEventListener('resize', positionMenu);
+})();
+</script>
+
+</body></html>

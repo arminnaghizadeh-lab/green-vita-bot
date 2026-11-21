@@ -1,0 +1,21 @@
+[data-gv-jalali-date] {
+  direction:rtl; text-align:right; cursor:pointer; background-image:none !important;
+}
+.gv-jalali-picker {
+  position:fixed; z-index:99999; width:292px; padding:12px;
+  border:1px solid rgba(45,91,48,.2); border-radius:16px;
+  background:#fbfdf8; color:#18351e;
+  box-shadow:0 16px 48px rgba(15,45,22,.2); font-family:inherit;
+}
+.gv-jdp-head {display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.gv-jdp-head strong {font-size:14px}
+.gv-jdp-nav {width:32px;height:32px;border:0;border-radius:9px;background:#eaf2e2;color:#214b29;font-size:22px;cursor:pointer}
+.gv-jdp-week,.gv-jdp-grid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.gv-jdp-week {margin-bottom:6px;color:#71816e;font-size:11px}
+.gv-jdp-day {height:32px;border:0;border-radius:9px;background:transparent;color:#243b27;font:inherit;font-size:12px;cursor:pointer}
+.gv-jdp-day:hover {background:#e8f1df}
+.gv-jdp-day.is-outside {color:#aab4a6}
+.gv-jdp-day.is-today {outline:1px solid #8bc53f}
+.gv-jdp-day.is-selected {background:#285c32;color:#fff}
+.gv-jdp-foot {display:flex;justify-content:space-between;margin-top:10px;padding-top:9px;border-top:1px solid #e7ede2}
+.gv-jdp-foot button {border:0;background:transparent;color:#32633a;font:inherit;font-size:12px;cursor:pointer;padding:5px 8px}

@@ -38,10 +38,10 @@
     <meta name="twitter:description"
           content="{% block twitter_description %}تشخیص و درمان تخصصی گیاهان آپارتمانی، فضای باز و باغات توسط گرین ویتا.{% endblock %}">
 
-    <link rel="stylesheet" href="/static/css/global-vazir.css?v=2">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
     <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
     <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
-    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20261012-service-heading-dynamic-final2">
+    <link rel="stylesheet" href="/static/css/green-vita-ui.css?v=20261021-footer-ticker-tight1">
     
     
     
@@ -69,7 +69,7 @@
 
     {% block extra_css %}{% endblock %}
     <link rel="stylesheet" href="/static/css/public-shared-header.css?v=20261012-header-edge-shadow-final2">
-<link id="gv-booking-cta-motion-css" rel="stylesheet" href="/static/css/booking-cta-motion.css?v=20261020-neon-final1">
+<link id="gv-booking-cta-motion-css" rel="stylesheet" href="/static/css/booking-cta-motion.css?v=20261023-footer-bale-static4">
 
     <!-- Green Vita standard icons -->
     <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png?v=gvicon-20261012-011452">
@@ -123,7 +123,7 @@
                     واتساپ 09128111058
                 </a>
 
-                <a href="http://ble.ir/greenvita"
+                <a class="gv-footer-bale-static" href="http://ble.ir/greenvita"
                    target="_blank"
                    rel="noopener noreferrer">
                     بله
@@ -556,6 +556,360 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 <!-- GV-HEADER-NEON-PERSISTENT-END -->
-<script id="gv-chat-neon-gloss-script" src="/static/js/gv-chat-neon-gloss.js?v=20261021-chat-neon2" defer></script>
+<script id="gv-chat-neon-gloss-script" src="/static/js/gv-chat-neon-gloss.js?v=20261024-footer-bale-exclude1" defer></script>
+
+<style id="gv-footer-bale-direct-fix">
+/* GV-FOOTER-BALE-DIRECT-FIX */
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static:link,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static:visited,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static:hover,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static:focus,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static:active {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  will-change: auto !important;
+}
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static::before,
+html body footer.gv-footer .gv-footer-column > a.gv-footer-bale-static::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+/* END GV-FOOTER-BALE-DIRECT-FIX */
+</style>
+
+
+<style id="gv-footer-bottom-layout-final">
+html {
+  min-height: 100% !important;
+}
+html body {
+  min-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body > .gv-inner-page {
+  flex: 1 0 auto !important;
+}
+html body > footer.gv-footer.gv-footer {
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding-bottom: 56px !important;
+}
+html body > footer.site-footer.site-footer {
+  position: relative !important;
+  inset: auto !important;
+  height: 28px !important;
+  flex: 0 0 28px !important;
+  margin-top: -28px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+}
+html body > footer.site-footer.site-footer .container.footer-inner,
+html body > footer.site-footer.site-footer .gv-footer-ticker {
+  background: transparent !important;
+}
+</style>
+
+
+
+<!-- GV old header-gap adjustment removed; public-header-offset handles spacing -->
+
+
+
+<script id="gv-home-text-effects-final">
+(() => {
+  const root = document.querySelector(".gv-home-content");
+  if (!root || document.getElementById("gv-home-text-effects-final-style")) return;
+
+  const normalize = s => s.replace(/\s+/g, " ").trim();
+  const phrase = "مشکل گیاهت رو همین‌جا حل کن";
+
+  const source = [...root.querySelectorAll("h1,h2,h3,h4,p,span")]
+    .filter(el => normalize(el.textContent).includes(phrase))
+    .sort((a, b) => a.children.length - b.children.length)[0];
+
+  if (!source) {
+    console.warn("عنوان مبنای افکت پیدا نشد؛ افکت‌ها اعمال نشدند.");
+    return;
+  }
+
+  const isTransparent = color =>
+    !color || color === "transparent" ||
+    /^rgba\([^)]*,\s*0(?:\.0+)?\s*\)$/i.test(color);
+
+  function inBox(el) {
+    for (let n = el; n && n !== root; n = n.parentElement) {
+      if (/^(HEADER|FOOTER|NAV|BUTTON|A)$/.test(n.tagName)) return true;
+
+      const c = getComputedStyle(n);
+      const cls = typeof n.className === "string" ? n.className : "";
+
+      if (/\b(card|tile|panel|box|service-card)\b/i.test(cls)) return true;
+      if (!isTransparent(c.backgroundColor) || c.backgroundImage !== "none") return true;
+      if (c.boxShadow !== "none") return true;
+
+      const hasBorder = ["Top", "Right", "Bottom", "Left"].some(side =>
+        parseFloat(c[`border${side}Width`]) > 0 &&
+        c[`border${side}Style`] !== "none"
+      );
+      if (hasBorder && c.borderRadius !== "0px") return true;
+    }
+    return false;
+  }
+
+  const selector = "h1,h2,h3,h4,h5,h6,p,.gv-inner-eyebrow,.gv-services-main-eyebrow";
+  const targets = [...root.querySelectorAll(selector)].filter(el =>
+    el !== source &&
+    el.getClientRects().length &&
+    normalize(el.textContent) &&
+    !inBox(el)
+  );
+
+  if (!targets.length) {
+    console.info("متن دیگری خارج از باکس‌ها برای دریافت افکت پیدا نشد.");
+    return;
+  }
+
+  const effectProps = [
+    "color", "text-shadow", "filter",
+    "-webkit-text-stroke-width", "-webkit-text-stroke-color",
+    "text-decoration-line", "text-decoration-color",
+    "text-decoration-style", "text-decoration-thickness",
+    "mix-blend-mode", "opacity",
+    "animation-name", "animation-duration",
+    "animation-timing-function", "animation-delay",
+    "animation-iteration-count", "animation-direction",
+    "animation-fill-mode", "animation-play-state"
+  ];
+
+  const srcStyle = getComputedStyle(source);
+  const declarations = [];
+
+  for (const prop of effectProps) {
+    const value = srcStyle.getPropertyValue(prop).trim();
+    if (!value) continue;
+    if (prop === "text-shadow" && value === "none") continue;
+    if (prop === "filter" && value === "none") continue;
+    if (prop === "animation-name" && value === "none") continue;
+    if (prop === "mix-blend-mode" && value === "normal") continue;
+    declarations.push(`${prop}:${value} !important`);
+  }
+
+  const markerAttr = "data-gv-home-text-effects-final";
+  const pseudoRules = [];
+
+  for (const pseudo of ["::before", "::after"]) {
+    const ps = getComputedStyle(source, pseudo);
+    const content = ps.content;
+
+    if (!content || content === "none" || content === "normal") continue;
+
+    const props = [
+      "content", "display", "position",
+      "top", "right", "bottom", "left",
+      "width", "height", "margin", "padding",
+      "background-color", "background-image",
+      "border", "border-radius", "box-shadow",
+      "text-shadow", "color", "filter", "opacity",
+      "transform", "animation-name", "animation-duration",
+      "animation-timing-function", "animation-delay",
+      "animation-iteration-count", "animation-direction",
+      "animation-fill-mode", "animation-play-state",
+      "z-index", "pointer-events"
+    ];
+
+    const rules = props.map(prop => {
+      const value = ps.getPropertyValue(prop).trim();
+      return value ? `${prop}:${value} !important` : "";
+    }).filter(Boolean);
+
+    if (rules.length) {
+      pseudoRules.push(
+        `[${markerAttr}="on"]${pseudo}{${rules.join(";")}}`
+      );
+    }
+  }
+
+  targets.forEach(el => el.setAttribute(markerAttr, "on"));
+
+  const style = document.createElement("style");
+  style.id = "gv-home-text-effects-final-style";
+  style.textContent = `
+    [${markerAttr}="on"] { ${declarations.join(";")}; }
+    ${pseudoRules.join("\n")}
+  `;
+  document.head.appendChild(style);
+
+  console.info(
+    `افکت‌های متن مبنا روی ${targets.length} متن خارج از باکس‌ها اعمال شد.`
+  );
+})();
+</script>
+
+
+<style id="gv-dx-account-button-effects-final-style">
+[data-gv-dx-account-effect="1"] {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background-color: #2e6840 !important;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.26) 0%,
+      rgba(255,255,255,.08) 42%,
+      transparent 48%
+    ),
+    linear-gradient(115deg,#173e29,#2e6840) !important;
+  box-shadow:
+    0 9px 22px rgba(23,62,41,.25),
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -2px 0 rgba(0,0,0,.12) !important;
+  animation: gvDxAccountCtaGlowFinal 3.2s ease-in-out infinite !important;
+  transition: filter .25s ease, transform .25s ease,
+              box-shadow .25s ease !important;
+}
+
+[data-gv-dx-account-effect="1"]::before {
+  content: none !important;
+  display: none !important;
+}
+
+[data-gv-dx-account-effect="1"]:hover {
+  filter: brightness(1.09) !important;
+  transform: translateY(-1px) !important;
+}
+
+[data-gv-dx-account-effect="1"]:focus-visible {
+  outline: 3px solid rgba(168,206,112,.7) !important;
+  outline-offset: 3px !important;
+}
+
+[data-gv-dx-account-effect="1"]:disabled {
+  animation: none !important;
+  opacity: .65 !important;
+  cursor: wait !important;
+}
+
+@keyframes gvDxAccountCtaGlowFinal {
+  0%, 100% {
+    box-shadow:
+      0 8px 20px rgba(23,62,41,.22),
+      inset 0 1px 0 rgba(255,255,255,.42),
+      inset 0 -2px 0 rgba(0,0,0,.12);
+  }
+  50% {
+    box-shadow:
+      0 12px 28px rgba(23,62,41,.32),
+      0 0 0 4px rgba(168,206,112,.13),
+      inset 0 1px 0 rgba(255,255,255,.48),
+      inset 0 -2px 0 rgba(0,0,0,.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-gv-dx-account-effect="1"] {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+
+<script id="gv-dx-account-button-effects-final-script">
+(() => {
+  const wanted = new Set([
+    "ورود / عضویت",
+    "ورود",
+    "ایجاد حساب",
+    "خروج از حساب",
+    "مشاهده رزرو",
+    "رزرو آنلاین",
+    "رزرو ویزیت",
+    "رزرو نوبت"
+  ]);
+
+  const normalize = value =>
+    String(value || "")
+      .replace(/\u200c/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  function mark(el) {
+    if (!(el instanceof Element)) return;
+    if (!el.matches("a, button, input[type='submit'], input[type='button']")) return;
+
+    // Keep every footer link/button on the normal footer styling.
+    if (el.closest("footer")) {
+      el.removeAttribute("data-gv-dx-account-effect");
+      return;
+    }
+
+    const text = normalize(
+      el.matches("input") ? el.value : (el.innerText || el.textContent)
+    );
+
+    const isBookingLink =
+      el.matches('a[href="/booking/"], a[href^="/booking/?"]');
+
+    if (wanted.has(text) || isBookingLink) {
+      el.setAttribute("data-gv-dx-account-effect", "1");
+    }
+  }
+
+  function scan(root) {
+    if (!(root instanceof Element || root instanceof Document)) return;
+
+    if (root instanceof Element) mark(root);
+
+    root.querySelectorAll(
+      "a, button, input[type='submit'], input[type='button']"
+    ).forEach(mark);
+  }
+
+  scan(document);
+
+  if (document.body) {
+    const observer = new MutationObserver(records => {
+      for (const record of records) {
+        record.addedNodes.forEach(node => {
+          if (node instanceof Element) scan(node);
+        });
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+})();
+</script>
+
+
+
+
+
+
+
+
 </body>
 </html>

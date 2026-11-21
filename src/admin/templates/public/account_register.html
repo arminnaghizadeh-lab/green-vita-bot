@@ -1,0 +1,57 @@
+{% extends "public/base.html" %}
+{% block title %}عضویت در گرین‌ویتا{% endblock %}
+{% block meta_description %}ساخت حساب کاربری گرین‌ویتا و دسترسی به سوابق رزرو و تشخیص گیاه.{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/account.css?v=account-bg-viewport-fixed-v1-20261107">
+<script defer src="/static/js/account-password-toggle.js?v=20261023-eye2"></script>
+<script defer src="/static/js/account-register-validation.js?v=20261023-live4"></script>
+{% endblock %}
+{% block content %}
+<main class="gv-account-page" dir="rtl">
+  <div class="gv-account-wrap">
+    <section class="gv-account-card">
+      <p class="gv-account-eyebrow">GREEN VITA · ACCOUNT</p>
+      <h1 class="gv-account-title">ساخت حساب کاربری</h1>
+      <p class="gv-account-description">حساب بساز تا سوابق رزرو و تشخیص‌هایت در یک جا نگهداری شوند.</p>
+      {% if error %}<p class="gv-account-error" role="alert">{{ error }}</p>{% endif %}
+      <form id="gv-account-register-form" class="gv-account-form" method="post" action="/account/register/">
+        <div class="gv-account-field">
+          <label for="first_name">نام</label>
+          <input id="first_name" name="first_name" autocomplete="given-name" maxlength="80" required value="{{ first_name|default('') }}">
+          <div class="gv-field-error" id="gv-register-error-first_name">نام و نام خانوادگی باید حداقل ۳ حرف فارسی باشد.</div>
+        </div>
+        <div class="gv-account-field">
+          <label for="last_name">نام خانوادگی</label>
+          <input id="last_name" name="last_name" autocomplete="family-name" maxlength="80" required value="{{ last_name|default('') }}">
+          <div class="gv-field-error" id="gv-register-error-last_name">نام و نام خانوادگی باید حداقل ۳ حرف فارسی باشد.</div>
+        </div>
+        <div class="gv-account-field">
+          <label for="phone_number">شماره تلفن (نام کاربری)</label>
+          <input id="phone_number" name="phone_number" type="tel" inputmode="numeric" autocomplete="tel" minlength="11" maxlength="11" pattern="[0۰٠][9۹٩][0-9۰-۹٠-٩]{9}" title="شماره باید دقیقاً ۱۱ رقم و با 09 شروع شود." placeholder="09123456789" required value="{{ phone_number|default('') }}">
+          <div class="gv-field-error" id="gv-register-error-phone_number">شماره باید دقیقاً ۱۱ رقم و با 09 شروع شود.</div>
+        </div>
+        <div class="gv-account-field">
+          <label for="password">رمز عبور</label>
+          <small>حداقل ۸ کاراکتر، شامل دست‌کم یک حرف و یک عدد.</small>
+          <div class="gv-password-wrap">
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+            <button class="gv-password-toggle" type="button" data-password-toggle="password" aria-controls="password" aria-pressed="false" aria-label="نمایش رمز">👁️</button>
+          </div>
+        </div>
+        <div class="gv-account-field">
+          <label for="password_confirm">تکرار رمز عبور</label>
+          <div class="gv-password-wrap">
+            <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+            <button class="gv-password-toggle" type="button" data-password-toggle="password_confirm" aria-controls="password_confirm" aria-pressed="false" aria-label="نمایش رمز">👁️</button>
+          </div>
+        </div>
+        <button class="gv-account-submit" type="submit">ایجاد حساب</button>
+      </form>
+      <div class="gv-account-links">
+        <a href="/account/login/">از قبل حساب داری؟ وارد شو</a>
+        <a href="/">بازگشت به سایت</a>
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}

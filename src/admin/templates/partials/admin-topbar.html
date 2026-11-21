@@ -1,5 +1,6 @@
 <header class="gv-admin-topbar">
-    <div class="gv-admin-topbar-spacer"></div>
+    <button id="gv-mobile-menu-toggle" type="button" aria-label="باز کردن منو">☰</button>
+<div class="gv-admin-topbar-spacer"></div>
 
     <form method="post" action="/logout">
         <button type="submit" class="gv-admin-logout">
@@ -7,3 +8,55 @@
         </button>
     </form>
 </header>
+
+<div id="gv-mobile-menu-overlay"></div>
+<style>
+#gv-mobile-menu-toggle,#gv-mobile-menu-overlay{display:none}
+
+ @media(max-width:768px){
+  header.gv-admin-topbar{
+    height:0!important;min-height:0!important;
+    padding:0!important;margin:0!important;
+    border:0!important;background:transparent!important;
+    box-shadow:none!important;overflow:visible!important;
+  }
+  header.gv-admin-topbar form,
+  header.gv-admin-topbar-spacer{display:none!important}
+  /* GV GLOBAL MOBILE TOPBAR CLEAN V1 */
+ #gv-mobile-menu-toggle{display:flex!important;position:fixed!important;left:14px!important;top:8px!important;width:42px!important;height:42px!important;align-items:center!important;justify-content:center!important;border:0!important;border-radius:11px!important;background:#174b28!important;color:white!important;font-size:25px!important;z-index:10004!important}
+ #gv-mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10001}
+ aside#gv-mobile-sidebar{position:fixed!important;top:0!important;right:0!important;bottom:0!important;width:min(82vw,310px)!important;z-index:10002!important;transform:translateX(105%)!important;transition:transform .25s ease!important}
+ aside#gv-mobile-sidebar.open{transform:translateX(0)!important}
+ .gv-admin-sidebar .gv-admin-sidebar-nav{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;width:100%!important}
+ .gv-admin-sidebar .gv-admin-sidebar-nav>a{display:flex!important;width:100%!important;box-sizing:border-box!important}
+}
+</style>
+<script id="gv-mobile-menu-control">
+(() => {
+ const init = () => {
+  const btn=document.getElementById("gv-mobile-menu-toggle");
+  const menu=document.getElementById("gv-mobile-sidebar");
+  const overlay=document.getElementById("gv-mobile-menu-overlay");
+  if(!btn||!menu||!overlay)return;
+  const close=()=>{
+   menu.classList.remove("open");
+   overlay.style.display="none";
+   btn.textContent="☰";
+   btn.setAttribute("aria-expanded","false");
+  };
+  btn.onclick=()=>{
+   const opening=!menu.classList.contains("open");
+   menu.classList.toggle("open",opening);
+   overlay.style.display=opening?"block":"none";
+   btn.textContent=opening?"×":"☰";
+   btn.setAttribute("aria-expanded",String(opening));
+  };
+  overlay.onclick=close;
+  menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",close));
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+ };
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});
+ else init();
+})();
+</script>
+

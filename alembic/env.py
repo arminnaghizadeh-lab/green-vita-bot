@@ -16,6 +16,7 @@ from alembic import context
 from src.core.config import get_settings
 from src.db.base import Base
 from src.db.models import *  # noqa: F401,F403  # ثبت همه مدل‌ها در metadata
+from src.invoices import models as invoice_models  # noqa: F401
 
 config = context.config
 settings = get_settings()

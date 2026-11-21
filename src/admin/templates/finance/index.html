@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7FAF2">
+    <title>مدیریت مالی | Green Vita</title>
+
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+    <link rel="stylesheet" href="/static/css/finance.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+
+<main class="container gv-command-main gv-finance-main">
+
+    <section class="gv-finance-hero">
+        <div>
+            <span class="gv-finance-eyebrow">GREEN VITA · FINANCE CENTER</span>
+            <h1>مدیریت مالی و حسابداری</h1>
+            <p>مرکز یکپارچه کنترل امور مالی، فروش، خرید و موجودی گرین ویتا</p>
+        </div>
+        <a class="gv-finance-primary" href="/admin/invoices">صدور فاکتور جدید</a>
+    </section>
+
+    <section class="gv-finance-section">
+        <div class="gv-finance-section-title">
+            <h2>نمای کلی مالی</h2>
+            <span>اطلاعات زنده از دیتابیس فاکتورها</span>
+        </div>
+
+        <div class="gv-finance-stats">
+            <article class="gv-finance-stat gv-finance-stat-main">
+                <span>مجموع فروش فاکتورهای نهایی</span>
+                <strong>{{ stats.sales_total }}</strong>
+                <small>ریال · فقط فاکتورهای نهایی‌شده</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>کل فاکتورها</span>
+                <strong>{{ stats.total_invoices }}</strong>
+                <small>تمام وضعیت‌ها</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>فاکتورهای نهایی</span>
+                <strong>{{ stats.final_invoices }}</strong>
+                <small>ثبت‌شده به‌عنوان نهایی</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>پیش‌نویس‌ها</span>
+                <strong>{{ stats.draft_invoices }}</strong>
+                <small>هنوز نهایی نشده</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>فاکتورهای باطل‌شده</span>
+                <strong>{{ stats.void_invoices }}</strong>
+                <small>خارج از فروش نهایی</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>مشتریان ثبت‌شده</span>
+                <strong>{{ stats.customers_count }}</strong>
+                <small>دفتر اطلاعات مشتریان فاکتور</small>
+            </article>
+
+            <article class="gv-finance-stat">
+                <span>محصولات ثبت‌شده</span>
+                <strong>{{ stats.products_count }}</strong>
+                <small>فهرست محصولات فاکتور</small>
+            </article>
+        </div>
+    </section>
+
+    <section class="gv-finance-section">
+        <div class="gv-finance-section-title">
+            <h2>بخش‌های سیستم مالی</h2>
+            <span>ساختار ماژولار حسابداری گرین ویتا</span>
+        </div>
+
+        <div class="gv-finance-modules">
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/admin/invoices">
+                <span class="gv-finance-module-icon">🧾</span>
+                <strong>فروش و فاکتورها</strong>
+                <small>صدور، مدیریت و پیگیری فاکتورها</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/admin/invoices?tab=c"
+               aria-label="ورود به دفتر مشتریان">
+                <span class="gv-finance-module-icon">👥</span>
+                <strong>دفتر مشتریان</strong>
+                <small>اطلاعات مشتریان ثبت‌شده در سیستم فاکتور</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/admin/invoices?tab=p"
+               aria-label="ورود به فهرست محصولات">
+                <span class="gv-finance-module-icon">📦</span>
+                <strong>فهرست محصولات</strong>
+                <small>محصولات ثبت‌شده در سیستم فاکتور</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/purchases/"
+               aria-label="ورود به فاکتورهای خرید">
+                <span class="gv-finance-module-icon">🛒</span>
+                <strong>خرید و تأمین‌کنندگان</strong>
+                <small>ثبت فاکتور خرید و گردش ورود کالا به انبار</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/inventory/"
+               aria-label="ورود به انبار و موجودی کالا">
+                <span class="gv-finance-module-icon">🏬</span>
+                <strong>انبار و موجودی کالا</strong>
+                <small>موجودی، انبار قرنطینه، موجودی اول دوره و کاردکس</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/sales-returns/"
+               aria-label="ورود به برگشت از فروش">
+                <span class="gv-finance-module-icon">↩️</span>
+                <strong>برگشت از فروش</strong>
+                <small>ثبت کالای برگشتی و کنترل مقدار قابل برگشت</small>
+                <em>فعال</em>
+            </a>
+
+            <article class="gv-finance-module gv-finance-module-next">
+                <span class="gv-finance-module-icon">💳</span>
+                <strong>صندوق و بانک</strong>
+                <small>دریافت، پرداخت، انتقال وجه و مغایرت بانکی</small>
+                <em>در دست پیاده‌سازی</em>
+            </article>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/general-ledger/">
+                <span class="gv-finance-module-icon">📚</span>
+                <strong>دفتر کل</strong>
+                <small>گردش بدهکار و بستانکار و مانده حساب‌ها</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/subsidiary-ledger/">
+                <span class="gv-finance-module-icon">📖</span>
+                <strong>دفتر معین</strong>
+                <small>ریز گردش مشتریان، تأمین‌کنندگان و طرف حساب‌ها</small>
+                <em>فعال</em>
+            </a>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/journal/new/">
+                <span class="gv-finance-module-icon">🧾</span>
+                <strong>ثبت سند حسابداری</strong>
+                <small>ثبت سند دوطرفه با کنترل تراز بدهکار و بستانکار</small>
+                <em>فعال</em>
+            </a>
+
+            <article class="gv-finance-module gv-finance-module-next">
+                <span class="gv-finance-module-icon">🔄</span>
+                <strong>دریافتنی‌ها و پرداختنی‌ها</strong>
+                <small>مطالبات مشتریان و بدهی به تأمین‌کنندگان</small>
+                <em>در دست پیاده‌سازی</em>
+            </article>
+
+            <article class="gv-finance-module gv-finance-module-next">
+                <span class="gv-finance-module-icon">📊</span>
+                <strong>گزارش‌های مالی</strong>
+                <small>سود و زیان، ترازنامه و جریان وجوه نقد</small>
+                <em>در دست پیاده‌سازی</em>
+            </article>
+
+            <a class="gv-finance-module gv-finance-module-live"
+               href="/finance/master-data/">
+                <span class="gv-finance-module-icon">🗂️</span>
+                <strong>مدیریت اطلاعات پایه</strong>
+                <small>افزودن و ویرایش کالاها، انبارها و مشتریان</small>
+                <em>فعال</em>
+            </a>
+
+            <article class="gv-finance-module gv-finance-module-next">
+                <span class="gv-finance-module-icon">⚙️</span>
+                <strong>تنظیمات مالی</strong>
+                <small>سال مالی، مالیات، واحد پول و تنظیمات حسابداری</small>
+                <em>در دست پیاده‌سازی</em>
+            </article>
+
+        </div>
+    </section>
+
+    <section class="gv-finance-section">
+        <div class="gv-finance-section-title">
+            <h2>آخرین فاکتورها</h2>
+            <a href="/admin/invoices">رفتن به مدیریت فاکتورها ←</a>
+        </div>
+
+        <div class="gv-finance-table-wrap">
+            <table class="gv-finance-table">
+                <thead>
+                    <tr>
+                        <th>شماره</th>
+                        <th>مشتری</th>
+                        <th>تاریخ</th>
+                        <th>مبلغ (ریال)</th>
+                        <th>وضعیت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for invoice in recent_invoices %}
+                    <tr>
+                        <td>{{ invoice.no }}</td>
+                        <td>{{ invoice.customer_name }}</td>
+                        <td>{{ invoice.date_text }}</td>
+                        <td>{{ "{:,}".format(invoice.payable or 0) }}</td>
+                        <td>
+                            {% if invoice.status == "final" %}
+                                <span class="gv-finance-status final">نهایی</span>
+                            {% elif invoice.status == "draft" %}
+                                <span class="gv-finance-status draft">پیش‌نویس</span>
+                            {% else %}
+                                <span class="gv-finance-status void">باطل</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="gv-finance-empty">
+                            هنوز فاکتوری ثبت نشده است.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <p class="gv-finance-note">
+        دفتر کل و دفتر معین از اسناد حسابداری قطعی ثبت‌شده محاسبه می‌شوند.
+        فاکتورهای قدیمی تا زمان تعریف قواعد ثبت و انتقال حسابداری، خودکار به سند تبدیل نمی‌شوند.
+        ماژول‌های خرید، انبار و برگشت از فروش فعال هستند.
+        گردش‌های انبار هنوز به ثبت خودکار اسناد حسابداری متصل نشده‌اند.
+        ماژول صندوق و بانک در دست پیاده‌سازی است.
+    </p>
+
+</main>
+</body>
+</html>

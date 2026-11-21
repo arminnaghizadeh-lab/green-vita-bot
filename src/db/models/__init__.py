@@ -12,6 +12,11 @@ from src.db.models.user import User
 from src.db.models.visit_status import VisitStatus
 from src.db.models.visit_appointment import AppointmentStatus, VisitAppointment
 from src.db.models.smart_bio_click import SmartBioClick
+from src.db.models.web_account import (
+    WebAccount,
+    WebDiagnosisUsage,
+    WebPasswordResetToken,
+)
 
 __all__ = [
     "User",
@@ -51,4 +56,35 @@ __all__ += [
     "Booking",
     "BookingSource",
     "BookingStatus",
+    "WebAccount",
+    "WebDiagnosisUsage",
+    "WebPasswordResetToken",
 ]
+
+from src.db.models.accounting import (
+    AccountingAccount,
+    AccountingJournal,
+    AccountingJournalLine,
+)
+
+__all__ += [
+    "AccountingAccount",
+    "AccountingJournal",
+    "AccountingJournalLine",
+]
+
+from src.db.models.inventory import (
+    InventoryDocument,
+    InventoryDocumentLine,
+    InventoryMovement,
+    InventoryWarehouse,
+)
+
+__all__ += [
+    "InventoryDocument",
+    "InventoryDocumentLine",
+    "InventoryMovement",
+    "InventoryWarehouse",
+]
+from src.db.models.admin_dashboard_preference import AdminDashboardPreference
+__all__ += ["AdminDashboardPreference"]

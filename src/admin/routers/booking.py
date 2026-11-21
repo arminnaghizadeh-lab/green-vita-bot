@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 
 import jdatetime
 from fastapi import APIRouter, Form, Request
+from src.admin.auth import require_authentication
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
@@ -21,6 +22,7 @@ from src.db.models.booking import (
     BookingTimeSlot,
     Service,
 )
+from src.db.models.web_account import WebAccount
 from src.db.session import AsyncSessionLocal
 from src.admin.services.push import send_push
 from src.admin.services.badge import get_admin_badge_count
@@ -1164,64 +1166,61 @@ async def toggle_booking_slot_enabled(
         return redirect
 
     async with AsyncSessionLocal() as session:
-        slot = await session.get(
-            BookingTimeSlot,
-            slot_id,
+        slot_start = await session.scalar(
+            select(BookingTimeSlot.starts_at).where(
+                BookingTimeSlot.id == slot_id
+            )
         )
 
-        if slot is None:
+        if slot_start is None:
             return {
                 "success": False,
                 "error": "زمان موردنظر پیدا نشد.",
             }
 
-        active_booking_statuses = (
-            BookingStatus.PENDING,
-            BookingStatus.REVIEWING,
-            BookingStatus.SCHEDULED,
-            BookingStatus.CONFIRMED,
-            BookingStatus.IN_PROGRESS,
-        )
-
-        reserved_booking = await session.scalar(
-            select(BookingSlotAssignment.id)
-            .join(
-                Booking,
-                BookingSlotAssignment.booking_id == Booking.id,
+        # همه Slotهای چهار خدمت در یک ساعت مشترک تغییر می‌کنند.
+        # قفل‌ها همیشه بر اساس ID گرفته می‌شوند تا ترتیب قفل ثابت بماند.
+        shared_slots = (
+            await session.scalars(
+                select(BookingTimeSlot)
+                .where(BookingTimeSlot.starts_at == slot_start)
+                .order_by(BookingTimeSlot.id)
+                .with_for_update()
             )
-            .where(
-                BookingSlotAssignment.time_slot_id == slot_id,
-                BookingSlotAssignment.kind == "RESERVED",
-                Booking.status.in_(active_booking_statuses),
-            )
-            .limit(1)
-        )
+        ).all()
 
-        if reserved_booking is not None:
+        if not shared_slots:
             return {
                 "success": False,
-                "error": "این بازه قبلاً رزرو شده و قابل غیرفعال‌سازی نیست.",
+                "error": "بازه زمانی موردنظر پیدا نشد.",
             }
 
-        # فقط فعال/غیرفعال بودن دستی را تغییر می‌دهیم.
-        # وضعیت رزرو/ظرفیت مستقل باقی می‌ماند.
-        slot.is_enabled = enabled
+        affected_ids = [item.id for item in shared_slots]
+        available = bool(shared_slots[0].is_available)
+        end_at = shared_slots[0].ends_at
+
+        # فقط is_enabled تغییر می‌کند.
+        # وضعیت رزروها، Assignmentها و is_available دست‌نخورده می‌مانند.
+        for item in shared_slots:
+            item.is_enabled = enabled
 
         await session.commit()
-        await session.refresh(slot)
 
         return {
             "success": True,
-            "slot_id": slot.id,
-            "enabled": slot.is_enabled,
-            "available": slot.is_available,
-            "start_at": slot.starts_at.isoformat(),
-            "end_at": slot.ends_at.isoformat(),
+            "slot_id": slot_id,
+            "enabled": enabled,
+            "available": available,
+            "affected_count": len(affected_ids),
+            "affected_slot_ids": affected_ids,
+            "start_at": slot_start.isoformat(),
+            "end_at": end_at.isoformat(),
         }
 
 
 @router.post("/api/book", include_in_schema=False)
 async def create_booking(
+    request: Request,
     service_id: int = Form(...),
     slot_id: int = Form(...),
     duration_hours: int = Form(...),
@@ -1233,7 +1232,7 @@ async def create_booking(
     notes: str = Form(""),
 ):
     customer_name = customer_name.strip()
-    customer_phone = customer_phone.strip()
+    # Keep the phone exactly as entered; whitespace must be rejected.
     customer_email = customer_email.strip() or None
     plant_name = plant_name.strip() or None
     plant_description = (
@@ -1242,15 +1241,11 @@ async def create_booking(
     )
     notes = notes.strip() or None
 
-    # Normalize Persian / Arabic digits in phone numbers.
-    customer_phone = (
-        customer_phone
-        .translate(str.maketrans(
-            "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
-            "01234567890123456789",
-        ))
-        .strip()
-    )
+    # Convert Persian / Arabic digits only; do not trim or rewrite the phone.
+    customer_phone = customer_phone.translate(str.maketrans(
+        "۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩",
+        "01234567890123456789",
+    ))
 
     # Persian-only customer name, minimum 3 letters.
     name_letters = customer_name.replace(" ", "").replace("‌", "")
@@ -1272,7 +1267,7 @@ async def create_booking(
 
     # Iranian mobile number.
     if not re.fullmatch(
-        r"09\d{9}",
+        r"09[0-9]{9}",
         customer_phone,
     ):
         return {
@@ -1517,7 +1512,26 @@ async def create_booking(
             if existing.scalar_one_or_none() is not None:
                 tracking_code = generate_tracking_code()
 
+            booking_user_id = None
+            raw_account_id = request.session.get("web_account_id")
+
+            if raw_account_id is not None:
+                try:
+                    account_id = int(raw_account_id)
+                except (TypeError, ValueError):
+                    account_id = None
+
+                if account_id is not None:
+                    account_result = await session.execute(
+                        select(WebAccount.user_id).where(
+                            WebAccount.id == account_id,
+                            WebAccount.is_active.is_(True),
+                        )
+                    )
+                    booking_user_id = account_result.scalar_one_or_none()
+
             booking = Booking(
+                user_id=booking_user_id,
                 tracking_code=tracking_code,
                 service_id=service.id,
                 time_slot_id=start_slot.id,

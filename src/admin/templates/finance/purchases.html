@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فاکتورهای خرید | Green Vita</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+<link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+<link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+<link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+<link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+<link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+<link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+<link rel="stylesheet" href="/static/css/finance.css?v=1">
+<link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+<header class="gv-accounting-hero">
+<div>
+<span class="gv-finance-eyebrow">GREEN VITA · PURCHASES</span>
+<h1>فاکتورهای خرید</h1>
+<p>سوابق ورود کالا و خرید از تأمین‌کنندگان</p>
+</div>
+<a class="gv-finance-primary" href="/finance/purchases/new/">ثبت فاکتور خرید</a>
+</header>
+<nav class="gv-accounting-nav">
+<a href="/finance/inventory/">انبار</a>
+<a class="active" href="/finance/purchases/">خریدها</a>
+<a href="/finance/sales-returns/">برگشت از فروش</a>
+<a href="/finance/">مدیریت مالی</a>
+</nav>
+<section class="gv-accounting-panel">
+<div class="gv-accounting-table-wrap">
+<table class="gv-accounting-table">
+<thead><tr><th>شماره سند</th><th>تاریخ</th><th>تأمین‌کننده</th><th>شرح</th><th>مبلغ (ریال)</th><th>وضعیت</th></tr></thead>
+<tbody>
+{% for d in documents %}
+<tr>
+<td>{{ d.document_no }}</td>
+<td data-gv-date-display="{{ d.document_date }}">{{ d.document_date }}</td>
+<td>{{ d.party_name or "—" }}</td>
+<td>{{ d.description or "—" }}</td>
+<td>{{ "{:,.0f}".format(d.total_amount or 0) }}</td>
+<td>{{ "قطعی" if d.status == "posted" else "باطل" }}</td>
+</tr>
+{% else %}
+<tr><td colspan="6" class="gv-finance-empty">هنوز فاکتور خریدی ثبت نشده است.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+</main>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

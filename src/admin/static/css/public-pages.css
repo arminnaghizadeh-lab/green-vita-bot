@@ -724,3 +724,75 @@
   transform: none !important;
 }
 /* GV-CONTACT-LOGO-85-END */
+
+
+
+/* GV ABOUT PAGE VIEWPORT FIXED BACKGROUND V2 */
+
+/* صفحه درباره زمینه شفاف دارد تا لایه ثابت پشت محتوا دیده شود */
+html:has(.gv-about-page),
+body:has(.gv-about-page) {
+    background: transparent !important;
+}
+
+body:has(.gv-about-page) {
+    position: relative !important;
+    isolation: isolate !important;
+}
+
+/* تصویر مستقل و ثابت نسبت به viewport؛ دسکتاپ و موبایل */
+body:has(.gv-about-page)::before {
+    content: "" !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    display: block !important;
+    pointer-events: none !important;
+    background-image: url("/static/images/about.jpeg") !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+/* محتوای صفحه روی تصویر باقی می‌ماند */
+body:has(.gv-about-page) .gv-inner-page.gv-about-page {
+    position: relative !important;
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV ABOUT PAGE VIEWPORT FIXED BACKGROUND V2 */
+
+
+/* GV CONTACT PAGE VIEWPORT FIXED BACKGROUND V1 */
+
+html:has(.gv-contact-page),
+body:has(.gv-contact-page) {
+    background: transparent !important;
+}
+
+body:has(.gv-contact-page) {
+    position: relative !important;
+    isolation: isolate !important;
+}
+
+body:has(.gv-contact-page)::before {
+    content: "" !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    display: block !important;
+    pointer-events: none !important;
+    background-image: url("/static/images/contact.jpeg") !important;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+}
+
+body:has(.gv-contact-page) .gv-inner-page.gv-contact-page {
+    position: relative !important;
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV CONTACT PAGE VIEWPORT FIXED BACKGROUND V1 */

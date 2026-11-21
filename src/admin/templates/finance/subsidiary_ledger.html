@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7FAF2">
+    <title>دفتر معین | Green Vita</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+    <link rel="stylesheet" href="/static/css/finance.css?v=1">
+    <link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+    <header class="gv-accounting-hero">
+        <div>
+            <span class="gv-finance-eyebrow">GREEN VITA · SUBSIDIARY LEDGER</span>
+            <h1>دفتر معین</h1>
+            <p>ریز گردش حساب‌ها به تفکیک مشتری، تأمین‌کننده و طرف حساب</p>
+        </div>
+        <a class="gv-finance-primary" href="{{ new_journal_url }}">ثبت سند حسابداری</a>
+    </header>
+
+    <nav class="gv-accounting-nav">
+        <a href="/finance/general-ledger/">دفتر کل</a>
+        <a class="active" href="/finance/subsidiary-ledger/">دفتر معین</a>
+        <a href="/finance/journal/new/">ثبت سند</a>
+        <a href="/finance/">مدیریت مالی</a>
+    </nav>
+
+    <section class="gv-accounting-panel">
+        <form method="get" class="gv-accounting-filters">
+            <label>از تاریخ
+                <input type="hidden" id="gv-from-date-iso" name="from_date" value="{{ from_date }}">
+                <input type="text" id="gv-from-date" data-gv-jalali-date data-gv-iso-target="gv-from-date-iso" value="{{ from_date }}">
+            </label>
+            <label>تا تاریخ
+                <input type="hidden" id="gv-to-date-iso" name="to_date" value="{{ to_date }}">
+                <input type="text" id="gv-to-date" data-gv-jalali-date data-gv-iso-target="gv-to-date-iso" value="{{ to_date }}">
+            </label>
+            <label>حساب معین
+                <select name="account_id">
+                    <option value="">همه حساب‌ها</option>
+                    {% for account in accounts %}
+                    <option value="{{ account.id }}" {% if account_id == account.id %}selected{% endif %}>
+                        {{ account.code }} — {{ account.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>نوع طرف حساب
+                <select name="party_type">
+                    <option value="">همه</option>
+                    <option value="customer" {% if party_type == "customer" %}selected{% endif %}>مشتری</option>
+                    <option value="supplier" {% if party_type == "supplier" %}selected{% endif %}>تأمین‌کننده</option>
+                    <option value="other" {% if party_type == "other" %}selected{% endif %}>سایر</option>
+                </select>
+            </label>
+            <button type="submit" class="gv-accounting-button">نمایش گزارش</button>
+        </form>
+    </section>
+
+    <section class="gv-accounting-panel">
+        <div class="gv-accounting-section-heading">
+            <h2>مانده و گردش طرف حساب‌ها</h2>
+            <span><span data-gv-date-display="{{ from_date }}">{{ from_date }}</span> تا <span data-gv-date-display="{{ to_date }}">{{ to_date }}</span></span>
+        </div>
+        <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table">
+                <thead>
+                    <tr>
+                        <th>کد حساب</th>
+                        <th>حساب</th>
+                        <th>نوع طرف حساب</th>
+                        <th>نام طرف حساب</th>
+                        <th>مانده اول دوره</th>
+                        <th>بدهکار</th>
+                        <th>بستانکار</th>
+                        <th>مانده پایان دوره</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in summary_rows %}
+                    <tr>
+                        <td>{{ row.account_code }}</td>
+                        <td>{{ row.account_name }}</td>
+                        <td>{{ row.party_type_label }}</td>
+                        <td><a href="{{ row.url }}">{{ row.party_name }}</a></td>
+                        <td>{{ row.opening }}</td>
+                        <td>{{ row.debit_text }}</td>
+                        <td>{{ row.credit_text }}</td>
+                        <td class="gv-accounting-balance">{{ row.closing }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="8" class="gv-finance-empty">برای این فیلترها گردش معینی ثبت نشده است.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% if selected_account and selected_party_name %}
+    <section class="gv-accounting-panel">
+        <div class="gv-accounting-section-heading">
+            <h2>ریز گردش {{ selected_party_name }} — {{ selected_account.name }}</h2>
+            <span><span data-gv-date-display="{{ from_date }}">{{ from_date }}</span> تا <span data-gv-date-display="{{ to_date }}">{{ to_date }}</span></span>
+        </div>
+        <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>شماره سند</th>
+                        <th>شرح</th>
+                        <th>بدهکار (ریال)</th>
+                        <th>بستانکار (ریال)</th>
+                        <th>مانده</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in details %}
+                    <tr>
+                        <td data-gv-date-display="{{ row.date }}">{{ row.date }}</td>
+                        <td>{{ row.number }}</td>
+                        <td>{{ row.description }}</td>
+                        <td>{{ row.debit }}</td>
+                        <td>{{ row.credit }}</td>
+                        <td class="gv-accounting-balance">{{ row.balance }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="gv-finance-empty">در این بازه گردش ثبت‌شده‌ای وجود ندارد.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+    <p class="gv-finance-note">
+        دفتر معین بر اساس طرف حساب ثبت‌شده در ردیف‌های اسناد قطعی محاسبه می‌شود. برای حساب‌های دریافتنی و پرداختنی، تعیین طرف حساب هنگام ثبت سند الزامی است.
+    </p>
+</main>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

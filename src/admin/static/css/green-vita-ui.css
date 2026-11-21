@@ -5557,3 +5557,170 @@ html body p.gv-services-select-hint {
   }
 }
 /* GV-SERVICE-HEADING-DYNAMIC-FINAL-END */
+
+/* GV FOOTER TICKER — REMOVE GAP ABOVE FOOTER */
+body:not(.gv-dashboard) footer.site-footer {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body:not(.gv-dashboard) footer.site-footer > .container.footer-inner {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body:not(.gv-dashboard) footer.site-footer .gv-footer-ticker {
+  margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   GREEN VITA — SERVICE CARDS / SOFT NEUMORPHIC DEPTH
+   2026-10-25
+   ========================================================= */
+
+.gv-home-services .service {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.96),
+            rgba(247,250,242,.96)
+        ) !important;
+
+    border: 1px solid rgba(255,255,255,.72) !important;
+    border-radius: 28px !important;
+
+    box-shadow:
+        inset -24px -24px 46px rgba(255,255,255,.72),
+        inset  20px  20px 44px rgba(2,47,18,.075),
+        -10px -10px 32px rgba(255,255,255,.92),
+         12px  14px 36px rgba(2,47,18,.13) !important;
+
+    transition:
+        transform .28s cubic-bezier(.22,.61,.36,1),
+        box-shadow .28s ease,
+        border-color .28s ease !important;
+}
+
+/* لایه‌ی نور بسیار ظریف روی سطح کارت */
+.gv-home-services .service::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 27px;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.34),
+            transparent 42%,
+            rgba(2,47,18,.025)
+        );
+    opacity: .9;
+    z-index: 0;
+}
+
+/* محتوای کارت بالای لایه‌ی نور */
+.gv-home-services .service > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover دسکتاپ */
+@media (hover: hover) and (pointer: fine) {
+    .gv-home-services .service:hover {
+        transform: translateY(-5px);
+
+        box-shadow:
+            inset -27px -27px 50px rgba(255,255,255,.78),
+            inset  22px  22px 46px rgba(2,47,18,.08),
+            -12px -12px 36px rgba(255,255,255,.96),
+             15px  18px 42px rgba(2,47,18,.17) !important;
+    }
+}
+
+/* حالت لمس */
+.gv-home-services .service:active {
+    transform: translateY(-1px);
+    box-shadow:
+        inset -18px -18px 34px rgba(255,255,255,.72),
+        inset  18px  18px 34px rgba(2,47,18,.09),
+        5px 6px 18px rgba(2,47,18,.11) !important;
+}
+
+/* موبایل */
+@media (max-width: 767px) {
+    .gv-home-services .service {
+        border-radius: 24px !important;
+
+        box-shadow:
+            inset -19px -19px 38px rgba(255,255,255,.72),
+            inset  17px  17px 36px rgba(2,47,18,.07),
+            -7px -7px 24px rgba(255,255,255,.9),
+             9px  11px 28px rgba(2,47,18,.12) !important;
+    }
+
+    .gv-home-services .service::before {
+        border-radius: 23px;
+    }
+}
+
+
+
+/* GV BOT BOTTOM EDGE HEADER EFFECT V1 */
+html body .gv-bot-promo > .gv-bot-bottom-edge {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 18px !important;
+  pointer-events: none !important;
+  z-index: 10002 !important;
+}
+
+html body .gv-bot-promo > .gv-bot-bottom-edge::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 1px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(
+    90deg,
+    rgba(139,197,61,.55) 0%,
+    #9edc5c 15%,
+    #e5f8bf 50%,
+    #9edc5c 85%,
+    rgba(139,197,61,.55) 100%
+  ) !important;
+  box-shadow:
+    0 0 3px rgba(211,255,159,.95),
+    0 1px 8px rgba(139,197,61,.75),
+    0 2px 15px rgba(139,197,61,.32) !important;
+  z-index: 2 !important;
+}
+
+html body .gv-bot-promo > .gv-bot-bottom-edge::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 18px !important;
+  border-radius: 0 0 50% 50% !important;
+  background: linear-gradient(
+    0deg,
+    rgba(1,15,8,.30) 0%,
+    rgba(1,15,8,.15) 38%,
+    rgba(1,15,8,0) 100%
+  ) !important;
+  box-shadow: 0 5px 13px rgba(0,0,0,.15) !important;
+  filter: blur(5px) !important;
+  opacity: .9 !important;
+  z-index: 1 !important;
+}
+/* END GV BOT BOTTOM EDGE HEADER EFFECT V1 */

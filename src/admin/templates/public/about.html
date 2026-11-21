@@ -27,20 +27,23 @@
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/public-pages.css?v=20260926-about-justify1">
+<link rel="stylesheet" href="/static/css/public-pages.css?v=about-bg-viewport-fixed-v3-20261107">
 {% endblock %}
 
 {% block content %}
-<section class="gv-inner-page">
+<section class="gv-inner-page gv-about-page">
     <div class="container">
 
         <header class="gv-inner-hero gv-about-hero-card">
     <div class="gv-about-hero-copy">
-        <span class="gv-inner-eyebrow">ABOUT GREEN VITA</span>
+        <span class="gv-inner-eyebrow" style="display:block!important;width:100%!important;text-align:center!important;align-self:center!important;margin-inline:auto!important;">ABOUT GREEN VITA</span>
 
-        <h1>کلینیک گیاه پزشکی گرین ویتا</h1>
+        <h1 style="display:flex!important; flex-direction:column!important; align-items:center!important; text-align:center!important; width:100%!important; box-sizing:border-box!important; row-gap:0.2em!important;">
+  <span style="display:block!important; font-size:0.8em!important; white-space:nowrap!important;">کلینیک گیاه پزشکی</span>
+  <span style="display:block!important; font-size:1.2em!important; white-space:nowrap!important;">گرین ویتا</span>
+</h1>
 
-        <p>
+        <p style="text-align: justify !important; text-align-last: center !important; width: 100% !important; box-sizing: border-box !important; margin-inline: auto !important">
             جایی برای تشخیص دقیق‌تر، مراقبت اصولی‌تر و تصمیم‌گیری بهتر<br>
             <span style="color:#fff !important;">
                 گرین ویتا با بیش از <strong>۷ سال تجربه در زمینه گیاه‌پزشکی</strong> شکل گرفته است؛
@@ -89,4 +92,72 @@
 
     </div>
 </section>
+
+<script id="gv-about-gap-half-final">
+(() => {
+  const header = document.querySelector("header.site-header");
+  const hero = document.querySelector(".gv-inner-hero.gv-about-hero-card");
+  if (!header || !hero) return;
+
+  const style = document.createElement("style");
+  style.id = "gv-about-gap-half-final-style";
+  document.head.appendChild(style);
+
+  const alignGap = () => {
+    style.disabled = true;
+
+    const baseMargin =
+      Number.parseFloat(getComputedStyle(hero).marginTop) || 0;
+    const gapBefore =
+      hero.getBoundingClientRect().top -
+      header.getBoundingClientRect().bottom;
+
+    if (gapBefore <= 0) {
+      style.textContent = "";
+      style.disabled = false;
+      return;
+    }
+
+    const targetGap = gapBefore / 2;
+    let margin = baseMargin - targetGap;
+
+    const setMargin = () => {
+      style.textContent = `
+        html body .gv-inner-hero.gv-about-hero-card {
+          margin-top: ${margin}px !important;
+        }
+      `;
+      style.disabled = false;
+    };
+
+    setMargin();
+
+    let attempts = 0;
+    const correct = () => {
+      const actualGap =
+        hero.getBoundingClientRect().top -
+        header.getBoundingClientRect().bottom;
+
+      if (Math.abs(actualGap - targetGap) > 1 && attempts < 3) {
+        attempts++;
+        margin += targetGap - actualGap;
+        setMargin();
+        requestAnimationFrame(correct);
+      }
+    };
+
+    requestAnimationFrame(() => requestAnimationFrame(correct));
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", alignGap, { once: true });
+  } else {
+    alignGap();
+  }
+
+  window.addEventListener("resize", alignGap, { passive: true });
+})();
+</script>
+
+
 {% endblock %}

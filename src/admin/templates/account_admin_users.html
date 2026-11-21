@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+{% block title %}مدیریت کاربران و مشتریان | گرین‌ویتا{% endblock %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 py-7" dir="rtl">
+
+  <header class="mb-7">
+    <p class="text-sm font-semibold tracking-wide text-green-800">
+      GREEN VITA · PEOPLE DIRECTORY
+    </p>
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mt-2">
+      مدیریت کاربران و مشتریان
+    </h1>
+    <p class="text-sm text-gray-500 mt-2">
+      فهرست مستقل مشتریان فاکتور، اعضای سایت و کاربران پیام‌رسان‌ها
+    </p>
+  </header>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <article class="rounded-2xl border bg-white p-4 shadow-sm">
+      <div class="text-sm text-gray-500">مشتریان بدون اتصال سایت</div>
+      <strong class="block text-2xl mt-2">{{ counts.customers }}</strong>
+    </article>
+    <article class="rounded-2xl border bg-white p-4 shadow-sm">
+      <div class="text-sm text-gray-500">کل اعضای سایت</div>
+      <strong class="block text-2xl mt-2">{{ counts.site }}</strong>
+      <small class="text-gray-500">فعال: {{ counts.site_active }} · غیرفعال: {{ counts.site_inactive }}</small>
+    </article>
+    <article class="rounded-2xl border bg-white p-4 shadow-sm">
+      <div class="text-sm text-gray-500">کاربران بات</div>
+      <strong class="block text-2xl mt-2">{{ counts.bots }}</strong>
+      <small class="text-gray-500">رکوردهای مستقل کاربران پیام‌رسان</small>
+    </article>
+    <article class="rounded-2xl border bg-white p-4 shadow-sm">
+      <div class="text-sm text-gray-500">اتصال‌های ثبت‌شده مشتری به سایت</div>
+      <strong class="block text-2xl mt-2">{{ counts.customers_linked }}</strong>
+      <small class="text-gray-500">بدون تطبیق خودکار هویت</small>
+    </article>
+  </div>
+
+  <nav class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5" aria-label="گروه کاربران">
+    <a href="/account/admin/users/?tab=customers"
+       class="rounded-2xl border p-4 {% if tab == 'customers' %}bg-green-50 border-green-700{% else %}bg-white{% endif %}">
+      <strong>مشتریان بدون اتصال</strong>
+      <span class="block text-sm text-gray-500 mt-1">{{ counts.customers }} پرونده</span>
+    </a>
+    <a href="/account/admin/users/?tab=site"
+       class="rounded-2xl border p-4 {% if tab == 'site' %}bg-green-50 border-green-700{% else %}bg-white{% endif %}">
+      <strong>اعضای سایت</strong>
+      <span class="block text-sm text-gray-500 mt-1">{{ counts.site }} حساب</span>
+    </a>
+    <a href="/account/admin/users/?tab=bots"
+       class="rounded-2xl border p-4 {% if tab == 'bots' %}bg-green-50 border-green-700{% else %}bg-white{% endif %}">
+      <strong>کاربران بات</strong>
+      <span class="block text-sm text-gray-500 mt-1">
+        {{ counts.bots }} رکورد · تلگرام {{ counts.telegram }} · بله {{ counts.bale }}
+      </span>
+    </a>
+    <a href="/account/admin/users/?tab=reset"
+       class="rounded-2xl border p-4 {% if tab == 'reset' %}bg-green-50 border-green-700{% else %}bg-white{% endif %}">
+      <strong>بازیابی رمز عبور</strong>
+      <span class="block text-sm text-gray-500 mt-1">ساخت لینک امن برای اعضای سایت</span>
+    </a>
+  </nav>
+
+  <section class="rounded-2xl border bg-white shadow-sm p-4 md:p-6">
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+      <div>
+        {% if tab == 'customers' %}
+          <h2 class="text-xl font-bold">مشتریان بدون اتصال به حساب سایت</h2>
+          <p class="text-sm text-gray-500 mt-1">پرونده‌هایی که هنوز به حساب سایت متصل نشده‌اند.</p>
+        {% elif tab == 'site' %}
+          <h2 class="text-xl font-bold">اعضای سایت</h2>
+          <p class="text-sm text-gray-500 mt-1">تمام حساب‌های سایت، فعال و غیرفعال.</p>
+        {% elif tab == 'bots' %}
+          <h2 class="text-xl font-bold">کاربران تلگرام و بله</h2>
+          <p class="text-sm text-gray-500 mt-1">هر رکورد بر اساس شناسه پیام‌رسان خودش نمایش داده می‌شود.</p>
+        {% else %}
+          <h2 class="text-xl font-bold">بازیابی رمز عبور اعضای سایت</h2>
+          <p class="text-sm text-gray-500 mt-1">ساخت لینک یک‌بارمصرف برای حساب فعال سایت</p>
+        {% endif %}
+      </div>
+      {% if tab != 'reset' %}
+        <span class="text-sm text-gray-500">
+          نتیجه: {{ total_rows }} · صفحه {{ page }} از {{ total_pages }}
+        </span>
+      {% endif %}
+    </div>
+
+    {% if tab != 'reset' %}
+    <form method="get" action="/account/admin/users/" class="flex flex-col sm:flex-row gap-2 mb-6">
+      <input type="hidden" name="tab" value="{{ tab }}">
+      <input type="search" name="q" value="{{ q }}"
+             placeholder="جست‌وجو بر اساس نام، تلفن، شناسه یا نام کاربری"
+             class="w-full rounded-xl border border-gray-300 px-4 py-3">
+      <button type="submit"
+              class="rounded-xl px-6 py-3 text-white font-semibold"
+              style="background:#174d2c">
+        جست‌وجو
+      </button>
+      {% if q %}
+        <a href="/account/admin/users/?tab={{ tab }}"
+           class="rounded-xl border px-5 py-3 text-center">
+          پاک‌کردن
+        </a>
+      {% endif %}
+    </form>
+    {% endif %}
+
+    {% if tab == 'customers' %}
+      {% if customer_rows %}
+        <div class="space-y-3">
+          {% for item in customer_rows %}
+            <article class="rounded-xl border p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <strong class="text-base">{{ item.customer.name }}</strong>
+                <div class="text-sm text-gray-500 mt-2">
+                  تلفن: <span dir="ltr">{{ item.customer.data.get('phone') or 'ثبت نشده' }}</span>
+                </div>
+                <div class="text-xs text-gray-400 mt-1">
+                  شناسه پرونده: {{ item.customer.id }} · تعداد فاکتورها: {{ item.invoice_count }}
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="rounded-full bg-amber-50 text-amber-800 px-3 py-2 text-xs">
+                  بدون اتصال به حساب سایت
+                </span>
+                <a href="/account/admin/customer-links/"
+                   class="rounded-xl px-4 py-2 text-sm font-semibold text-white"
+                   style="background:#174d2c">
+                  مدیریت اتصال
+                </a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center text-gray-500 py-10">مشتری بدون اتصال با این جست‌وجو پیدا نشد.</p>
+      {% endif %}
+
+    {% elif tab == 'site' %}
+      {% if site_rows %}
+        <div class="space-y-3">
+          {% for item in site_rows %}
+            <article class="rounded-xl border p-4">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                <div>
+                  <strong class="text-base">{{ item.user.first_name or '' }} {{ item.user.last_name or '' }}</strong>
+                  <div class="text-sm text-gray-500 mt-2" dir="ltr">{{ item.account.phone_number }}</div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    شناسه حساب: {{ item.account.id }} · شناسه رکورد کاربر: {{ item.user.id }}
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  {% if item.account.is_active %}
+                    <span class="rounded-full bg-green-50 text-green-800 px-3 py-2 text-xs">فعال</span>
+                  {% else %}
+                    <span class="rounded-full bg-gray-100 text-gray-700 px-3 py-2 text-xs">غیرفعال</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mt-3 pt-3 border-t text-sm text-gray-600">
+                {% if item.customer %}
+                  پرونده متصل: {{ item.customer.name }} · شناسه {{ item.customer.id }}
+                {% else %}
+                  پرونده مشتری به این حساب متصل نشده است.
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center text-gray-500 py-10">حساب سایتی با این جست‌وجو پیدا نشد.</p>
+      {% endif %}
+
+    {% elif tab == 'bots' %}
+      {% if bot_rows %}
+        <div class="space-y-3">
+          {% for item in bot_rows %}
+            <article class="rounded-xl border p-4">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                <div>
+                  <strong class="text-base">{{ item.first_name or '' }} {{ item.last_name or '' }}</strong>
+                  {% if item.username %}
+                    <div class="text-sm text-gray-500 mt-1" dir="ltr">@{{ item.username }}</div>
+                  {% endif %}
+                  <div class="text-sm text-gray-500 mt-2" dir="ltr">
+                    تلفن: {{ item.phone_number or 'ثبت نشده' }}
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">شناسه رکورد کاربر: {{ item.id }}</div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  {% if item.telegram_id is not none %}
+                    <span class="rounded-full bg-sky-50 text-sky-800 px-3 py-2 text-xs">تلگرام</span>
+                  {% endif %}
+                  {% if item.bale_id is not none %}
+                    <span class="rounded-full bg-violet-50 text-violet-800 px-3 py-2 text-xs">بله</span>
+                  {% endif %}
+                  {% if item.is_blocked %}
+                    <span class="rounded-full bg-red-50 text-red-800 px-3 py-2 text-xs">مسدود</span>
+                  {% endif %}
+                </div>
+              </div>
+              {% if item.telegram_id is not none %}
+                <div class="text-sm mt-3" dir="ltr">Telegram ID: {{ item.telegram_id }}</div>
+              {% endif %}
+              {% if item.bale_id is not none %}
+                <div class="text-sm mt-1" dir="ltr">Bale ID: {{ item.bale_id }}</div>
+              {% endif %}
+              <div class="text-xs text-gray-500 mt-2">
+                {% if item.is_admin %}مدیر بات{% else %}کاربر عادی بات{% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center text-gray-500 py-10">کاربر بات با این جست‌وجو پیدا نشد.</p>
+      {% endif %}
+
+    {% else %}
+      <div class="max-w-2xl">
+        <p class="text-sm text-gray-600 leading-7 mb-5">
+          شماره موبایل حساب فعال سایت را وارد کن. لینک ساخته‌شده فقط یک‌بار
+          قابل استفاده است و پس از {{ expires_minutes }} دقیقه منقضی می‌شود.
+        </p>
+
+        {% if reset_error %}
+          <p role="alert" class="mb-4 p-3 rounded-xl bg-red-50 text-red-800">
+            {{ reset_error }}
+          </p>
+        {% endif %}
+
+        {% if reset_message %}
+          <p role="status" class="mb-4 p-3 rounded-xl bg-green-50 text-green-900">
+            {{ reset_message }}
+          </p>
+        {% endif %}
+
+        <form method="post"
+              action="/account/admin/password-reset/"
+              class="space-y-4">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+          <label for="gv-reset-phone" class="block font-semibold">
+            شماره موبایل حساب سایت
+          </label>
+          <input id="gv-reset-phone"
+                 name="phone_number"
+                 type="tel"
+                 inputmode="numeric"
+                 autocomplete="tel"
+                 minlength="11"
+                 maxlength="11"
+                 pattern="[0۰٠][9۹٩][0-9۰-۹٠-٩]{9}"
+                 required
+                 dir="ltr"
+                 value="{{ reset_phone_number }}"
+                 placeholder="09123456789"
+                 class="w-full rounded-xl border border-gray-300 p-3">
+
+          <button type="submit"
+                  class="rounded-xl px-5 py-3 font-bold text-white"
+                  style="background:#174d2c">
+            ساخت لینک بازیابی
+          </button>
+        </form>
+
+        {% if reset_url %}
+          <div class="mt-6 border-t pt-5">
+            <h3 class="font-bold mb-2">لینک بازیابی آماده است</h3>
+            <textarea id="gv-reset-link"
+                      readonly
+                      rows="3"
+                      dir="ltr"
+                      class="w-full rounded-xl border p-3">{{ reset_url }}</textarea>
+            <button type="button"
+                    class="mt-3 rounded-xl border px-4 py-2"
+                    onclick="(function(){var e=document.getElementById('gv-reset-link');e.focus();e.select();if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(e.value).catch(function(){});}})()">
+              انتخاب و کپی لینک
+            </button>
+            <p class="text-sm text-gray-600 mt-3 leading-7">
+              قبل از ارسال، هویت دریافت‌کننده را از طریق یک کانال مطمئن تأیید کن.
+              لینک را برای فرد تأییدنشده ارسال نکن.
+            </p>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if total_pages > 1 and tab != 'reset' %}
+      <div class="flex items-center justify-between mt-6 pt-4 border-t">
+        {% if page > 1 %}
+          <a class="rounded-xl border px-4 py-2"
+             href="?tab={{ tab }}&page={{ page - 1 }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+            صفحه قبل
+          </a>
+        {% else %}
+          <span></span>
+        {% endif %}
+        <span class="text-sm text-gray-500">{{ page }} / {{ total_pages }}</span>
+        {% if page < total_pages %}
+          <a class="rounded-xl border px-4 py-2"
+             href="?tab={{ tab }}&page={{ page + 1 }}{% if q %}&q={{ q|urlencode }}{% endif %}">
+            صفحه بعد
+          </a>
+        {% else %}
+          <span></span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+
+  <p class="text-xs text-gray-500 mt-4 leading-7">
+    نکته: «بدون اتصال به حساب سایت» به معنی تأیید قطعی عضو نبودن فرد نیست.
+    کاربران تلگرام، بله و سایت بر اساس شناسه‌های مستقل نمایش داده می‌شوند.
+    هیچ تطبیق هویتی خودکاری بر اساس نام یا شماره تلفن انجام نمی‌شود.
+  </p>
+
+</section>
+{% endblock %}

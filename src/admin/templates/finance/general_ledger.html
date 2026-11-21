@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F7FAF2">
+    <title>دفتر کل | Green Vita</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/dashboard-redesign.css?v=gv-sidebar-alignment-v2-20261122">
+    <link rel="stylesheet" href="/static/css/global-vazir.css?v=20261119-remove-after-v1">
+    <link rel="stylesheet" href="/static/css/gv-tokens.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-luxury-theme.css?v=13">
+    <link rel="stylesheet" href="/static/css/gv-modern-admin.css?v=1">
+    <link rel="stylesheet" href="/static/css/green-vita-final.css?v=20260914-final9">
+    <link rel="stylesheet" href="/static/css/finance.css?v=1">
+    <link rel="stylesheet" href="/static/css/accounting.css?v=1">
+    <link rel="stylesheet" href="/static/css/gv-jalali-date-picker.css?v=1">
+
+<style>
+/* GV SIDEBAR INLINE LAYOUT V2 */
+@media (min-width:769px) {
+  body.gv-dashboard main.gv-finance-main {
+    width:calc(100% - 282px) !important;
+    max-width:none !important;
+    margin:28px 266px 50px 16px !important;
+    box-sizing:border-box !important;
+  }
+}
+</style>
+</head>
+<body class="gv-dashboard rv-layout">
+{% include "partials/admin-topbar.html" %}
+{% include "partials/admin-sidebar.html" %}
+<main class="container gv-command-main gv-finance-main gv-accounting-main">
+    <header class="gv-accounting-hero">
+        <div>
+            <span class="gv-finance-eyebrow">GREEN VITA · GENERAL LEDGER</span>
+            <h1>دفتر کل</h1>
+            <p>گردش بدهکار و بستانکار و مانده هر حساب در بازه انتخابی</p>
+        </div>
+        <a class="gv-finance-primary" href="{{ new_journal_url }}">ثبت سند حسابداری</a>
+    </header>
+
+    <nav class="gv-accounting-nav">
+        <a class="active" href="/finance/general-ledger/">دفتر کل</a>
+        <a href="/finance/subsidiary-ledger/">دفتر معین</a>
+        <a href="/finance/journal/new/">ثبت سند</a>
+        <a href="/finance/">مدیریت مالی</a>
+    </nav>
+
+    <section class="gv-accounting-panel">
+        <form method="get" class="gv-accounting-filters">
+            <label>از تاریخ
+                <input type="hidden" id="gv-from-date-iso" name="from_date" value="{{ from_date }}">
+                <input type="text" id="gv-from-date" data-gv-jalali-date data-gv-iso-target="gv-from-date-iso" value="{{ from_date }}">
+            </label>
+            <label>تا تاریخ
+                <input type="hidden" id="gv-to-date-iso" name="to_date" value="{{ to_date }}">
+                <input type="text" id="gv-to-date" data-gv-jalali-date data-gv-iso-target="gv-to-date-iso" value="{{ to_date }}">
+            </label>
+            <label>حساب
+                <select name="account_id">
+                    <option value="">همه حساب‌ها</option>
+                    {% for account in accounts %}
+                    <option value="{{ account.id }}" {% if selected_account and selected_account.id == account.id %}selected{% endif %}>
+                        {{ account.code }} — {{ account.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button type="submit" class="gv-accounting-button">نمایش گزارش</button>
+        </form>
+    </section>
+
+    <section class="gv-accounting-panel">
+        <div class="gv-accounting-section-heading">
+            <h2>خلاصه گردش حساب‌ها</h2>
+            <span><span data-gv-date-display="{{ from_date }}">{{ from_date }}</span> تا <span data-gv-date-display="{{ to_date }}">{{ to_date }}</span></span>
+        </div>
+        <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table">
+                <thead>
+                    <tr>
+                        <th>کد حساب</th>
+                        <th>عنوان حساب</th>
+                        <th>مانده اول دوره</th>
+                        <th>گردش بدهکار</th>
+                        <th>گردش بستانکار</th>
+                        <th>مانده پایان دوره</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in summary_rows %}
+                    <tr class="{% if selected_account and selected_account.id == row.account_id %}selected{% endif %}">
+                        <td>{{ row.code }}</td>
+                        <td>
+                            <a href="/finance/general-ledger/?from_date={{ from_date }}&to_date={{ to_date }}&account_id={{ row.account_id }}">
+                                {{ row.name }}
+                            </a>
+                        </td>
+                        <td>{{ row.opening }}</td>
+                        <td>{{ row.debit }}</td>
+                        <td>{{ row.credit }}</td>
+                        <td class="gv-accounting-balance">{{ row.closing }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="gv-finance-empty">حسابی برای نمایش وجود ندارد.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% if selected_account %}
+    <section class="gv-accounting-panel">
+        <div class="gv-accounting-section-heading">
+            <h2>ریز گردش: {{ selected_account.code }} — {{ selected_account.name }}</h2>
+            <span>مانده محاسبه‌شده به ترتیب تاریخ سند</span>
+        </div>
+        <div class="gv-accounting-table-wrap">
+            <table class="gv-accounting-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>شماره سند</th>
+                        <th>شرح</th>
+                        <th>بدهکار (ریال)</th>
+                        <th>بستانکار (ریال)</th>
+                        <th>مانده</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for row in details %}
+                    <tr>
+                        <td data-gv-date-display="{{ row.date }}">{{ row.date }}</td>
+                        <td>{{ row.number }}</td>
+                        <td>{{ row.description }}</td>
+                        <td>{{ row.debit }}</td>
+                        <td>{{ row.credit }}</td>
+                        <td class="gv-accounting-balance">{{ row.balance }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="gv-finance-empty">در این بازه گردش ثبت‌شده‌ای وجود ندارد.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+
+    <p class="gv-finance-note">
+        گزارش دفتر کل فقط اسناد حسابداری قطعی را نمایش می‌دهد. فاکتورهای قدیمی تا زمان تعریف و ثبت سند حسابداری، در این گزارش وارد نمی‌شوند.
+    </p>
+</main>
+    <script src="/static/js/gv-jalali-date-picker.js?v=1"></script>
+</body>
+</html>

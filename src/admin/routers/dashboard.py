@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +12,7 @@ from src.admin.services.badge import (
 )
 from src.admin.dependencies import get_session
 from src.core.config import Settings, get_settings
+from src.db.models.admin_dashboard_preference import AdminDashboardPreference
 from src.db.models import (
     Diagnosis,
     Plant,
@@ -538,6 +539,50 @@ async def admin_overview(
             "last_7d": smart_bio_7d,
         },
     }
+
+
+
+HOME_WIDGETS = {
+    "reservations", "visits", "finance", "invoices",
+    "users", "contact", "website"
+}
+DEFAULT_HOME_WIDGETS = ["reservations", "visits", "finance", "invoices"]
+
+
+@router.get("/api/home-widgets", include_in_schema=False)
+async def get_home_widgets(request: Request, session: AsyncSession = Depends(get_session)):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+    pref = await session.get(AdminDashboardPreference, 1)
+    widgets = pref.widgets if pref else DEFAULT_HOME_WIDGETS
+    return {"widgets": [w for w in widgets if w in HOME_WIDGETS]}
+
+
+@router.post("/api/home-widgets", include_in_schema=False)
+async def save_home_widgets(request: Request, session: AsyncSession = Depends(get_session)):
+    redirect = require_authentication(request)
+    if redirect:
+        return redirect
+    try:
+        data = await request.json()
+        widgets = data.get("widgets")
+    except Exception:
+        raise HTTPException(400, "درخواست نامعتبر است.")
+
+    if (not isinstance(widgets, list)
+        or any(not isinstance(w, str) or w not in HOME_WIDGETS for w in widgets)
+        or len(widgets) != len(set(widgets))):
+        raise HTTPException(422, "فهرست ابزارها معتبر نیست.")
+
+    pref = await session.get(AdminDashboardPreference, 1)
+    if pref is None:
+        session.add(AdminDashboardPreference(id=1, widgets=widgets))
+    else:
+        pref.widgets = widgets
+
+    await session.commit()
+    return {"ok": True, "widgets": widgets}
 
 
 @router.get("/")

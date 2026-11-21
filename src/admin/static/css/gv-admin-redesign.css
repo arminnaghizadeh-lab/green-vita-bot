@@ -430,3 +430,15 @@ body.gv-dashboard .gv-command-overview-card strong{
     min-height:42px !important;
   }
 }
+
+/* GV HIDE ADMIN MENU WHEN PRINTING */
+@media print {
+  .gv-admin-topbar,
+  .gv-admin-sidebar,
+  #gv-mobile-menu-toggle,
+  #gv-mobile-menu-overlay {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+/* END GV HIDE ADMIN MENU WHEN PRINTING */

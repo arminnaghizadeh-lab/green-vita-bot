@@ -47,7 +47,7 @@
       const headerBottom = header.getBoundingClientRect().bottom;
       const currentTop = content.getBoundingClientRect().top;
       const naturalTop = currentTop - appliedOffset;
-      const needed = Math.max(0, Math.ceil(headerBottom + 4 - naturalTop));
+      const needed = Math.max(0, Math.ceil(headerBottom - naturalTop));
 
       if (needed === appliedOffset) return;
 

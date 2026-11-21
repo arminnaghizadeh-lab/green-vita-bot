@@ -113,3 +113,273 @@ html body nav.nav a.gv-booking-live-cta[href="/booking/"] {
   }
 }
 /* END GV-HEADER-NEON-GLOSS-FINAL */
+
+
+/* GV-DIAGNOSIS-STYLE-BOOKING-EFFECT-20261023 */
+/* Diagnosis-style glossy green effect for booking actions */
+body.gv-booking-page .bk-actions button.next-btn,
+body.gv-booking-page #confirmButton,
+body:has(#submitBtn) #submitBtn.submit,
+body:has(#confirmBtn) #confirmBtn.submit {
+  position: relative !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background-color: #2e6840 !important;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.26) 0%,
+      rgba(255,255,255,.08) 42%,
+      transparent 48%
+    ),
+    linear-gradient(115deg, #173e29, #2e6840) !important;
+  color: #F7FAF2 !important;
+  box-shadow:
+    0 9px 22px rgba(23,62,41,.25),
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -2px 0 rgba(0,0,0,.12);
+  animation: gv-booking-dx-glow 3.2s ease-in-out infinite;
+  transition: filter .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+body.gv-booking-page .bk-actions button.next-btn:hover:not(:disabled),
+body.gv-booking-page #confirmButton:hover:not(:disabled),
+body:has(#submitBtn) #submitBtn.submit:hover:not(:disabled),
+body:has(#confirmBtn) #confirmBtn.submit:hover:not(:disabled) {
+  filter: brightness(1.09) !important;
+  transform: translateY(-1px);
+}
+
+body.gv-booking-page .bk-actions button.next-btn:focus-visible,
+body.gv-booking-page #confirmButton:focus-visible,
+body:has(#submitBtn) #submitBtn.submit:focus-visible,
+body:has(#confirmBtn) #confirmBtn.submit:focus-visible {
+  outline: 3px solid rgba(168,206,112,.7) !important;
+  outline-offset: 3px;
+}
+
+/* Apply the same glossy treatment only to the selected day/time. */
+body.gv-booking-page .cal-week .day.selected,
+body.gv-booking-page .slot-grid button.selected,
+body:has(#dates) .date.active,
+body:has(#dates) .date.selected,
+body:has(#times) .time.active,
+body:has(#times) .time.selected,
+body.gv-booking-page .gv-booking-day.is-active,
+body.gv-booking-page .gv-booking-slot.is-active,
+body.gv-booking-page .gv-booking-date.is-active,
+body.gv-booking-page .gv-booking-time.is-active {
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background-color: #2e6840 !important;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.26) 0%,
+      rgba(255,255,255,.08) 42%,
+      transparent 48%
+    ),
+    linear-gradient(115deg, #173e29, #2e6840) !important;
+  color: #F7FAF2 !important;
+  box-shadow:
+    0 9px 22px rgba(23,62,41,.25),
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -2px 0 rgba(0,0,0,.12) !important;
+  animation: gv-booking-dx-glow 3.2s ease-in-out infinite;
+}
+
+body.gv-booking-page .cal-week .day.selected *,
+body.gv-booking-page .slot-grid button.selected *,
+body:has(#dates) .date.active *,
+body:has(#dates) .date.selected *,
+body:has(#times) .time.active *,
+body:has(#times) .time.selected * {
+  color: #F7FAF2 !important;
+}
+
+@keyframes gv-booking-dx-glow {
+  0%, 100% {
+    box-shadow:
+      0 8px 20px rgba(23,62,41,.22),
+      inset 0 1px 0 rgba(255,255,255,.42),
+      inset 0 -2px 0 rgba(0,0,0,.12);
+  }
+  50% {
+    box-shadow:
+      0 12px 28px rgba(23,62,41,.32),
+      0 0 0 4px rgba(168,206,112,.13),
+      inset 0 1px 0 rgba(255,255,255,.48),
+      inset 0 -2px 0 rgba(0,0,0,.12);
+  }
+}
+
+body.gv-booking-page .bk-actions button.next-btn:disabled,
+body.gv-booking-page #confirmButton:disabled,
+body:has(#submitBtn) #submitBtn.submit:disabled,
+body:has(#confirmBtn) #confirmBtn.submit:disabled {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.gv-booking-page .bk-actions button.next-btn,
+  body.gv-booking-page #confirmButton,
+  body:has(#submitBtn) #submitBtn.submit,
+  body:has(#confirmBtn) #confirmBtn.submit,
+  body.gv-booking-page .cal-week .day.selected,
+  body.gv-booking-page .slot-grid button.selected,
+  body:has(#dates) .date.active,
+  body:has(#dates) .date.selected,
+  body:has(#times) .time.active,
+  body:has(#times) .time.selected {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* END GV-DIAGNOSIS-STYLE-BOOKING-EFFECT-20261023 */
+
+
+/* GV-FOOTER-NO-MOTION-ALL-PAGES-20261023 */
+/* Keep all footer links and controls static on every public page. */
+html body footer a,
+html body footer button,
+html body footer [role="button"] {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+html body footer a::before,
+html body footer a::after,
+html body footer button::before,
+html body footer button::after,
+html body footer [role="button"]::before,
+html body footer [role="button"]::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+html body footer a:hover,
+html body footer a:active,
+html body footer button:hover,
+html body footer button:active,
+html body footer [role="button"]:hover,
+html body footer [role="button"]:active {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+/* END GV-FOOTER-NO-MOTION-ALL-PAGES */
+
+/* GV-FOOTER-BALE-NO-MOTION */
+html body footer a[href*="ble.ir"],
+html body footer a[href*="bale.ai"],
+html body footer a[href*="bale"],
+html body footer a[aria-label*="بله"],
+html body footer a[title*="بله"],
+html body .gv-contact-float-wrap a[href*="ble.ir"],
+html body .gv-contact-float-wrap a[href*="bale.ai"],
+html body .gv-contact-float-wrap a[href*="bale"],
+html body #gv-contact-float-menu a[href*="ble.ir"],
+html body #gv-contact-float-menu a[href*="bale.ai"],
+html body #gv-contact-float-menu a[href*="bale"] {
+  animation: none !important;
+  animation-name: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  will-change: auto !important;
+}
+
+html body footer a[href*="ble.ir"]::before,
+html body footer a[href*="ble.ir"]::after,
+html body footer a[href*="bale.ai"]::before,
+html body footer a[href*="bale.ai"]::after,
+html body footer a[href*="bale"]::before,
+html body footer a[href*="bale"]::after,
+html body .gv-contact-float-wrap a[href*="ble.ir"]::before,
+html body .gv-contact-float-wrap a[href*="ble.ir"]::after,
+html body .gv-contact-float-wrap a[href*="bale.ai"]::before,
+html body .gv-contact-float-wrap a[href*="bale.ai"]::after,
+html body .gv-contact-float-wrap a[href*="bale"]::before,
+html body .gv-contact-float-wrap a[href*="bale"]::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+/* END GV-FOOTER-BALE-NO-MOTION */
+
+/* GV-BALE-FOOTER-EXACT-STATIC-FINAL */
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"],
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:hover,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:focus,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:active {
+  animation: none !important;
+  animation-name: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  will-change: auto !important;
+  color: inherit !important;
+}
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]::before,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+/* END GV-BALE-FOOTER-EXACT-STATIC-FINAL */
+
+/* GV-BALE-FOOTER-REMOVE-GREEN-GLOW-FINAL */
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"],
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:link,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:visited,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:hover,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:focus,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]:active {
+  animation: none !important;
+  animation-name: none !important;
+  animation-duration: 0s !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  color: #F7FAF2 !important;
+  -webkit-text-fill-color: #F7FAF2 !important;
+  border-color: transparent !important;
+  mix-blend-mode: normal !important;
+  will-change: auto !important;
+}
+
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]::before,
+html body footer.gv-footer .gv-footer-grid .gv-footer-column > a[href="http://ble.ir/greenvita"]::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+/* END GV-BALE-FOOTER-REMOVE-GREEN-GLOW-FINAL */

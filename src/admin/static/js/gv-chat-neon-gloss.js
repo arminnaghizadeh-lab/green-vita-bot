@@ -7,6 +7,8 @@
   const styleId = 'gv-chat-neon-gloss-persistent-style';
 
   function isTarget(el) {
+    // دکمه بله در فوتر نباید افکت نئونی بگیرد.
+    if (el.matches('a.gv-footer-bale-static')) return false;
     const text = norm(
       el.innerText || el.textContent || el.getAttribute('aria-label')
     );

@@ -314,7 +314,7 @@
           height: 100dvh !important;
           z-index: -1 !important;
           pointer-events: none !important;
-          background-image: url("/static/images/home1.jpeg") !important;
+          background-image: url("/static/images/home.jpeg") !important;
           background-repeat: no-repeat !important;
           background-position: center center !important;
           background-size: auto 100vh !important;
@@ -365,10 +365,187 @@
 })();
 </script>
 
+
+<script id="gv-service-card-stack-v1">
+(() => {
+  const init = () => {
+    const root = document.getElementById("gv-service-preview-v2");
+    const grid = root?.querySelector(".gv-service-preview-grid");
+    if (!root || !grid || grid.dataset.stackReady === "1") return;
+
+    const cards = [...grid.querySelectorAll(":scope > .gv-preview-card")];
+    if (cards.length !== 4) return;
+
+    grid.dataset.stackReady = "1";
+
+    const mobile = window.matchMedia("(max-width: 600px)");
+    let order = [...cards];
+    let suppressNextClick = false;
+    let swipeStart = null;
+
+    const render = () => {
+      grid.classList.toggle("gv-stack-active", mobile.matches);
+      order.forEach((card, index) => {
+        for (let i = 0; i < 4; i++) {
+          card.classList.remove(`gv-stack-${i}`);
+        }
+        card.classList.add(`gv-stack-${index}`);
+        card.style.order = String(index);
+      });
+    };
+
+    const rotateTopToBack = (card, direction = 1) => {
+      if (!mobile.matches || order[0] !== card) return;
+
+      card.classList.remove("is-open");
+      card.setAttribute("aria-expanded", "false");
+      card.classList.remove("gv-stack-exit-left", "gv-stack-exit-right");
+      card.classList.add(direction < 0 ? "gv-stack-exit-left" : "gv-stack-exit-right");
+
+      let finished = false;
+      let fallbackTimer;
+
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(fallbackTimer);
+        card.removeEventListener("transitionend", onTransitionEnd);
+
+        if (order[0] !== card) {
+          card.classList.remove("gv-stack-exit-left", "gv-stack-exit-right");
+          return;
+        }
+
+        order = [...order.slice(1), card];
+
+        // کارتِ جابه‌جا شده ابتدا در انتهای دسته قرار می‌گیرد،
+        // سپس بدون پرش با یک فریم به حالت طبیعی برمی‌گردد.
+        card.classList.remove("gv-stack-exit-left", "gv-stack-exit-right");
+        card.classList.add("gv-stack-no-transition");
+        render();
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            card.classList.remove("gv-stack-no-transition");
+          });
+        });
+      };
+
+      const onTransitionEnd = (event) => {
+        if (event.target === card && event.propertyName === "transform") {
+          finish();
+        }
+      };
+
+      card.addEventListener("transitionend", onTransitionEnd);
+      fallbackTimer = window.setTimeout(finish, 320);
+    };
+
+    // Swipe افقی فقط روی کارت رویی؛ دکمه رزرو مستثنا است.
+    grid.addEventListener("pointerdown", (event) => {
+      if (!mobile.matches || event.target.closest(".gv-preview-book")) {
+        swipeStart = null;
+        return;
+      }
+
+      const card = event.target.closest(".gv-preview-card");
+      if (!card || order[0] !== card) {
+        swipeStart = null;
+        return;
+      }
+
+      swipeStart = {
+        card,
+        x: event.clientX,
+        y: event.clientY,
+        pointerId: event.pointerId
+      };
+    }, true);
+
+    grid.addEventListener("pointerup", (event) => {
+      if (!swipeStart || !mobile.matches) {
+        swipeStart = null;
+        return;
+      }
+
+      const start = swipeStart;
+      swipeStart = null;
+
+      if (event.pointerId !== start.pointerId) return;
+
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+
+      if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy) * 1.25) {
+        return;
+      }
+
+      suppressNextClick = true;
+      rotateTopToBack(start.card, dx < 0 ? -1 : 1);
+
+      // اگر مرورگر click تولید نکرد، کلیک بعدی بی‌دلیل حذف نشود.
+      window.setTimeout(() => {
+        suppressNextClick = false;
+      }, 700);
+    }, true);
+
+    grid.addEventListener("pointercancel", () => {
+      swipeStart = null;
+    }, true);
+
+    grid.addEventListener("click", (event) => {
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      if (event.target.closest(".gv-preview-book")) return;
+      if (event.target.closest(".gv-preview-click-circle, .gv-preview-content")) return;
+      const card = event.target.closest(".gv-preview-card");
+      if (!card || !mobile.matches) return;
+
+      // تپ دوباره روی کارت باز فقط توضیحات را می‌بندد.
+      if (order[0] === card && card.classList.contains("is-open")) {
+        event.preventDefault();
+        event.stopPropagation();
+        card.classList.remove("is-open");
+        card.setAttribute("aria-expanded", "false");
+      } else if (order[0] !== card) {
+        // تپ روی کارت‌های زیرین نباید ترتیب دسته را تغییر دهد.
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
+
+    grid.addEventListener("keydown", (event) => {
+      if (!mobile.matches || !["Enter", " "].includes(event.key)) return;
+      const card = event.target.closest(".gv-preview-card");
+      if (!card || event.target.closest(".gv-preview-book")) return;
+      if (order[0] !== card) {
+        event.preventDefault();
+        order = [card, ...order.filter(item => item !== card)];
+        render();
+      }
+    });
+
+    mobile.addEventListener?.("change", render);
+    render();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/home-luxury.css?v=20261018-home1-jpeg-final1">
+<link rel="stylesheet" href="/static/css/home-luxury.css?v=gv-testimonials-click-layer-v1">
 <link rel="stylesheet" href="/static/react/green-vita-hero/green-vita-hero.css?v=20261011-craos-mobile1">
 
 
@@ -875,7 +1052,7 @@ html body section#gv-online-diagnosis-cta {
 
 @media (max-width: 768px) {
   html body section#gv-online-diagnosis-cta {
-    margin-top: 64px !important;
+    margin-top: 0 !important;
     background-size: cover, 130% auto !important;
     background-position: center center, center top !important;
     background-repeat: no-repeat, no-repeat !important;
@@ -1002,13 +1179,15 @@ html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyeb
 }
 </style>
 
+
+
 <section id="gv-online-diagnosis-cta" dir="rtl"
-  style="padding:0 !important; margin-top:64px !important; scroll-margin-top:78px; background-image:none !important;  height:auto !important; min-height:0 !important; box-sizing:border-box !important">
+  style="padding:0 !important; margin-top:0 !important; scroll-margin-top:78px; background-image:none !important;  height:auto !important; min-height:0 !important; box-sizing:border-box !important">
   
 <div id="gv-diagnosis-photo-frame" style="display:block !important;width:100% !important;height:auto !important;overflow:hidden !important;position:relative !important;margin:0 !important;padding:0 !important;line-height:0 !important;box-sizing:border-box !important">
     
     <img id="gv-diagnosis-photo" src="/static/images/home-diag.jpeg?v=20261018-dx-bg2" alt="تصویر بنر تشخیص آنلاین گرین ویتا" fetchpriority="high" style="display:block !important;width:100% !important;height:auto !important;max-width:100% !important;object-fit:initial !important;object-position:center top !important">
-    <p class="gv-diagnosis-eyebrow-static" style="display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:9px!important;margin:0 auto 12px!important;padding:0 8px!important;color:#B58A3C!important;font-size:11px!important;font-weight:800!important;letter-spacing:.16em!important;line-height:1.5!important;white-space:nowrap!important; position:absolute!important; top:15px!important; left:0!important; right:0!important; z-index:3!important;"><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,transparent,#B58A3C)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span><span style="color:#B58A3C!important;-webkit-text-fill-color:#B58A3C!important;font-weight:800!important;text-shadow:0 1px 0 rgba(255,255,255,.55),0 3px 8px rgba(2,47,18,.24)!important;">GREEN VITA · ONLINE PLANT CLINIC</span><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,#B58A3C,transparent)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span></p>
+    <p class="gv-diagnosis-eyebrow-static" style="flex-direction:row!important;padding:0 8px!important;color:#B58A3C!important;font-size:11px!important;font-weight:800!important;letter-spacing:.16em!important;line-height:1.5!important;white-space:nowrap!important;margin:0!important;gap:9px!important"><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,transparent,#B58A3C)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span><span style="color:#B58A3C!important;-webkit-text-fill-color:#B58A3C!important;font-weight:800!important;text-shadow:0 1px 0 rgba(255,255,255,.55),0 3px 8px rgba(2,47,18,.24)!important;">GREEN VITA · ONLINE PLANT CLINIC</span><span aria-hidden="true" style="display:block!important;flex:0 0 24px!important;width:24px!important;height:1px!important;background:linear-gradient(90deg,#B58A3C,transparent)!important; filter:drop-shadow(0 1px 3px rgba(2,47,18,.35))!important;"></span></p>
 </div>
   <div class="container" style="max-width:1120px !important;width:100% !important;margin:0 auto !important;transform:none !important;padding:28px 16px 40px !important;position:relative !important;z-index:2 !important;box-sizing:border-box !important;text-align:center !important;">
     
@@ -1038,6 +1217,147 @@ html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyeb
 
 
 </section>
+
+
+
+<script id="gv-diagnosis-eyebrow-desktop-final-v1">
+(() => {
+  const frame = document.querySelector("#gv-diagnosis-photo-frame");
+  const label = document.querySelector(
+    "#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static"
+  );
+
+  if (!frame || !label || label.children.length < 3) return;
+
+  const desktop = window.matchMedia("(min-width: 768px)");
+
+  const original = {
+    frame: frame.getAttribute("style"),
+    label: label.getAttribute("style"),
+    children: [...label.children].map(el => el.getAttribute("style"))
+  };
+
+  const set = (el, styles) => {
+    Object.entries(styles).forEach(([key, value]) => {
+      el.style.setProperty(key, value, "important");
+    });
+  };
+
+  const restore = (el, value) => {
+    if (value === null) el.removeAttribute("style");
+    else el.setAttribute("style", value);
+  };
+
+  function apply() {
+    const [leftLine, text, rightLine] = label.children;
+
+    if (!desktop.matches) {
+      restore(frame, original.frame);
+      restore(label, original.label);
+      [leftLine, text, rightLine].forEach((el, i) => {
+        restore(el, original.children[i]);
+      });
+      return;
+    }
+
+    set(frame, { position: "relative" });
+
+    const top = Math.max(
+      16,
+      Math.min(30, Math.round(frame.clientHeight * 0.035))
+    );
+
+    set(label, {
+      position: "absolute",
+      top: `${top}px`,
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translateX(-50%)",
+      display: "grid",
+      "grid-template-columns": "24px max-content 24px",
+      "grid-template-rows": "auto",
+      "column-gap": "9px",
+      "justify-content": "center",
+      "justify-items": "center",
+      "align-items": "center",
+      width: "max-content",
+      "max-width": "calc(100% - 32px)",
+      margin: "0",
+      padding: "0 8px",
+      "box-sizing": "border-box",
+      direction: "ltr",
+      "text-align": "center",
+      "z-index": "20"
+    });
+
+    // پاک‌کردن موقعیت‌دهی‌های inline قدیمی که با Grid تداخل داشتند
+    [leftLine, text, rightLine].forEach(el => {
+      el.removeAttribute("style");
+    });
+
+    [leftLine, rightLine].forEach((line, index) => {
+      set(line, {
+        position: "static",
+        display: "block",
+        width: "24px",
+        height: "1px",
+        "min-width": "24px",
+        "max-width": "24px",
+        "grid-row": "1",
+        "grid-column": String(index === 0 ? 1 : 3),
+        margin: "0",
+        transform: "none",
+        background: index === 0
+          ? "linear-gradient(90deg, transparent, #B58A3C)"
+          : "linear-gradient(90deg, #B58A3C, transparent)"
+      });
+    });
+
+    set(text, {
+      position: "static",
+      display: "block",
+      width: "max-content",
+      "max-width": "none",
+      "grid-row": "1",
+      "grid-column": "2",
+      "text-align": "center",
+      "white-space": "nowrap",
+      margin: "0",
+      transform: "none"
+    });
+  }
+
+  let queued = false;
+
+  function schedule() {
+    if (queued) return;
+    queued = true;
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      queued = false;
+      apply();
+    }));
+  }
+
+  schedule();
+  window.addEventListener("load", schedule, { once: true });
+  window.addEventListener("resize", schedule, { passive: true });
+  window.addEventListener("orientationchange", schedule);
+
+  if (document.fonts?.ready) document.fonts.ready.then(schedule);
+
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(schedule).observe(frame);
+  }
+
+  desktop.addEventListener?.("change", schedule);
+})();
+</script>
+
+
+
+
 
 
 <!-- GV-ONLINE-BOTTOM-EDGE-SHADOW-PERSISTENT-START -->
@@ -1152,17 +1472,27 @@ html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyeb
 
 
 
+
 <section class="gv-service-preview-section" id="gv-service-preview-v2">
 
         <div class="gv-services-main-heading">
-            <span class="gv-services-main-eyebrow">GREEN VITA CLINIC</span>
-            <h1>کلینیک گیاه پزشکی گرین ویتا</h1>
+            <span class="gv-services-main-eyebrow"></span>
+            <h1 class="gv-home-title-fit" style="display:block!important; width:100%!important; max-width:calc(100vw - 24px)!important; min-width:0!important; margin-inline:auto!important; text-align:center!important; box-sizing:border-box!important;">
+  <span class="gv-home-title-fit-line1" style="display:block!important; width:100%!important; font-size:0.8em!important; white-space:nowrap!important; text-align:center!important;">کلینیک گیاه پزشکی</span>
+  <span class="gv-home-title-fit-line2" style="display:block!important; width:100%!important; font-size:1.2em!important; white-space:nowrap!important; text-align:center!important;">گرین ویتا</span>
+</h1>
                 تشخیص و درمان بیماری‌ها و آفات گیاهان آپارتمانی، فضای باز و باغات؛
                 ویزیت حضوری و آنلاین متناسب با شرایط واقعی گیاه
             </p>
             <p class="gv-services-select-hint">لطفاً سرویس مورد نظر خود را انتخاب کنید</p>
 
         </div>
+
+
+
+<!-- END GV PLANT CLINIC FEATURE CARD -->
+
+
 <div class="gv-service-preview-grid">
 
             {% set preview_images = [
@@ -1195,9 +1525,12 @@ html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyeb
                         {{ service.title }}
                     </div>
 
-                    <span class="gv-preview-click-circle" aria-hidden="true">
-                        <span></span>
-                    </span>
+                    <button type="button"
+                        class="gv-preview-click-circle"
+                        aria-label="نمایش توضیحات سرویس"
+                        aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                    </button>
 
                     <span class="gv-preview-hint" aria-hidden="true">
                         <span class="gv-preview-hint-arrow">←</span>
@@ -1209,9 +1542,6 @@ html body section#gv-online-diagnosis-cta > .container > p.gv-online-clinic-eyeb
 
                     <div class="gv-preview-content-inner">
 
-                        <span class="gv-preview-icon">
-                            {{ ["🪴","🌳","🌿","📞"][loop.index0] }}
-                        </span>
 
                         <h3>{{ service.title }}</h3>
 
@@ -1258,7 +1588,7 @@ body section.gv-customer-trust {
         position:relative!important;
         display:block!important;
         width:100%!important;
-        margin-top:100px!important;
+        margin-top:12.5px!important;
         margin-bottom:0!important;
         transform:none!important;
         opacity:1!important;
@@ -1394,7 +1724,7 @@ body section.gv-customer-trust {
         <div class="container">
 
             <div class="gv-visit-process-head">
-                <span>HOW IT WORKS</span>
+                
                 <h2>روند ویزیت</h2>
                 <p>از پیدا کردن مشکل تا شروع مسیر درمان، قدم‌به‌قدم کنارت هستیم.</p>
             </div>
@@ -1442,7 +1772,7 @@ body section.gv-customer-trust {
         <div class="container">
 
             <div class="gv-treatment-cases-head">
-                <span>REAL CASES</span>
+                
                 <h2>نمونه‌های واقعی درمان</h2>
                 <p>هر گیاه داستان خودش را دارد؛ تشخیص درست، اولین قدم برای نجات آن است.</p>
             </div>
@@ -1476,7 +1806,7 @@ body section.gv-customer-trust {
         </div>
     </section>
 
-    <section class="section gv-home-trust">
+    <section class="section gv-home-trust" style="background: transparent !important; background-color: transparent !important; background-image: none !important; box-shadow: none !important;">
     <div class="container">
 
         <div
@@ -1487,16 +1817,7 @@ body section.gv-customer-trust {
                 text-align:center;
             "
         >
-            <span
-                style="
-                    display:block;
-                    margin-bottom:10px;
-                    color:#C6A15B;
-                    font-size:11px;
-                    font-weight:700;
-                    letter-spacing:.18em;
-                "
-            >WHY GREEN VITA</span>
+            
 
             <h2
                 style="
@@ -1545,13 +1866,20 @@ body section.gv-customer-trust {
 
 <!-- ================= GREEN VITA BOT PROMO ================= -->
 <section class="gv-bot-promo" id="green-vita-bots">
+  <div id="gv-bot-bottom-edge-final-inline" aria-hidden="true"
+       style="position:absolute;left:0;right:0;bottom:0;height:18px;pointer-events:none;z-index:10002;">
+    <div style="position:absolute;left:0;right:0;bottom:0;height:18px;border-radius:0 0 50% 50%;background:linear-gradient(180deg,rgba(1,15,8,.30),rgba(1,15,8,.15) 38%,transparent);box-shadow:0 5px 13px rgba(0,0,0,.15);filter:blur(5px);opacity:.9;"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:1px;border-radius:50%;background:linear-gradient(90deg,rgba(139,197,61,.55),#9edc5c 15%,#e5f8bf 50%,#9edc5c 85%,rgba(139,197,61,.55));box-shadow:0 0 3px rgba(211,255,159,.95),0 1px 8px rgba(139,197,61,.75),0 2px 15px rgba(139,197,61,.32);"></div>
+  </div>
+
+  
   <div class="gv-bot-promo-orb gv-bot-orb-1"></div>
   <div class="gv-bot-promo-orb gv-bot-orb-2"></div>
 
   <div class="container gv-bot-promo-inner">
 
     <div class="gv-bot-promo-head">
-      <span class="gv-bot-eyebrow">GREEN VITA ASSISTANT</span>
+      
       <h2>ربات گیاه پزشک گرین‌ویتا همیشه کنارت هست</h2>
       <p>
         ربات گیاه پزشک گرین‌ویتا برای تشخیص اولیه مشکل گیاه،
@@ -1713,6 +2041,78 @@ body section.gv-customer-trust {
     </div>
   </div>
 </section>
+
+<script id="gv-top-edges-permanent-v1">
+(() => {
+  const install = () => {
+    const targets = [
+      { el: document.querySelector('#green-vita-bots'), id: 'gv-bot-top-edge-final' },
+      { el: document.querySelector('footer'), id: 'gv-footer-top-edge-final' }
+    ];
+
+    targets.forEach(({el, id}) => {
+      if (!el) return console.warn('Target not found:', id);
+
+      document.getElementById(id)?.remove();
+
+      if (getComputedStyle(el).position === 'static') {
+        el.style.position = 'relative';
+      }
+
+      const wrap = document.createElement('div');
+      wrap.id = id;
+      Object.assign(wrap.style, {
+        position: 'absolute',
+        left: '0',
+        right: '0',
+        top: '0',
+        height: '18px',
+        pointerEvents: 'none',
+        zIndex: '10002',
+        transform: 'rotate(180deg)',
+        transformOrigin: 'center'
+      });
+
+      const shadow = document.createElement('div');
+      Object.assign(shadow.style, {
+        position: 'absolute',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        height: '18px',
+        borderRadius: '0 0 50% 50%',
+        background: 'linear-gradient(180deg,rgba(1,15,8,.30),rgba(1,15,8,.15) 38%,transparent)',
+        boxShadow: '0 5px 13px rgba(0,0,0,.15)',
+        filter: 'blur(5px)',
+        opacity: '.9'
+      });
+
+      const line = document.createElement('div');
+      Object.assign(line.style, {
+        position: 'absolute',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        height: '1px',
+        borderRadius: '50%',
+        background: 'linear-gradient(90deg,rgba(139,197,61,.55),#9edc5c 15%,#e5f8bf 50%,#9edc5c 85%,rgba(139,197,61,.55))',
+        boxShadow: '0 0 3px rgba(211,255,159,.95),0 1px 8px rgba(139,197,61,.75),0 2px 15px rgba(139,197,61,.32)'
+      });
+
+      wrap.append(shadow, line);
+      el.appendChild(wrap);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install, { once: true });
+  } else {
+    install();
+  }
+})();
+</script>
+
+
 <!-- ================= END GREEN VITA BOT PROMO ================= -->
 
 <section class="gv-home-testimonials">
@@ -1756,7 +2156,7 @@ body section.gv-customer-trust {
             
                 <!-- MORE REVIEWS START -->
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         برای پتوسم چند ماه درگیر زردی برگ‌ها بودم. بعد از بررسی نور
@@ -1765,7 +2165,7 @@ body section.gv-customer-trust {
                     <strong>محمدی / تهران</strong>
                 </article>
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         خیلی ساده و قابل فهم توضیح دادن که چه تغییری در آبیاری گیاه
@@ -1774,7 +2174,7 @@ body section.gv-customer-trust {
                     <strong>ف.لطفی / تهران</strong>
                 </article>
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         برای گیاه بالکنم مشکل آفت داشتم و با راهنمایی درست تونستم
@@ -1783,7 +2183,7 @@ body section.gv-customer-trust {
                     <strong>رضایی / کرج</strong>
                 </article>
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         چیزی که دوست داشتم این بود که فقط یک راه‌حل کلی نگرفتم؛
@@ -1792,7 +2192,7 @@ body section.gv-customer-trust {
                     <strong>م.سامانی / ورامین</strong>
                 </article>
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         مشکل خاک گلدونم رو متوجه نمی‌شدم تا اینکه با بررسی تخصصی
@@ -1801,7 +2201,7 @@ body section.gv-customer-trust {
                     <strong>احمدی / اصفهان</strong>
                 </article>
 
-                <article class="gv-testimonial-card gv-extra-review">
+                <article class="gv-testimonial-card gv-extra-review" hidden>
                     <div class="gv-testimonial-quote">“</div>
                     <p>
                         توضیحات کامل بود و بعد از ویزیت هم می‌دونستم برای ادامه مراقبت
@@ -1831,7 +2231,77 @@ body section.gv-customer-trust {
                 </div>
 
         </div>
-    </section>
+    
+
+<script id="gv-more-reviews-functional-v1">
+/* GV MORE REVIEWS FUNCTIONAL V1 */
+(() => {
+  const section = document.querySelector("section.gv-home-testimonials");
+  if (!section) return;
+
+  const grid = section.querySelector(".gv-testimonials-grid");
+  const button = section.querySelector(".gv-more-reviews-btn");
+
+  if (!grid || !button) return;
+
+  const extraReviews = [
+    ...grid.querySelectorAll(".gv-extra-review")
+  ];
+
+  if (!extraReviews.length) return;
+
+  const label = button.querySelector("span");
+  const arrow = button.querySelector("b");
+  const dots = [
+    ...section.querySelectorAll(".gv-more-reviews-indicator span")
+  ];
+
+  let expanded = false;
+
+  const setExpanded = (value) => {
+    expanded = value;
+
+    extraReviews.forEach((review) => {
+      if (expanded) {
+        review.hidden = false;
+        review.style.setProperty("display", "flex", "important");
+      } else {
+        review.style.removeProperty("display");
+        review.hidden = true;
+      }
+    });
+
+    button.setAttribute("aria-expanded", String(expanded));
+    button.setAttribute(
+      "aria-label",
+      expanded ? "نمایش نظرات کمتر" : "نمایش نظرات بیشتر"
+    );
+
+    if (label) {
+      label.textContent = expanded ? "کمتر" : "بیشتر";
+    }
+
+    if (arrow) {
+      arrow.textContent = expanded ? "⌃" : "⌄";
+    }
+
+    dots.forEach((dot, index) => {
+      dot.classList.toggle(
+        "active",
+        expanded ? index === 1 : index === 0
+      );
+    });
+  };
+
+  setExpanded(false);
+
+  button.addEventListener("click", () => {
+    setExpanded(!expanded);
+  });
+})();
+</script>
+
+</section>
 
     <section
     class="gv-home-faq"
@@ -1852,16 +2322,7 @@ body section.gv-customer-trust {
             class="gv-faq-head"
            
         >
-            <span
-                style="
-                    display:block;
-                    margin-bottom:10px;
-                    color:#C6A15B;
-                    font-size:11px;
-                    font-weight:700;
-                    letter-spacing:.18em;
-                "
-            >FAQ</span>
+            
 
             <h2
                 style="
@@ -2127,7 +2588,7 @@ body section.gv-customer-trust {
     </div>
 </section>
 
-    <section class="gv-final-cta">
+    <section class="gv-final-cta" style="background: transparent !important; background-color: transparent !important; background-image: none !important; box-shadow: none !important;">
     <div class="gv-final-cta-inner">
         <h2>گیاهت را تنها نگذار.</h2>
         <p>
@@ -2752,29 +3213,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const clickedCard = event.target.closest(".gv-preview-card");
 
-    // دکمه رزرو
+    // دکمه رزرو — رفتار عادی لینک حفظ شود.
     if (event.target.closest(".gv-preview-book")) {
       return;
     }
 
-    // کلیک روی کارت
-    if (clickedCard) {
-      const wasOpen = clickedCard.classList.contains("is-open");
+    // رادیوس منفی / دکمه بازکردن توضیحات
+    const clickCircle = event.target.closest(".gv-preview-click-circle");
+
+    if (clickCircle && clickedCard) {
+      event.preventDefault();
+      event.stopPropagation();
 
       cards.forEach(card => {
         card.classList.remove("is-open");
         card.setAttribute("aria-expanded", "false");
       });
 
-      if (!wasOpen) {
-        clickedCard.classList.add("is-open");
-        clickedCard.setAttribute("aria-expanded", "true");
-      }
+      clickedCard.classList.add("is-open");
+      clickedCard.setAttribute("aria-expanded", "true");
 
       return;
     }
 
-    // هر کلیک خارج از کارت
+    // کلیک روی توضیحات = بستن توضیحات
+    const clickedContent = event.target.closest(".gv-preview-content");
+
+    if (clickedContent && clickedCard) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      clickedCard.classList.remove("is-open");
+      clickedCard.setAttribute("aria-expanded", "false");
+
+      return;
+    }
+
+    // در حالت بسته، کلیک روی بدنه کارت هیچ تغییری ایجاد نکند.
+    if (clickedCard) {
+      return;
+    }
+
+    // کلیک خارج از کارت = بستن توضیحات
     cards.forEach(card => {
       card.classList.remove("is-open");
       card.setAttribute("aria-expanded", "false");
@@ -3269,7 +3749,7 @@ html body p.gv-services-select-hint {
 <style id="gv-home1-landscape-background-final">
 @media (orientation: landscape) and (max-height: 500px) and (hover: none) and (pointer: coarse) {
   html body {
-    background-image: url("/static/images/home1.jpeg") !important;
+    background-image: url("/static/images/home.jpeg") !important;
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
@@ -3278,4 +3758,1018 @@ html body p.gv-services-select-hint {
 }
 </style>
 
+
+<script id="gv-home-title-fit-final">
+(() => {
+  const init = () => {
+    const heading = document.querySelector(
+      "#gv-service-preview-v2 .gv-services-main-heading h1.gv-home-title-fit"
+    );
+    const first = heading?.querySelector(".gv-home-title-fit-line1");
+    const second = heading?.querySelector(".gv-home-title-fit-line2");
+
+    if (!heading || !first || !second) {
+      console.warn("عنوان دوخطی هوم پیدا نشد.");
+      return;
+    }
+
+    heading.style.setProperty("display", "block", "important");
+    heading.style.setProperty("width", "100%", "important");
+    heading.style.setProperty("max-width", "calc(100vw - 24px)", "important");
+    heading.style.setProperty("min-width", "0", "important");
+    heading.style.setProperty("margin-inline", "auto", "important");
+    heading.style.setProperty("text-align", "center", "important");
+    heading.style.setProperty("box-sizing", "border-box", "important");
+
+    [first, second].forEach(line => {
+      line.style.setProperty("display", "block", "important");
+      line.style.setProperty("width", "100%", "important");
+      line.style.setProperty("max-width", "100%", "important");
+      line.style.setProperty("min-width", "0", "important");
+      line.style.setProperty("box-sizing", "border-box", "important");
+      line.style.setProperty("white-space", "nowrap", "important");
+      line.style.setProperty("text-align", "center", "important");
+    });
+
+    const fit = () => {
+      const baseSize =
+        parseFloat(getComputedStyle(heading).fontSize) || 32;
+      const viewportWidth =
+        document.documentElement.clientWidth || window.innerWidth;
+      const safeWidth = Math.max(1, viewportWidth - 24);
+
+      // First fit the previous title sizes, then apply exactly 50%.
+      const lines = [
+        [first, 7.2],
+        [second, 10.8]
+      ];
+
+      for (const [line, ratio] of lines) {
+        let size = baseSize * ratio;
+        line.style.setProperty("font-size", `${size}px`, "important");
+
+        const measureText = () => {
+          const range = document.createRange();
+          range.selectNodeContents(line);
+          return range.getBoundingClientRect().width;
+        };
+
+        for (let i = 0; i < 30; i++) {
+          const available = Math.min(
+            line.clientWidth || heading.clientWidth,
+            safeWidth
+          );
+          const textWidth = measureText();
+
+          if (available <= 0 || textWidth <= available + 1) break;
+
+          size *= Math.max(
+            0.1,
+            Math.min(0.99, (available / textWidth) * 0.98)
+          );
+          line.style.setProperty("font-size", `${size}px`, "important");
+        }
+
+        size *= 0.5;
+        line.style.setProperty("font-size", `${size}px`, "important");
+      }
+    };
+
+    let frame = 0;
+    const scheduleFit = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => requestAnimationFrame(fit));
+    };
+
+    scheduleFit();
+    window.addEventListener("resize", scheduleFit, { passive: true });
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(scheduleFit);
+    }
+
+    if (window.ResizeObserver && heading.parentElement) {
+      let lastWidth = -1;
+      new ResizeObserver(entries => {
+        const width = entries[0]?.contentRect.width;
+        if (width != null && Math.abs(width - lastWidth) > 0.5) {
+          lastWidth = width;
+          scheduleFit();
+        }
+      }).observe(heading.parentElement);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
+<style id="gv-diagnosis-login-modal-final">
+#gv-diagnosis-login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(2, 20, 8, .68);
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  direction: rtl;
+}
+#gv-diagnosis-login-overlay.gv-open {
+  display: flex;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-card {
+  width: min(100%, 420px);
+  position: relative;
+  box-sizing: border-box;
+  padding: 30px 24px 24px;
+  border: 1px solid rgba(212,180,110,.75);
+  border-radius: 24px;
+  background: #f7faf2;
+  color: #123d22;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  animation: gvLoginModalIn .22s ease-out both;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-icon {
+  font-size: 34px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-title {
+  margin: 0 0 12px;
+  color: #123d22;
+  font-size: 22px;
+  font-weight: 850;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-message {
+  margin: 0 0 22px;
+  color: #405644;
+  font-size: 15px;
+  line-height: 2;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: #176b38;
+  color: white;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform .2s ease, background .2s ease;
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-link:hover {
+  background: #10552c;
+  transform: translateY(-2px);
+}
+#gv-diagnosis-login-overlay .gv-diagnosis-login-close {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #e8efdf;
+  color: #123d22;
+  font-size: 22px;
+  cursor: pointer;
+}
+@keyframes gvLoginModalIn {
+  from { opacity: 0; transform: translateY(8px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gv-diagnosis-login-overlay .gv-diagnosis-login-card {
+    animation: none;
+  }
+}
+</style>
+
+<script id="gv-diagnosis-login-modal-final">
+(() => {
+  const triggerSelector = '#gv-online-diagnosis-cta a[href="/diagnosis/"]';
+  let checking = false;
+  let previousOverflow = "";
+
+  function createModal() {
+    let overlay = document.getElementById("gv-diagnosis-login-overlay");
+    if (overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.id = "gv-diagnosis-login-overlay";
+    overlay.innerHTML = `
+      <section class="gv-diagnosis-login-card"
+        role="dialog" aria-modal="true"
+        aria-labelledby="gv-diagnosis-login-title"
+        aria-describedby="gv-diagnosis-login-message">
+        <button type="button" class="gv-diagnosis-login-close"
+          aria-label="بستن پنجره">×</button>
+        <div class="gv-diagnosis-login-icon" aria-hidden="true">🌿</div>
+        <h2 id="gv-diagnosis-login-title" class="gv-diagnosis-login-title">
+          ورود به حساب کاربری
+        </h2>
+        <p id="gv-diagnosis-login-message" class="gv-diagnosis-login-message">
+          برای استفاده از خدمات کلینیک لطفاً وارد حساب کاربری خود شوید.
+        </p>
+        <a class="gv-diagnosis-login-link" href="/account/login/">
+          ورود / عضویت
+        </a>
+      </section>`;
+
+    document.body.appendChild(overlay);
+
+    const close = () => {
+      overlay.classList.remove("gv-open");
+      document.body.style.overflow = previousOverflow;
+    };
+
+    overlay.querySelector(".gv-diagnosis-login-close")
+      .addEventListener("click", close);
+
+    overlay.addEventListener("click", event => {
+      if (event.target === overlay) close();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && overlay.classList.contains("gv-open")) {
+        close();
+      }
+    });
+
+    overlay._gvOpen = () => {
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      overlay.classList.add("gv-open");
+      overlay.querySelector(".gv-diagnosis-login-link").focus();
+    };
+
+    return overlay;
+  }
+
+  document.addEventListener("click", async event => {
+    const target = event.target instanceof Element
+      ? event.target.closest(triggerSelector)
+      : null;
+
+    if (!target) return;
+
+    event.preventDefault();
+    if (checking) return;
+    checking = true;
+
+    try {
+      const response = await fetch("/account/api/me", {
+        method: "GET",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: { "Accept": "application/json" }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.authenticated === true) {
+          window.location.assign(target.href);
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn("بررسی ورود ناموفق بود؛ پنجرهٔ ورود نمایش داده می‌شود.");
+    } finally {
+      checking = false;
+    }
+
+    createModal()._gvOpen();
+  });
+})();
+</script>
+
+
+
+<script id="gv-middle-ornament-all-sections">
+/* GV MIDDLE ORNAMENT ALL SECTIONS SPACING 20 PERCENT V2 */
+(() => {
+  const selectors = [
+    "section.gv-customer-trust",
+    "section.gv-visit-process",
+    "section.gv-treatment-cases",
+    "section.gv-home-trust",
+    "section.gv-home-faq#faq",
+    "section.gv-final-cta",
+    "section.gv-blog-strip#blog"
+  ];
+
+  const reduceTo20Percent = value => {
+    const number = Number.parseFloat(value);
+    if (!Number.isFinite(number)) return value;
+    return `${Math.round(number * 0.2 * 10) / 10}px`;
+  };
+
+  let added = 0;
+  let adjusted = 0;
+
+  selectors.forEach(selector => {
+    document.querySelectorAll(selector).forEach(section => {
+      if (section.dataset.gvOrnamentSpacing20 === "1") return;
+
+      const sectionStyle = getComputedStyle(section);
+      const paddingTop = sectionStyle.paddingTop;
+      const paddingBottom = sectionStyle.paddingBottom;
+
+      let img = section.querySelector(":scope > .gv-home-middle-ornament");
+
+      if (!img) {
+        img = document.createElement("img");
+        img.className = "gv-home-middle-ornament";
+        img.src = "/static/images/midle%20ornament.png?v=20261108-sections-v1";
+        img.alt = "";
+        img.setAttribute("aria-hidden", "true");
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        section.insertBefore(img, section.firstElementChild);
+        added++;
+      }
+
+      const imageStyle = getComputedStyle(img);
+
+      section.style.setProperty(
+        "padding-top",
+        reduceTo20Percent(paddingTop),
+        "important"
+      );
+      section.style.setProperty(
+        "padding-bottom",
+        reduceTo20Percent(paddingBottom),
+        "important"
+      );
+
+      img.style.setProperty(
+        "margin-top",
+        reduceTo20Percent(imageStyle.marginTop),
+        "important"
+      );
+      img.style.setProperty(
+        "margin-bottom",
+        reduceTo20Percent(imageStyle.marginBottom),
+        "important"
+      );
+
+      section.dataset.gvOrnamentSpacing20 = "1";
+      adjusted++;
+    });
+  });
+
+  console.info(
+    "[Green Vita] Ornament spacing set to 20%:",
+    adjusted,
+    "sections;",
+    added,
+    "images inserted"
+  );
+})();
+</script>
+
+
+<script id="gv-homepage-section-gaps-half">
+/* GV HOMEPAGE CONTENT TO NEXT HEADING GAP 50 PERCENT V1 */
+(() => {
+  const sections = [...document.querySelectorAll("section")]
+    .filter(section => !section.parentElement?.closest("section"))
+    .filter(section => {
+      const r = section.getBoundingClientRect();
+      const st = getComputedStyle(section);
+      return r.height > 0 && st.display !== "none" &&
+             st.visibility !== "hidden";
+    });
+
+  function restoreOriginalMargins() {
+    sections.forEach(section => {
+      if (!section.dataset.gvGapHalfOriginalMarginTop) {
+        section.dataset.gvGapHalfOriginalMarginTop = JSON.stringify({
+          value: section.style.getPropertyValue("margin-top"),
+          priority: section.style.getPropertyPriority("margin-top")
+        });
+      }
+
+      const original = JSON.parse(
+        section.dataset.gvGapHalfOriginalMarginTop
+      );
+
+      if (original.value) {
+        section.style.setProperty(
+          "margin-top", original.value, original.priority
+        );
+      } else {
+        section.style.removeProperty("margin-top");
+      }
+    });
+  }
+
+  function lastContentBottom(section) {
+    let bottom = -Infinity;
+
+    const walker = document.createTreeWalker(
+      section, NodeFilter.SHOW_TEXT
+    );
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (!node.nodeValue.trim()) continue;
+
+      const el = node.parentElement;
+      if (!el || el.closest(
+        "script,style,noscript,template,.gv-home-middle-ornament"
+      )) continue;
+
+      const st = getComputedStyle(el);
+      if (
+        st.display === "none" ||
+        st.visibility === "hidden" ||
+        st.position === "absolute" ||
+        st.position === "fixed"
+      ) continue;
+
+      const range = document.createRange();
+      range.selectNodeContents(node);
+
+      for (const rect of range.getClientRects()) {
+        if (rect.width > 0 && rect.height > 0) {
+          bottom = Math.max(bottom, rect.bottom);
+        }
+      }
+    }
+
+    const media = section.querySelectorAll(
+      'a,button,img:not(.gv-home-middle-ornament),video,canvas,iframe,' +
+      'figure,summary,details,input,select,textarea,svg'
+    );
+
+    media.forEach(el => {
+      const st = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+
+      if (
+        st.display === "none" ||
+        st.visibility === "hidden" ||
+        st.position === "absolute" ||
+        st.position === "fixed" ||
+        r.width <= 0 ||
+        r.height <= 0
+      ) return;
+
+      bottom = Math.max(bottom, r.bottom);
+    });
+
+    return Number.isFinite(bottom) ? bottom : null;
+  }
+
+  function applyHalfGaps() {
+    restoreOriginalMargins();
+
+    const changes = [];
+
+    for (let i = 0; i < sections.length - 1; i++) {
+      const previous = sections[i];
+      const next = sections[i + 1];
+
+      const heading = [...next.querySelectorAll("h1,h2,h3")]
+        .find(el => {
+          const r = el.getBoundingClientRect();
+          const st = getComputedStyle(el);
+          return r.height > 0 &&
+                 st.display !== "none" &&
+                 st.visibility !== "hidden";
+        });
+
+      const bottom = lastContentBottom(previous);
+      if (!heading || bottom === null) continue;
+
+      const gap = heading.getBoundingClientRect().top - bottom;
+      if (gap <= 1) continue;
+
+      const baseMargin =
+        parseFloat(getComputedStyle(next).marginTop) || 0;
+
+      const reduction = gap / 2;
+      const newMargin = baseMargin - reduction;
+
+      changes.push({
+        section: next,
+        previous: previous.className || previous.id,
+        heading: heading.textContent.trim().slice(0, 35),
+        originalGap: Math.round(gap),
+        newMargin
+      });
+    }
+
+    changes.forEach(change => {
+      change.section.style.setProperty(
+        "margin-top",
+        `${Math.round(change.newMargin * 10) / 10}px`,
+        "important"
+      );
+    });
+
+    console.table(changes.map(c => ({
+      previousSection: c.previous,
+      nextHeading: c.heading,
+      originalGap: c.originalGap,
+      reducedBy: Math.round(c.originalGap / 2),
+      targetGap: Math.round(c.originalGap / 2)
+    })));
+
+    console.info(
+      "[Green Vita] Homepage gaps reduced by 50%:",
+      changes.length,
+      "transitions"
+    );
+  }
+
+  let scheduled = false;
+
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true;
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      scheduled = false;
+      applyHalfGaps();
+    }));
+  }
+
+  schedule();
+
+  window.addEventListener("load", schedule, {once: true});
+  window.addEventListener("resize", schedule, {passive: true});
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(schedule);
+  }
+
+  document.querySelectorAll("section img").forEach(img => {
+    if (!img.complete) {
+      img.addEventListener("load", schedule, {once: true});
+    }
+  });
+})();
+</script>
+
+
+<script id="gv-after-why-down-50">
+/* GV ALL SECTIONS AFTER WHY GREEN VITA DOWN 50PX V1 */
+(() => {
+  const anchor = document.querySelector('section.gv-home-trust');
+
+  if (!anchor) {
+    console.warn('[Green Vita] Why Green Vita section not found.');
+    return;
+  }
+
+  const following = [...document.querySelectorAll(
+    'section, footer, .gv-bot-promo'
+  )].filter(el =>
+    el !== anchor &&
+    (anchor.compareDocumentPosition(el) &
+      Node.DOCUMENT_POSITION_FOLLOWING)
+  );
+
+  // Move only outer sections, avoiding double movement of nested elements.
+  const targets = following.filter(el =>
+    !following.some(parent =>
+      parent !== el && parent.contains(el)
+    )
+  );
+
+  const results = [];
+
+  targets.forEach(el => {
+    if (el.dataset.gvAfterWhyDown50 === '1') return;
+
+    const current = getComputedStyle(el).translate;
+    const values = current === 'none'
+      ? [0, 0]
+      : [...current.matchAll(/-?[\d.]+px/g)]
+          .map(x => parseFloat(x[0]));
+
+    const x = values[0] || 0;
+    const y = values[1] || 0;
+
+    el.style.setProperty(
+      'translate',
+      `${x}px ${y + 50}px`,
+      'important'
+    );
+
+    el.dataset.gvAfterWhyDown50 = '1';
+
+    results.push({
+      section: el.id || el.className || el.tagName,
+      movement: '+50px'
+    });
+  });
+
+  console.table(results);
+  console.info(
+    '[Green Vita] Sections after Why Green Vita moved down 50px:',
+    results.length
+  );
+})();
+</script>
+
+
+<script id="gv-robot-and-after-down25">
+/* GV ROBOT AND FOLLOWING SECTIONS DOWN 25PX V1 */
+(() => {
+  const bot = document.querySelector(".gv-bot-promo");
+
+  if (!bot) {
+    console.warn("[Green Vita] Robot section not found.");
+    return;
+  }
+
+  const candidates = [
+    ...document.querySelectorAll("section, footer, .gv-bot-promo")
+  ].filter(el =>
+    el === bot ||
+    (bot.compareDocumentPosition(el) &
+      Node.DOCUMENT_POSITION_FOLLOWING)
+  );
+
+  const targets = candidates.filter(el =>
+    !candidates.some(parent =>
+      parent !== el && parent.contains(el)
+    )
+  );
+
+  const results = [];
+
+  targets.forEach(el => {
+    if (el.dataset.gvRobotExtra25 === "1") return;
+
+    const current = getComputedStyle(el).translate;
+    const values = current === "none"
+      ? []
+      : [...current.matchAll(/-?[\d.]+px/g)]
+          .map(match => parseFloat(match[0]));
+
+    const x = values[0] || 0;
+    const y = values[1] || 0;
+
+    el.style.setProperty(
+      "translate",
+      `${x}px ${y + 25}px`,
+      "important"
+    );
+
+    el.dataset.gvRobotExtra25 = "1";
+
+    results.push({
+      section: el.id || el.className || el.tagName,
+      extraMovement: "+25px"
+    });
+  });
+
+  console.table(results);
+  console.info(
+    "[Green Vita] Robot and following sections moved down 25px:",
+    results.length
+  );
+})();
+</script>
+
+
+<script id="gv-experience-and-after-down40">
+/* GV EXPERIENCE AND FOLLOWING SECTIONS DOWN 40PX V1 */
+(() => {
+  const start = document.querySelector("section.gv-home-testimonials");
+
+  if (!start) {
+    console.warn("[Green Vita] Experience section not found.");
+    return;
+  }
+
+  const candidates = [
+    ...document.querySelectorAll("section, footer")
+  ].filter(el =>
+    el === start ||
+    (start.compareDocumentPosition(el) &
+      Node.DOCUMENT_POSITION_FOLLOWING)
+  );
+
+  const targets = candidates.filter(el =>
+    !candidates.some(parent =>
+      parent !== el && parent.contains(el)
+    )
+  );
+
+  const results = [];
+
+  targets.forEach(el => {
+    if (el.dataset.gvExperienceExtra40 === "1") return;
+
+    const current = getComputedStyle(el).translate;
+    const values = current === "none"
+      ? []
+      : [...current.matchAll(/-?[\d.]+px/g)]
+          .map(match => parseFloat(match[0]));
+
+    const x = values[0] || 0;
+    const y = values[1] || 0;
+
+    el.style.setProperty(
+      "translate",
+      `${x}px ${y + 40}px`,
+      "important"
+    );
+
+    el.dataset.gvExperienceExtra40 = "1";
+
+    results.push({
+      section: el.id || el.className || el.tagName,
+      additionalMovement: "+40px"
+    });
+  });
+
+  console.table(results);
+  console.info(
+    "[Green Vita] Experience and following sections moved down 40px:",
+    results.length
+  );
+})();
+</script>
+
+
+<script id="gv-footer-follow-blog-position">
+/* GV FOOTER FOLLOW BLOG POSITION V1 */
+(() => {
+  requestAnimationFrame(() => {
+    const blog = document.querySelector("section.gv-blog-strip#blog")
+      || document.querySelector(".gv-blog-strip");
+
+    const footer = document.querySelector("footer");
+
+    if (!blog || !footer) {
+      console.warn("[Green Vita] Blog or footer not found.");
+      return;
+    }
+
+    const value = getComputedStyle(blog).translate;
+    const numbers = value === "none"
+      ? [0, 0]
+      : [...value.matchAll(/-?(?:\d+\.?\d*|\.\d+)px/g)]
+          .map(item => parseFloat(item[0]));
+
+    const x = numbers[0] || 0;
+    const y = numbers[1] || 0;
+
+    footer.style.setProperty(
+      "translate",
+      `${x}px ${y}px`,
+      "important"
+    );
+
+    footer.dataset.gvFooterFollowBlog = "1";
+
+    console.info(
+      "[Green Vita] Footer aligned with blog:",
+      `${x}px ${y}px`
+    );
+  });
+})();
+</script>
+
+
+<script id="gv-harf-all-down30">
+/* GV ALL CONTENT FROM HARF DOWN 30PX V1 */
+(() => {
+  function applyMovement() {
+    const start = document.querySelector("section.gv-home-testimonials");
+
+    if (!start) {
+      console.warn("[Green Vita] Experience section not found.");
+      return;
+    }
+
+    const candidates = [
+      ...document.querySelectorAll("section, footer")
+    ].filter(el =>
+      el === start ||
+      (start.compareDocumentPosition(el) &
+        Node.DOCUMENT_POSITION_FOLLOWING)
+    );
+
+    const targets = candidates.filter(el =>
+      !candidates.some(parent =>
+        parent !== el && parent.contains(el)
+      )
+    );
+
+    const results = [];
+
+    targets.forEach(el => {
+      if (el.dataset.gvHarfExtra30 === "1") return;
+
+      const current = getComputedStyle(el).translate;
+      const values = current === "none"
+        ? []
+        : [...current.matchAll(/-?[\d.]+px/g)]
+            .map(item => parseFloat(item[0]));
+
+      const x = values[0] || 0;
+      const y = values[1] || 0;
+
+      el.style.setProperty(
+        "translate",
+        `${x}px ${y + 30}px`,
+        "important"
+      );
+
+      el.dataset.gvHarfExtra30 = "1";
+
+      results.push({
+        section: el.id || el.className || el.tagName,
+        additionalMovement: "+30px",
+        ornaments: el.querySelectorAll(
+          ".gv-home-middle-ornament"
+        ).length
+      });
+    });
+
+    console.table(results);
+    console.info(
+      "[Green Vita] All content from Harf moved down 30px:",
+      results.length
+    );
+  }
+
+  // Wait for the existing footer/blog alignment script first.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(applyMovement);
+  });
+})();
+</script>
+
+
+<script id="gv-final-cta-only-up30">
+/* GV FINAL CTA ONLY UP 30PX; ORNAMENT FIXED V1 */
+(() => {
+  const cta = document.querySelector("section.gv-final-cta");
+
+  if (!cta || cta.dataset.gvCtaOnlyUp30 === "1") return;
+
+  function getXY(el) {
+    const value = getComputedStyle(el).translate;
+    if (value === "none") return [0, 0];
+
+    const numbers = [...value.matchAll(
+      /-?(?:\d+\.?\d*|\.\d+)px/g
+    )].map(m => parseFloat(m[0]));
+
+    return [numbers[0] || 0, numbers[1] || 0];
+  }
+
+  // Move only the final CTA section 30px upward.
+  const [sectionX, sectionY] = getXY(cta);
+
+  cta.style.setProperty(
+    "translate",
+    `${sectionX}px ${sectionY - 30}px`,
+    "important"
+  );
+
+  // Counter-move only its direct ornament to keep it visually fixed.
+  const ornament = cta.querySelector(
+    ":scope > img.gv-home-middle-ornament"
+  );
+
+  if (ornament) {
+    const [ornamentX, ornamentY] = getXY(ornament);
+
+    ornament.style.setProperty(
+      "translate",
+      `${ornamentX}px ${ornamentY + 30}px`,
+      "important"
+    );
+  }
+
+  cta.dataset.gvCtaOnlyUp30 = "1";
+
+  console.info(
+    "[Green Vita] Only final CTA content moved up 30px; ornament kept fixed."
+  );
+})();
+</script>
+
+
+<script id="gv-final-cta-content-up40">
+/* GV FINAL CTA CONTENT UP 40PX; ORNAMENT FIXED V1 */
+(() => {
+  const section = document.querySelector("section.gv-final-cta");
+
+  if (!section) {
+    console.warn("[Green Vita] Final CTA not found.");
+    return;
+  }
+
+  const ornament = section.querySelector(
+    ":scope > img.gv-home-middle-ornament"
+  );
+
+  const contents = [...section.children].filter(el =>
+    el !== ornament &&
+    !["SCRIPT", "STYLE"].includes(el.tagName)
+  );
+
+  let moved = 0;
+
+  contents.forEach(el => {
+    if (el.dataset.gvFinalCtaContentUp40 === "1") return;
+
+    const current = getComputedStyle(el).translate;
+
+    const values = current === "none"
+      ? []
+      : [...current.matchAll(
+          /-?(?:\d+\.?\d*|\.\d+)px/g
+        )].map(m => parseFloat(m[0]));
+
+    const x = values[0] || 0;
+    const y = values[1] || 0;
+
+    const translateValue = values.length > 2
+      ? `${x}px ${y - 40}px ${values[2]}px`
+      : `${x}px ${y - 40}px`;
+
+    el.style.setProperty(
+      "translate",
+      translateValue,
+      "important"
+    );
+
+    el.dataset.gvFinalCtaContentUp40 = "1";
+    moved++;
+  });
+
+  console.info(
+    "[Green Vita] Final CTA content moved up 40px. Ornament unchanged. Elements:",
+    moved
+  );
+})();
+</script>
+
+
+<script id="gv-testimonials-ornament-down20">
+/* GV TESTIMONIALS SECTION AND ORNAMENT DOWN 20PX V1 */
+(() => {
+  const section = document.querySelector("section.gv-home-testimonials");
+
+  if (!section || section.dataset.gvTestimonialsDown20 === "1") {
+    return;
+  }
+
+  const current = getComputedStyle(section).translate;
+
+  const values = current === "none"
+    ? []
+    : [...current.matchAll(/-?(?:\d+\.?\d*|\.\d+)px/g)]
+        .map(match => parseFloat(match[0]));
+
+  const x = values[0] || 0;
+  const y = values[1] || 0;
+
+  section.style.setProperty(
+    "translate",
+    `${x}px ${y + 20}px`,
+    "important"
+  );
+
+  section.dataset.gvTestimonialsDown20 = "1";
+
+  console.info(
+    "[Green Vita] Only testimonials section and its ornament moved down 20px."
+  );
+})();
+</script>
+
+
+<!-- GV ORNAMENT SPACING MINUS 20 — PERMANENT V1 -->
+<script src="/static/js/gv-ornament-spacing-minus20.js?v=20261121-final1"></script>
+
+<!-- GV FOOTER BLOG GAP 20PX — PERMANENT V1 -->
+<script src="/static/js/gv-footer-blog-gap20.js?v=20261121-v2"></script>
 {% endblock %}

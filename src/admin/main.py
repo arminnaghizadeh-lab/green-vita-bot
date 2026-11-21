@@ -11,7 +11,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.admin.auth import SESSION_KEY
-from src.admin.routers import auth, booking, dashboard, diagnosis_online, public, push, smart_bio, visits
+from src.admin.routers import account, accounting, auth, booking, dashboard, diagnosis_online, finance, inventory, public, push, smart_bio, visits
+from src.invoices.router import api as invoices_api, page_router as invoices_page
 from src.core.config import get_settings
 from src.db.session import AsyncSessionLocal
 from src.db.models.booking import BookingTimeSlot
@@ -156,14 +157,20 @@ async def stop_booking_slot_daily_job():
 
         _booking_slot_task = None
 
+app.include_router(account.router)
 app.include_router(auth.router)
 app.include_router(dashboard.router, prefix="/dashboard")
+app.include_router(finance.router, prefix="/finance")
+app.include_router(inventory.router, prefix="/finance")
+app.include_router(accounting.router, prefix="/finance")
 app.include_router(visits.router)
 app.include_router(smart_bio.router)
 app.include_router(push.router)
 app.include_router(booking.router)
 app.include_router(public.router)
 app.include_router(diagnosis_online.router)
+app.include_router(invoices_api)
+app.include_router(invoices_page)
 
 
 @app.get("/health")

@@ -184,3 +184,13 @@ html body.gv-booking-page .site-header .menu .cta:hover {
 html body .site-header .menu a.cta {
     border-radius: 999px !important;
 }
+
+/* GV-BOOKING-MOBILE-MENU-OPEN-FIX-20261023 */
+@media (max-width: 620px) {
+  html body.gv-booking-page .site-header.gv-mobile-open .menu {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+  }
+}

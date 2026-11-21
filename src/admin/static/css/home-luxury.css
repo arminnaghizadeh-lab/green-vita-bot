@@ -4460,7 +4460,7 @@ body:has(#root) {
 }
 
 body:has(#root) {
-    background-image: url("/static/images/home1.jpeg") !important;
+    background-image: url("/static/images/home.jpeg") !important;
     background-position: center center !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
@@ -4470,10 +4470,1601 @@ body:has(#root) {
 /* GV-HOME-JPG-MOBILE-FIT-FIX-20261018 */
 @media screen and (max-width: 768px) {
   body:has(#root) {
-    background-image: url("/static/images/home1.jpeg") !important;
+    background-image: url("/static/images/home.jpeg") !important;
     background-position: center top !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
   }
 }
+
+/* =========================================================
+   GV SERVICE CARD STACK V1
+   Homepage only — reversible
+   ========================================================= */
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 365px !important;
+    margin: 18px auto 26px !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+    perspective: 1000px;
+    isolation: isolate;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card {
+    position: absolute !important;
+    top: 0 !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: calc(100% - 16px) !important;
+    height: 310px !important;
+    min-height: 310px !important;
+    margin: 0 !important;
+    transform-origin: 50% 85% !important;
+    transition:
+      transform .42s cubic-bezier(.22,.61,.36,1),
+      box-shadow .35s ease !important;
+    box-shadow:
+      -7px -7px 20px rgba(255,255,255,.82),
+      0 15px 32px rgba(2,47,18,.17) !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 {
+    z-index: 4 !important;
+    transform: translate(0, 0) rotate(0deg) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-1 {
+    z-index: 3 !important;
+    transform: translate(-3px, 9px) rotate(-1.1deg) scale(.975) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-2 {
+    z-index: 2 !important;
+    transform: translate(3px, 17px) rotate(1.1deg) scale(.95) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-3 {
+    z-index: 1 !important;
+    transform: translate(-2px, 24px) rotate(-1.5deg) scale(.925) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.is-open {
+    z-index: 10 !important;
+    transform: translateY(0) scale(1) !important;
+  }
+}
+
+
+/* =========================================================
+   GV SERVICE CARD SMOOTH MOTION V1
+   Mobile stack — swipe exit + smooth card promotion
+   ========================================================= */
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card {
+    will-change: transform;
+    transition:
+      transform .38s cubic-bezier(.22,.68,.25,1),
+      box-shadow .32s ease,
+      opacity .24s ease !important;
+  }
+
+  /* کارت هنگام Swipe از stack خارج نمی‌شود؛
+     با یک حرکت کوتاه و نرم به پشت دسته می‌لغزد. */
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-exit-left {
+    z-index: 20 !important;
+    transform: translate(-18px, 24px) rotate(-3.5deg) scale(.925) !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    transition:
+      transform .30s cubic-bezier(.22,.68,.25,1) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-exit-right {
+    z-index: 20 !important;
+    transform: translate(18px, 24px) rotate(3.5deg) scale(.925) !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    transition:
+      transform .30s cubic-bezier(.22,.68,.25,1) !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-no-transition {
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card {
+    transition-duration: .01ms !important;
+  }
+}
+
+
+/* =========================================================
+   GV SERVICE CARD INVERTED RADIUS V3
+   Service description trigger; swipe animation remains unchanged
+   ========================================================= */
+
+#gv-service-preview-v2 .gv-preview-image {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  position: absolute !important;
+  left: 18px !important;
+  bottom: 18px !important;
+  z-index: 13 !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #f7faf2 !important;
+  box-shadow: 0 0 0 9px #f7faf2,
+              0 5px 18px rgba(2,47,18,.18) !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  animation: none !important;
+  transition: transform .2s ease, box-shadow .2s ease !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle span {
+  display: block !important;
+  width: 15px !important;
+  height: 2.5px !important;
+  border-radius: 99px !important;
+  background: #174d29 !important;
+  box-shadow: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle:focus-visible {
+  outline: 2px solid #174d29 !important;
+  outline-offset: 3px !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-content {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle {
+    width: 44px !important;
+    height: 44px !important;
+    left: 16px !important;
+    bottom: 16px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle {
+    transition: none !important;
+  }
+}
+
+
+
+
+
+/* GV-DIAGNOSIS-BANNER-INVERTED-RADIUS-V1 */
+#gv-online-diagnosis-cta #gv-diagnosis-photo-frame {
+  --r: 20px;
+  --s: 30px;
+  --x: 20px;
+  --y: 10px;
+
+  --_m: /calc(2 * var(--r)) calc(2 * var(--r))
+        radial-gradient(#000 70%, #0000 72%);
+
+  --_g: conic-gradient(
+    at calc(100% - var(--r)) var(--r),
+    #0000 25%, #000 0
+  );
+
+  --_d: calc(var(--s) + var(--r));
+
+  border-radius: var(--r);
+
+  -webkit-mask:
+    calc(100% - var(--_d) - var(--x)) 0 var(--_m),
+    100% calc(var(--_d) + var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 100% 0,
+      #0000 99%, #000 calc(100% + 1px)
+    ) calc(-1 * var(--r) - var(--x))
+      calc(var(--r) + var(--y)),
+    var(--_g) calc(-1 * var(--_d) - var(--x)) 0,
+    var(--_g) 0 calc(var(--_d) + var(--y));
+
+  -webkit-mask-repeat: no-repeat;
+
+  mask:
+    calc(100% - var(--_d) - var(--x)) 0 var(--_m),
+    100% calc(var(--_d) + var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 100% 0,
+      #0000 99%, #000 calc(100% + 1px)
+    ) calc(-1 * var(--r) - var(--x))
+      calc(var(--r) + var(--y)),
+    var(--_g) calc(-1 * var(--_d) - var(--x)) 0,
+    var(--_g) 0 calc(var(--_d) + var(--y));
+
+  mask-repeat: no-repeat;
+}
+
+@media (max-width: 767px) {
+  #gv-online-diagnosis-cta #gv-diagnosis-photo-frame {
+    --r: 18px;
+    --s: 27px;
+    --x: 14px;
+    --y: 8px;
+  }
+}
+/* END GV-DIAGNOSIS-BANNER-INVERTED-RADIUS-V1 */
+
+
+
+/* GV-DIAGNOSIS-BANNER-INVERTED-RADIUS-BOTTOM-LEFT-V1 */
+#gv-online-diagnosis-cta #gv-diagnosis-photo-frame {
+  --r: 20px;
+  --s: 30px;
+  --x: 20px;
+  --y: 10px;
+
+  --_m: /calc(2 * var(--r)) calc(2 * var(--r))
+        radial-gradient(#000 70%, #0000 72%);
+
+  /* چرخش محل منحنی به پایین و چپ */
+  --_g: conic-gradient(
+    from 180deg at var(--r) calc(100% - var(--r)),
+    #0000 25%, #000 0
+  );
+
+  --_d: calc(var(--s) + var(--r));
+
+  -webkit-mask:
+    calc(var(--_d) + var(--x)) 100% var(--_m),
+    0 calc(100% - var(--_d) - var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 0 100%,
+      #0000 99%, #000 calc(100% + 1px)
+    )
+    calc(var(--r) + var(--x))
+    calc(0px - var(--r) - var(--y)),
+    var(--_g) calc(var(--_d) + var(--x)) 0,
+    var(--_g) 0 calc(0px - var(--_d) - var(--y));
+
+  -webkit-mask-repeat: no-repeat;
+
+  mask:
+    calc(var(--_d) + var(--x)) 100% var(--_m),
+    0 calc(100% - var(--_d) - var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 0 100%,
+      #0000 99%, #000 calc(100% + 1px)
+    )
+    calc(var(--r) + var(--x))
+    calc(0px - var(--r) - var(--y)),
+    var(--_g) calc(var(--_d) + var(--x)) 0,
+    var(--_g) 0 calc(0px - var(--_d) - var(--y));
+
+  mask-repeat: no-repeat;
+}
+
+@media (max-width: 767px) {
+  #gv-online-diagnosis-cta #gv-diagnosis-photo-frame {
+    --r: 18px;
+    --s: 27px;
+    --x: 14px;
+    --y: 8px;
+  }
+}
+/* END GV-DIAGNOSIS-BANNER-INVERTED-RADIUS-BOTTOM-LEFT-V1 */
+
+
+
+/* GV-DIAGNOSIS-BANNER-SQUARE-CORNERS-V1 */
+/* Remove all rounded and inverted corners from diagnosis banner */
+#gv-online-diagnosis-cta #gv-diagnosis-photo-frame,
+#gv-online-diagnosis-cta #gv-diagnosis-photo {
+  border-radius: 0 !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+}
+/* END GV-DIAGNOSIS-BANNER-SQUARE-CORNERS-V1 */
+
+
+
+/* GV-SERVICES-TOP-BANNER-CSS-V1 */
+#gv-service-preview-v2 .gv-services-top-banner {
+  display: block;
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto 24px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 0;
+  line-height: 0;
+  background: transparent;
+}
+
+#gv-service-preview-v2 .gv-services-top-banner img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  -webkit-mask: none;
+  mask: none;
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-services-top-banner {
+    width: calc(100% - 24px);
+    margin-bottom: 18px;
+  }
+}
+/* END GV-SERVICES-TOP-BANNER-CSS-V1 */
+
+
+/* GV-SERVICES-BANNER-INVERTED-BOTTOM-LEFT-V1 */
+#gv-service-preview-v2 .gv-services-top-banner {
+  --r: 20px;
+  --s: 30px;
+  --x: 20px;
+  --y: 10px;
+
+  --_m: /calc(2 * var(--r)) calc(2 * var(--r))
+        radial-gradient(#000 70%, #0000 72%);
+
+  --_g: conic-gradient(
+    from 180deg at var(--r) calc(100% - var(--r)),
+    #0000 25%, #000 0
+  );
+
+  --_d: calc(var(--s) + var(--r));
+
+  border-radius: var(--r) !important;
+  overflow: hidden;
+
+  -webkit-mask:
+    calc(var(--_d) + var(--x)) 100% var(--_m),
+    0 calc(100% - var(--_d) - var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 0 100%,
+      #0000 99%, #000 calc(100% + 1px)
+    )
+    calc(var(--r) + var(--x))
+    calc(0px - var(--r) - var(--y)),
+    var(--_g) calc(var(--_d) + var(--x)) 0,
+    var(--_g) 0 calc(0px - var(--_d) - var(--y));
+
+  -webkit-mask-repeat: no-repeat;
+
+  mask:
+    calc(var(--_d) + var(--x)) 100% var(--_m),
+    0 calc(100% - var(--_d) - var(--y)) var(--_m),
+    radial-gradient(
+      var(--s) at 0 100%,
+      #0000 99%, #000 calc(100% + 1px)
+    )
+    calc(var(--r) + var(--x))
+    calc(0px - var(--r) - var(--y)),
+    var(--_g) calc(var(--_d) + var(--x)) 0,
+    var(--_g) 0 calc(0px - var(--_d) - var(--y));
+
+  mask-repeat: no-repeat;
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-services-top-banner {
+    --r: 18px;
+    --s: 27px;
+    --x: 14px;
+    --y: 8px;
+  }
+}
+/* END GV-SERVICES-BANNER-INVERTED-BOTTOM-LEFT-V1 */
+
+
+/* GV-SERVICES-TOP-DX-BUTTON-PEEK-V1 */
+#gv-service-preview-v2 .gv-services-top-banner-wrap {
+  position: relative;
+  isolation: isolate;
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto 24px;
+  padding: 0;
+  overflow: visible;
+  box-sizing: border-box;
+  line-height: 0;
+}
+
+#gv-service-preview-v2 .gv-services-top-banner-wrap
+.gv-services-top-diagnosis-cta {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+
+  width: 184px;
+  height: 52px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 0 10px;
+
+  direction: ltr;
+  text-decoration: none;
+  white-space: nowrap;
+
+  color: #F7FAF2;
+  background: linear-gradient(135deg, #022F12, #075222);
+  border: 1px solid rgba(181, 138, 60, .9);
+  border-radius: 16px;
+
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+
+  box-shadow: 0 10px 24px rgba(2, 20, 8, .25);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+/* عنوان در قسمت قابل‌مشاهده‌ی فرورفتگی قرار می‌گیرد */
+#gv-service-preview-v2 .gv-services-top-diagnosis-cta > span:first-child {
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 66px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  direction: rtl;
+  text-align: right;
+  font-size: 10px;
+  overflow: hidden;
+}
+
+#gv-service-preview-v2 .gv-services-top-diagnosis-cta > span:last-child {
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+
+/* خود بنر روی دکمه قرار می‌گیرد؛ ماسک، بخش موردنظر دکمه را آشکار می‌کند. */
+#gv-service-preview-v2 .gv-services-top-banner-wrap
+> .gv-services-top-banner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+}
+
+#gv-service-preview-v2 .gv-services-top-diagnosis-cta:hover {
+  background: #075222;
+  box-shadow: 0 12px 28px rgba(2, 20, 8, .32);
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-services-top-banner-wrap {
+    width: calc(100% - 24px);
+    margin-bottom: 18px;
+  }
+
+  #gv-service-preview-v2 .gv-services-top-diagnosis-cta {
+    width: 174px;
+    height: 48px;
+  }
+}
+/* END GV-SERVICES-TOP-DX-BUTTON-PEEK-V1 */
+
+
+/* GV-SERVICES-BANNER-GLOSSY-LIFT-V1 */
+
+/* سطح برجسته و سایه طبیعی */
+#gv-service-preview-v2 .gv-services-top-banner {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden;
+  transform: translateZ(0);
+
+  filter:
+    drop-shadow(0 12px 16px rgba(2, 20, 8, .20))
+    drop-shadow(0 3px 5px rgba(2, 47, 18, .12));
+
+  transition:
+    filter .35s ease,
+    transform .35s ease;
+}
+
+/* انعکاس براق روی سطح تصویر */
+#gv-service-preview-v2 .gv-services-top-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, .38) 0%,
+      rgba(255, 255, 255, .13) 12%,
+      transparent 32%,
+      transparent 68%,
+      rgba(255, 255, 255, .08) 84%,
+      rgba(255, 255, 255, .20) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, .28) 0%,
+      rgba(255, 255, 255, .06) 12%,
+      transparent 30%,
+      transparent 78%,
+      rgba(2, 20, 8, .13) 100%
+    );
+
+  border: 1px solid rgba(255, 255, 255, .42);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .72),
+    inset 0 -1px 0 rgba(2, 47, 18, .16);
+}
+
+/* رگه ظریف نور شیشه‌ای */
+#gv-service-preview-v2 .gv-services-top-banner::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+
+  top: -30%;
+  left: -42%;
+  width: 32%;
+  height: 165%;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, .12),
+    rgba(255, 255, 255, .38),
+    rgba(255, 255, 255, .10),
+    transparent
+  );
+
+  transform: rotate(17deg);
+  opacity: .72;
+}
+
+/* برجستگی هنگام قرارگرفتن نشانگر */
+@media (hover: hover) and (pointer: fine) {
+  #gv-service-preview-v2 .gv-services-top-banner:hover {
+    transform: translateY(-3px);
+
+    filter:
+      drop-shadow(0 17px 22px rgba(2, 20, 8, .24))
+      drop-shadow(0 5px 8px rgba(2, 47, 18, .13));
+  }
+}
+
+/* END GV-SERVICES-BANNER-GLOSSY-LIFT-V1 */
+
+
+/* GV-DIAGNOSIS-EYEBROW-DESKTOP-CENTER-V1 */
+@media (min-width: 768px) {
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 15px !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+
+    width: max-content !important;
+    max-width: calc(100% - 32px) !important;
+
+    margin: 0 !important;
+    padding: 0 8px !important;
+
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+
+    transform: translateX(-50%) !important;
+  }
+
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:first-child,
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:last-child {
+    flex: 0 0 24px !important;
+    width: 24px !important;
+  }
+
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:nth-child(2) {
+    flex: 0 1 auto !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+}
+/* END GV-DIAGNOSIS-EYEBROW-DESKTOP-CENTER-V1 */
+
+
+
+/* GV-DIAGNOSIS-EYEBROW-DESKTOP-INSIDE-V2 */
+#gv-online-diagnosis-cta #gv-diagnosis-photo-frame {
+  position: relative !important;
+}
+
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static {
+  position: absolute !important;
+  top: clamp(26px, 2.5vw, 36px) !important;
+  left: 50% !important;
+  right: auto !important;
+  width: max-content !important;
+  max-width: calc(100% - 40px) !important;
+  transform: translateX(-50%) !important;
+
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  z-index: 10 !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span {
+  flex-shrink: 0 !important;
+}
+
+#gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static > span:nth-child(2) {
+  flex: 0 1 auto !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 767px) {
+  #gv-online-diagnosis-cta .gv-diagnosis-eyebrow-static {
+    top: 15px !important;
+    max-width: calc(100% - 16px) !important;
+  }
+}
+/* END GV-DIAGNOSIS-EYEBROW-DESKTOP-INSIDE-V2 */
+
+
+
+
+
+
+
+/* GV SERVICE CARD UNIFORM IMAGE STYLE V1 */
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-image {
+  border-radius: 0 !important;
+  border: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  box-sizing: border-box !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  animation: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-image img {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  transform: none !important;
+  transform-origin: center top !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  clip-path: none !important;
+  animation: none !important;
+}
+
+/* END GV SERVICE CARD UNIFORM IMAGE STYLE V1 */
+
+/* GV SERVICE CARDS GLASS 3D EFFECT V1 */
+
+#gv-service-preview-v2 .gv-preview-card {
+  border: 1px solid rgba(255,255,255,.72) !important;
+  box-shadow:
+    0 18px 38px rgba(2,20,8,.20),
+    0 5px 12px rgba(2,47,18,.10),
+    inset 0 1px 0 rgba(255,255,255,.88),
+    inset 0 -2px 0 rgba(2,20,8,.13) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card:hover {
+  box-shadow:
+    0 26px 50px rgba(2,20,8,.25),
+    0 8px 18px rgba(2,47,18,.13),
+    inset 0 1px 0 rgba(255,255,255,.95) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.34),
+    rgba(255,255,255,.10) 20%,
+    transparent 45%,
+    transparent 72%,
+    rgba(255,255,255,.13)
+  ) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 1px !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.58),
+    inset 0 -18px 35px rgba(2,20,8,.13) !important;
+  border: 1px solid rgba(255,255,255,.24) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.91),
+    rgba(228,240,204,.78)
+  ) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+  backdrop-filter: blur(16px) saturate(150%) !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(2,47,18,.08),
+    0 10px 28px rgba(2,20,8,.13) !important;
+}
+
+/* END GV SERVICE CARDS GLASS 3D EFFECT V1 */
+
+/* GV SERVICE CARDS GLASS 3D EFFECT V2 FINAL */
+
+#gv-service-preview-v2 .gv-preview-card {
+  border: 1px solid rgba(255,255,255,.20) !important;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.20),
+    rgba(228,240,204,.10) 48%,
+    rgba(2,47,18,.08)
+  ) !important;
+
+  box-shadow:
+    0 25px 45px rgba(2,20,8,.25),
+    0 9px 18px rgba(2,47,18,.15),
+    0 2px 5px rgba(2,20,8,.10),
+    inset 0 2px 4px rgba(255,255,255,.68),
+    inset 0 -5px 12px rgba(2,47,18,.14) !important;
+
+  transition:
+    transform .35s ease,
+    filter .4s ease,
+    box-shadow .4s ease !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image::before {
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,.48) 0%,
+    rgba(255,255,255,.20) 18%,
+    rgba(255,255,255,.06) 34%,
+    transparent 48%,
+    transparent 72%,
+    rgba(255,255,255,.16) 100%
+  ) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-image::after {
+  box-shadow:
+    inset 0 2px 5px rgba(255,255,255,.68),
+    inset 0 -22px 38px rgba(2,20,8,.17) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-content {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.94),
+    rgba(228,240,204,.84) 55%,
+    rgba(255,255,255,.88)
+  ) !important;
+
+  -webkit-backdrop-filter: blur(20px) saturate(165%) !important;
+  backdrop-filter: blur(20px) saturate(165%) !important;
+
+  border-color: rgba(255,255,255,.58) !important;
+
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.98),
+    inset 0 -2px 5px rgba(2,47,18,.10),
+    0 14px 32px rgba(2,20,8,.17) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #gv-service-preview-v2 .gv-preview-card:hover {
+    filter: brightness(1.035) saturate(1.12) !important;
+
+    box-shadow:
+      0 32px 54px rgba(2,20,8,.30),
+      0 13px 24px rgba(2,47,18,.19),
+      inset 0 2px 5px rgba(255,255,255,.78),
+      inset 0 -5px 12px rgba(2,47,18,.14) !important;
+  }
+}
+
+/* END GV SERVICE CARDS GLASS 3D EFFECT V2 FINAL */
+
+
+/* GV FAQ GLASS 3D EFFECT V1 */
+
+html body .gv-home-faq .gv-faq-item {
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255,255,255,.38) !important;
+    border-radius: 22px !important;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.96),
+        rgba(228,240,204,.80) 52%,
+        rgba(255,255,255,.92)
+    ) !important;
+
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+
+    box-shadow:
+        0 22px 40px rgba(2,20,8,.20),
+        0 8px 18px rgba(2,47,18,.12),
+        0 2px 5px rgba(2,20,8,.08),
+        inset 0 2px 4px rgba(255,255,255,.88),
+        inset 0 -4px 10px rgba(2,47,18,.10) !important;
+
+    transition:
+        transform .35s ease,
+        filter .4s ease,
+        border-color .35s ease,
+        box-shadow .4s ease !important;
+}
+
+html body .gv-home-faq .gv-faq-item::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
+
+    background: linear-gradient(
+        125deg,
+        rgba(255,255,255,.46),
+        rgba(255,255,255,.14) 22%,
+        transparent 48%,
+        transparent 72%,
+        rgba(255,255,255,.20)
+    ) !important;
+}
+
+html body .gv-home-faq .gv-faq-item summary,
+html body .gv-home-faq .gv-faq-item .gv-faq-answer {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+html body .gv-home-faq .gv-faq-item .gv-faq-answer {
+    border-top: 1px solid rgba(2,47,18,.09) !important;
+    padding-top: 14px !important;
+}
+
+html body .gv-home-faq .gv-faq-item summary b {
+    border: 1px solid rgba(255,255,255,.72) !important;
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.94),
+        rgba(228,240,204,.82)
+    ) !important;
+
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,.95),
+        inset 0 -2px 4px rgba(2,47,18,.09),
+        0 5px 12px rgba(2,20,8,.10) !important;
+
+    transition:
+        background .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease !important;
+}
+
+html body .gv-home-faq .gv-faq-item[open] {
+    border-color: rgba(139,197,61,.48) !important;
+
+    box-shadow:
+        0 25px 45px rgba(2,20,8,.22),
+        0 9px 18px rgba(2,47,18,.14),
+        inset 0 2px 4px rgba(255,255,255,.92),
+        inset 0 -4px 10px rgba(2,47,18,.10) !important;
+}
+
+html body .gv-home-faq .gv-faq-item[open] summary b {
+    background: linear-gradient(
+        145deg,
+        rgba(228,240,204,.98),
+        rgba(139,197,61,.50)
+    ) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    html body .gv-home-faq .gv-faq-item:hover {
+        transform: translateY(-3px) !important;
+        filter: brightness(1.035) saturate(1.10) !important;
+        border-color: rgba(198,161,91,.48) !important;
+
+        box-shadow:
+            0 32px 54px rgba(2,20,8,.27),
+            0 13px 24px rgba(2,47,18,.17),
+            inset 0 2px 5px rgba(255,255,255,.94),
+            inset 0 -4px 10px rgba(2,47,18,.12) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    html body .gv-home-faq .gv-faq-item {
+        border-radius: 18px !important;
+        box-shadow:
+            0 14px 28px rgba(2,20,8,.15),
+            0 5px 12px rgba(2,47,18,.09),
+            inset 0 2px 4px rgba(255,255,255,.88) !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html body .gv-home-faq .gv-faq-item,
+    html body .gv-home-faq .gv-faq-item summary b {
+        transition: none !important;
+    }
+
+    html body .gv-home-faq .gv-faq-item:hover {
+        transform: none !important;
+    }
+}
+
+/* END GV FAQ GLASS 3D EFFECT V1 */
+
+
+/* GV EXPERIENCE WHY CASES VISIT GLASS V1 */
+
+html body .gv-home-testimonials .gv-testimonial-card,
+html body .gv-home-trust .feature,
+html body .gv-treatment-cases .gv-treatment-case,
+html body .gv-visit-process .gv-visit-step {
+    position: relative !important;
+    isolation: isolate !important;
+
+    border: 1px solid rgba(255,255,255,.38) !important;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.96),
+        rgba(228,240,204,.80) 52%,
+        rgba(255,255,255,.92)
+    ) !important;
+
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+
+    box-shadow:
+        0 22px 40px rgba(2,20,8,.20),
+        0 8px 18px rgba(2,47,18,.12),
+        0 2px 5px rgba(2,20,8,.08),
+        inset 0 2px 4px rgba(255,255,255,.88),
+        inset 0 -4px 10px rgba(2,47,18,.10) !important;
+
+    transition:
+        transform .35s ease,
+        filter .4s ease,
+        border-color .35s ease,
+        box-shadow .4s ease !important;
+}
+
+/* Subtle glass reflection */
+html body .gv-home-testimonials .gv-testimonial-card::before,
+html body .gv-home-trust .feature::before,
+html body .gv-treatment-cases .gv-treatment-case::before,
+html body .gv-visit-process .gv-visit-step::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
+
+    background: linear-gradient(
+        125deg,
+        rgba(255,255,255,.46),
+        rgba(255,255,255,.14) 22%,
+        transparent 48%,
+        transparent 72%,
+        rgba(255,255,255,.20)
+    ) !important;
+}
+
+/* Keep all card content above the reflection */
+html body .gv-home-testimonials .gv-testimonial-card > *,
+html body .gv-home-trust .feature > *,
+html body .gv-treatment-cases .gv-treatment-case > *,
+html body .gv-visit-process .gv-visit-step > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Refined number and plant badges */
+html body .gv-visit-process .gv-visit-step-number,
+html body .gv-treatment-cases .gv-treatment-case-tag {
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,.72),
+        0 5px 12px rgba(2,20,8,.10) !important;
+}
+
+/* Desktop hover */
+@media (hover: hover) and (pointer: fine) {
+    html body .gv-home-testimonials .gv-testimonial-card:hover,
+    html body .gv-home-trust .feature:hover,
+    html body .gv-treatment-cases .gv-treatment-case:hover,
+    html body .gv-visit-process .gv-visit-step:hover {
+        transform: translateY(-4px) !important;
+        filter: brightness(1.035) saturate(1.10) !important;
+        border-color: rgba(198,161,91,.48) !important;
+
+        box-shadow:
+            0 32px 54px rgba(2,20,8,.27),
+            0 13px 24px rgba(2,47,18,.17),
+            inset 0 2px 5px rgba(255,255,255,.94),
+            inset 0 -4px 10px rgba(2,47,18,.12) !important;
+    }
+}
+
+/* Softer shadows on mobile, preserve existing layout */
+@media (max-width: 640px) {
+    html body .gv-home-testimonials .gv-testimonial-card,
+    html body .gv-home-trust .feature,
+    html body .gv-treatment-cases .gv-treatment-case,
+    html body .gv-visit-process .gv-visit-step {
+        box-shadow:
+            0 14px 28px rgba(2,20,8,.15),
+            0 5px 12px rgba(2,47,18,.09),
+            inset 0 2px 4px rgba(255,255,255,.88) !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html body .gv-home-testimonials .gv-testimonial-card,
+    html body .gv-home-trust .feature,
+    html body .gv-treatment-cases .gv-treatment-case,
+    html body .gv-visit-process .gv-visit-step {
+        transition: none !important;
+    }
+
+    html body .gv-home-testimonials .gv-testimonial-card:hover,
+    html body .gv-home-trust .feature:hover,
+    html body .gv-treatment-cases .gv-treatment-case:hover,
+    html body .gv-visit-process .gv-visit-step:hover {
+        transform: none !important;
+    }
+}
+
+/* END GV EXPERIENCE WHY CASES VISIT GLASS V1 */
+
+
+/* GV WHY GREEN VITA BACKGROUND TRANSPARENT V1 */
+
+html body section.section.gv-home-trust,
+html body .gv-home-trust {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV WHY GREEN VITA BACKGROUND TRANSPARENT V1 */
+
+
+
+/* GV ROUND BUTTON GLASS V1 */
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle {
+  background: rgba(255,255,255,.16) !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,.38),
+    0 3px 14px rgba(0,0,0,.16) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle span {
+  background: #ffffff !important;
+  box-shadow: 0 0 5px rgba(0,0,0,.22) !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle:active {
+  transform: scale(.94) !important;
+}
+/* END GV ROUND BUTTON GLASS V1 */
+
+
+/* GV ROUND BUTTON CLEAN V1 */
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle {
+  animation: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle::before,
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle::after {
+  display: none !important;
+  animation: none !important;
+  content: none !important;
+}
+
+#gv-service-preview-v2 .gv-preview-card .gv-preview-click-circle span {
+  display: none !important;
+}
+
+/* کارت‌های زیرین: دکمه ثابت، بدون موج و انیمیشن */
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-1 .gv-preview-click-circle,
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-2 .gv-preview-click-circle,
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-3 .gv-preview-click-circle {
+    animation: none !important;
+  }
+}
+/* END GV ROUND BUTTON CLEAN V1 */
+
+
+/* GV TOP CARD BUTTON PULSE V1 */
+@keyframes gvTopButtonPulse {
+  0%, 100% {
+    background-color: rgba(255,255,255,.14);
+    box-shadow:
+      inset 0 1px 3px rgba(255,255,255,.38),
+      0 3px 14px rgba(0,0,0,.16),
+      0 0 0 rgba(255,255,255,0);
+    border-color: rgba(255,255,255,.68);
+  }
+  50% {
+    background-color: rgba(255,255,255,.25);
+    box-shadow:
+      inset 0 1px 4px rgba(255,255,255,.48),
+      0 3px 16px rgba(0,0,0,.17),
+      0 0 12px rgba(255,255,255,.24);
+    border-color: rgba(255,255,255,.95);
+  }
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 .gv-preview-click-circle {
+    animation: gvTopButtonPulse 2.4s ease-in-out infinite !important;
+  }
+}
+/* END GV TOP CARD BUTTON PULSE V1 */
+
+
+/* GV TOP CARD BUTTON RING EFFECT V2 */
+
+@keyframes gvTopButtonGlowV2 {
+  0%, 100% {
+    background-color: rgba(255,255,255,.13);
+    border-color: rgba(255,255,255,.68);
+    box-shadow:
+      inset 0 1px 3px rgba(255,255,255,.35),
+      0 3px 14px rgba(0,0,0,.16),
+      0 0 3px rgba(255,255,255,.10);
+  }
+  50% {
+    background-color: rgba(255,255,255,.29);
+    border-color: rgba(255,255,255,.98);
+    box-shadow:
+      inset 0 1px 5px rgba(255,255,255,.58),
+      0 3px 17px rgba(0,0,0,.17),
+      0 0 17px rgba(255,255,255,.38);
+  }
+}
+
+@keyframes gvTopButtonRingV2 {
+  0% {
+    transform: scale(.78);
+    opacity: 0;
+  }
+  15% {
+    opacity: .68;
+  }
+  70% {
+    opacity: .24;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 .gv-preview-click-circle {
+    animation: gvTopButtonGlowV2 2.2s ease-in-out infinite !important;
+    overflow: visible !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 .gv-preview-click-circle::before,
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 .gv-preview-click-circle::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    inset: -2px !important;
+    border: 1px solid rgba(255,255,255,.82) !important;
+    border-radius: 50% !important;
+    box-sizing: border-box !important;
+    pointer-events: none !important;
+    animation: gvTopButtonRingV2 2.2s ease-out infinite !important;
+  }
+
+  #gv-service-preview-v2 .gv-service-preview-grid.gv-stack-active
+  > .gv-preview-card.gv-stack-0 .gv-preview-click-circle::after {
+    animation-delay: 1.1s !important;
+  }
+}
+
+/* END GV TOP CARD BUTTON RING EFFECT V2 */
+
+
+/* GV WHY GREEN VITA NO BACKGROUND V2 */
+
+html body section.section.gv-home-trust,
+html body section.section.gv-home-trust::before,
+html body section.section.gv-home-trust::after {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV WHY GREEN VITA NO BACKGROUND V2 */
+
+
+/* GV HOMEPAGE FAQ TRANSPARENT V1 */
+
+html body section.gv-home-faq#faq,
+html body section.gv-home-faq#faq > .container,
+html body section.gv-home-faq#faq .gv-faq-head,
+html body section.gv-home-faq#faq .gv-faq-list,
+html body section.gv-home-faq#faq details.gv-faq-item {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+html body section.gv-home-faq#faq::before,
+html body section.gv-home-faq#faq::after,
+html body section.gv-home-faq#faq details.gv-faq-item::before,
+html body section.gv-home-faq#faq details.gv-faq-item::after {
+    background: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV HOMEPAGE FAQ TRANSPARENT V1 */
+
+
+/* GV HOMEPAGE FAQ OPAQUE CONTENT V1 */
+
+html body #faq.gv-home-faq details.gv-faq-item > summary,
+html body #faq.gv-home-faq details.gv-faq-item > .gv-faq-answer {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* END GV HOMEPAGE FAQ OPAQUE CONTENT V1 */
+
+
+/* GV FINAL CTA TRANSPARENT V1 */
+
+html body section.gv-final-cta,
+html body section.gv-final-cta .gv-final-cta-inner {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+html body section.gv-final-cta::before,
+html body section.gv-final-cta::after {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+/* END GV FINAL CTA TRANSPARENT V1 */
+
+
+/* GV HOMEPAGE BLOG TRANSPARENT V1 */
+
+html body section.section.gv-blog-strip#blog,
+html body section.section.gv-blog-strip#blog > .container,
+html body section.section.gv-blog-strip#blog .gv-blog-card {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+html body section.section.gv-blog-strip#blog::before,
+html body section.section.gv-blog-strip#blog::after,
+html body section.section.gv-blog-strip#blog .gv-blog-card::before,
+html body section.section.gv-blog-strip#blog .gv-blog-card::after {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* END GV HOMEPAGE BLOG TRANSPARENT V1 */
+
+
+/* GV FINAL CTA DARK TYPOGRAPHY V1 */
+
+html body section.gv-final-cta h2 {
+    font-feature-settings: "kern" 1 !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+
+    direction: rtl !important;
+    visibility: visible !important;
+    letter-spacing: -.02em !important;
+
+    color: #022F12 !important;
+    -webkit-text-fill-color: #022F12 !important;
+
+    font-family: "Vazir", Tahoma, Arial, sans-serif !important;
+    font-size: 56.3924px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+
+    text-align: center !important;
+    white-space: nowrap !important;
+
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.55),
+        0 3px 8px rgba(2,47,18,.24) !important;
+
+    -webkit-text-stroke-width: 0 !important;
+    -webkit-text-stroke-color: rgb(255,253,244) !important;
+
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: initial !important;
+    filter: none !important;
+
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    animation: none !important;
+}
+
+@media (max-width: 600px) {
+    html body section.gv-final-cta h2 {
+        font-size: clamp(28px, 8vw, 36px) !important;
+    }
+}
+
+/* END GV FINAL CTA DARK TYPOGRAPHY V1 */
+
+
+/* GV SERVICES EYEBROW ORNAMENT GLOW V1 */
+
+html body span.gv-services-main-eyebrow {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+html body span.gv-services-main-eyebrow::before {
+    content: "" !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: clamp(190px, 25vw, 312.5px) !important;
+    aspect-ratio: 2400 / 1340 !important;
+    height: auto !important;
+    margin: 0 auto 4.5px !important;
+
+    background-image: url("/static/images/ornament.png?v=20261108-glow-v1") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+
+    transform: translateY(30px) !important;
+
+    opacity: 1 !important;
+    filter:
+        drop-shadow(0 0 2px rgba(255,255,255,.95))
+        drop-shadow(0 0 7px rgba(198,161,91,.95))
+        drop-shadow(0 0 15px rgba(212,180,110,.65))
+        drop-shadow(0 3px 7px rgba(2,20,8,.8)) !important;
+}
+
+/* اندازه ۲٫۵ برابر در موبایل */
+@media (max-width: 600px) {
+    html body span.gv-services-main-eyebrow::before {
+        width: min(205px, 72vw) !important;
+        margin-bottom: 3.5px !important;
+    }
+}
+
+/* END GV SERVICES EYEBROW ORNAMENT GLOW V1 */
+
+
+/* GV MIDDLE ORNAMENT ALL HOMEPAGE SECTIONS V1 */
+
+html body img.gv-home-middle-ornament {
+    display: block !important;
+    width: clamp(250px, 30vw, 387.5px) !important;
+    max-width: 90vw !important;
+    height: auto !important;
+    object-fit: contain !important;
+    margin: 0 auto 10px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    user-select: none !important;
+}
+
+@media (max-width: 600px) {
+    html body img.gv-home-middle-ornament {
+        width: clamp(205px, 60vw, 287.5px) !important;
+        max-width: 90vw !important;
+        margin-bottom: 7.5px !important;
+    }
+}
+
+/* END GV MIDDLE ORNAMENT ALL HOMEPAGE SECTIONS V1 */
+
+
+/* GV SERVICES TO CUSTOMER STATS GAP HALF V1 */
+html body section.gv-service-preview-section#gv-service-preview-v2 {
+    margin-bottom: 12.5px !important;
+}
+
+
+/* GV FOUR HOMEPAGE SECTIONS MOVE UP 60PX ORNAMENTS FIXED V1 */
+
+html body section.gv-customer-trust,
+html body section.gv-visit-process,
+html body section.gv-treatment-cases,
+html body section.gv-home-trust {
+    translate: 0 -60px !important;
+}
+
+/* Keep each middle ornament at its original visual position */
+html body section.gv-customer-trust > img.gv-home-middle-ornament,
+html body section.gv-visit-process > img.gv-home-middle-ornament,
+html body section.gv-treatment-cases > img.gv-home-middle-ornament,
+html body section.gv-home-trust > img.gv-home-middle-ornament {
+    translate: 0 60px !important;
+}
+
+
+/* GV-DIAGNOSIS-CTA-STACKING-FIX-V1 */
+html body #gv-online-diagnosis-cta {
+  z-index: 20 !important;
+}
+/* END GV-DIAGNOSIS-CTA-STACKING-FIX-V1 */
+
+/* GV SERVICE CARDS STACKING FIX V1 */
+html body .gv-home-content #gv-service-preview-v2 {
+  position: relative !important;
+  z-index: 2 !important;
+}
+/* END GV SERVICE CARDS STACKING FIX V1 */
+
+
+
+/* GV MORE REVIEWS VISIBILITY V1 */
+html body section.gv-home-testimonials
+.gv-testimonial-card.gv-extra-review[hidden] {
+    display: none !important;
+}
+/* END GV MORE REVIEWS VISIBILITY V1 */
+
+
+/* GV TESTIMONIALS CLICK LAYER FIX V1 */
+html body section.gv-home-testimonials {
+    position: relative !important;
+    z-index: 2 !important;
+}
+/* END GV TESTIMONIALS CLICK LAYER FIX V1 */
+
